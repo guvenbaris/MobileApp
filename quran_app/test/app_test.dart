@@ -4,10 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:quran_app/app.dart';
 import 'package:quran_app/core/config/flavor.dart';
 import 'package:quran_app/core/config/flavor_provider.dart';
-import 'package:quran_app/features/home/presentation/home_page.dart';
 import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/reader/presentation/reader_page.dart';
 import 'package:quran_app/features/settings/presentation/settings_page.dart';
+import 'package:quran_app/features/today/presentation/today_page.dart';
 
 import 'helpers/fake_quran_repository.dart';
 import 'helpers/localized_app.dart';
@@ -39,7 +39,8 @@ void main() {
     ) async {
       await tester.pumpWidget(_app(flavor));
       await tester.pumpAndSettle();
-      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.byType(TodayPage), findsOneWidget);
+      await openTab(tester, 'quran');
       expect(find.text('Bakara'), findsOneWidget);
     });
   }
@@ -47,12 +48,12 @@ void main() {
   testWidgets('ana sayfadan okuma ve ayarlar ekranına gidilir', (tester) async {
     await tester.pumpWidget(_app(Flavor.dev));
 
-    await tester.tap(find.byKey(const Key('home.read')));
+    await tester.tap(find.byKey(const Key('today.continue')));
     await tester.pumpAndSettle();
     expect(find.byType(ReaderPage), findsOneWidget);
 
     await tapBack(tester);
-    await tester.tap(find.byKey(const Key('home.settings')));
+    await tester.tap(find.byKey(const Key('today.settings')));
     await tester.pumpAndSettle();
     expect(find.byType(SettingsPage), findsOneWidget);
   });

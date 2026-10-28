@@ -7,14 +7,16 @@ import '../../../core/widgets/state_views.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
+import '../../quran/domain/quran_navigation.dart';
 import '../../settings/application/theme_settings.dart';
 import '../application/reader_providers.dart';
 import '../application/reader_settings.dart';
 import 'ayah_list_view.dart';
+import 'go_to_sheet.dart';
 import 'mushaf_page_view.dart';
 
-// F0-05 denemesi: okuma ekranının tam özellikleri (gösterge çubukları,
-// otomatik kaydırma vb.) Faz 1'dedir.
+// Okuma ekranı. Tam özellikleri (gizlenebilir çubuklar, otomatik kaydırma,
+// okuma ayarları paneli vb.) F1-02'de gelir.
 class ReaderPage extends ConsumerStatefulWidget {
   const ReaderPage({this.initialPage = 1, super.key});
 
@@ -35,6 +37,9 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
   /// Çift sayfa (açılım) görünümü mü (M2-03). Döndürmede değişir; okunan
   /// sayfa [_page] korunur (M2-10).
   bool _twoPage = false;
+
+  /// Git paneliyle her atlamada artar; ayet görünümü yeni çapadan açılır.
+  int _jumpGeneration = 0;
 
   /// Tablet yatay tutulduğunda iki sayfa yan yana gösterilir.
   static bool _useTwoPages(Size size) =>
@@ -98,6 +103,38 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
     settings.setViewMode(mode);
   }
 
+  /// Git panelinden seçilen yere gider (M4-07). Konum hem sayfa hem ayet
+  /// görünümünde aynı çapadan açılır (M2-15).
+  Future<void> _goTo(JumpTarget target) async {
+    final repo = ref.read(quranRepositoryProvider);
+    final AyahRef anchor;
+    final int page;
+    switch (target) {
+      case AyahJump(:final ayah):
+        final result = await repo.pageOf(kDefaultLayoutId, ayah);
+        if (result.valueOrNull == null) return;
+        (anchor, page) = (ayah, result.valueOrNull!);
+      case PageJump(page: final p):
+        final result = await repo.firstAyahOfPage(kDefaultLayoutId, p);
+        if (result.valueOrNull == null) return;
+        (anchor, page) = (result.valueOrNull!, p);
+    }
+    if (!mounted) return;
+    ref.read(readerAnchorProvider.notifier).set(anchor);
+    ref.read(selectedWordProvider.notifier).select(null);
+    setState(() {
+      _page = page;
+      _resetController(page);
+      _jumpGeneration++;
+    });
+    _prefetchAround(page);
+  }
+
+  Future<void> _openGoTo() async {
+    final target = await showGoToSheet(context, ref.read(readerAnchorProvider));
+    if (target != null) await _goTo(target);
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -132,15 +169,27 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
     return Scaffold(
       backgroundColor: colors.background,
       appBar: AppBar(
-        title: Text(
-          ayahView
-              ? l10n.readerAyahTitle(context.formatDigits(anchor))
-              : juz == null
-              ? l10n.readerPageTitle(pageText)
-              : l10n.readerPageJuzTitle(pageText, context.formatInt(juz)),
-          key: const Key('reader.title'),
+        // Çubukta çok düğme varken başlık kesilmez, küçülür. Düğmeler F1-02'de
+        // okuma ayarları paneline (E-10) taşınınca yer açılacak.
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: AlignmentDirectional.centerStart,
+          child: Text(
+            ayahView
+                ? l10n.readerAyahTitle(context.formatDigits(anchor))
+                : juz == null
+                ? l10n.readerPageTitle(pageText)
+                : l10n.readerPageJuzTitle(pageText, context.formatInt(juz)),
+            key: const Key('reader.title'),
+          ),
         ),
         actions: [
+          IconButton(
+            key: const Key('reader.goTo'),
+            tooltip: l10n.readerGoTo,
+            icon: const Icon(Icons.manage_search),
+            onPressed: _openGoTo,
+          ),
           IconButton(
             key: const Key('reader.viewMode'),
             tooltip: ayahView
@@ -183,6 +232,7 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
           ? index == null
                 ? ColoredBox(color: colors.background)
                 : AyahListView(
+                    key: ValueKey('reader.ayahList.$_jumpGeneration'),
                     index: index,
                     colors: colors,
                     textScale: settings.textScale,

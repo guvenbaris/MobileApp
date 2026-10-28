@@ -49,8 +49,8 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. L
 
 ### F1-00 Faz 0'dan Devredilenler [Z]
 Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taşındı (Yol Haritası, faz geçiş kuralı 2).
-- [ ] iOS: `ios.yml`'ın GitHub'da ilk çalıştırılması ve simülatörde açılış (F0-01)
-- [ ] CI: bilerek bozulan bir PR'ın kırmızıya düştüğünün görülmesi (F0-09)
+- [~] iOS: `ios.yml`'ın GitHub'da ilk çalıştırılması ve simülatörde açılış (F0-01)
+- [~] CI: bilerek bozulan bir PR'ın kırmızıya düştüğünün görülmesi (F0-09)
 - [x] F0-05 sonuç raporu: seçilen yöntem, sorunlar, Türkiye düzeni için uygulanabilirlik (`Faz_1_Notlar.md` §2.5; Türkiye kısmı ön değerlendirme, kesinleşmesi F1-03'te)
 - [~] Gerçek cihazda performans ölçümü (NF-PF01, NF-PF02): araçlar hazır ve emülatörde denendi (`tool/perf/startup.dart`, `integration_test/perf_test.dart`); ⏳ gerçek telefonda çalıştırılması
 - [~] 7 sayfanın basılı nüshayla karşılaştırılması: paket hazır (`test/manual/page_sheet_test.dart` → `build/page_check/`); ⏳ basılı mushafla karşılaştırma
@@ -58,12 +58,12 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 - [~] Arapça arayüz çevirilerinin anadili Arapça biri tarafından gözden geçirilmesi: tablo aracı hazır (`tool/l10n/export_review_sheet.dart`); ⏳ gözden geçirme (Faz 1 sonuna yakın önerilir)
 
 ### F1-01 Uygulama Kabuğu ve Gezinme [Z] — M4-01, M4-07, M6-05
-- [ ] Alt sekmeli kabuk (S8, TK-16); her sekme kendi geçmişini korur; Arapçada sekme sırası sağdan sola
-- [ ] **Bugün** ekranının Faz 1 sürümü: "Okumaya devam et" kartı (birden fazla ilerleme varsa her biri), son dinlenen, günün ayeti (E-02)
-- [ ] **Kur'an** dizini: Sure / Cüz / Sayfa sekmeleri, `2:255` ve sayfa numarasıyla atlama (E-03)
-- [ ] **Git** paneli: okuma ekranından çıkmadan sure, cüz, sayfa, ayet seçimi (M4-07)
-- [ ] Derin bağlantı `/read?ayah=s:a`; geçersiz bağlantıda hata durumu
-- **Bitti:** Uygulama açılışından son okunan ayete tek dokunuş; okuma ekranından ana menüye dönmeden herhangi bir ayete gidilebiliyor.
+- [x] Alt sekmeli kabuk (S8, TK-16); her sekme kendi geçmişini korur; Arapçada sekme sırası sağdan sola
+- [x] **Bugün** ekranının Faz 1 sürümü: "Okumaya devam et" kartı, günün ayeti (E-02). Birden fazla ilerleme F1-10'da; son dinlenen F1-09'da
+- [x] **Kur'an** dizini: Sure / Cüz (hizb ve rubu') / Sayfa sekmeleri, `2:255` ve sayfa numarasıyla atlama, son okunan şeridi (E-03)
+- [x] **Git** paneli: okuma ekranından çıkmadan sure+ayet, sayfa, cüz seçimi (M4-07)
+- [x] Derin bağlantı `/read?ayah=s:a` ve `?page=`; geçersiz bağlantıda hata durumu (işletim sistemi düzeyinde kayıt AK-04 ile)
+- **Bitti:** Uygulama açılışından son okunan ayete tek dokunuş; okuma ekranından ana menüye dönmeden herhangi bir ayete gidilebiliyor. ✅ (`Faz_1_Notlar.md` §3)
 
 ### F1-02 Okuma Ekranı [Z] — M2-01, M2-03, M2-04, M2-05, M2-07, M2-09…M2-13
 - [ ] Çubukların dokununca gizlenip gösterilmesi; ekranı kendiliğinden kapatmaz (M2-13)
@@ -193,6 +193,7 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 ## Değişiklik Geçmişi
 | Tarih | Değişiklik |
 |---|---|
+| 29.10.2026 | F1-01 tamamlandı: sekmeli kabuk, Bugün, Kur'an dizini, Git paneli, derin bağlantı |
 | 29.10.2026 | F1-00: F0-05 sonuç raporu; sayfa karşılaştırma paketi, gerçek cihaz performans araçları ve çeviri gözden geçirme tablosu |
 | 29.10.2026 | S9 uygulandı (`text_uthmani` kaldırıldı, içerik sürümü 7); S1/S2 meal lisansı yolları netleştirildi (atıf izin yerine geçmez; izin + kamu malı yedek) |
 | 29.10.2026 | İlk sürüm: Faz 0 kullanıcı kararıyla kapandı, açık kalanlar F1-00'a devredildi; ekran tasarımı `Ekran_Tasarimi.md` ile birlikte planlandı |

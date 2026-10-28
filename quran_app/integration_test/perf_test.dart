@@ -69,7 +69,9 @@ void main() {
     loads.sort();
 
     // Okuma ekranı: Fatiha'dan (1. sayfa) başlayıp 20 sayfa ileri.
-    await tester.tap(find.byKey(const Key('home.surah.1')));
+    await tester.tap(find.byKey(const Key('tab.quran')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('quran.surah.1')));
     await tester.pumpAndSettle();
     expect(find.byType(MushafPageView), findsWidgets);
 

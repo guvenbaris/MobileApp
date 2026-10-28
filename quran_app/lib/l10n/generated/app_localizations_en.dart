@@ -13,9 +13,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Quran';
 
   @override
-  String get homeTitle => 'Home';
-
-  @override
   String get settingsTitle => 'Settings';
 
   @override
@@ -147,4 +144,119 @@ class AppLocalizationsEn extends AppLocalizations {
   String mushafPageLabel(String page) {
     return 'Mushaf, page $page';
   }
+
+  @override
+  String get tabToday => 'Today';
+
+  @override
+  String get tabQuran => 'Quran';
+
+  @override
+  String get tabMemorize => 'Memorize';
+
+  @override
+  String get tabMe => 'Me';
+
+  @override
+  String get todayContinueButton => 'Continue';
+
+  @override
+  String get todayStartButton => 'Start';
+
+  @override
+  String get todayStartDetail => 'Start with Al-Fatihah';
+
+  @override
+  String locationDetail(String surah, String ayah, String page, String juz) {
+    return '$surah $ayah · Page $page · Juz $juz';
+  }
+
+  @override
+  String surahAyah(String surah, String ayah) {
+    return '$surah $ayah';
+  }
+
+  @override
+  String get todayDailyAyah => 'Verse of the day';
+
+  @override
+  String get todayRead => 'Read';
+
+  @override
+  String get quranJumpHint => 'Surah:verse (2:255) or page';
+
+  @override
+  String get quranJumpInvalid => 'Not found. Example: 2:255 or page 1–604';
+
+  @override
+  String get quranTabSurah => 'Surah';
+
+  @override
+  String get quranTabJuz => 'Juz';
+
+  @override
+  String get quranTabPage => 'Page';
+
+  @override
+  String juzTitle(String juz) {
+    return 'Juz $juz';
+  }
+
+  @override
+  String pageAt(String location, String page) {
+    return '$location · Page $page';
+  }
+
+  @override
+  String hizbStart(String hizb) {
+    return 'Hizb $hizb';
+  }
+
+  @override
+  String hizbQuarter(String hizb, String fraction) {
+    return 'Hizb $hizb · $fraction';
+  }
+
+  @override
+  String lastRead(String location) {
+    return 'Last read: $location';
+  }
+
+  @override
+  String get surahMeccan => 'Meccan';
+
+  @override
+  String get surahMedinan => 'Medinan';
+
+  @override
+  String get memorizeSoonTitle => 'Memorization tools are coming';
+
+  @override
+  String get memorizeSoonMessage =>
+      'Verse hiding, a memorization map, a review plan and memorization tests will be here. All free and offline.';
+
+  @override
+  String get readerGoTo => 'Go to';
+
+  @override
+  String get goToTitle => 'Go to';
+
+  @override
+  String get goToSurah => 'Surah';
+
+  @override
+  String get goToAyah => 'Verse';
+
+  @override
+  String get goToPage => 'Page';
+
+  @override
+  String get goToJuz => 'Juz';
+
+  @override
+  String get goToButton => 'Go';
+
+  @override
+  String get linkInvalid =>
+      'This link does not point to a valid verse or page.';
 }

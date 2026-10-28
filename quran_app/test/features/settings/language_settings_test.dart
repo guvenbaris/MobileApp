@@ -8,11 +8,11 @@ import 'package:quran_app/core/config/flavor.dart';
 import 'package:quran_app/core/config/flavor_provider.dart';
 import 'package:quran_app/core/database/user_database.dart';
 import 'package:quran_app/core/l10n/app_language.dart';
-import 'package:quran_app/features/home/presentation/home_page.dart';
 import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/reader/presentation/reader_page.dart';
 import 'package:quran_app/features/settings/application/locale_settings.dart';
 import 'package:quran_app/features/settings/presentation/settings_page.dart';
+import 'package:quran_app/features/today/presentation/today_page.dart';
 import 'package:quran_app/features/user_data/application/user_data_providers.dart';
 
 import '../../helpers/fake_quran_repository.dart';
@@ -32,7 +32,7 @@ TextDirection _directionOf(WidgetTester tester, Type screen) =>
     Directionality.of(tester.element(find.byType(screen)));
 
 Future<void> _openSettings(WidgetTester tester) async {
-  await tester.tap(find.byKey(const Key('home.settings')));
+  await tester.tap(find.byKey(const Key('today.settings')));
   await tester.pumpAndSettle();
 }
 
@@ -67,19 +67,21 @@ void main() {
   ) async {
     await tester.pumpWidget(_app());
     await tester.pumpAndSettle();
-    expect(find.text('Ana Sayfa'), findsOneWidget);
+    expect(find.text('Bugün'), findsWidgets);
+    expect(_directionOf(tester, TodayPage), TextDirection.ltr);
+    await openTab(tester, 'quran');
     expect(find.text('Bakara'), findsOneWidget);
-    expect(find.text('286 ayet'), findsOneWidget);
-    expect(_directionOf(tester, HomePage), TextDirection.ltr);
+    expect(find.text('Medenî · 286 ayet'), findsOneWidget);
   });
 
   testWidgets('desteklenmeyen cihaz dilinde İngilizce açılır', (tester) async {
     tester.platformDispatcher.localesTestValue = const [Locale('de', 'DE')];
     await tester.pumpWidget(_app());
     await tester.pumpAndSettle();
-    expect(find.text('Home'), findsOneWidget);
+    expect(find.text('Today'), findsWidgets);
+    await openTab(tester, 'quran');
     expect(find.text('Al-Baqarah'), findsOneWidget);
-    expect(find.text('286 verses'), findsOneWidget);
+    expect(find.text('Medinan · 286 verses'), findsOneWidget);
   });
 
   testWidgets(
@@ -95,19 +97,27 @@ void main() {
       expect(_directionOf(tester, SettingsPage), TextDirection.rtl);
 
       await tapBack(tester);
-      expect(find.text('الرئيسية'), findsOneWidget);
+      expect(find.text('اليوم'), findsWidgets);
       expect(find.text('ابدأ القراءة'), findsOneWidget);
+      expect(_directionOf(tester, TodayPage), TextDirection.rtl);
+      // RTL'de sekme sırası aynalanır: Bugün en sağda, Ben en solda.
+      final todayTab = tester.getCenter(find.byKey(const Key('tab.today')));
+      final meTab = tester.getCenter(find.byKey(const Key('tab.me')));
+      expect(todayTab.dx, greaterThan(meTab.dx));
+
+      await openTab(tester, 'quran');
       // Sure adı Arapça, sayılar Doğu Arap rakamıyla (NF-Y03).
       expect(find.text('البقرة'), findsOneWidget);
-      expect(find.text('٢٨٦ آية'), findsOneWidget);
-      expect(find.text('٧ آيات'), findsOneWidget);
-      expect(_directionOf(tester, HomePage), TextDirection.rtl);
+      expect(find.text('مدنية · ٢٨٦ آية'), findsOneWidget);
+      expect(find.text('مكية · ٧ آيات'), findsOneWidget);
       // RTL'de ListTile'ın başı (sure numarası) sağda olur.
       final number = tester.getCenter(find.text('٢'));
       final name = tester.getCenter(find.text('البقرة'));
       expect(number.dx, greaterThan(name.dx));
 
-      await tester.tap(find.byKey(const Key('home.read')));
+      await openTab(tester, 'today');
+
+      await tester.tap(find.byKey(const Key('today.continue')));
       await tester.pumpAndSettle();
       expect(_directionOf(tester, ReaderPage), TextDirection.rtl);
       expect(find.textContaining('الصفحة ١'), findsOneWidget);
@@ -122,8 +132,9 @@ void main() {
     await _openSettings(tester);
     await _choose(tester, 'settings.numerals.arabic');
     await tapBack(tester);
+    await openTab(tester, 'quran');
     expect(find.text('Bakara'), findsOneWidget);
-    expect(find.text('٢٨٦ ayet'), findsOneWidget);
+    expect(find.text('Medenî · ٢٨٦ ayet'), findsOneWidget);
   });
 
   testWidgets('İngilizceye geçiş ve geri cihaz diline dönüş', (tester) async {
@@ -180,7 +191,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Home'), findsOneWidget);
+      expect(find.text('Today'), findsWidgets);
     });
   });
 }

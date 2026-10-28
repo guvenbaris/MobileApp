@@ -7,7 +7,8 @@
 ## İçindekiler
 1. [S9: Tanzil metninin uygulamadan çıkarılması ve meal lisansı](#1-s9-tanzil-metninin-uygulamadan-çıkarılması-ve-meal-lisansı)
 2. [F1-00 Faz 0'dan Devredilenler](#2-f1-00-faz-0dan-devredilenler)
-3. [Genel durum ve bekleyen kararlar](#3-genel-durum-ve-bekleyen-kararlar)
+3. [F1-01 Uygulama Kabuğu ve Gezinme](#3-f1-01-uygulama-kabuğu-ve-gezinme)
+4. [Genel durum ve bekleyen kararlar](#4-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -160,17 +161,59 @@ Raster süresi emülatörün yazılım grafik biriminden etkileniyor (F0-05 §8.
 
 ---
 
-## 3. Genel durum ve bekleyen kararlar
+## 3. F1-01 Uygulama Kabuğu ve Gezinme
+**Tarih:** 29.10.2026 · **Durum:** ✅ · **Gereksinimler:** M4-01, M4-07, M6-05 · **Ekranlar:** §3, E-02, E-03 (`Ekran_Tasarimi.md`)
+
+### 3.1 Yapılanlar
+| Parça | Dosya | Açıklama |
+|---|---|---|
+| Kabuk | `lib/core/widgets/app_shell.dart`, `lib/core/routing/app_router.dart` | go_router `StatefulShellRoute`: 4 alt sekme (Bugün · Kur'an · Hafızlık · Ben). Her sekme kendi geçmişini korur (TK-16). Seçili sekmeye tekrar dokunmak o sekmenin başına döner. Arapçada sekme sırası aynalanır. |
+| Tam ekran rotalar | `app_router.dart`, `app_routes.dart` | Okuma (`/read`) ve Ayarlar (`/settings`) sekmelerin **üstünde** açılır; geri tuşu açıldıkları sekmeye döner. |
+| Bugün (E-02) | `features/today/` | Devam et kartı: son okunan ör. "Bakara 150 · Sayfa 23 · Cüz 2", tek dokunuşla oraya (M6-05). Hiç okunmadıysa "Okumaya başla" → Fatiha. Günün ayeti: tarihe göre (aynı gün herkese aynı ayet; 977 adımla 6.236 günde her ayet bir kez), uzun ayetler atlanır; "Oku" ile açılır. |
+| Kur'an dizini (E-03) | `features/quran/presentation/quran_index_page.dart` | Atlama kutusu (`2:255`, `2 255`, `٢:٢٥٥`, sayfa `50`; geçersizde uyarı). Sure sekmesi: numara, ad, "Mekkî/Medenî · N ayet", Arapça ad. Cüz sekmesi: 30 cüz, açılınca 8 rubu' ("Hizb 1 · ¼ — Bakara 26 · Sayfa 5"). Sayfa sekmesi: 604 sayfa ızgarası. Altta "Son okunan" şeridi. |
+| Hafızlık | `features/memorize/` | "Yakında" boş durumu; sekme Faz 2'de dolar (ET-7). |
+| Ben | `features/me/` | Ayarlar, Lisanslar. İlerlemeler, indirmeler vb. sonraki paketlerde. |
+| Git paneli (M4-07) | `features/reader/presentation/go_to_sheet.dart` | Okuma ekranında 🔍 düğmesiyle: sure + ayet, sayfa veya cüz. Sayfa ve ayet görünümünde aynı çapadan açılır (M2-15). Geçersiz ayet numarasında panel kapanmaz. |
+| Derin bağlantı | `features/reader/presentation/reader_entry.dart` | `/read?ayah=2:255`, `/read?page=50`; parametresiz = son okunan. Geçersiz bağlantıda hata durumu ("Bu bağlantı geçerli bir ayete veya sayfaya ait değil"). İşletim sistemi düzeyinde bağlantı kaydı (Android intent, iOS universal link) alan adı/uygulama adı kararıyla (AK-04) yapılacak. |
+| Veri | `quran_navigation.dart`, `QuranRepository.quarterStarts` | Atlama ayrıştırıcısı (`parseJump`) ve 240 rubu'un başlangıç ayeti ve sayfası (tek SQL sorgusu). Cüz dizini bundan türetilir. |
+
+### 3.2 Bulunan ve düzeltilen hatalar
+- **Atlama kutusu ilk girdiyi yok sayıyordu.** Ayet sayıları henüz yüklenmemiş bir sağlayıcıdan senkron okunuyordu; değer `null` gelince girdi sessizce yok sayılıyordu. Değer artık beklenerek okunuyor. Testle bulundu.
+- **Sayfa ızgarasında numaralar alt alta kırılıyordu** ("1/0"). Düğmenin varsayılan iç boşluğu 72 px hücrede yazıya yer bırakmıyordu. Emülatör görüntüsünde fark edildi. Test, numaranın tek satırda olduğunu denetliyor; düzeltme yokken kırıldı (yazı yüksekliği 40 px, beklenen 20 px).
+- **Okuma ekranında başlık kesiliyordu** ("Ayet 2:…"). Git düğmesi eklenince ayet görünümünde çubukta 5 düğme oldu. Başlık artık kesilmek yerine küçülüyor. Kalıcı çözüm F1-02'de: yazı boyutu ve tema düğmeleri okuma ayarları paneline (E-10) taşınacak.
+
+### 3.3 Testler
+| Test | Kontrol |
+|---|---|
+| `test/features/quran/quran_navigation_test.dart` | Atlama biçimleri (`2:255`, `2.255`, `2 255`, Doğu Arap rakamları, sayfa); geçersizler (`2:287`, `115:1`, `605`…); rubu'un hizb içindeki çeyreği |
+| `test/features/navigation_test.dart` (17 test) | 4 sekme; sekme durumu korunuyor; okuma sekmenin üstünde açılıp geri dönüyor. Devam et (sahte veride Bakara 150 → sayfa 16) ve Okumaya başla (Fatiha). Günün ayeti tarihe göre. Dizin: sure, atlama, geçersiz uyarı, cüz → rubu', sayfa ızgarası, son okunan şeridi. Derin bağlantı geçerli/geçersiz. Git paneli: sayfa, ayet, ayet görünümünde atlama, geçersiz ayette panel açık. |
+| `test/features/accessibility_test.dart` | Yeni ekranların hepsi (Bugün, Kur'an'ın 3 sekmesi, Hafızlık, Ben, Git paneli) etiket, dokunma alanı (Android 48, iOS 44) ve metin kontrastı kurallarından geçiyor. |
+| Güncellenen testler | Eski ana sayfaya bağlı dil, tema, uygulama ve entegrasyon testleri yeni sekmelere göre güncellendi. `test/helpers`'a `openTab()` eklendi. |
+
+**Emülatör (gerçek veri):** Bugün, Kur'an dizini ve cüz listesi kontrol edildi. Cüz ve rubu' başlangıçları basılı Medine mushafıyla uyumlu (2:26 → s. 5, 2:44 → s. 7, 2:142 → s. 22). Rubu'a dokununca okuma ekranı o ayette açıldı.
+
+**Toplam:** 184 test geçiyor (1 elle çalıştırılan atlanıyor); analiz temiz.
+
+### 3.4 Bilmeniz gerekenler
+- **Ana sayfa (`HomePage`) kaldırıldı.** Yerini Bugün (`TodayPage`) ve Kur'an dizini (`QuranIndexPage`) aldı. Test anahtarları değişti: `home.read` → `today.continue`, `home.settings` → `today.settings`, `home.surah.N` → `quran.surah.N`.
+- **Günün ayeti** şimdilik yalnızca Arapça; meal F1-05'te eklenecek. Seçim kuralı yerine seçilmiş bir ayet listesi düşünülürse (ET-2), yalnızca `dailyAyahProvider` değişir. Cihazın yerel tarihi kullanılır (emülatör GMT'de olduğu için Türkiye'den bir gün geride görünebilir).
+- **Okuma ilerlemesi şimdilik tek** (son okunan). Birden fazla ilerleme (Hatim, Ramazan…) F1-10'da kartta seçilebilir olacak.
+
+---
+
+## 4. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 29.10.2026
 
 | İş paketi | Durum |
 |---|---|
 | S9 (Tanzil metni uygulamadan çıkarıldı) | ✅ |
 | F1-00 Faz 0'dan devredilenler | 🔨 F0-05 raporu ✅; araçlar hazır (sayfa paketi, performans, çeviri tablosu); gerçek cihaz, basılı nüsha, TalkBack dinleme ve Arapça gözden geçirme kullanıcıda; CI ve iOS sonra |
-| F1-01 … F1-14 | ⬜ |
+| F1-01 Uygulama kabuğu ve gezinme | ✅ |
+| F1-02 … F1-14 | ⬜ |
 
 **Bekleyen kararlar ve işler**
 - **Yayın meali (S1, S2), karar Faz 1 sonunda (kullanıcı, 29.10.2026):** Kullanıcı, uygulama ticari olacağı için Diyanet'in izin vermeyeceğini düşünüyor. Bu yüzden **kamu malı yedek meal gerçek bir seçenek olarak hazırlanacak**: kaynak doğrulaması, metin hattı ve okunabilirlik değerlendirmesi F1-05 içinde yapılacak. Diyanet başvurusu yine de denenebilir. Geliştirme Diyanet mealiyle sürüyor.
 - **Faz 1 başlangıç kararları S1–S8 ve TK-11…TK-17:** öneri halinde; itiraz yoksa uygulanır.
+- **ET-1 ("Ben") ve ET-7 (Hafızlık sekmesi "yakında")** öneriye göre uygulandı; itiraz yoksa kesinleşir.
 - **Ekran tasarımı açık soruları ET-1…ET-7** (`Ekran_Tasarimi.md` §10).
 - **Emülatör:** içerik sürümü 7'ye çıktı; uygulama güncel kodla ilk açılışta yeni veritabanını kendiliğinden kopyalar ve eskisini siler.

@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../../../core/result/result.dart';
 import '../domain/mushaf_page.dart';
 import '../domain/quran_models.dart';
+import '../domain/quran_navigation.dart';
 import '../domain/quran_repository.dart';
 import 'content_database.dart';
 
@@ -199,6 +200,35 @@ class DriftQuranRepository implements QuranRepository {
       glyphs: glyphs,
     );
   }
+
+  @override
+  Future<Result<List<QuarterStart>>> quarterStarts(String layoutId) =>
+      _guard(() async {
+        // Her rubu'un ilk ayeti ve o ayetin başladığı sayfa, tek sorguda.
+        final rows = await _db
+            .customSelect(
+              'SELECT a.juz, a.hizb, a.rub, a.surah, a.ayah, '
+              '(SELECT p.page FROM layout_pages p '
+              'WHERE p.layout_id = ?1 AND p.first_ayah_id <= a.id '
+              'AND p.last_ayah_id >= a.id ORDER BY p.page LIMIT 1) AS page '
+              'FROM ayahs a '
+              'WHERE a.id IN (SELECT MIN(id) FROM ayahs GROUP BY rub) '
+              'ORDER BY a.rub',
+              variables: [Variable.withString(layoutId)],
+              readsFrom: {_db.ayahs, _db.layoutPages},
+            )
+            .get();
+        return Ok([
+          for (final r in rows)
+            QuarterStart(
+              juz: r.read<int>('juz'),
+              hizb: r.read<int>('hizb'),
+              rub: r.read<int>('rub'),
+              start: AyahRef(r.read<int>('surah'), r.read<int>('ayah')),
+              page: r.read<int>('page'),
+            ),
+        ]);
+      });
 
   Future<Result<T>> _guard<T>(Future<Result<T>> Function() body) async {
     try {

@@ -728,13 +728,13 @@ Yeni bileşenler `lib/core/widgets/`'a ya da yalnız bir özelliğe aitse o öze
 
 | # | Soru | Öneri | Karar |
 |---|---|---|---|
-| ET-1 | Sekme adı "Ben" mi "Profil" mi? | "Ben": hesapsız kullanımda "profil" yanıltıcı | ⏳ |
+| ET-1 | Sekme adı "Ben" mi "Profil" mi? | "Ben": hesapsız kullanımda "profil" yanıltıcı | 🟡 Öneriyle uygulandı (F1-01), onay bekliyor |
 | ET-2 | Bugün ekranında günün ayeti her gün mü değişsin, kullanıcı mı seçsin? | Her gün değişir; yer imlerinden "favori ayetler" seçeneği | ⏳ |
 | ET-3 | Okuma açılışta hangi görünümde başlasın? | Son kullanılan görünüm (F0-06'da kalıcı) | ✅ Uygulanıyor |
 | ET-4 | Ayet görünümünde varsayılan: tüm sure listesi mi, tek ayet odak mı? | Liste; odak modu seçenek | ⏳ |
 | ET-5 | Sayfa okları varsayılan açık mı? | Kapalı (kaydırma yeterli); ayarlardan açılır | ⏳ |
 | ET-6 | Marka rengi ve logo | Uygulama adı (AK-04) ile birlikte | ⏳ |
-| ET-7 | Hafızlık sekmesi Faz 1'de görünsün mü? | Görünsün, "yakında" boş durumuyla (sekme yerleşimi sonradan değişmesin, Y-05) | ⏳ |
+| ET-7 | Hafızlık sekmesi Faz 1'de görünsün mü? | Görünsün, "yakında" boş durumuyla (sekme yerleşimi sonradan değişmesin, Y-05) | 🟡 Öneriyle uygulandı (F1-01), onay bekliyor |
 
 ---
 

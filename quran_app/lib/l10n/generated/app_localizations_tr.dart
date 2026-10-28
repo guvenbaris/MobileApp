@@ -13,9 +13,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get appTitle => 'Kur\'an';
 
   @override
-  String get homeTitle => 'Ana Sayfa';
-
-  @override
   String get settingsTitle => 'Ayarlar';
 
   @override
@@ -146,4 +143,119 @@ class AppLocalizationsTr extends AppLocalizations {
   String mushafPageLabel(String page) {
     return 'Mushaf, sayfa $page';
   }
+
+  @override
+  String get tabToday => 'Bugün';
+
+  @override
+  String get tabQuran => 'Kur\'an';
+
+  @override
+  String get tabMemorize => 'Hafızlık';
+
+  @override
+  String get tabMe => 'Ben';
+
+  @override
+  String get todayContinueButton => 'Devam et';
+
+  @override
+  String get todayStartButton => 'Başla';
+
+  @override
+  String get todayStartDetail => 'Fâtiha\'dan başlayın';
+
+  @override
+  String locationDetail(String surah, String ayah, String page, String juz) {
+    return '$surah $ayah · Sayfa $page · Cüz $juz';
+  }
+
+  @override
+  String surahAyah(String surah, String ayah) {
+    return '$surah $ayah';
+  }
+
+  @override
+  String get todayDailyAyah => 'Günün ayeti';
+
+  @override
+  String get todayRead => 'Oku';
+
+  @override
+  String get quranJumpHint => 'Sure:ayet (2:255) veya sayfa';
+
+  @override
+  String get quranJumpInvalid => 'Bulunamadı. Örnek: 2:255 veya sayfa 1–604';
+
+  @override
+  String get quranTabSurah => 'Sure';
+
+  @override
+  String get quranTabJuz => 'Cüz';
+
+  @override
+  String get quranTabPage => 'Sayfa';
+
+  @override
+  String juzTitle(String juz) {
+    return '$juz. Cüz';
+  }
+
+  @override
+  String pageAt(String location, String page) {
+    return '$location · Sayfa $page';
+  }
+
+  @override
+  String hizbStart(String hizb) {
+    return 'Hizb $hizb';
+  }
+
+  @override
+  String hizbQuarter(String hizb, String fraction) {
+    return 'Hizb $hizb · $fraction';
+  }
+
+  @override
+  String lastRead(String location) {
+    return 'Son okunan: $location';
+  }
+
+  @override
+  String get surahMeccan => 'Mekkî';
+
+  @override
+  String get surahMedinan => 'Medenî';
+
+  @override
+  String get memorizeSoonTitle => 'Hafızlık araçları yakında';
+
+  @override
+  String get memorizeSoonMessage =>
+      'Ayet gizleme, ezber haritası, tekrar planı ve ezber testi bu sekmede olacak. Hepsi ücretsiz ve internetsiz.';
+
+  @override
+  String get readerGoTo => 'Git';
+
+  @override
+  String get goToTitle => 'Git';
+
+  @override
+  String get goToSurah => 'Sure';
+
+  @override
+  String get goToAyah => 'Ayet';
+
+  @override
+  String get goToPage => 'Sayfa';
+
+  @override
+  String get goToJuz => 'Cüz';
+
+  @override
+  String get goToButton => 'Git';
+
+  @override
+  String get linkInvalid =>
+      'Bu bağlantı geçerli bir ayete veya sayfaya ait değil.';
 }

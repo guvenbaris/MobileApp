@@ -106,12 +106,6 @@ abstract class AppLocalizations {
   /// **'Kur\'an'**
   String get appTitle;
 
-  /// No description provided for @homeTitle.
-  ///
-  /// In tr, this message translates to:
-  /// **'Ana Sayfa'**
-  String get homeTitle;
-
   /// Ayarlar ekranının başlığı; ana sayfadaki ayarlar düğmesinin ipucu olarak da kullanılır.
   ///
   /// In tr, this message translates to:
@@ -333,6 +327,204 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Mushaf, sayfa {page}'**
   String mushafPageLabel(String page);
+
+  /// No description provided for @tabToday.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün'**
+  String get tabToday;
+
+  /// No description provided for @tabQuran.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kur\'an'**
+  String get tabQuran;
+
+  /// No description provided for @tabMemorize.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hafızlık'**
+  String get tabMemorize;
+
+  /// Kişisel alan sekmesi (ET-1: "Ben" önerisi; hesapsız kullanımda "Profil" yanıltıcı).
+  ///
+  /// In tr, this message translates to:
+  /// **'Ben'**
+  String get tabMe;
+
+  /// No description provided for @todayContinueButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam et'**
+  String get todayContinueButton;
+
+  /// No description provided for @todayStartButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başla'**
+  String get todayStartButton;
+
+  /// No description provided for @todayStartDetail.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fâtiha\'dan başlayın'**
+  String get todayStartDetail;
+
+  /// Bir konumun özeti (devam et kartı).
+  ///
+  /// In tr, this message translates to:
+  /// **'{surah} {ayah} · Sayfa {page} · Cüz {juz}'**
+  String locationDetail(String surah, String ayah, String page, String juz);
+
+  /// Sure adı ve ayet numarası (ör. "Bakara 255").
+  ///
+  /// In tr, this message translates to:
+  /// **'{surah} {ayah}'**
+  String surahAyah(String surah, String ayah);
+
+  /// No description provided for @todayDailyAyah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günün ayeti'**
+  String get todayDailyAyah;
+
+  /// No description provided for @todayRead.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oku'**
+  String get todayRead;
+
+  /// No description provided for @quranJumpHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sure:ayet (2:255) veya sayfa'**
+  String get quranJumpHint;
+
+  /// No description provided for @quranJumpInvalid.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bulunamadı. Örnek: 2:255 veya sayfa 1–604'**
+  String get quranJumpInvalid;
+
+  /// No description provided for @quranTabSurah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sure'**
+  String get quranTabSurah;
+
+  /// No description provided for @quranTabJuz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cüz'**
+  String get quranTabJuz;
+
+  /// No description provided for @quranTabPage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sayfa'**
+  String get quranTabPage;
+
+  /// No description provided for @juzTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{juz}. Cüz'**
+  String juzTitle(String juz);
+
+  /// No description provided for @pageAt.
+  ///
+  /// In tr, this message translates to:
+  /// **'{location} · Sayfa {page}'**
+  String pageAt(String location, String page);
+
+  /// No description provided for @hizbStart.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hizb {hizb}'**
+  String hizbStart(String hizb);
+
+  /// fraction: ¼, ½ veya ¾ (rubu').
+  ///
+  /// In tr, this message translates to:
+  /// **'Hizb {hizb} · {fraction}'**
+  String hizbQuarter(String hizb, String fraction);
+
+  /// No description provided for @lastRead.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son okunan: {location}'**
+  String lastRead(String location);
+
+  /// No description provided for @surahMeccan.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mekkî'**
+  String get surahMeccan;
+
+  /// No description provided for @surahMedinan.
+  ///
+  /// In tr, this message translates to:
+  /// **'Medenî'**
+  String get surahMedinan;
+
+  /// No description provided for @memorizeSoonTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hafızlık araçları yakında'**
+  String get memorizeSoonTitle;
+
+  /// No description provided for @memorizeSoonMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayet gizleme, ezber haritası, tekrar planı ve ezber testi bu sekmede olacak. Hepsi ücretsiz ve internetsiz.'**
+  String get memorizeSoonMessage;
+
+  /// Okuma ekranındaki gezinme düğmesi (M4-07).
+  ///
+  /// In tr, this message translates to:
+  /// **'Git'**
+  String get readerGoTo;
+
+  /// No description provided for @goToTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Git'**
+  String get goToTitle;
+
+  /// No description provided for @goToSurah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sure'**
+  String get goToSurah;
+
+  /// No description provided for @goToAyah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayet'**
+  String get goToAyah;
+
+  /// No description provided for @goToPage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sayfa'**
+  String get goToPage;
+
+  /// No description provided for @goToJuz.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cüz'**
+  String get goToJuz;
+
+  /// No description provided for @goToButton.
+  ///
+  /// In tr, this message translates to:
+  /// **'Git'**
+  String get goToButton;
+
+  /// No description provided for @linkInvalid.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu bağlantı geçerli bir ayete veya sayfaya ait değil.'**
+  String get linkInvalid;
 }
 
 class _AppLocalizationsDelegate

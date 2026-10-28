@@ -22,3 +22,9 @@ Future<void> tapBack(WidgetTester tester) async {
   await tester.tap(find.byType(BackButton));
   await tester.pumpAndSettle();
 }
+
+/// Alt sekmelerden birini açar: `today`, `quran`, `memorize`, `me`.
+Future<void> openTab(WidgetTester tester, String tab) async {
+  await tester.tap(find.byKey(Key('tab.$tab')));
+  await tester.pumpAndSettle();
+}

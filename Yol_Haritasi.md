@@ -1,6 +1,6 @@
 # Yol Haritası
 
-> **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (ne yapılacak), `Fazlar/Faz_N.md` (fazın detaylı iş listesi).
+> **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (ne yapılacak), `Fazlar/Faz_N.md` (fazın detaylı iş listesi), `Ekran_Tasarimi.md` (tüm fazların ekranları; her faz kendi E-xx ekranlarını uygular).
 > **Kural:** Bir faz dosyası sadece o faza başlarken yazılır. Faz bitince bu dosyadaki durum güncellenir.
 > **Son güncelleme:** 29.10.2026
 
@@ -15,6 +15,14 @@
 | **3** | Sunucu, Senkron ve Beta | Sunucu (ASP.NET Core, AK-03), M1 gerçek entegrasyon, M14-02, senkron testleri, kapalı beta (Y-01) | **v1.0 yayını** | ⬜ |
 | **4** | Eğitim ve Ödeme | M9, M11, M15 | **v1.1 yayını** | ⬜ |
 | **5** | Genişleme | Çalma listesi, Warş/Kalûn, hafız-hoca modu, yeni ders yolları; v2.0 kararları | v1.2+ | ⬜ |
+
+### Fazlara göre ekranlar (`Ekran_Tasarimi.md`)
+| Faz | Ekranlar |
+|---|---|
+| 1 | Bilgi mimarisi ve alt sekmeler (§3); E-02 Bugün (temel), E-03 Kur'an dizini, E-04/E-05 Okuma, E-06 Ayet eylemleri, E-07 Kelime kartı, E-08 Meal/Tefsir, E-09 Oynatıcı, E-10 Okuma ayarları, E-11 Arama, E-12 Kayıtlarım, E-13 İndirmeler, E-14 Ayarlar, E-15 Hakkında, E-16 Okuma ilerlemeleri |
+| 2 | E-01 Karşılama, E-02 Bugün (hedef, seri, tekrar), E-17…E-20 Hafızlık, E-21…E-23 Alışkanlık, E-24 Zikir, E-25 Bildirimler, E-26 Hata bildir (yerel) |
+| 3 | E-27 Hesap, senkron, yedek; E-26 Destek (sunucu) |
+| 4 | Dersler sekmesi, E-28 Ders yolları ve ders, E-29 Abonelik |
 
 **Durum simgeleri:** ⬜ Başlamadı · ⏳ Hazırlanıyor · 🔨 Devam ediyor · ✅ Tamamlandı
 
@@ -46,4 +54,5 @@ Bu işler geliştirmeyle aynı anda yürür ve aşağıdaki fazları bloklar.
 |---|---|
 | 28.10.2026 | İlk sürüm |
 | 28.10.2026 | Faz 0 başladı |
+| 29.10.2026 | Fazlara göre ekran eşlemesi eklendi (`Ekran_Tasarimi.md`) |
 | 29.10.2026 | Faz 0 kapandı (kullanıcı kararı). Kapanmayan [Z] maddeler (iOS ilk CI çalışması, CI kırmızı denemesi, F0-05 sonuç raporu ve ertelenen 2 doğrulama, TalkBack elle kontrolü) Faz 1'e taşındı: `Faz_1.md` F1-00 (faz geçiş kuralı 2). Faz 1 başladı; tüm fazların ekranları `Ekran_Tasarimi.md`'de planlandı. |

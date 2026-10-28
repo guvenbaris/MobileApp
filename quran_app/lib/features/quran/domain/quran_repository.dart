@@ -1,6 +1,7 @@
 import '../../../core/result/result.dart';
 import 'mushaf_page.dart';
 import 'quran_models.dart';
+import 'quran_navigation.dart';
 
 /// Kur'an içeriğine erişim (MK-07: arayüz katmanı veritabanına doğrudan
 /// erişmez). İçerik cihazdadır, internet gerektirmez (M16-01).
@@ -19,4 +20,8 @@ abstract interface class QuranRepository {
 
   /// Bir mushaf sayfasının çizim için gereken tüm bilgisi (M2-01, M2-02).
   Future<Result<MushafPage>> getMushafPage(String layoutId, int page);
+
+  /// 240 rubu'un başlangıç ayeti ve sayfası, sırayla (cüz ve hizb dizini,
+  /// M4-01).
+  Future<Result<List<QuarterStart>>> quarterStarts(String layoutId);
 }

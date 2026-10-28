@@ -4,7 +4,6 @@
   "@appTitle": {
     "description": "Görev değiştiricide görünen geçici uygulama adı (AK-04 kararına kadar)."
   },
-  "homeTitle": "Ana Sayfa",
   "settingsTitle": "Ayarlar",
   "@settingsTitle": {
     "description": "Ayarlar ekranının başlığı; ana sayfadaki ayarlar düğmesinin ipucu olarak da kullanılır."
@@ -151,5 +150,114 @@
         "example": "5"
       }
     }
-  }
+  },
+  "tabToday": "Bugün",
+  "tabQuran": "Kur'an",
+  "tabMemorize": "Hafızlık",
+  "tabMe": "Ben",
+  "@tabMe": {
+    "description": "Kişisel alan sekmesi (ET-1: \"Ben\" önerisi; hesapsız kullanımda \"Profil\" yanıltıcı)."
+  },
+  "todayContinueButton": "Devam et",
+  "todayStartButton": "Başla",
+  "todayStartDetail": "Fâtiha'dan başlayın",
+  "locationDetail": "{surah} {ayah} · Sayfa {page} · Cüz {juz}",
+  "@locationDetail": {
+    "description": "Bir konumun özeti (devam et kartı).",
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "String"
+      },
+      "page": {
+        "type": "String"
+      },
+      "juz": {
+        "type": "String"
+      }
+    }
+  },
+  "surahAyah": "{surah} {ayah}",
+  "@surahAyah": {
+    "description": "Sure adı ve ayet numarası (ör. \"Bakara 255\").",
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "String"
+      }
+    }
+  },
+  "todayDailyAyah": "Günün ayeti",
+  "todayRead": "Oku",
+  "quranJumpHint": "Sure:ayet (2:255) veya sayfa",
+  "quranJumpInvalid": "Bulunamadı. Örnek: 2:255 veya sayfa 1–604",
+  "quranTabSurah": "Sure",
+  "quranTabJuz": "Cüz",
+  "quranTabPage": "Sayfa",
+  "juzTitle": "{juz}. Cüz",
+  "@juzTitle": {
+    "placeholders": {
+      "juz": {
+        "type": "String"
+      }
+    }
+  },
+  "pageAt": "{location} · Sayfa {page}",
+  "@pageAt": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      },
+      "page": {
+        "type": "String"
+      }
+    }
+  },
+  "hizbStart": "Hizb {hizb}",
+  "@hizbStart": {
+    "placeholders": {
+      "hizb": {
+        "type": "String"
+      }
+    }
+  },
+  "hizbQuarter": "Hizb {hizb} · {fraction}",
+  "@hizbQuarter": {
+    "description": "fraction: ¼, ½ veya ¾ (rubu').",
+    "placeholders": {
+      "hizb": {
+        "type": "String"
+      },
+      "fraction": {
+        "type": "String"
+      }
+    }
+  },
+  "lastRead": "Son okunan: {location}",
+  "@lastRead": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "surahMeccan": "Mekkî",
+  "surahMedinan": "Medenî",
+  "memorizeSoonTitle": "Hafızlık araçları yakında",
+  "memorizeSoonMessage": "Ayet gizleme, ezber haritası, tekrar planı ve ezber testi bu sekmede olacak. Hepsi ücretsiz ve internetsiz.",
+  "readerGoTo": "Git",
+  "@readerGoTo": {
+    "description": "Okuma ekranındaki gezinme düğmesi (M4-07)."
+  },
+  "goToTitle": "Git",
+  "goToSurah": "Sure",
+  "goToAyah": "Ayet",
+  "goToPage": "Sayfa",
+  "goToJuz": "Cüz",
+  "goToButton": "Git",
+  "linkInvalid": "Bu bağlantı geçerli bir ayete veya sayfaya ait değil."
 }

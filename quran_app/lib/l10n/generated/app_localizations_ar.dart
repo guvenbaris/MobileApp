@@ -13,9 +13,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appTitle => 'القرآن';
 
   @override
-  String get homeTitle => 'الرئيسية';
-
-  @override
   String get settingsTitle => 'الإعدادات';
 
   @override
@@ -149,4 +146,118 @@ class AppLocalizationsAr extends AppLocalizations {
   String mushafPageLabel(String page) {
     return 'المصحف، الصفحة $page';
   }
+
+  @override
+  String get tabToday => 'اليوم';
+
+  @override
+  String get tabQuran => 'القرآن';
+
+  @override
+  String get tabMemorize => 'الحفظ';
+
+  @override
+  String get tabMe => 'أنا';
+
+  @override
+  String get todayContinueButton => 'تابع';
+
+  @override
+  String get todayStartButton => 'ابدأ';
+
+  @override
+  String get todayStartDetail => 'ابدأ بسورة الفاتحة';
+
+  @override
+  String locationDetail(String surah, String ayah, String page, String juz) {
+    return '$surah $ayah · الصفحة $page · الجزء $juz';
+  }
+
+  @override
+  String surahAyah(String surah, String ayah) {
+    return '$surah $ayah';
+  }
+
+  @override
+  String get todayDailyAyah => 'آية اليوم';
+
+  @override
+  String get todayRead => 'اقرأ';
+
+  @override
+  String get quranJumpHint => 'سورة:آية (2:255) أو صفحة';
+
+  @override
+  String get quranJumpInvalid => 'لم يُعثر عليه. مثال: 2:255 أو صفحة 1–604';
+
+  @override
+  String get quranTabSurah => 'السور';
+
+  @override
+  String get quranTabJuz => 'الأجزاء';
+
+  @override
+  String get quranTabPage => 'الصفحات';
+
+  @override
+  String juzTitle(String juz) {
+    return 'الجزء $juz';
+  }
+
+  @override
+  String pageAt(String location, String page) {
+    return '$location · الصفحة $page';
+  }
+
+  @override
+  String hizbStart(String hizb) {
+    return 'الحزب $hizb';
+  }
+
+  @override
+  String hizbQuarter(String hizb, String fraction) {
+    return 'الحزب $hizb · $fraction';
+  }
+
+  @override
+  String lastRead(String location) {
+    return 'آخر قراءة: $location';
+  }
+
+  @override
+  String get surahMeccan => 'مكية';
+
+  @override
+  String get surahMedinan => 'مدنية';
+
+  @override
+  String get memorizeSoonTitle => 'أدوات الحفظ قادمة قريبًا';
+
+  @override
+  String get memorizeSoonMessage =>
+      'إخفاء الآيات وخريطة الحفظ وخطة المراجعة واختبار الحفظ ستكون هنا. كلها مجانية وتعمل دون إنترنت.';
+
+  @override
+  String get readerGoTo => 'انتقال';
+
+  @override
+  String get goToTitle => 'الانتقال إلى';
+
+  @override
+  String get goToSurah => 'السورة';
+
+  @override
+  String get goToAyah => 'الآية';
+
+  @override
+  String get goToPage => 'الصفحة';
+
+  @override
+  String get goToJuz => 'الجزء';
+
+  @override
+  String get goToButton => 'انتقل';
+
+  @override
+  String get linkInvalid => 'هذا الرابط لا يشير إلى آية أو صفحة صحيحة.';
 }

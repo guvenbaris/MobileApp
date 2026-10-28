@@ -5,11 +5,11 @@ import 'package:integration_test/integration_test.dart';
 import 'package:quran_app/app.dart';
 import 'package:quran_app/core/config/flavor.dart';
 import 'package:quran_app/core/config/flavor_provider.dart';
-import 'package:quran_app/features/home/presentation/home_page.dart';
 import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/quran/data/content_database_opener.dart';
 import 'package:quran_app/features/reader/presentation/reader_page.dart';
 import 'package:quran_app/features/settings/application/locale_settings.dart';
+import 'package:quran_app/features/today/presentation/today_page.dart';
 import 'package:quran_app/features/user_data/application/user_data_providers.dart';
 
 /// Gerçek cihazda/emülatörde uygulamanın açıldığını ve paketteki içerik
@@ -40,10 +40,14 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.byType(HomePage), findsOneWidget);
+    expect(find.byType(TodayPage), findsOneWidget);
+    await tester.tap(find.byKey(const Key('tab.quran')));
+    await tester.pumpAndSettle();
     expect(find.text('Fâtiha'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('tab.today')));
+    await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const Key('home.read')));
+    await tester.tap(find.byKey(const Key('today.continue')));
     await tester.pumpAndSettle();
     expect(find.byType(ReaderPage), findsOneWidget);
   });

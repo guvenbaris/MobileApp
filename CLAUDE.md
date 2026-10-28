@@ -40,7 +40,7 @@ quran_app/
       l10n/                         Dil seçimi, sayı biçimi, context.l10n
       theme/                        Palet, tema üretici, tipografi, ölçüler
       widgets/                      Ortak bileşenler (AppButton, AppListItem, durum ekranları)
-    features/<özellik>/             auth, billing, home, lessons, quran, reader, settings, sync, user_data
+    features/<özellik>/             auth, billing, lessons, me, memorize, quran, reader, settings, sync, today, user_data
       domain/                       Modeller ve arayüzler (Flutter'a bağımlı değil)
       data/                         Arayüz uygulamaları (Drift, sahte servisler)
       application/                  Riverpod sağlayıcıları, Notifier'lar, ayarlar
@@ -65,7 +65,7 @@ quran_app/
   - `prod`'da gerçek uygulaması olmayan servis açıkça `UnimplementedError` verir; sessizce sahteye düşmez.
   - Gerçek servis tek satırlık sağlayıcı değişikliğiyle bağlanır.
 - **Hata türleri:** veri katmanı `Result<T>` (`Ok`/`Err`) ve `AppFailure` döndürür; arayüze istisna sızdırmaz. Yakalanmamış hatalar `CrashReporter`'a gider (TK-10: sağlayıcı Faz 3'te seçilecek).
-- **Yönlendirme (TK-03):** go_router; rotalar `core/routing/app_routes.dart`. Okuma ekranı `?page=` ile açılır.
+- **Yönlendirme (TK-03, TK-16):** go_router; rotalar `core/routing/app_routes.dart`. Alt sekmeler `StatefulShellRoute` (Bugün `/`, Kur'an `/quran`, Hafızlık `/memorize`, Ben `/me`); okuma (`/read?ayah=2:255` veya `?page=50`) ve ayarlar (`/settings`) sekmelerin üstünde `context.push` ile açılır.
 - **Flavor (TK-07):** `dev` (paket adı `.dev` ekli, sahte servisler) ve `prod`.
 
 ## Veri
@@ -128,7 +128,7 @@ quran_app/
   - Dokunma alanı en az 48×48.
   - Bölüm başlıkları `header`, durum değişiklikleri `liveRegion`, süs simgeleri `ExcludeSemantics`.
   - Mushaf kelimeleri seçilebilir düğmedir.
-- **Widget anahtarları:** testlerin bulduğu öğelerde `Key('ekran.öğe')` (ör. `home.read`, `settings.theme.dark`, `reader.viewMode`).
+- **Widget anahtarları:** testlerin bulduğu öğelerde `Key('ekran.öğe')` (ör. `today.continue`, `quran.surah.2`, `tab.quran`, `settings.theme.dark`, `reader.goTo`).
 - **Gereksinim kodlarına atıf:** bir kuralı uygulayan kodun yorumunda gereksinim kodu yazılır (ör. `// M2-15: konum sayfadan bağımsız`). Böylece gereksinim ↔ kod izlenebilir.
 - **Yorumlar:** neden'i anlatır; kodun ne yaptığını tekrar etmez.
 
@@ -137,6 +137,7 @@ quran_app/
 - `test/` klasör yapısı `lib/` ile aynıdır.
 - Ortak yardımcılar `test/helpers/`:
   - `localizedApp()`: tek ekranı dil ve temayla sarar.
+  - `openTab()`: alt sekme açar (`today`, `quran`, `memorize`, `me`).
   - `tapBack()`: geri tuşu. `tester.pageBack()` İngilizce "Back" aradığı için Türkçe/Arapçada çalışmaz.
   - `FakeQuranRepository`, `openTestContentDatabase()`.
 - İçerik testleri (`test/content/`) üretilmiş `assets/db/content.sqlite` ister; önce veritabanı üretilir.

@@ -9,11 +9,11 @@ import 'package:quran_app/core/config/flavor_provider.dart';
 import 'package:quran_app/core/database/user_database.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/core/widgets/state_views.dart';
-import 'package:quran_app/features/home/presentation/home_page.dart';
 import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/reader/presentation/reader_page.dart';
 import 'package:quran_app/features/settings/application/theme_settings.dart';
 import 'package:quran_app/features/settings/presentation/settings_page.dart';
+import 'package:quran_app/features/today/presentation/today_page.dart';
 import 'package:quran_app/features/user_data/application/user_data_providers.dart';
 
 import '../../helpers/fake_quran_repository.dart';
@@ -60,12 +60,12 @@ void main() {
     tester.platformDispatcher.platformBrightnessTestValue = Brightness.light;
     await tester.pumpWidget(_app());
     await tester.pumpAndSettle();
-    expect(_themeOf(tester, HomePage), AppThemeId.light);
+    expect(_themeOf(tester, TodayPage), AppThemeId.light);
 
     tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
     await tester.pumpAndSettle();
-    expect(_themeOf(tester, HomePage), AppThemeId.dark);
-    expect(_scaffoldColor(tester, HomePage), AppPalette.dark.background);
+    expect(_themeOf(tester, TodayPage), AppThemeId.dark);
+    expect(_scaffoldColor(tester, TodayPage), AppPalette.dark.background);
   });
 
   for (final id in AppThemeId.values) {
@@ -74,16 +74,16 @@ void main() {
     ) async {
       await tester.pumpWidget(_app());
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('home.settings')));
+      await tester.tap(find.byKey(const Key('today.settings')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('settings.theme.${id.name}')));
       await tester.pumpAndSettle();
       expect(_themeOf(tester, SettingsPage), id);
 
       await tapBack(tester);
-      expect(_scaffoldColor(tester, HomePage), AppPalette.of(id).background);
+      expect(_scaffoldColor(tester, TodayPage), AppPalette.of(id).background);
 
-      await tester.tap(find.byKey(const Key('home.read')));
+      await tester.tap(find.byKey(const Key('today.continue')));
       await tester.pumpAndSettle();
       // Mushaf sayfası da aynı temada (koyuda metin alanı da koyu, M2-08).
       expect(_readerBackground(tester), AppPalette.of(id).mushaf.background);
@@ -99,7 +99,7 @@ void main() {
       _app(settings: {ThemeSettingsNotifier.key: 'light'}),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('home.read')));
+    await tester.tap(find.byKey(const Key('today.continue')));
     await tester.pumpAndSettle();
 
     final seen = <Color>[];
@@ -133,7 +133,7 @@ void main() {
         }
 
         await check(); // ana sayfa
-        await tester.tap(find.byKey(const Key('home.settings')));
+        await tester.tap(find.byKey(const Key('today.settings')));
         await tester.pumpAndSettle();
         await check(); // ayarlar
         handle.dispose();
