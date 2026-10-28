@@ -36,7 +36,7 @@ void main() {
     final ayah = (await repo.getAyah(const AyahRef(2, 255))).valueOrNull!;
     expect(ayah.juz, 3);
     expect(ayah.sajdah, isNull);
-    expect(ayah.textUthmani, isNotEmpty);
+    expect(ayah.textQpcHafs, isNotEmpty);
   });
 
   test('secde ayeti işaretli', () async {

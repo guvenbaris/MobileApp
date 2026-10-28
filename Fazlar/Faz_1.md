@@ -20,15 +20,15 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. L
 
 | # | Konu | Öneri | Not |
 |---|---|---|---|
-| S1 | Geliştirme meali (TR) | Quran.com/QUL'deki **Diyanet İşleri** meali (yalnız geliştirme). Yayın için Diyanet'ten yazılı izin (İÇ-04, AK-05). | Varsayılan meal uygulamayla gelecek (M16-01); bu yüzden yayın meali lisansı **Faz 1 sonuna kadar** netleşmeli. |
-| S2 | Ek mealler | Geliştirmede 2 TR + 1 EN meal (ör. Elmalılı'nın lisansı uygun bir sürümü, Saheeh International). | Yazarı, kaynağı ve sürümü bilgi ekranında (M3-07). Hangi sürümlerin serbest olduğu tek tek kontrol edilir. |
+| S1 | Geliştirme meali (TR) ve yayın meali | Geliştirmede Quran.com/QUL'deki **Diyanet İşleri** meali. **Yayın için iki yol paralel yürür:** (a) Diyanet'ten yazılı izin istenir; (b) telif süresi dolmuş bir meal yedek olarak hazırlanır (S2). | Meal bir telif eseridir: kaynağı yazmak (atıf) **izin yerine geçmez** (`Faz_1_Notlar.md` §1.2). Varsayılan meal uygulamayla geleceği için (M16-01) karar **Faz 1 sonuna kadar** verilmeli. |
+| S2 | Ek mealler ve kamu malı adayları | Telif süresi dolmuş olabilecek mealler: TR **Elmalılı Hamdi Yazır** (ö. 1942) ve **Ömer Rıza Doğrul** (ö. 1952) **özgün** metinleri; EN **Pickthall** (ö. 1936) ve **Yusuf Ali** (ö. 1953, 1934 özgün metni). Sadeleştirilmiş/yeniden düzenlenmiş baskılar **ayrı eserdir**, kullanılmaz. | Her biri için dijital kaynağın gerçekten özgün metni verdiği ve kaynağın kendi koşulları kontrol edilir; hukuk danışmanı onayı (AK-09). Yazar, kaynak, sürüm bilgi ekranında (M3-07). Saheeh International gibi telifli mealler izinsiz eklenmez. |
 | S3 | Kelime meali (TR, EN) | QUL'deki kelime meali verileri (aday); KFGQPC kelime bölünmesine otomatik eşleme. | Kelime sınırı farkları Q-12'de belli; eşleme orada test edilir. |
 | S4 | Kök ve morfoloji (M3-04, M4-04) | **Kaynak lisansı önce kontrol edilir.** Quranic Arabic Corpus verisinin GPL lisanslı olduğu biliniyor (doğrulanacak); uygulamaya gömülmesi uygun olmayabilir. Alternatif: QUL kök verisi. | [Ö] öncelikli; lisans çözülmezse Faz 1'den çıkar. |
 | S5 | Tefsir | Geliştirmede 1 TR + 1 AR + 1 EN tefsir, **indirilebilir** paket. Uygulamayla gelmez (boyut). | T-03: tefsir doğru ayete bağlı. |
 | S6 | Ses kaynağı | **Sure bazlı ses + ayet zaman damgaları** (QUL "segments" verisi). Gapless ve vurgulama için bu biçim gerekir. Geliştirmede 2–3 kari. | Yayın için ≥ 10 lisanslı kari, Türk hafızlar dahil (M5-01, İÇ-05, AK-05). |
 | S7 | Türkiye mushaf düzeni (M2-02 [Z]) | **Araştırma iş paketi (F1-03).** Diyanet'in dijital mushafı ve açık veri aranır. Veri bulunamazsa düzen verisi üretimi ayrı bir iş olarak planlanır. | Lisans AK-11. Bu madde v1.0 yayınını bloklayabilir; riskler tablosunda. |
 | S8 | Uygulama kabuğu | 4 alt sekme: **Bugün · Kur'an · Hafızlık · Ben**; v1.1'de **Dersler** eklenir. | Ayrıntı: `Ekran_Tasarimi.md` §3. |
-| S9 | `ayahs.text_uthmani` (Tanzil kökenli) | Arama KFGQPC metninin harekesiz biçiminden üretilir; `text_uthmani` **kaldırılır**. Tanzil yalnızca test referansı kalır. | `VERI_KAYNAKLARI.md` §4'teki besmele sorusu da böylece kapanır. |
+| S9 | `ayahs.text_uthmani` (Tanzil kökenli) | ✅ **Uygulandı (29.10.2026, kullanıcı onayı):** alan kaldırıldı (içerik sürümü 7, 13,9 MB). Tanzil tek dış test referansı; T-01 harf iskeletini Tanzil ile karşılaştırır. Arama (F1-08) KFGQPC metninin harekesiz biçiminden üretilir. | Uygulamada Tanzil yükümlülüğü ve besmele sorusu kapandı. Ayrıntı: `Faz_1_Notlar.md` §1. |
 
 ## Teknik Kararlar (Faz 1'de verilir)
 | # | Konu | Öneri | Gerekçe |
@@ -111,7 +111,7 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 - **Bitti:** Tefsir indirildikten sonra internetsiz açılıyor; T-03 geçiyor.
 
 ### F1-08 Arama [Z] — M4-02…M4-06, NF-PF03
-- [ ] FTS5 doğrulaması (TK-12); harekesiz Arapça arama dizini (KFGQPC metninden; S9 ile `text_uthmani` kaldırılır, VERI_KAYNAKLARI güncellenir)
+- [ ] FTS5 doğrulaması (TK-12); harekesiz Arapça arama dizini KFGQPC metninden (S9 ✅: `text_uthmani` kaldırıldı)
 - [ ] Meal içinde arama; kaynak filtresi kalıcı (M4-03)
 - [ ] Kök ile arama [Ö] (S4)
 - [ ] Arama ekranı (E-11): son aramalar, sonuç vurgusu, `2:255`/sayfa algılama
@@ -149,7 +149,8 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 
 ### F1-12 Hakkında ve Kaynaklar [Z] — İÇ-01, M3-07
 - [ ] Hakkında ekranı (E-15): Kur'an metni kaynağı ve sürümü, mushaf düzeni, font, meal/tefsir/kari kaynakları
-- [ ] Tanzil için **tıklanabilir** tanzil.net bağlantısı (S9 ile `text_uthmani` kaldırılırsa gerekmez); lisans sayfası bağlantısı
+- [x] ~~Tanzil için tıklanabilir tanzil.net bağlantısı~~: gerekmiyor, Tanzil metni uygulamaya girmiyor (S9)
+- [ ] Lisans sayfası bağlantısı
 - **Bitti:** Uygulamadaki her içerik kaynağının adı, sürümü ve lisansı uygulama içinden görülebiliyor.
 
 ### F1-13 Ayarlar ve Erişilebilirlik [Z] — M13-02…M13-05, T-05, T-10
@@ -174,7 +175,7 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 | Risk | Etki | Önlem |
 |---|---|---|
 | Türkiye mushaf düzeni için dijital veri veya lisans yok | M2-02 [Z] karşılanamaz, v1.0 gecikir | F1-03 ilk iş olarak başlar; Diyanet ile görüşme (AK-11) paralel yürür; gerekirse düzen verisi üretimi ayrı iş paketi olur |
-| Varsayılan meal (Diyanet) için yayın izni gecikir | M16-01 gereği paketlenecek meal belirsiz | Mimari meal kaynağından bağımsız; izin gelene kadar geliştirme verisi; alternatif lisanslı meal listesi hazır tutulur |
+| Varsayılan meal (Diyanet) için yayın izni gecikir veya alınamaz | M16-01 gereği paketlenecek meal belirsiz | İzin başvurusu Faz 1'in başında yapılır; mimari meal kaynağından bağımsız; S2'deki kamu malı adayı yedek olarak hazırlanır |
 | Kari seslerinin lisansı ve boyutu | M5-01 (≥ 10 kari) karşılanamaz | Sesler uygulamaya gömülmez, indirilir; kari başına izin süreci erkenden başlar (İÇ-05) |
 | Kök/morfoloji verisinin lisansı (GPL olasılığı) | M3-04, M4-04 [Ö] düşer | S4: önce lisans; uygun değilse kapsamdan çıkar |
 | Gapless çalmanın iki platformda farklı davranması | M5-02 [Z] | Sure bazlı dosya + zaman damgası; T-06 iki platformda; iOS testi CI'da |
@@ -190,4 +191,5 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 ## Değişiklik Geçmişi
 | Tarih | Değişiklik |
 |---|---|
+| 29.10.2026 | S9 uygulandı (`text_uthmani` kaldırıldı, içerik sürümü 7); S1/S2 meal lisansı yolları netleştirildi (atıf izin yerine geçmez; izin + kamu malı yedek) |
 | 29.10.2026 | İlk sürüm: Faz 0 kullanıcı kararıyla kapandı, açık kalanlar F1-00'a devredildi; ekran tasarımı `Ekran_Tasarimi.md` ile birlikte planlandı |

@@ -1,7 +1,8 @@
 // İçerik veritabanının sağlama (SHA-256) değerleri (F0-04, T-01).
 //
-// Tanzil yalnızca `text_uthmani` için bağımsız referanstır. KFGQPC metni
-// (`text_qpc_hafs`), kelimeler ve mushaf düzeni için bağımsız referans
+// Tanzil yalnızca harf iskeleti, sure/ayet sayıları ve cüz/rubu'/secde/sayfa
+// için bağımsız referanstır (T-01, T-02). KFGQPC metninin harekeleri ve
+// durak işaretleri, kelimeler ve mushaf düzeni için bağımsız referans
 // olmadığından, doğrulanmış halleri sure başına sağlama değeriyle
 // `tool/content/reference/checksums.json` dosyasına sabitlenir. Veride tek
 // karakter değişse test hangi surede değiştiğini söyler.
@@ -30,7 +31,6 @@ Future<Map<String, dynamic>> computeChecksums(ContentDatabase db) async {
     final a = ayahs.where((r) => r.surah == surah).toList();
     final w = words.where((r) => r.surah == surah);
     text['$surah'] = {
-      'textUthmani': hash(a.map((r) => r.textUthmani)),
       'textQpcHafs': hash(a.map((r) => r.textQpcHafs)),
       'textDigitalKhatt': hash(a.map((r) => r.textDigitalKhatt)),
       'meta': hash(

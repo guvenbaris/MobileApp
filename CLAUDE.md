@@ -97,10 +97,10 @@ quran_app/
 - **Secde:** 14 (Hanefi). 22:77'deki ۩ sayfada görünür ama secde sayılmaz.
 - **Yeni veri kaynağı veya dosya indirildiğinde:** `VERI_KAYNAKLARI.md` dosya tablosuna kaynak, **indirme amacı** ve kullanım yeri (🟢 uygulama / 🔵 eşleme / 🟡 test) yazılır. Lisans kontrol listesi doldurulur (İÇ-10).
 - **Lisans yükümlülükleri korunur:**
-  - Tanzil telif notu `content_meta.notice.tanzil`'de durur.
-  - DigitalKhatt OFL metni pakette durur.
-  - İkisi de Ayarlar → Lisanslar'da gösterilir.
+  - DigitalKhatt OFL metni pakette durur ve Ayarlar → Lisanslar'da gösterilir.
+  - **Tanzil yalnızca test referansıdır**; Tanzil metninin hiçbir kısmı uygulamaya girmez (içerik sürümü 7, Faz 1 S9).
   - `test/content/license_notices_test.dart` bunları denetler.
+- **Atıf izin yerine geçmez:** meal, tefsir, ses ve font gibi telifli içerik ancak yazılı izinle veya lisansı açıkça izin veriyorsa eklenir. Kaynağı yazmak tek başına yeterli değildir (İÇ-04, İÇ-05).
 
 ## Kod kuralları
 - **Lint ve biçim (TK-08):**

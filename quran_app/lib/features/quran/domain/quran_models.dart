@@ -64,7 +64,6 @@ class Ayah {
     required this.juz,
     required this.hizb,
     required this.rub,
-    required this.textUthmani,
     required this.textQpcHafs,
     required this.textDigitalKhatt,
     this.sajdah,
@@ -79,7 +78,6 @@ class Ayah {
 
   /// Secde ayetiyse secde sıra numarası (1–14).
   final int? sajdah;
-  final String textUthmani;
 
   /// KFGQPC Hafs metni: esas kelime bölünmesinin kaynağı.
   final String textQpcHafs;

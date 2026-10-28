@@ -132,7 +132,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get aboutLegalese =>
-      'Kur\'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur\'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur\'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel), Tanzil Project (tanzil.net).';
+      'Kur\'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur\'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur\'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).';
 
   @override
   String get loading => 'Yükleniyor';

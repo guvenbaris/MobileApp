@@ -1,798 +1,684 @@
 {
   "text": {
     "1": {
-      "textUthmani": "2ba2195e4abc07d8551ba06ed4df0b956322f5106c777ff3bee0bdc805a0810a",
       "textQpcHafs": "e30d0a5da658495cb40912978adea187a50297f0be67e4a999b803c20a4a553b",
       "textDigitalKhatt": "ede45efd5d36e4d71c8bab5c21005b5382d385334717a2ca301eb598671c149a",
       "meta": "25e481f1206c1fd387b7a0eb88bc0293226a3b2c14ec44d257e130239a52e699",
       "words": "9de3aefe99a787d727fea11ede1ab814216bdfee9243d10d6276a271317571a3"
     },
     "2": {
-      "textUthmani": "96d326b43c34fe5bd565c8d784cee493375ec99a2495898ec59f809c027e3c2d",
       "textQpcHafs": "12ecf94ce391da1256b89f1a417309e23f4cfcd6f37a98eae9f91a3438e4164f",
       "textDigitalKhatt": "8f435c90f42a26a820c31822ebc8ba7e902cce7c93bcc6915054bc5c3e5f833c",
       "meta": "bd3fa89f87b27f24077fe262f5359e3262245b803668d9c192d79da13876b960",
       "words": "4162a8e2c1eed6ac2280ad663fe57bd86c08882508ffb81e22dc0f25f186ad5e"
     },
     "3": {
-      "textUthmani": "1943db222639895e55ad7ad08a9ca6f56d0547b75f079656a77d8cf72a398258",
       "textQpcHafs": "0b65fb15b0d4aa5e42edf82c1510429a68949b379f9baf7f32250682ff2e90f7",
       "textDigitalKhatt": "305dedc1245fc64b580222514e9562679f44357f3f253fa5fe0ac92d4a5b3719",
       "meta": "c646a68e1eb12a496ddea781243aa6b043f500957496c530dfccfb169c95c6ae",
       "words": "f925d1181d9d09bbae2c1f82b6e60d644108a8b08794fbc1217199c8ae850d39"
     },
     "4": {
-      "textUthmani": "a7d5b216c07873507cbbddb5a6feb1e87d5af41e7691f5af680ec6c6cf360a20",
       "textQpcHafs": "f954a66feeae9f5387be7ef7193beda226b06a9d4b8334ee61b1338e1127307a",
       "textDigitalKhatt": "83924b8cb61c61d7f7b0752d7223689f14f0c909957071cc7b2903b7441c51f1",
       "meta": "cc3c81400dff5ae562e99737450cc7cf55d38f2f5bb7bc1a7bb20e86c8d61d64",
       "words": "99feeb77ef5e2ffde27cdf2d5f9874d31d5ef3387a80662e94727eec959ff9e4"
     },
     "5": {
-      "textUthmani": "1e39b7f4d253b26d01275698279ff6c00278c2cf1c5e6ee52d0d838481525689",
       "textQpcHafs": "3ac3a20396e420b5ce194f138ff4d3f999a8bb019d7075cb26f3e9653c51b1ba",
       "textDigitalKhatt": "c0c98ceed1cef94b0c1ce3f6c9bec03ddb084ea5f51eb8904a521e017375a09d",
       "meta": "09716a20273ccfa582a0821b2a1d1e077e1974c449afe554f55c02d2faeca849",
       "words": "fe08022c68c7364fcd5aef9919d650b0b53ed446ca3fd93d50f33574b1d16bea"
     },
     "6": {
-      "textUthmani": "a194726b6fb139adad9d1110845d30fb89004add200dde8fdc0370c6e8bb76fc",
       "textQpcHafs": "9aebedb8e7cf84b3b22245bb24ae9548693c69fd72d8433f6c8aadda888208a8",
       "textDigitalKhatt": "1f5acfad00f15d7d424f696d68e816e06ba5674b314a091a58b20fa598777890",
       "meta": "ace525f23c26aaf2fd9802aa1f86c75201cedf1cec32f5e8ebf9a2e39ee757eb",
       "words": "0c3c80897a4657ef628345a61b625bb4f471fdf53161b532524cc8acc4c9ba31"
     },
     "7": {
-      "textUthmani": "3a3561a02e5193caee1544daa540ba5c20d032056acaed6156708104f75bef91",
       "textQpcHafs": "5fd448e6c82db037b2881a89dd6ab4f6eee8feecb4154f53a5852a351d3ae8b8",
       "textDigitalKhatt": "d96760690453dbb2f551cd6a4db04bb5536a4833cb4b7fb2f76f42ff0fe32139",
       "meta": "0a195455cb92ebd1c5a0cb21915b36f1cc5c678b0014984861c68c2bcc97b791",
       "words": "5e16ded655450f965114b300e235e9a6a815cfa27f6e0cfdf3386afa74829b4b"
     },
     "8": {
-      "textUthmani": "ac891b449a4fb45b89c2c64bc9b6d46939abe727b5fc5eb9227d32d973c425b4",
       "textQpcHafs": "ceb1481e28517418c1c002901cbc64f0d640106342a4a6166fe22d2d5b3bc94c",
       "textDigitalKhatt": "1b6cfa272bd7dcd5beb6dd89b0fcc5e68472b0abc7b09efc359b7e6329480b12",
       "meta": "7c5f92d14cde66720dccd5ea2a6b19c32343303ee2f69b74440bd34e9028704a",
       "words": "e87b22747f36c4b8fdc1e9340a26a1a58e3d4bc7b97a4512acd9fb3262553f43"
     },
     "9": {
-      "textUthmani": "389818ed199c27e87d166019acd67e7493466584ea8491a3ac70c4282409290d",
       "textQpcHafs": "09d7f1d5dc80267e07c66d6a9206eebd634a92378c9baf74301697bec2f291dc",
       "textDigitalKhatt": "232099bb801c597a92e37a9a16f682291f86260e794e484e2fa41fc04d80ec25",
       "meta": "ccbd2426fc8a02c5649620bbe1fd1d836ecf3f5eaa195d75accbf98527948179",
       "words": "0b0f17542102e447fcd9ca7344a67bb5cd20e96bca4530ea535cb94a75b24288"
     },
     "10": {
-      "textUthmani": "77a9c99648922753477edfab0501c14cd6d6c812e4f72834b5854d85bf029cfc",
       "textQpcHafs": "8cf07d1e2cfd8e91025e137f174482c6150420fb8c440d0dbc12dae0a371e0e0",
       "textDigitalKhatt": "94148be9f726e62d8952dc4607d4451d2d68b96f9c5ee276605bf049196b9fbd",
       "meta": "0f0be8f28eee77dd4952320e4a8b750a421476b72187f264a75d0d8c24e0e40d",
       "words": "b836eddf5e6b3abed5d429eafea1a57387fa967eb5e8eb9a355e0f10f3103760"
     },
     "11": {
-      "textUthmani": "1becc8dd013a700846b0a159233577e8c0e54ad16c699126b46ad9aae69066aa",
       "textQpcHafs": "0aefbe30e2fc741b86e788a485c3b679f25e7866dabf8c91082c9c43b77d6031",
       "textDigitalKhatt": "ac349eafcb62dc846903952eaabe32544da54bac5803772bef681e3da97629b8",
       "meta": "be63b8e00f8ca4f57852c5a440f0f02691f63ebd886a8f3319ccf849a3e47935",
       "words": "0ef8852c0303d9e9f8a6ad1ed07a14b7783532219ee2dcbe5a369f9603386e29"
     },
     "12": {
-      "textUthmani": "fa010947e0ec1e8814c451cee6cddd0a5d5d97ec0dd100727d29b5225949cb1f",
       "textQpcHafs": "3c6bc6bb6d6e2cda492d1291a43b0522fe80b87eed6ae18992cfc0f9e3f3483e",
       "textDigitalKhatt": "6e53e0b812aa56c7a8bae2bbbcea9eb11346142950d0c0fb7d7ce4bf6cbedaf8",
       "meta": "e967e2c389efc70f092b0bf41918e9d81b998eb5b0cceb9c941189f7d907650c",
       "words": "407fe7dd7e28b1042fc950d71b4ebde8bcf2eccd81aaa418f199e8a148548f92"
     },
     "13": {
-      "textUthmani": "90e96b0c3ef21c45eda75fcf6f8bdbdb692dff726eaefca5917fe456f1c886d8",
       "textQpcHafs": "bff7ec8da103a1afe1dda9a82d4d58116170175870c89ece5899727016471a7f",
       "textDigitalKhatt": "6566ef2abccd9e158d671efbed1ee27b469670c69dfe4de7a7d62f342098940c",
       "meta": "4fec7aab044d1112d515e07a23708b28edcb615eb3744a722899867b07e20d78",
       "words": "d624a1b6e507e7b42c678f3e8344702c27f27602474bb1cca0f01015038a7446"
     },
     "14": {
-      "textUthmani": "51907c5260c8878dae446740c7c9685688915c0cf3dff2e88d56e831951a69c3",
       "textQpcHafs": "6004d091e82949a5182758032d4e8f3e07e717ec7f868ed2f5a4b14577abd5db",
       "textDigitalKhatt": "58ae8439f50e70976736d209e7507dbc99c37e033fc638087bf770dc9b355ee9",
       "meta": "d8ce9b0c58421121013ce5a02f6ce74ab811cad16d767429b25a860372476489",
       "words": "d74716d9ad85c3dfe27c9ecb4d17a89573b316393e480a607c475cea423b67b1"
     },
     "15": {
-      "textUthmani": "cd4532452540e783f18359ad5924c88fa712c9be1db35531904fc6654a8f0c09",
       "textQpcHafs": "f203080aa6eb945ea59a0f8e87eb009ebb1885ea1dcdbe4909a61e23edf92016",
       "textDigitalKhatt": "2b39e63e979edf53ce8f077702249672e7a8b30a6616386f3456d709f1d9c683",
       "meta": "74f0f4073f1dfe3a738506a13af69f180a9fb6ce76638229fc46440d4b00b66f",
       "words": "c7419afb676092b2ce28a6f9f4b17e0000a31997dbfb9e04dab4f329b95eb614"
     },
     "16": {
-      "textUthmani": "b5f109f3265b780fa2a39645c814d0de26e2dafde5532d2a2ec4c4a5e1e15e36",
       "textQpcHafs": "8a57017f9a06ac6c46bbd106e938cd6cb96b7ed940f1ac82f2cb9c1b7fb92928",
       "textDigitalKhatt": "1d390f66b4841c1d6318cbdb09f28ce1bb7f4d106191d49868a1f6d627fd1426",
       "meta": "2f58c8cd2d607adc0da5d3cedc1ecf78346cdf656f49c9dadb97d4c38888017a",
       "words": "ca0be16b446dd39ce9b08975ac4024dba8c4901fe3df1bb6fd09ee92f99e7a9f"
     },
     "17": {
-      "textUthmani": "ddd8e45c6d64503dfbd11e7c243b88e27887b8ad0085b1005dde4a062cb6614b",
       "textQpcHafs": "b8839edfc4f58d4e214a1aec8f3e898191eac8ec9a9f9228707edd4ae57fc432",
       "textDigitalKhatt": "764b3a62b43cb586b4fdf6359c75d47448b7be334a6101cf1353234fa6b0e71d",
       "meta": "63d8a93e100b9882e366bd3cdec018c1d48cd9f60aca9713cd913f4da6b72882",
       "words": "cfc06df20d5790cd705844d40a903ccd8ec61c8d2dade2dbef1be7e0471532f7"
     },
     "18": {
-      "textUthmani": "f1976e0eab7b5601ede464b62b77fefda32ba16a1d64e5f7efb6ccb1dc0f3484",
       "textQpcHafs": "d5022d1f266aeb626b8d79e799fda0ee15f06fcb7a37abd661db32a51f6c36c3",
       "textDigitalKhatt": "2799bafa8cd78ec64c45c9e6526c8b23016030a24d3ecd95e129fada856156fa",
       "meta": "b1325ef4fd254fb62cadcb73602a380dc297735a78a6f24a32cb712d01b1b79f",
       "words": "c6b972fcb37d4db6e0d40d0c4444090f17640018e929b76b4db09368f2cd8dc4"
     },
     "19": {
-      "textUthmani": "fa009cc9095a7b9a980addb406bd1c590f4941e5a968e2bd01175c81f126cc73",
       "textQpcHafs": "308d5dbb824a662896479a01ada9b60508158f6ee18cffb4483fbed7bfc60595",
       "textDigitalKhatt": "0678a8822ae4b1008b2867dae279307111bef5b830fedc5e5072e1a2496917de",
       "meta": "f534ac34083546c373410c8c67541d1567b57dafb63ea3d718637b3fbdbe97e8",
       "words": "23bf07c3008495c8689b1776b3faaf9d7d256a4413eecec70dff9db7a38dc2f6"
     },
     "20": {
-      "textUthmani": "dd5974e163252cbdf311d68cd6781cf4e27e3e7f1c745408aac49a7d4da7d7c0",
       "textQpcHafs": "00e39b65b33a8e2e40919a831ea188e4adb9d623b0d48f25616e5614ee533ee6",
       "textDigitalKhatt": "83ebb4ff3bfc4d7d8d05535d30e058f8637603be807f0706fc9377b281cd3f15",
       "meta": "13ddb074446a48394c22be99568c4a6b7bfcedc63469352bae93795c6064e0a0",
       "words": "883695b922544aa274fefa0b4c6e5f5c04e1e342c60a4935635ea3f5802d360f"
     },
     "21": {
-      "textUthmani": "a320f85536c8d85377ac54b9df0441922c252988caaabfaa709a30bdafa788a8",
       "textQpcHafs": "dd1b3ac87fbc2ba9644b00e89fa41e011bd66bef34f79384a014a321e59f9d22",
       "textDigitalKhatt": "d974f1b8c837e43e275306aab3cc783ba1e3ffbc7bed63fe5fe316c99218243c",
       "meta": "f0ebb468ae102b8f7080df0968c778ff10df9ab57366f8fe165f16062707f32c",
       "words": "6d3a1a664b7ff86ac100e3b45e7d1961267abe2e5fecf2c4f41fd976dd22be62"
     },
     "22": {
-      "textUthmani": "9c86d0c57bfa4435d4425329f19792ee537b53a0e714abb477448a72c05c8a2a",
       "textQpcHafs": "28d7c2eef6f27faca7685f0b62fef8c3d290595e0d53747e3b7443d2be158131",
       "textDigitalKhatt": "41bc013be4236159ac4edd737e4c2837fd3781e7b73223f47d00ac24c928b428",
       "meta": "d7d3628a13e500836d7431be569a7b82f0d99eab55b27a95eec277c4300ea250",
       "words": "f2538ecc19858f1e3e77d2c34534c8e064bccbf42a5ffe5e873ede899f13d567"
     },
     "23": {
-      "textUthmani": "2602d646db24a4d9e5386795cf9a1d1509c643be450e2de8ffc00148861d2eae",
       "textQpcHafs": "609989ce029a760c722ce4d5bdbfdf7cbf293f9c0234b82e497ac192552db80c",
       "textDigitalKhatt": "dc3c5215c6d2fb93c5977852499496768000d6efa9816eaa5e0cc4cac6045fc4",
       "meta": "b03e0dd30af71365f4072e24419936bc7ebe16367bf1ab591b11f0ca23e240fc",
       "words": "22c8fd6fe73bdaa037df412ccfab1e98c306277310229beadc9130ee1c508bc1"
     },
     "24": {
-      "textUthmani": "9c350a2c737d826efe243948b017286637ec80826ff37afe97566cc2b9fa65db",
       "textQpcHafs": "a5723489df0aa2f62ca4def0b5bbc6e4df67801defdd26dba4c1cf5bbe102899",
       "textDigitalKhatt": "455f48d47c30b22b4a88cdf61f6192f6ff6d98a51cc33a8a0c58d6028104c6ab",
       "meta": "eddba1ee42d74c0054a00d4d146d6ee20d6dc5ac97e6486bc97336dec247bff4",
       "words": "55e74582ab99d2329eea6ed052b8c2574b5c2864bf576bf801b26b0fadc26cd3"
     },
     "25": {
-      "textUthmani": "e3726913ad13f522e81462e1de81ab432772ece06733699f9b756eadb89dfe15",
       "textQpcHafs": "33d735317da9edeebd43e2519218418907f1318d4dda03eab17d765ab4ce9c72",
       "textDigitalKhatt": "8895c99df55242185eb0500f6a261b48b915f962088dba7c7d1d2a282ebf4115",
       "meta": "8d17d067f5f3fe033ad7529b08e4f8641ed71826cd5a7dbba675565858fb68d5",
       "words": "4f52ab3566f813a542d3e9e261308a81dad047fce697dc2ad3331ebbfc469373"
     },
     "26": {
-      "textUthmani": "cb3aed09ad60617f5901dd6f8c9f23d938d83299b33366f2b2468ecf68ec4fde",
       "textQpcHafs": "6350a3a56bce5694c604f98af06358cc7ba51538de1163509d087ae65af57ed9",
       "textDigitalKhatt": "178ac60ecbc43a3d166b879f5b9fbf13f16c3212d80c140e151425c1fd1cbea3",
       "meta": "468d35cab9dee48a9d0d45e8d02ff71bced433ba801c46ff79777423cd58a1bd",
       "words": "eafe1754de54ecc6b7e44680b56a5d5bbf7815a874f8d95d77065a63246dbea7"
     },
     "27": {
-      "textUthmani": "e57ed0e9909689e6556e83c87ca4f8edb0f3d3bf6df612ebe632a953edbcbfad",
       "textQpcHafs": "2d82b15572095084192614996dd86388fdceb52c382e07fe3aeb970ce2c85000",
       "textDigitalKhatt": "f5efd3547b8c542c033933160405880a482686daa7d44f370eff9244fcbb42e7",
       "meta": "233ed1537e8e57f56b52182bfa06eb3e083cf4ad32e311a7624e3c03d9103e0d",
       "words": "acafcc46d0ff32455ae9c3360ffcf5aea41db6796fcc1d80180404c1e270317a"
     },
     "28": {
-      "textUthmani": "35b5d21fc18322e122218662e73b0f86f85290127af6e07074193cb8c5ae5a3b",
       "textQpcHafs": "7b5de3f97a9cc68c2a0e4241fa40b0b0499a92f51e29269caac2372a1f5bce8f",
       "textDigitalKhatt": "6f5ec5274807103e61d689ed6c1d228647873c82f806f40c9ce00906854eed9c",
       "meta": "72f19ff147ff4fd957154bc53d099903081e350e24e56a9c22f7cfdf170dc6ea",
       "words": "64cbed98d81caad53ad9d14a7f0b320c55d6a82d69695d7577ed8c37e763a4e4"
     },
     "29": {
-      "textUthmani": "7b47bd19ce32d47a75c3bacca555884e266098774a6d7ea18b3b8d6c1fa3ebf3",
       "textQpcHafs": "4db9b9d8f2cafe32dd91d177156648a3318fc2e567d5e24787416565675c52c1",
       "textDigitalKhatt": "68873626bca4b667c764d32b10881e915abf980b88e88862eb4359f70771a950",
       "meta": "87dc80ce33e79653043e4aab4d448e32561b2188269c59604a4eb70044da01bb",
       "words": "0a67127a48768f3ea85ced883e0f2e35deee3b78507f630c7dacb8137c0f006a"
     },
     "30": {
-      "textUthmani": "8570c89727dd1e6d40af040fa69d4d894bd92f3d1263ea0215072cee80385df6",
       "textQpcHafs": "ea8c9397a8f100770d88b00ce7bdde8be50ee494c986bfe64ab5e873659aa91a",
       "textDigitalKhatt": "deab6890272b3730052dce876143a2dfeea05a118193a526d7d01d2f5aa58b2d",
       "meta": "a2498656391e034cf8be0dacaff53993fa6b23be6478f83fcc2f10c83c33fe23",
       "words": "b56e74adf97f1144560bd0cdc58749150018ab781010ee832a15b1545a6aa750"
     },
     "31": {
-      "textUthmani": "4e0dfb9fcf758fa4afbea5eca965f172e485343f25ba74095026eab91591b2ef",
       "textQpcHafs": "b607f98202e7e9546f70f1e195f3393ecc92c50bc5876d1d773b2fa129fba708",
       "textDigitalKhatt": "b3aa23fd559196022f31827b68e78072ae493f595ecea6a7445b76b88f5ae13a",
       "meta": "878efec72d058cf0fcdbc9a19f44b6c48bd6ed4f84ea9df71faa0b7f70208dd7",
       "words": "d76207a3d2f36375657dd2a0f2144857beb956c069275839e1ff7dbb7d824af2"
     },
     "32": {
-      "textUthmani": "71a6791e11a1a8ad181a76d8d115fb7a28cf77564aaee1e38e5fae481f43f856",
       "textQpcHafs": "00f7cbf2aa0d155a7df778a3a18a4c0c2c257a4192911413f9dbeee20cfec98c",
       "textDigitalKhatt": "3044cc69cdae71481035ab6884caf1d3250182b2100138104e84e9c703d8e26c",
       "meta": "b53c4aeefc4932dfdca6cb112c30bcb97910412085fb616e9fdea6ceb7675ea4",
       "words": "da2513e4428042e4205c5d81d30a15e5b092bd351a8edc2d07c72d446ed3fa38"
     },
     "33": {
-      "textUthmani": "ca252cbe625f4ef96a16a6f2f35efb0c45c9757adc6a53a499b00bfd4f68575e",
       "textQpcHafs": "f07c8757e864aad45bc6c7735456dcedfcfe8d79dc7f6075f1b93c0ca0bd7c2f",
       "textDigitalKhatt": "2ce3ab82b62b7ebe5bf0614dd5985f0f513abcdd3125b9eaae3474788a09fd11",
       "meta": "99c5a2eeeea1b94d6975e42e72ec4949ca2d5ea2e49deb4798c84eb27ff9e8fa",
       "words": "ca8e73b4b280af347fd3ac5a89660b3e81a384d7a39229bc8453d481aaad2a38"
     },
     "34": {
-      "textUthmani": "a9dc61defc38e6591b7ae0e6cf8dc173ba87e903e096f3e7f39bcd276577c443",
       "textQpcHafs": "e095d4df2976e237620bbd4afeb2e23cb648db4ea3664aa92e57e61e6f6eab1a",
       "textDigitalKhatt": "728167a48da82ee8a5d4d2e5b32fee492e02e3b081619cbfd9a14d1d48f875aa",
       "meta": "58935fa5b84ee2df18fe958c894af15c01959f0a6a04c9ee01a72db3ea87530b",
       "words": "717197e5390f61411c81d1348f0cc6d62f9e077261c75316b3a077d4eec5a754"
     },
     "35": {
-      "textUthmani": "b5af7070b5ac42579642108a945c2a0c5a507cfe8e4a7c78650476fe80ccfeff",
       "textQpcHafs": "abb9dcaebe1df87940509283d9cd51c45b6090942a6ca3dfcf03e3d7328e69d7",
       "textDigitalKhatt": "78a4e1c6d8a19b1ff09ab3627c47d149dc0ad8c04eb75cc98ae962704d09348f",
       "meta": "bb22370320f0e12b6d9706a74a0058b420c4ad621591045cac139bd879ac2696",
       "words": "a574bcd398b6b4dd9327028e412b62716c92f9fb7093dcd6206349460098bfff"
     },
     "36": {
-      "textUthmani": "4533ced606b32372f7e26b4af1dd61cecefd1e2c87ecaee55e020a2b83b58983",
       "textQpcHafs": "19d6f8947d266bac91dca813f4f90fb4016f5e612f69a58626a4557cd356b896",
       "textDigitalKhatt": "f39ce51ce40d9d034ef8a6a2f94b56e92fecb73c9f2c67b340a6328b888d4cf1",
       "meta": "24ed5056e1a6e69369a52a2408c72e50f0b680e1d273b0e41a26d504941d24c3",
       "words": "7f41e5fb5f75cc62af36830f9628f69b2c71395bd5ce510912fcedcc35b67f34"
     },
     "37": {
-      "textUthmani": "0680d555a4fe7033568e5bd4f1c2b2da01656b2cb51faf7c649ee417f22365d0",
       "textQpcHafs": "dd34ea3c7b8e7a2c49ace2fee5a2e3ec5bd4d78f7b046710c348ac942d0a9fa7",
       "textDigitalKhatt": "2503cc2a41187c1fbc5c2d18ed1351f5c976fcdacf3aae2f2f5e086b3cea372b",
       "meta": "07d5332a3c0d106b2f710f24fe623b33337cf30d1ffee79959724189d5028cc8",
       "words": "d06c56df591506740a24934d4c3973944138bc546e0ee4bb0aa3c34894066f17"
     },
     "38": {
-      "textUthmani": "f50b1016314ce78a2f6a8eb5e07869df75f3d43a209eabe9fec30f434f72db34",
       "textQpcHafs": "5452025443ff41251a9b045e8418e74a6cce0ab4bd9ad43fc08e2d6e5e261a1b",
       "textDigitalKhatt": "44966c54d87714ffa25e956d09d1de1453746f9175c093fddf6bde560939d22d",
       "meta": "bd34f665fe6264f1715f640a8253e625951222028590de0fd80fe6c0ff2f3a8c",
       "words": "3867b7b834d4cd796ab378629d90aeee6e3221f5a2627df9627e1b33faf3bf2e"
     },
     "39": {
-      "textUthmani": "7f21718a10ca5b1f958b070a5c23b01d8f106aa95a90ecf925ff668ca8b408da",
       "textQpcHafs": "d67cf7b9d5b0dcfc874322f9a79d9ccf324a61f77ca901f237d818b1748e23f2",
       "textDigitalKhatt": "af81f95e6524392049764bff62e19251a203874263d97067aa3d46267d0bdc64",
       "meta": "a3ff53e7364d87fee2a335e913a67eb8af30d13f2cdf59145854c6a900eb79f3",
       "words": "331ded301a6b3fa5ee4547b4835ccd4f91996f21536b1833bfe1a3efc33b0252"
     },
     "40": {
-      "textUthmani": "12fc822fb4bd88dcd1341685529141b9a2cf6d7cf2fb4855dec7db2bb69e977c",
       "textQpcHafs": "0375ff90d73c5a42250ed0c5717565f32600b157de6e5bdb22178cb890b550e2",
       "textDigitalKhatt": "29d6ee9f198f2c8b72d75fb710b8253b2fc2179b4a0a093384abe6fae7c946e4",
       "meta": "ce2ad0f334960e2599f3bf7a517b5baca4b128ba3863b1966c382c6c19a1509b",
       "words": "d846f32b223996b86099db6112ac7922eac4e6624c90276373957e0e2b838f4e"
     },
     "41": {
-      "textUthmani": "6bef80d4702db476fee45cc66828ce87b681a554f3e3aa87a5c3e0575f171e95",
       "textQpcHafs": "1810c9611e9b88a1bbe10831f8c637142aeef17f182842e989029361069ef62b",
       "textDigitalKhatt": "42989cabb4b94189e3f8d7666d5ec395ce6e2db52f3aa627534450724a8ee1fc",
       "meta": "d156a87888ecfaf552a78872d65cca6d42c4e58210f1a1f9ed194147b6e47953",
       "words": "d33237c4aa3e988713afc978490905127756944642d65555a7a77cd97ea58046"
     },
     "42": {
-      "textUthmani": "70d09c50adaccae539c46a3df1afbbee32b69128fc99e3d72cad64f473de3d34",
       "textQpcHafs": "9ac512faedb1dc3153b63a15567e2f3ef4f3cb1e16fd28ded06cae7a2be524dc",
       "textDigitalKhatt": "0b49222fca0c26d3b0a001ec62dae78fd8ac3297185a6663881eb067db997b9f",
       "meta": "46ed0b55e6d4871c25b399420fe7526b80a09c35969d7f67db42a1486d63a845",
       "words": "c86efeca43c5133ef0a4dc9fe3d4984a9583257f3c9ef1c5169da70adb3ba119"
     },
     "43": {
-      "textUthmani": "aab2fd2eaf989c6f5915029e0f288b0e76afdf82e61781a11ab0cda3eb24bb12",
       "textQpcHafs": "3fcd6a21c35d8e9bf01ec67cf91e9412e7a4759f65bbcadb8bcde49ac0f92aa0",
       "textDigitalKhatt": "521fffbae1bd1836ddb227cca48e68c5b02b7ba2b041bdb1e59236695b4083a6",
       "meta": "c9481468ffe538213b1223232459e88d0f4fbef1811efc19996c0eaf73f04454",
       "words": "65c836f548bcf0ec2c5130a1b3a8dc57c6e590a8cba14d1cbcccfd1b991e64db"
     },
     "44": {
-      "textUthmani": "91f42247693d5688a941c23bcd2404187dcbe3154de453d2dbe6b2c2150765f7",
       "textQpcHafs": "b40f0033c87cc7e765ccb9cf630db1621a3be995ca988b9700f33728ff75c79b",
       "textDigitalKhatt": "31afb9c6e0315b6c0e270eb3ac1692f97065697dfc6a14b1c267fe0a6f80888a",
       "meta": "0862144dda7d625bb4f07ddd9b0ae39ba2a6a65213d662cb4a8b48d7c0955ede",
       "words": "8230cb3562d8e4503ae10a20fc54e28416fc086ba133e944e464c1e7c56a1ce2"
     },
     "45": {
-      "textUthmani": "22c4ed7a1f48b5d1a30a60ef28c02852bb7e369da7915e9280f19c4cff952df9",
       "textQpcHafs": "23289a60a70e75d29b66c30b26f467154a9f17bc9b289dd4b4d5c7eb83121cd9",
       "textDigitalKhatt": "3d516ab48a9af8f7f4f24622fc3cf9a739e0a498cdede293b6653d6893897332",
       "meta": "ef35ac749ea07d0f18a318567b549f795feb9fee1732b6e66f01b5a25b42c0c9",
       "words": "4f051f62db55554d2d8d2b58f81bd9a8d9a65bf7454eb197c45b27c8d77d4013"
     },
     "46": {
-      "textUthmani": "0a5261759665da2e2e451994d9e97576566b6462d18275a63cda818c15761f40",
       "textQpcHafs": "c4c21995486ad4e6872778efc4e1702b0f1191e9fc4972f6446a875d449da950",
       "textDigitalKhatt": "a366544726970e33c6c4fedd7233d61946ad943f5a061219e72a8c46eb76736e",
       "meta": "945bc4d29873e53a404968ec95b7d73093f296c6bf5bfcaadb262e2e7411adf0",
       "words": "220a8c14b12b5d9305daddba67edcae1d55ceb63e0aa57efc7a95bbd02658488"
     },
     "47": {
-      "textUthmani": "22edb8ec6dc764ed6b252987c2cefa77720b431771114e69fe5fc1490a9c25bf",
       "textQpcHafs": "47491d19eaadf8683c9017bd17429b2cd30660227036c12acb57aaff0f5214bf",
       "textDigitalKhatt": "d8d505073ab8bd9b1e6a50ac105546ba6344b0c4bde47271630e980e4dce108f",
       "meta": "495d068ae11afb5c29d0f5c376b4422c80ed81d25e6463927263847c40974007",
       "words": "296024cbffaadd183cea997904d736a1e839b98d3646285908d675ed4a7922d8"
     },
     "48": {
-      "textUthmani": "44b0e368350a3c3fec11a2c56e36748267d74f153c6fb533892b4211035ca31c",
       "textQpcHafs": "a979a7bd04a0ba1e7e99a3de68496177c0c2a18cbabbd241772d70d82bfdf66b",
       "textDigitalKhatt": "eea599d7317c7c2bf8cd4d9d9587b14c860b562145b50c8e3928fc0a1ff92fdc",
       "meta": "dd93966eb5dc8e46de6e8714a078b881c6760089fb8d5f49db53cba1830d7a64",
       "words": "fa768a43b5632d72f2093359991db4e92cb8c02dda86b4ce8d2ba103f59a51ae"
     },
     "49": {
-      "textUthmani": "9ba81376e3e30e051681cd60619f74bf4a6bb119a339b2e67a64f5135aa6d3d9",
       "textQpcHafs": "c87e0c14c56780ab320db0229e131693e59baf4c44d84bcb483e601f9c99784e",
       "textDigitalKhatt": "0d56145016a6d44e71e7617147f4c8da99628bf9aab9eef1f46a368bf7bd86cb",
       "meta": "7f4166839621e4160bef962fdfbf0dbd1a5b5049e7ab9e5c32eb81b244999afe",
       "words": "9453debcfb63bb18f7b57f3db45833e3aa1dbb5f89b9e9767fcb2af503985631"
     },
     "50": {
-      "textUthmani": "074613cbe612f7189e13b9c24063d7125c9b2118a23ef7ac6cc469d8dc07ad39",
       "textQpcHafs": "c41da74798ca420816ab6dd895d8a2cdc57eddf399f4b2101113435c1bc4df62",
       "textDigitalKhatt": "4c379e5fd64569182b2b5de2eab486a8fcb81493af0f6c13be79cdf4be45d897",
       "meta": "014c8bb99fc782c87919e0d221bb89c928e9eaf2f4e31069bb8faa9bc7eee5c7",
       "words": "26faa170438bc0c2090d3e2436abab78e20672df143f7141d6301434067eb1a1"
     },
     "51": {
-      "textUthmani": "9b156315488e06ae821fc8061335fa90bc029662096165dc7f92e0cfc7039669",
       "textQpcHafs": "015d1b41334df45285f57bc1b36ac0695ddb287bfe7f1649f6ef389146ee41af",
       "textDigitalKhatt": "eb024099879285623a31cda46f165eeb1761fbbe23ddd6e682ab7cd1c44c0d56",
       "meta": "0a37d2b64183ee375873109a192dde69d43627c7e7c62320e8f5b808dd574e63",
       "words": "1cfc5c558fd89587b95c8d6f6149631bf1ddf53d4058a2cc582807a794ab5875"
     },
     "52": {
-      "textUthmani": "cf251e15c697f956677a85def32a3ddcc5462ab47459d480a03797ff4dd96487",
       "textQpcHafs": "d5cacb24579567fe16decdbfa793cf14c7a13e5475b646d6945923f53861ef57",
       "textDigitalKhatt": "3cec1d371cf033c3111342e6a249b5fe8def97e8b4d604e710280457a82aa185",
       "meta": "b9ceef73c0e2b6d6eb4a660e781293f1ce5b48e1efd43f63ae3b59eabeac0fd1",
       "words": "448de9fc4bbc212006e9276320c320dbc82d750ede12f4375f4285c63db8242f"
     },
     "53": {
-      "textUthmani": "601834819573bdead5b16580b1ed28325d09820c0c58e5190614d874dc49629c",
       "textQpcHafs": "d9551b2e7933a4507303fe583cf4c4657d6966d5d39d6eb99ae2c993306a8108",
       "textDigitalKhatt": "c56189fb98a8c2893396bcd8a643a41a7b02f9558e32480ca1a213b6604b5258",
       "meta": "49dc645f19f75772012cdbca678cc0d8128c1847a25bac007bd26aced8288de3",
       "words": "43b8ec9b4ef5688926806e773549ae9f2000c14f76dda3af7c5b62eb42aa1662"
     },
     "54": {
-      "textUthmani": "1fc2d5a53a0847c826030d6723fb940483f01df42e9ae12af492ca4df8875a25",
       "textQpcHafs": "5b242b7919a93aeb0c975e73e99f2a1578df5c47fe2d37c4f81d98a47a48ab3b",
       "textDigitalKhatt": "53b9676f6ce0becf394a6dd88d58960acc5c93dd66a9b7154854258ed3fd289e",
       "meta": "960e5c55b8f8cc62b262962a4c72ff7817308bbb5597293a26bdc2540710ed14",
       "words": "1a3030cb8ef385ccc68d572242e8da9239767f74fd346bca6d2626a6736f64c5"
     },
     "55": {
-      "textUthmani": "0aed714764588e64d3bfdf2b5258282f48258e5b5c8375490d0865ea30a183e6",
       "textQpcHafs": "9303ecc0ccd5d1203b269e3420b519bc791f7db80c45c4741e9775dffe472bb3",
       "textDigitalKhatt": "3bb5eb729ade79248baf3f4561e8794cb1e19173140cac075eeef8f616085b0a",
       "meta": "e3d845a0d408613666417394ee8241fcdb080688f4158d23eaabb240edb29b58",
       "words": "6557cc7a3513959bc03f8414a1e9800e4bfdd9ea93cb0277d06251dffb1007ad"
     },
     "56": {
-      "textUthmani": "3f50270b34f367dc32689c94a27cf32c38d58f71a391c6b73e15565ccbaba178",
       "textQpcHafs": "33b6a57731c076665e81f99fdc8e2ca9ed589dd21fe82ac7c6884bbfe89e5475",
       "textDigitalKhatt": "ef88284cea16c59c3d75da2ae170f6908c7f6134661b784f379bb346bd8a5d1f",
       "meta": "531ca0ba18686d06dde38b7f79fe266dfebc71529e32c21f3b3df4c75a928623",
       "words": "f4638189d7cda53375a9f368c9631235d4a3afc7a066a8fd704c4d94097162c2"
     },
     "57": {
-      "textUthmani": "b52eb1495f9cc3ccee944a008856476d54e1d0f2442e8ad8ead41f36c2f662d7",
       "textQpcHafs": "3d951ef26b30bd08cba914d07e2184ae12d1db2f88c3dc958eb1a70c09cb12d5",
       "textDigitalKhatt": "ddc853fc84dbb0365ffb0a74b2cc13d7fa302661c17adb4e95943d2c1594ddee",
       "meta": "45b66f0544b7ba86a98c37bdf7cd39678308978d1e25b6050a99c0901ad1e28d",
       "words": "3bb8d322c6c129f58a89d99757625f23b81a3c9c847f684f936951e9872aa3a6"
     },
     "58": {
-      "textUthmani": "b53f8a5ef6f338482b34eaba0e3dc032154c4015ef86751626e45fc5e19b81b8",
       "textQpcHafs": "18633bc1b019710e84db5f84c33a16abb12db6b13239290bf6b73d6c7504e186",
       "textDigitalKhatt": "cbbae2c372be719902ee09183df35b70c0b366314f375770b63777ff9aafcfe9",
       "meta": "a923953400b82deb6fb55631c68dbe5cc60d431ffd5fc05bafe7cd18bb9f90ee",
       "words": "32b4764f9f2ac105619f860d06de449d4c19f1db5189aba3f7ae573351d218aa"
     },
     "59": {
-      "textUthmani": "685efa7593b11cf5da0a2ed2b306ca6b351ec846d40bc514e4e3f4a66ac5f102",
       "textQpcHafs": "afb82b648e9252e2794245da01eb50ab5a3147670929c0d3531cf4f9f8fbabcc",
       "textDigitalKhatt": "065b2b112d4f6b6b0ed74aa4afbcc8972a905b7a70099bba4297de332227d1d6",
       "meta": "e2a05d8255bb4b8431bd7cebde1171928d815dad545a06be68b8f202c8e4f9b0",
       "words": "65e7e33a4f80398bc4638f8ad8feec1474a52fdbbd4bdb463be755edc93dee59"
     },
     "60": {
-      "textUthmani": "910dc9628bf6428edbb50f2a397418c462c98f697e1bcdadf3d4b8a17d1d8052",
       "textQpcHafs": "51abc71d538935641f6e032678f75715f57fb92b333dd814d1bdff6e67171cc7",
       "textDigitalKhatt": "2cbb52740776eda0b98b406b9f5d5754e7aec42a50e36ac0fff216b82cef8e7a",
       "meta": "e674a6e1081733d82d8291dc332bf720a6856ffca6988dd100324d72794dda8f",
       "words": "1fe992878d0cd63e59c37d01d34013e6e4e55701b97f47334950211536751035"
     },
     "61": {
-      "textUthmani": "4d29277440ace84b467b362e81f57f3dd31b4bbae25c665c0540c6d31fef7cb6",
       "textQpcHafs": "1a97a5de49819d5e6237930e427ab41f7a57fed3497fc9ec75172c514c70f6ea",
       "textDigitalKhatt": "84e9ebfcb3069b2eae58393e7ff1c70d165634e96b8e9b8e301dae695654fe38",
       "meta": "a2160b3b5188551b51e5e15fc840615891c2537a87b438591ac0ce8ed7a958ce",
       "words": "dfb2f51f6fe2773a660b7a3e0e0ec564b8d812e6a9ee4367d5414b5b3853ff60"
     },
     "62": {
-      "textUthmani": "da41feae523d49610b7530b5cbe5bf7d12acb598fbd04c40bc0b69e0d9499f86",
       "textQpcHafs": "b179988ddda40925ee5cdcbb7928aa516ab2c2ad9d607ea3fc83ea2909c1e157",
       "textDigitalKhatt": "59467933deb82af2a795cbc17af2e17c2e9a3e62abc275fd93874a597a387bed",
       "meta": "1aa004615ec37e3dc6d3082516aed7b27abc4ff7c975c9b206786719c6255b55",
       "words": "1852a8d4eae050d37a507dc80ad9297e6925f815677c025d687f6dc1ae4d3094"
     },
     "63": {
-      "textUthmani": "841c965b68821d3b6bd6ddfe7177aed42d91e6e03d2f17c4ecb734fdbf78eb99",
       "textQpcHafs": "347c148bf1f61846dfbebd86ec7910f2e500b55ca105e89ffbab24dc9b2f02a3",
       "textDigitalKhatt": "7163ae27f7d4dc17883af25c2dcafc0fe51bb7777bebd3ff564145454678490a",
       "meta": "54699cdb86d905bdc94a30726ddb79c895d88eea389ba100ce4d12ba97aa6180",
       "words": "e2be6e6197868ab354692c47c5b2fb215eb404fdc9604b0f0a2dd2588ba92b6b"
     },
     "64": {
-      "textUthmani": "332d5656feff64adfd4b60a3997be6a438b2ec836504aa2eef194c5edaed50f7",
       "textQpcHafs": "04ea60932f74265b0e0822170ee12e4b02b54350067cee0194a4ef35f1424304",
       "textDigitalKhatt": "d6882f9dd0b4357c8d269feb40a1082c1bee83441a6cac2c689160a2e0c89e89",
       "meta": "d62af7e2f642e246ba78114a84808201c3d3aaf1b3c63039be05f8980398db17",
       "words": "0f4010ae72fec4bf0e8146e86cfc1abadb250f5c0374b9e5bbb18ba850e9a523"
     },
     "65": {
-      "textUthmani": "fec8fe64ed5fbc6c3dafb8650f48084952f19d4dbfd70569bed48669084b5c2e",
       "textQpcHafs": "cde14ce4d817060593fe908659afe0cd40b31405fdcb8d97f4ba75e5502c997e",
       "textDigitalKhatt": "268178b714ed9180637a9fa2705974924138eb71d6c72205299e2e31caf1cf15",
       "meta": "a74e9f5b65e82f95f7a45bfc3cb38a6ff0627970e9c00f17a43a45b460dddb6e",
       "words": "95f535f87d47b58e599c27fcae237917ce6e17c80f0214fc8a9e04c611c17225"
     },
     "66": {
-      "textUthmani": "db3973f38542193acdfd8fad5fbf0d1aa971ab0b8cc119186ec511529230adfc",
       "textQpcHafs": "7a554a5287e22520dbf00564b6660be00549a544778cb7680a2447e2bb1fe21b",
       "textDigitalKhatt": "2c729101652db57144c103984dfa423a220686d283bd53c2c7f6521866987550",
       "meta": "ad83c88adf9005f0e24009018d379e915c054cc0d56c7a427d4444c8e093d0c0",
       "words": "f2416400845c1951b9b4f94e73a32f8a961288c09fb5596e2347058ab6c20733"
     },
     "67": {
-      "textUthmani": "bde35f3ad1d2be8cd69ff6556772b2ccd2f16930538fb5a310959c3ee49121e7",
       "textQpcHafs": "482b31959541f86872fed6f54b7c974361a9ecd2b2d1ada010cf779223c7db6e",
       "textDigitalKhatt": "1b513336523bd47c70bbe1e299e8ab4e9d639383c52863ef3e106bfd0f4b87d8",
       "meta": "8ad4fd5c223951c91d18513ed274064f95ba6fa1dd6e18db4e8f251e8be2ff31",
       "words": "f21b40f9a799729cf9b65f327ad6796e4fc4cb9d5caac0ea400b3ff8d13bab2f"
     },
     "68": {
-      "textUthmani": "cea0497b964e2398f0c67e5f1c72d705b40aae5846b4e573e60f495908bc5523",
       "textQpcHafs": "b0763bca5b72498b3992c077cb82a0f4339e14ab5a090d359b093780b90a068f",
       "textDigitalKhatt": "7513dcc78244be54ce46a02fe4b87a3df20455f4d8989c1ac2958760b691a16b",
       "meta": "cd9e45c5d8ed3e623eda33d8bef044b941b1b972f2a92977c8a32ea52b1a2edf",
       "words": "b153ad94f5adb0961aa1b80242c7ea5384035748f3d1a9428250935bdee90fda"
     },
     "69": {
-      "textUthmani": "d1561194a691ac91303c27c2bb083b53430f85dd0c80da68d285d107ec771459",
       "textQpcHafs": "49a32eb693d2decaff4adda4c63695835ea7394a463448a5de2310b14dd9f8bf",
       "textDigitalKhatt": "928ea75af05f3c765de03ee233c408716ee4cebce1671f2bf0a37009d0106b3a",
       "meta": "ff570851f510ee1c08e1d7324a3e54bf00b0465010114f0a9480cd3d5f0af56c",
       "words": "bd60d3f3652a4cb7bcfd89220a78f3983302d399defe7d1adf6bffd8453e2bc3"
     },
     "70": {
-      "textUthmani": "80b59b724a003320e9cc4589a43aee1827ef406114d2026a17141eb56699dc03",
       "textQpcHafs": "16c41a4b93f91c62e564a11db78191c1fe66311d2720f048dbf9664511522dc0",
       "textDigitalKhatt": "6a912436aaf21c1b1764aeb8c4abe10dd6253d6854314cc47b866101ba4a9f19",
       "meta": "49cb3f8fd418241ef62a5c89e2249f9da2bc2b5013deec2a0073db44fc6ed8ca",
       "words": "16d5dd9f6b7b23cc2e152b5378015b674d92e920b33196cbc7d08471d0191154"
     },
     "71": {
-      "textUthmani": "f365aeffb5d90f35a6ff60c86f8936c3836b1ca2f23be01c12e59a27974127da",
       "textQpcHafs": "257fb34dc1f807e98eec7ef52aca2337c31f87fdb1dc591d40b3c601f164c480",
       "textDigitalKhatt": "0d7a3bc431d576d3146f852870ab7b10c26d840fdf9837c1e60ea5c8d7950f30",
       "meta": "89c188d84eb807f6d915b3652f51b34b6445eb33ad24ff1f6f8b44f701a5b96e",
       "words": "739eb62e0bc1741ff752a257bf040b60ee1edc79b5f640b7a226ef11abb500f1"
     },
     "72": {
-      "textUthmani": "c1025634c88401c5d064fd53b162054e0423a2500665e6741a965aa1a850864f",
       "textQpcHafs": "d268a2e1ba98b047d0b72711fca4c7fda5ac8ab96eef5ace6ed7f9293cfd09f9",
       "textDigitalKhatt": "e37b6e36b2bfd6597bdbf4d6b6e7ee93bc7d4dfdb261cefd443f7e298585b11e",
       "meta": "6f0806c84e0aab7740a36b2592fa017296563b162dfa9804b8e275fb4726f2bb",
       "words": "ae973fe2bfb4f79b3d8ce004b92459d1afc7a32464c4e20c5a251e4fb8386fde"
     },
     "73": {
-      "textUthmani": "95cddb2edaca1623cfecfd60d3e541074f4232807b824ee69489cddb17a3a97d",
       "textQpcHafs": "0f6e2bb523108cdd1f502b7ea0b32692ead74639829fb16342312c182004376e",
       "textDigitalKhatt": "6d80527dbe1d5f7ddde1216cac4baf4ca5d59412396a26d299be1f5963030ffa",
       "meta": "0dd6c35bbc9f6468329ef09ed7f7675a7aada9344923a3b513c7b8da1e936fd2",
       "words": "927e2beb8eea0b8308c845de8a28f782877c3ca77bd360808438572f4e93eecf"
     },
     "74": {
-      "textUthmani": "c6873cf4c2aaee2577b7b7cba8bc96c731bbe4718e60ec05395ebc4d101e80ce",
       "textQpcHafs": "63192b7e0a11a26dbc5e4c832ab128920d79d245752ce1212c9f0fe7e073ee3f",
       "textDigitalKhatt": "229c87423d52efa25a8ea815a3414cec0429eca46a073b979d49f4caf3e5aa72",
       "meta": "6dca6eb80bd089e4a59bde825799869a0112da621b91419cfa7c048ddde4109e",
       "words": "0a56d69f1593b5a5ea815c9f02215ecc525177bbb463f6c6aefb7d23173c9423"
     },
     "75": {
-      "textUthmani": "add9285661069e9d95aeeb6556ad39e48255bab67894aa0b5f0df3171b4e02d3",
       "textQpcHafs": "6729f4b3c154bdbedb5b26cf019105639a91a7a3b8b0365ba4544aa4f065f49a",
       "textDigitalKhatt": "ba6c727b1b4fbee3e6f068fe7b5f2feae423d64640b7077ff7b3311b5c1e5325",
       "meta": "c86c1452ee60a843a747ac12dd8c4d82cc46e8df8af3c63f84702818ded1659a",
       "words": "32bcbf06a8f116f6805082953b3302cc96750f67bdffd9dcfab580bf0d9f2374"
     },
     "76": {
-      "textUthmani": "1605eb6101ea4ccc587ee750cd0e5011ff1c7886605ddb85bd9d6e0984d8d316",
       "textQpcHafs": "83ec6e7725a04aaf680d15fdf5df61d38e1b7de8a329a898d3ce688ddeadb587",
       "textDigitalKhatt": "f18164e44282e30a27a79f9213d514b03a716b31a8062b30dc9ca25841abe211",
       "meta": "b4396fa91070ab00347d5f6014182c9973b1b42d37a0c4aa0c6d70af1a8bb020",
       "words": "a2678445e8f84b4bf64f3307ed7ebe66ca8d73a45dae19922ac43eb279c0cd43"
     },
     "77": {
-      "textUthmani": "41f6a4e319874f41d838dc538ee5b0e2116ac71bdfbdc1ce7948491eacab4bc9",
       "textQpcHafs": "4e1b6691aa05127f330b630feaee3c902ea12bc4a481cecf530196eeee8c9921",
       "textDigitalKhatt": "32d03790e0e8307842245ede649826358e23ab5ce07d383dd8ca6bd3e0a6ec39",
       "meta": "a624ed75ee511fa48b4e6b29235108d298e37151830be4e3375d99b186492070",
       "words": "56e446118d2f2e0fcbcd03d4c6e6bebce1c2c7fb7b5ad51a0cc74b942fa30aa8"
     },
     "78": {
-      "textUthmani": "83be2257ef952c6a013e89a62c4e62da88733ad854e6741b1ed34051fcfee991",
       "textQpcHafs": "7137b87fab40cdad8868dd67e91be9f412657a6f7664fe2b6ff7f2abab357ab0",
       "textDigitalKhatt": "81a68526ea023430c06f2abad1440eb9c199e3bb075e162a3b48235c6abec473",
       "meta": "9e039905f2900863ccbf412280667041e2f50982573579a6c0ff420fd9a411f4",
       "words": "3dc9968b9efda03b87023381e4b14fe552156d53a12c098cde01737c3ce70be3"
     },
     "79": {
-      "textUthmani": "c877e433a2ea6176c9ea161a798847951d3d22fee60032f15787ef81852395a2",
       "textQpcHafs": "d0e4c8fab3f8ec405a38902b1dc81d5149e6641b6e7af5eb403dee15600489e8",
       "textDigitalKhatt": "a236ccdf7289ab4a6c0138d485848f6756eb1ef37fc89936310fc66b237088bd",
       "meta": "b80482a301b6e92acb22107a4ec4a540f2488058da50cab183ec866de149af23",
       "words": "f9b7f38a16501f1a3a1c3746d0b68312590d2e6372197fbb2038b52b8767022d"
     },
     "80": {
-      "textUthmani": "994acaf7ce62c2f9c2e7f2ace19d62ed6eaeda96e95f186ac9cabb86c74dfd59",
       "textQpcHafs": "b8073c9f861add5f42754a0a1f7d249b2a3f72304310e71331136fc7ca8d7c71",
       "textDigitalKhatt": "e03d9b25b10c3c11eb60400adaa2f288db1519da5742042d38ec7f6c6e55dad9",
       "meta": "57dba6c8feeb2731eb48526d7086f04e25a13e96138746a7211000566a0ea0cd",
       "words": "4703c274e4ba3142c8ebd504c89810578a98a64c5e25ac7dad3513209b8ec2ef"
     },
     "81": {
-      "textUthmani": "01c613dea46d534fc1f44e4d04ee9cfec7ccbea4bfa50bacd43cad0d831d25e8",
       "textQpcHafs": "b117228718d8327fe09fb0c70f9c4b5a1fb8396c9f32ebeeda613a73b50a6459",
       "textDigitalKhatt": "f4248508fbe19b303a97062961dd56c4f44611bfaab23a719786138d173a0e0f",
       "meta": "1d740febf009936de94fc3b321a6e522a0e7c8838c7983ec9f6b0dbf4cbd15df",
       "words": "1c2cd9e4154bc12c32709051528f034e66849de1328a4fc781ca7634b92b982e"
     },
     "82": {
-      "textUthmani": "d75805756c4a5c6e22a003790cfa9f3aec19c2487d31ad6aafe8fa1f881e2d21",
       "textQpcHafs": "151141383d2034f515869e94f8c375ff1f0774309a73c0c91aa88bb0aebd4d58",
       "textDigitalKhatt": "3448096ea3b5445310c642bda35b30ed03870db0a11cc9ab469b0338c19a2678",
       "meta": "cb78cd4789b67fda796328aa82c24de1eadd40fc16a33e398280560232498d24",
       "words": "68a33c3421b8ad49e4e2d9e951578f2bf245b93b11e821de82735604ccbfe9c7"
     },
     "83": {
-      "textUthmani": "a617dedb1e7c205a54815fef0d282793724133013872888b192ae80ff6483911",
       "textQpcHafs": "3a39f80454000d8108c669d61e46be47a4a3b2290ff206197c6cdc3f9e12339e",
       "textDigitalKhatt": "ac3e2af26419c70ffbe287e54b8fb643b916c417bca316b7b332ae9ed3d8a3fd",
       "meta": "3d0e4116d32c7316d4ae8854585cb5fe5da6d99f21bf39cf76aa965a2c89d399",
       "words": "19974ac28fcf5236401cd0303c96795dc1c1f52aba79e3b770430f338403df06"
     },
     "84": {
-      "textUthmani": "b94ff98b92e22a1a3835b0fdee9c9133a4ee878b31c7db9816e466e1d2e98d8d",
       "textQpcHafs": "1c3e537f5808d32a5f3933d7c00ce92009e2627c9c11c3815b362dfe5ab25f48",
       "textDigitalKhatt": "c05460739609138d581c2cd1e41709fbcdb88027b16b8de66d7f25b65c7f1106",
       "meta": "06d6cfb1df6ec8576111fef4573839dd740f2de6c780e5660ba0447ab07d04b3",
       "words": "f5db823ac1c5c18919213630f01cbbdf76c209d22141296960cafcd012f4b84e"
     },
     "85": {
-      "textUthmani": "70dc4dd4c0551cb43e24daf6a0fcecff6b8bddc39f3e67fc57a7940ec6136037",
       "textQpcHafs": "cda8885421e286b13a374426e22ea39ea042f0c7b87010c5b09b65c8e94445ed",
       "textDigitalKhatt": "34673ec6a831ca188db8f90df57f469f291c6c294e1dbb6e3653a69481286e11",
       "meta": "157e41e2a9935ed65621bd96a9c465a8bde4255dffc51fd498b19098a09cb8ad",
       "words": "a92c1621910407c2ba5afebc22c79a83f4ff71066d9688bc7e7c8b4a2e254fc6"
     },
     "86": {
-      "textUthmani": "41944c137b147e42c88e22056780f29a5228ee0defabc7bf80b4bd5429d993e3",
       "textQpcHafs": "b8f2c35b4237797126e43d8f849895c953e5af88ba28341fe9ad0010644f0daf",
       "textDigitalKhatt": "c6240f7c9ea9dd6f61f505e54000fafe844b53c71f9a7967b6b4d5d850633ddb",
       "meta": "23a71ff9c6dcfbb85e4d88c5fc928c80c6d86ef4afb600f013c99c5c0276e7f9",
       "words": "71a959698200ab01ee79c5b979d66b5b21510a856c2bcf51bffebae7ef4828a6"
     },
     "87": {
-      "textUthmani": "bb4e7bca2050e4d467e2e5ed7c8b5d2f3c04cc3bf96549b9fc2a6574975e541d",
       "textQpcHafs": "3c30d7ce3773a32f6fab2c27c781f6bef27f946d22cdc12fad5f67efd811e95d",
       "textDigitalKhatt": "091065cba07318b275b2b34c53f9ca0320442658ec623f8b8c3cfe82a2253208",
       "meta": "506b6b86d976fd7ea9710fd024331559aa87ceca2759947675f9b2fe18ea6649",
       "words": "b2fdb1006cb2ea4ee9d374a2da9b29648d70ea43dfacdeb6242819fa8242445c"
     },
     "88": {
-      "textUthmani": "5e6981bec933e0269dfd058922e942d44e0c8be464ca913af76a24697e1914b4",
       "textQpcHafs": "00e3d9c385b2485d3f579c06035f3989156ac3b3e301818664859ed76841c41e",
       "textDigitalKhatt": "db1877d3a9dee386c0e3df7133ba35cd3d8fcf66736288c8310237b10db9a8f9",
       "meta": "1c3bf9c6d0369c62a5757a68295d3116e39158a4ded0e211fdd1fabfa90bf088",
       "words": "a08d46e1cc426a468577e1e9fcd05582f139735616183c4258ec3758b1019655"
     },
     "89": {
-      "textUthmani": "70b84d87abed0db5278fd15870d21c60d6cdcc7a3f28655fb945e9fe80abab28",
       "textQpcHafs": "d5efe61059607fdaefc8bc5fe43970c785033989fef99a2095e9e2f999b8a22a",
       "textDigitalKhatt": "816f028a72314f2fea7139b2603668eb87b258b850aeaeb298d4e86db1706bbf",
       "meta": "28e173651187a350172deedc8084fc0411074ae8c304d2e45088d985ad3474cd",
       "words": "63a9f6144d9210510069aa7928350f86a7a0e5233b141ddec5f39cfab2b8a17a"
     },
     "90": {
-      "textUthmani": "de6bfd4b33b7002bec2a90ceb08548ec56110e40cf02b98faa2b5e111a64cd03",
       "textQpcHafs": "1b786fea4b527f4ee6da5e291b8dff34f7e823012e825c440034e1d1448f332f",
       "textDigitalKhatt": "6beb11bc5521524200b7b82a6b6779e5802ab67222ce20aefb6752718752e025",
       "meta": "0ddfd6e7cbd3febaa5267beb4bc27121fbc7de03820208f7c2c9e5f60899ba0d",
       "words": "ddd9d3101513939e8a41319d92c035ae70771410a674cb7a81c8a0bd7cbb26ab"
     },
     "91": {
-      "textUthmani": "7dcd969ce75c8852792d91d7ed26fcd4f72e6052f4131a9441e094e8a5de84e4",
       "textQpcHafs": "1689b97fe8c33b8e52ab428d25d7262222583a4bd8ed757d1a6d395d3e69bf3e",
       "textDigitalKhatt": "0f0b496002753ff655613f8324c671f46f3c22fd4faa4585337b2b1411b96e1f",
       "meta": "349cbbfd9045735ee8c398828a5351849262cc05068fd37bdb57e23ec2703174",
       "words": "9f61ceddffa22aa8525ca4684687951a353f75fe2f5c2de0fc833b4965f1ce22"
     },
     "92": {
-      "textUthmani": "10114799c73a0e774c31e14f679bb41ba6afe2f4de4f2f6fea08f6dd815ee321",
       "textQpcHafs": "6e92711d6ef3daeca50825d44ab54b7e8ba65f7eb160e6e213f5ce950a353fdb",
       "textDigitalKhatt": "4b8ea4eb676645d56b940bed7c72bc2aee1934a906028770cfe9d6c3851c8751",
       "meta": "575c1229ced5502e79b6fcb77a4118dc24c9736231d535903d1bae9fa4b0dedc",
       "words": "f4a7d6e5128d2de21ff8b6ed806220f5363915facca1379e53baef76fd3d94e7"
     },
     "93": {
-      "textUthmani": "72dcc936134263f2175326e2a72e83fd28dbb36cbe7393babb224bbbdb28b615",
       "textQpcHafs": "b0223ba566f488aa66281b550f42a2e2cec6b148e48e96e9ec63c98087e092ec",
       "textDigitalKhatt": "80a4fa9b1fd9ca1bb5b5e156a739adb66303b4636b48a8d2d0368e21c58fa4f5",
       "meta": "f5310fb5bd9be7ae85339c566e7c9154d82e375e1336570ae66b4196706a12bd",
       "words": "a871df044eb60cccd387719b28886ec1e47ae183b3be297881d9ad63d9dbf819"
     },
     "94": {
-      "textUthmani": "cc8ddd0fe1afba855e37e6dd440ce2799812af05804624908d7f3b18f517fb40",
       "textQpcHafs": "5a4769af17f74b8e7796d5fbfeb1216a3441f7d320359e365d2a1b4140c814ad",
       "textDigitalKhatt": "da41318482f30cbd7ce56c98ec8d165d0fa7bbdf1620e088c474353b5410591a",
       "meta": "8299318d1779e757e90cc5445018739bb4980a8bff2d5ce057ea3f4f942970a4",
       "words": "c97044c9e15152f5578ff1568eb093858378098a3561c9bc218c6153bc7219c0"
     },
     "95": {
-      "textUthmani": "84d696704a2cc1a527cab875a29b6e269513ea6e13d00fd9ab783cac460cb3e6",
       "textQpcHafs": "ce933fd33f9fea4b3c95d33d09376b5c0a5ee2c52bb9f25284cd5d931fd441d6",
       "textDigitalKhatt": "0cbd8c43def979e91849c64971f91033e1ace0d61fd333d3ab50b9868b07957e",
       "meta": "8299318d1779e757e90cc5445018739bb4980a8bff2d5ce057ea3f4f942970a4",
       "words": "3a38d61be60931fd7503c14990e5a4fcbae261ab6d7aafcd118347b981b7424b"
     },
     "96": {
-      "textUthmani": "095458bf5b6f335b5fe1924198ee96d456af3bfa86073b4b6a9254794a3ba587",
       "textQpcHafs": "66ad237cc2e11c76967d699edb697478fb5f25ec0c93b4c49f00a8bd8dae62f9",
       "textDigitalKhatt": "194c4a59b21f8b79acc8e0f1289642ce3a42a84141cf1cd6f9cc5d5d6d198e1f",
       "meta": "10f201852eb008167f5e014583f5c42485c05a9780d039810582ff188afd4c9d",
       "words": "c4e84786392fee3aab5b762c0c355474bb511344859c24303f89db9aa32844d0"
     },
     "97": {
-      "textUthmani": "f048157212e3e14748712539137cb6759cfc20ab7370e5d502bb22febcac3d2c",
       "textQpcHafs": "73ecc003167ef7362d8a6c8ab725a3d2d98055b21d20816fd553ae8b1ffae631",
       "textDigitalKhatt": "88c7fbc11a53a9387e9e0e6366d9f5bcfc5078a5b3ddff364d0708760a600a14",
       "meta": "f97301e695d187fc91fd5cf2898fca730a01f00eb413d422a45eacca01d80fb2",
       "words": "2f8b2ec8bcfcda67f8c22399bb4542dba4b9eb7e4b74581da6f27e8c215624ce"
     },
     "98": {
-      "textUthmani": "3bf1ea21ab7a09519306652007628e06338bdc8b8bb4cac209c53d4807164d4c",
       "textQpcHafs": "cbc86a11fee1396693369b82edd36b32737be5853669e25f8ea0ed7c2b4c3b89",
       "textDigitalKhatt": "afce08776d5c0513559700ff4e838c35246ff8616e0adbbe4aa19f70e6a44d3d",
       "meta": "8299318d1779e757e90cc5445018739bb4980a8bff2d5ce057ea3f4f942970a4",
       "words": "d9196023d25e98848033d148ca2c53731a64252b0b537fb5dae8fe12cb20f671"
     },
     "99": {
-      "textUthmani": "cbf59239139f079c0fb33ce886a44b4382c785f261f1027a0ed7c136bf507148",
       "textQpcHafs": "da42c965f705b2e81ada7084dd5f497ac02d96569961d69b41b40485276c11d9",
       "textDigitalKhatt": "7aba7758b4dbb91c3460f74399c32176d2acd069ee91b7c738d0d991df3b73ee",
       "meta": "8299318d1779e757e90cc5445018739bb4980a8bff2d5ce057ea3f4f942970a4",
       "words": "263d4e636c2639b39a9dc4feef3a4e386d8d97757eaaf22c8e7130efd61a9235"
     },
     "100": {
-      "textUthmani": "f8ac09051052344694c7d1ba3e41d6b565e6c9ec4d2fff95c82e8de3a1bc2e3b",
       "textQpcHafs": "4596ecf34821d1658732a42aa9fe8c3d7a697e5337c079693a1513af488c49f6",
       "textDigitalKhatt": "d9a31a824c8f5180e70cf324aaa8ae0ba2a1712fe3291e72139bc65c246c784e",
       "meta": "d19b755b36ba308116ae01f4982d3182b7e87641fbbba70cea9d2a00fad63f28",
       "words": "ef8f9e614df6eccc055a0afb53deed2282dd38e391819db63e2cf0099887faa5"
     },
     "101": {
-      "textUthmani": "4589f2c4310533c04138b48c3c47cefb74b7e8d58b4cf2b68a68fe92fb52536f",
       "textQpcHafs": "244bbc0973c937de9fd707e66dc59a68762fd8f5b48fff4a7078adddc0134ae6",
       "textDigitalKhatt": "2d09f40b3238b3834e1130884963e0b6ddcbda4374f2458484936c8260cfbeca",
       "meta": "665c4e5f6ce236dfbf0ef23e5bb4cca610deb6fa9898a87460307cdf45548d6f",
       "words": "7d3d3ff49feda91786886e1a018691a5011553e52bd6dbe215ac001dc01a9022"
     },
     "102": {
-      "textUthmani": "2c62e60ffc74ec224babe5e2e09d0fe219b4d4554616ec556ec7b8c42e215c25",
       "textQpcHafs": "610be1e136b3f21fe8c3aad315f770ba286df1e814040acb23dcf6ef82f8c59c",
       "textDigitalKhatt": "af0150e97cba18fb8a80a6f8d51ff155dbd5fd4c22265392ff946cc1dff86b89",
       "meta": "0e3fa28e42b0789453e8bcac2f2e84efb3bacd1424ebf738aba3430280b0b968",
       "words": "78d7456675b8119241e61e862d4ad81d396edf2ce8ab5cd0cb11f527015d2bc5"
     },
     "103": {
-      "textUthmani": "205a4044c0cbe6637479a21b2e90f4aeb164c8c5daf20ce7efe3e56ece98bcde",
       "textQpcHafs": "2b04d795e37ab525642d9aeb93152169d9aa76a417202f0fd5a9ab089d7123a6",
       "textDigitalKhatt": "ac899c4ccafd6ee836b3676a8320648f5d1b3429706712c7341d3f904aa678bd",
       "meta": "8e315a595f328cbd4934f30929b09a5a473daa2770394aa4143e8a379178e2e1",
       "words": "6806678108ac5673fb49f0589826eb30d4a14675e78f369bfe0d5cc51ce30984"
     },
     "104": {
-      "textUthmani": "787a74a947a6c0a047e7eea5f935032ec91d7b8eb942899531fbf8335a088713",
       "textQpcHafs": "1adec761100382039c3bbe189fd933fac82908c79e216130f15436bcf4280d5e",
       "textDigitalKhatt": "718de2ac05cb3ce81f51b31c2a9812b76529bff79b5e49ee920afa0b6674f0d6",
       "meta": "547024f51ff9dabdd476d513c2887380a31d98ec4ef8b6e2314bcb34683446ec",
       "words": "c022caec63a1c317403ee5bcbe4f2db6b364aa3e36d3429868d1ce69fe0f7f2a"
     },
     "105": {
-      "textUthmani": "0ba208c22430346cfb5da7f1ab9c39977ebb241e4fc3adfe9b1242b2d4014118",
       "textQpcHafs": "084a7f3a270ccc5f2e6997b002b208d72d2c2d3c7002aa8e78e4d6b06b609e1b",
       "textDigitalKhatt": "74515fa9207027a5f3890ef79cc3a758a7da4b115b92954fe563a56012035862",
       "meta": "c2cc33928cb5842aa08c1df85a64558c715c1cfefc0ee0238f0606b8ea0e81da",
       "words": "10e8afd494e3dcc2043825ec383a7c4068c8bf9d66c08258e47f2721e50f8501"
     },
     "106": {
-      "textUthmani": "2f0d2241b64f5e7627b938c7280c59404f27768f0da04b0f684fa831556c6777",
       "textQpcHafs": "26442620046cf9b380c15d022213f3bd14e6ce9daba68684823024bb31221709",
       "textDigitalKhatt": "9e513ebd53383716de47f57c2c820e4ec8c5f82c2f86abc183000c45678b7b20",
       "meta": "20952f57345a98272b1bcaa56f54286890e0fbb3771f2de025f163d7dfbff698",
       "words": "15b9e7541185a5b27fd39e9644b6a20cceb88adb03757efd24d07001c87a5ca8"
     },
     "107": {
-      "textUthmani": "700639317a8b3bb0301e8de28302ad619be95c7026b458c3cdd75f0b9a44ccf5",
       "textQpcHafs": "57f250ca85eacf99ba8cfab3ea5a5dcaac4a44b66abd513247f99ff7a3cbab70",
       "textDigitalKhatt": "5745a5d2f7ce1e7a88d9cfae6f634042b698f42b46341977339e0c04ddcf64e3",
       "meta": "9b7cfac4563d37fe2d55da22918acf90ee086fb64a54025b25a3d70d8440e665",
       "words": "35857ac8411b9ed683fddce25f57795e6c62f5981a17ddb273bc4ab49b97092f"
     },
     "108": {
-      "textUthmani": "5ef35765fda287144b3bac08ac689151ba0330e90bc6931663d5285ca258833c",
       "textQpcHafs": "7eb3ca664e057a2ffd06f07a77af6e29e5b11158d205d57b1ce12ed07ba297dc",
       "textDigitalKhatt": "03a9a97bf2f6a827ed23310dbf4c8a8bd55613639bf9228c60b69db283297f9c",
       "meta": "8e315a595f328cbd4934f30929b09a5a473daa2770394aa4143e8a379178e2e1",
       "words": "67d5fda8f615f9f3cdccef93b32199f57f9a2740ee74a07345b710f5340fd91d"
     },
     "109": {
-      "textUthmani": "4c6eed1d551a86323db25b5d0302bf25686f21a69a913fdc4c1b06e650c10f3d",
       "textQpcHafs": "f1ca67065019f36373e4605ae6960c328f5a9ff07c6d6f3dfe167598d35cf9df",
       "textDigitalKhatt": "bbe2e8d3912e639377b174cf2f676f9e69275d011ea037912315514d9ebc534a",
       "meta": "5170aa8e6b7cfe1bda7be99dbd94b89bf36ccae5d3608a4bbb630da285ae4f5b",
       "words": "a06ea5ef6c6c09d68cdad234fcb296fb882c6b99c4a2c3b77508ada60cfbd7b8"
     },
     "110": {
-      "textUthmani": "102d9adcb294099b7120613f530f1057b620e8956ce0d5855edb67161a319d5c",
       "textQpcHafs": "c75e49cdd209793fd914e3c4e5d8cb935255947aeec22612438a961efa6eb864",
       "textDigitalKhatt": "fe32637cdeb6536e2c29ae979cb9b4680f56f7b71e0ba96fce9b1252c708ecf3",
       "meta": "8e315a595f328cbd4934f30929b09a5a473daa2770394aa4143e8a379178e2e1",
       "words": "f9b8cc6194bbaa27bfa9b9b46645c41c5e331e15056c9e97c9141fca71d76ba2"
     },
     "111": {
-      "textUthmani": "ea9d21277eb13c4058bd773a92f2ae8025f7559837299294c32bb5771696c0cf",
       "textQpcHafs": "b21333c5dbef7c7fc04802088731bf16ec7e12513aa3c9c0fd265df4ad42b6de",
       "textDigitalKhatt": "0aa6d7f17349c6bc5c0e88e9613ad7f5750cb6e27d09bd6aca99c2c0248e728d",
       "meta": "c2cc33928cb5842aa08c1df85a64558c715c1cfefc0ee0238f0606b8ea0e81da",
       "words": "4f83dab2884c051c40b9b7705368b5a4d341a11fb51cbaf9eb09b1f0e8ce0b5b"
     },
     "112": {
-      "textUthmani": "d7e6b7a6e7e349b372b2d24b5f240a2af4e8eb0e7f67bfb103db0cde5d77c94b",
       "textQpcHafs": "2f6978e0932f11c68fdf0087c00949d28ec7973a47a9906fd936dc949c0db9fd",
       "textDigitalKhatt": "a68e4b8972a953cd8498b2fd8cd0002d9c40040e5175ba4e74a3521afe2a2456",
       "meta": "20952f57345a98272b1bcaa56f54286890e0fbb3771f2de025f163d7dfbff698",
       "words": "73b4547a65832d5aade5042a85c13b618d5dbe16065220446eb60153dd84f945"
     },
     "113": {
-      "textUthmani": "a1cef8b5b2493a02a84e02da5451b452b919691a8f1dabbfa3c263308e5cc7ef",
       "textQpcHafs": "f5ea32318c3cde4f0a2eecc6f9a586db13d05bfa7b453745d868a823f35f96f5",
       "textDigitalKhatt": "8105863cbe8a7d1f07674de4f43e5876d5a6e9f80c22ffb73c00ce83479cf837",
       "meta": "c2cc33928cb5842aa08c1df85a64558c715c1cfefc0ee0238f0606b8ea0e81da",
       "words": "a839d38dcaa99b33347a0b2b2d15547d240bf5ee08ddef47e134b0b766677323"
     },
     "114": {
-      "textUthmani": "a48d74dba8472cb1a6d5eae8788c89609fb9a27b685229075fe47fcff560269e",
       "textQpcHafs": "21ba274410571ea8cfab0b9aa63fd8bf7a0e9ce3317d1dda166db57b7ce94f69",
       "textDigitalKhatt": "47ab7c323ce9c03f204ccd0f5957d72a2df1a72c607a495022cb5a9979922354",
       "meta": "5170aa8e6b7cfe1bda7be99dbd94b89bf36ccae5d3608a4bbb630da285ae4f5b",

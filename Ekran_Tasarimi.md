@@ -482,7 +482,6 @@ Bölümler (her biri bir alt sayfa ya da liste bölümü):
 │ Kariler ▸                            │
 │ ── ──                                │
 │ Lisanslar ▸  ·  Düzeltme günlüğü ▸    │
-│ Tanzil Project · tanzil.net ↗        │  (gerekirse, VERI_KAYNAKLARI §4)
 └──────────────────────────────────────┘
 ```
 

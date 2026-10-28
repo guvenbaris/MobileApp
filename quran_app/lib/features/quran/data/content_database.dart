@@ -9,13 +9,12 @@ part 'content_database.g.dart';
 /// Kaynak veri veya şema değiştiğinde artırılır; uygulama yeni sürümü
 /// görünce paketteki veritabanını yeniden kopyalar. Kullanıcı verisi ayrı
 /// veritabanındadır (MK-05) ve bundan etkilenmez.
-const int kContentVersion = 6;
+const int kContentVersion = 7;
 
 /// Paketteki veritabanının yolu (pubspec `assets` ile aynı olmalı).
 const String kContentAssetPath = 'assets/db/content.sqlite';
 
-/// Anahtar-değer: `contentVersion`, `source`, `builtAt`, `notice.tanzil`
-/// (Tanzil telif notu; `ayahs.text_uthmani` Tanzil kökenlidir).
+/// Anahtar-değer: `contentVersion`, `source`, `builtAt`.
 class ContentMeta extends Table {
   TextColumn get key => text()();
   TextColumn get value => text()();
@@ -50,7 +49,11 @@ class Ayahs extends Table {
   IntColumn get hizb => integer()();
   IntColumn get rub => integer()();
   IntColumn get sajdah => integer().nullable()();
-  TextColumn get textUthmani => text()();
+
+  /// KFGQPC (resmi Medine 1421H) metni: esas kelime bölünmesinin kaynağı ve
+  /// ekrandaki metnin referansı. Tanzil kökenli `text_uthmani` alanı
+  /// içerik sürümü 7'de kaldırıldı (Faz 1 S9; Tanzil yalnızca test
+  /// referansıdır, uygulamaya girmez).
   TextColumn get textQpcHafs => text()();
 
   /// Ekranda gösterilen metin: DigitalKhatt yazılışı (kelimeler + ayet sonu
@@ -196,9 +199,4 @@ class ContentDatabase extends _$ContentDatabase {
 
   @override
   int get schemaVersion => 1;
-
-  /// `content_meta` değeri; yoksa `null`.
-  Future<String?> metaValue(String key) async => (await (select(
-    contentMeta,
-  )..where((m) => m.key.equals(key))).getSingleOrNull())?.value;
 }

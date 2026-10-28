@@ -86,7 +86,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           const Divider(),
           AppSectionHeader(l10n.settingsAbout),
-          // Font, Kur'an metni (Tanzil notu) ve paket lisansları
+          // Kur'an fontu (OFL) ve paket lisansları
           // (VERI_KAYNAKLARI.md). Ayrıntılı "Hakkında" ekranı İÇ-01 ile gelir.
           AppListItem(
             key: const Key('settings.licenses'),

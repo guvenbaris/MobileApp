@@ -849,17 +849,6 @@ class $AyahsTable extends Ayahs with TableInfo<$AyahsTable, AyahRow> {
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _textUthmaniMeta = const VerificationMeta(
-    'textUthmani',
-  );
-  @override
-  late final GeneratedColumn<String> textUthmani = GeneratedColumn<String>(
-    'text_uthmani',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
   static const VerificationMeta _textQpcHafsMeta = const VerificationMeta(
     'textQpcHafs',
   );
@@ -891,7 +880,6 @@ class $AyahsTable extends Ayahs with TableInfo<$AyahsTable, AyahRow> {
     hizb,
     rub,
     sajdah,
-    textUthmani,
     textQpcHafs,
     textDigitalKhatt,
   ];
@@ -956,17 +944,6 @@ class $AyahsTable extends Ayahs with TableInfo<$AyahsTable, AyahRow> {
         sajdah.isAcceptableOrUnknown(data['sajdah']!, _sajdahMeta),
       );
     }
-    if (data.containsKey('text_uthmani')) {
-      context.handle(
-        _textUthmaniMeta,
-        textUthmani.isAcceptableOrUnknown(
-          data['text_uthmani']!,
-          _textUthmaniMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_textUthmaniMeta);
-    }
     if (data.containsKey('text_qpc_hafs')) {
       context.handle(
         _textQpcHafsMeta,
@@ -1030,10 +1007,6 @@ class $AyahsTable extends Ayahs with TableInfo<$AyahsTable, AyahRow> {
         DriftSqlType.int,
         data['${effectivePrefix}sajdah'],
       ),
-      textUthmani: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}text_uthmani'],
-      )!,
       textQpcHafs: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}text_qpc_hafs'],
@@ -1059,7 +1032,11 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
   final int hizb;
   final int rub;
   final int? sajdah;
-  final String textUthmani;
+
+  /// KFGQPC (resmi Medine 1421H) metni: esas kelime bölünmesinin kaynağı ve
+  /// ekrandaki metnin referansı. Tanzil kökenli `text_uthmani` alanı
+  /// içerik sürümü 7'de kaldırıldı (Faz 1 S9; Tanzil yalnızca test
+  /// referansıdır, uygulamaya girmez).
   final String textQpcHafs;
 
   /// Ekranda gösterilen metin: DigitalKhatt yazılışı (kelimeler + ayet sonu
@@ -1073,7 +1050,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
     required this.hizb,
     required this.rub,
     this.sajdah,
-    required this.textUthmani,
     required this.textQpcHafs,
     required this.textDigitalKhatt,
   });
@@ -1089,7 +1065,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
     if (!nullToAbsent || sajdah != null) {
       map['sajdah'] = Variable<int>(sajdah);
     }
-    map['text_uthmani'] = Variable<String>(textUthmani);
     map['text_qpc_hafs'] = Variable<String>(textQpcHafs);
     map['text_digital_khatt'] = Variable<String>(textDigitalKhatt);
     return map;
@@ -1106,7 +1081,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
       sajdah: sajdah == null && nullToAbsent
           ? const Value.absent()
           : Value(sajdah),
-      textUthmani: Value(textUthmani),
       textQpcHafs: Value(textQpcHafs),
       textDigitalKhatt: Value(textDigitalKhatt),
     );
@@ -1125,7 +1099,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
       hizb: serializer.fromJson<int>(json['hizb']),
       rub: serializer.fromJson<int>(json['rub']),
       sajdah: serializer.fromJson<int?>(json['sajdah']),
-      textUthmani: serializer.fromJson<String>(json['textUthmani']),
       textQpcHafs: serializer.fromJson<String>(json['textQpcHafs']),
       textDigitalKhatt: serializer.fromJson<String>(json['textDigitalKhatt']),
     );
@@ -1141,7 +1114,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
       'hizb': serializer.toJson<int>(hizb),
       'rub': serializer.toJson<int>(rub),
       'sajdah': serializer.toJson<int?>(sajdah),
-      'textUthmani': serializer.toJson<String>(textUthmani),
       'textQpcHafs': serializer.toJson<String>(textQpcHafs),
       'textDigitalKhatt': serializer.toJson<String>(textDigitalKhatt),
     };
@@ -1155,7 +1127,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
     int? hizb,
     int? rub,
     Value<int?> sajdah = const Value.absent(),
-    String? textUthmani,
     String? textQpcHafs,
     String? textDigitalKhatt,
   }) => AyahRow(
@@ -1166,7 +1137,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
     hizb: hizb ?? this.hizb,
     rub: rub ?? this.rub,
     sajdah: sajdah.present ? sajdah.value : this.sajdah,
-    textUthmani: textUthmani ?? this.textUthmani,
     textQpcHafs: textQpcHafs ?? this.textQpcHafs,
     textDigitalKhatt: textDigitalKhatt ?? this.textDigitalKhatt,
   );
@@ -1179,9 +1149,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
       hizb: data.hizb.present ? data.hizb.value : this.hizb,
       rub: data.rub.present ? data.rub.value : this.rub,
       sajdah: data.sajdah.present ? data.sajdah.value : this.sajdah,
-      textUthmani: data.textUthmani.present
-          ? data.textUthmani.value
-          : this.textUthmani,
       textQpcHafs: data.textQpcHafs.present
           ? data.textQpcHafs.value
           : this.textQpcHafs,
@@ -1201,7 +1168,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
           ..write('hizb: $hizb, ')
           ..write('rub: $rub, ')
           ..write('sajdah: $sajdah, ')
-          ..write('textUthmani: $textUthmani, ')
           ..write('textQpcHafs: $textQpcHafs, ')
           ..write('textDigitalKhatt: $textDigitalKhatt')
           ..write(')'))
@@ -1217,7 +1183,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
     hizb,
     rub,
     sajdah,
-    textUthmani,
     textQpcHafs,
     textDigitalKhatt,
   );
@@ -1232,7 +1197,6 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
           other.hizb == this.hizb &&
           other.rub == this.rub &&
           other.sajdah == this.sajdah &&
-          other.textUthmani == this.textUthmani &&
           other.textQpcHafs == this.textQpcHafs &&
           other.textDigitalKhatt == this.textDigitalKhatt);
 }
@@ -1245,7 +1209,6 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
   final Value<int> hizb;
   final Value<int> rub;
   final Value<int?> sajdah;
-  final Value<String> textUthmani;
   final Value<String> textQpcHafs;
   final Value<String> textDigitalKhatt;
   const AyahsCompanion({
@@ -1256,7 +1219,6 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
     this.hizb = const Value.absent(),
     this.rub = const Value.absent(),
     this.sajdah = const Value.absent(),
-    this.textUthmani = const Value.absent(),
     this.textQpcHafs = const Value.absent(),
     this.textDigitalKhatt = const Value.absent(),
   });
@@ -1268,7 +1230,6 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
     required int hizb,
     required int rub,
     this.sajdah = const Value.absent(),
-    required String textUthmani,
     required String textQpcHafs,
     required String textDigitalKhatt,
   }) : surah = Value(surah),
@@ -1276,7 +1237,6 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
        juz = Value(juz),
        hizb = Value(hizb),
        rub = Value(rub),
-       textUthmani = Value(textUthmani),
        textQpcHafs = Value(textQpcHafs),
        textDigitalKhatt = Value(textDigitalKhatt);
   static Insertable<AyahRow> custom({
@@ -1287,7 +1247,6 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
     Expression<int>? hizb,
     Expression<int>? rub,
     Expression<int>? sajdah,
-    Expression<String>? textUthmani,
     Expression<String>? textQpcHafs,
     Expression<String>? textDigitalKhatt,
   }) {
@@ -1299,7 +1258,6 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
       if (hizb != null) 'hizb': hizb,
       if (rub != null) 'rub': rub,
       if (sajdah != null) 'sajdah': sajdah,
-      if (textUthmani != null) 'text_uthmani': textUthmani,
       if (textQpcHafs != null) 'text_qpc_hafs': textQpcHafs,
       if (textDigitalKhatt != null) 'text_digital_khatt': textDigitalKhatt,
     });
@@ -1313,7 +1271,6 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
     Value<int>? hizb,
     Value<int>? rub,
     Value<int?>? sajdah,
-    Value<String>? textUthmani,
     Value<String>? textQpcHafs,
     Value<String>? textDigitalKhatt,
   }) {
@@ -1325,7 +1282,6 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
       hizb: hizb ?? this.hizb,
       rub: rub ?? this.rub,
       sajdah: sajdah ?? this.sajdah,
-      textUthmani: textUthmani ?? this.textUthmani,
       textQpcHafs: textQpcHafs ?? this.textQpcHafs,
       textDigitalKhatt: textDigitalKhatt ?? this.textDigitalKhatt,
     );
@@ -1355,9 +1311,6 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
     if (sajdah.present) {
       map['sajdah'] = Variable<int>(sajdah.value);
     }
-    if (textUthmani.present) {
-      map['text_uthmani'] = Variable<String>(textUthmani.value);
-    }
     if (textQpcHafs.present) {
       map['text_qpc_hafs'] = Variable<String>(textQpcHafs.value);
     }
@@ -1377,7 +1330,6 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
           ..write('hizb: $hizb, ')
           ..write('rub: $rub, ')
           ..write('sajdah: $sajdah, ')
-          ..write('textUthmani: $textUthmani, ')
           ..write('textQpcHafs: $textQpcHafs, ')
           ..write('textDigitalKhatt: $textDigitalKhatt')
           ..write(')'))
@@ -2130,7 +2082,8 @@ class MushafLayoutRow extends DataClass implements Insertable<MushafLayoutRow> {
   final int pageCount;
   final int linesPerPage;
 
-  /// Sayfa fontlarının paket kimliği (ör. `qcf_v2`).
+  /// Sayfanın çizildiği font (`digital_khatt`). Başka bir font paketiyle
+  /// gelen düzen kendi kimliğini yazar (ör. izin alınırsa `qcf_v2`).
   final String fontPack;
   final int version;
   const MushafLayoutRow({
@@ -4248,7 +4201,6 @@ typedef $$AyahsTableCreateCompanionBuilder = AyahsCompanion Function({
   required int hizb,
   required int rub,
   Value<int?> sajdah,
-  required String textUthmani,
   required String textQpcHafs,
   required String textDigitalKhatt,
 });
@@ -4260,7 +4212,6 @@ typedef $$AyahsTableUpdateCompanionBuilder = AyahsCompanion Function({
   Value<int> hizb,
   Value<int> rub,
   Value<int?> sajdah,
-  Value<String> textUthmani,
   Value<String> textQpcHafs,
   Value<String> textDigitalKhatt,
 });
@@ -4342,11 +4293,6 @@ class $$AyahsTableFilterComposer
 
   ColumnFilters<int> get sajdah => $composableBuilder(
     column: $table.sajdah,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get textUthmani => $composableBuilder(
-    column: $table.textUthmani,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4448,11 +4394,6 @@ class $$AyahsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get textUthmani => $composableBuilder(
-    column: $table.textUthmani,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get textQpcHafs => $composableBuilder(
     column: $table.textQpcHafs,
     builder: (column) => ColumnOrderings(column),
@@ -4513,11 +4454,6 @@ class $$AyahsTableAnnotationComposer
 
   GeneratedColumn<int> get sajdah =>
       $composableBuilder(column: $table.sajdah, builder: (column) => column);
-
-  GeneratedColumn<String> get textUthmani => $composableBuilder(
-    column: $table.textUthmani,
-    builder: (column) => column,
-  );
 
   GeneratedColumn<String> get textQpcHafs => $composableBuilder(
     column: $table.textQpcHafs,
@@ -4613,7 +4549,6 @@ class $$AyahsTableTableManager
                 Value<int> hizb = const Value.absent(),
                 Value<int> rub = const Value.absent(),
                 Value<int?> sajdah = const Value.absent(),
-                Value<String> textUthmani = const Value.absent(),
                 Value<String> textQpcHafs = const Value.absent(),
                 Value<String> textDigitalKhatt = const Value.absent(),
               }) => AyahsCompanion(
@@ -4624,7 +4559,6 @@ class $$AyahsTableTableManager
                 hizb: hizb,
                 rub: rub,
                 sajdah: sajdah,
-                textUthmani: textUthmani,
                 textQpcHafs: textQpcHafs,
                 textDigitalKhatt: textDigitalKhatt,
               ),
@@ -4637,7 +4571,6 @@ class $$AyahsTableTableManager
                 required int hizb,
                 required int rub,
                 Value<int?> sajdah = const Value.absent(),
-                required String textUthmani,
                 required String textQpcHafs,
                 required String textDigitalKhatt,
               }) => AyahsCompanion.insert(
@@ -4648,7 +4581,6 @@ class $$AyahsTableTableManager
                 hizb: hizb,
                 rub: rub,
                 sajdah: sajdah,
-                textUthmani: textUthmani,
                 textQpcHafs: textQpcHafs,
                 textDigitalKhatt: textDigitalKhatt,
               ),

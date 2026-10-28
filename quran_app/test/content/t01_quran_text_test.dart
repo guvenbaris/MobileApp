@@ -138,31 +138,27 @@ void main() {
     );
   });
 
-  test('her ayetin metni Tanzil ile karakteri karakterine aynı', () {
+  test('her ayetin harfleri bağımsız kaynakla (Tanzil) aynı: KFGQPC ve DigitalKhatt', () {
+    // Tanzil tek dış referanstır ve uygulamaya girmez (Faz 1 S9). Kodlamalar
+    // farklı olduğu için harf iskeleti karşılaştırılır (VERI_KAYNAKLARI Q-15).
     final mismatches = <String>[];
     for (final a in ayahs) {
       final ref = AyahRef(a.surah, a.ayah);
-      final expected = tanzil.textWithoutBasmala(ref);
-      if (a.textUthmani != expected) {
-        mismatches.add('$ref: ${_firstDifference(a.textUthmani, expected)}');
+      final expected = letterSkeleton(tanzil.textWithoutBasmala(ref));
+      for (final (name, text) in [
+        ('KFGQPC', a.textQpcHafs),
+        ('DigitalKhatt', a.textDigitalKhatt),
+      ]) {
+        final actual = letterSkeleton(text);
+        if (actual != expected) {
+          mismatches.add('$ref $name: ${_firstDifference(actual, expected)}');
+        }
       }
     }
     expect(mismatches, isEmpty, reason: mismatches.take(10).join('\n'));
   });
 
   group('ekranda gösterilen metin (DigitalKhatt)', () {
-    test('her ayetin harfleri KFGQPC ve Tanzil metniyle aynı', () {
-      final mismatches = <String>[];
-      for (final a in ayahs) {
-        final dk = letterSkeleton(a.textDigitalKhatt);
-        if (dk != letterSkeleton(a.textQpcHafs) ||
-            dk != letterSkeleton(a.textUthmani)) {
-          mismatches.add('${a.surah}:${a.ayah}');
-        }
-      }
-      expect(mismatches, isEmpty, reason: mismatches.take(10).join(', '));
-    });
-
     test('durak işaretleri resmi 1421H metniyle (KFGQPC) aynı', () {
       // Tanzil'in durak işaretleri 1405H baskısını izler ve 323 ayette
       // farklıdır; bu yüzden burada referans değildir (VERI_KAYNAKLARI Q-15).

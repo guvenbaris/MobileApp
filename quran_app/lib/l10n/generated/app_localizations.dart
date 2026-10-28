@@ -298,7 +298,7 @@ abstract class AppLocalizations {
   /// **'Hakkında'**
   String get settingsAbout;
 
-  /// Flutter'ın lisans sayfasını açar (font, Tanzil notu, paket lisansları).
+  /// Flutter'ın lisans sayfasını açar (Kur'an fontu ve paket lisansları).
   ///
   /// In tr, this message translates to:
   /// **'Lisanslar'**
@@ -310,10 +310,10 @@ abstract class AppLocalizations {
   /// **'Kur\'an fontu, metin kaynakları ve yazılım lisansları'**
   String get settingsLicensesSubtitle;
 
-  /// Lisans sayfasının üstündeki kaynak ve atıf metni. Tanzil koşulu: kaynak açıkça belirtilir ve tanzil.net'e bağlantı verilir.
+  /// Lisans sayfasının üstündeki kaynak ve atıf metni (İÇ-01). Uygulamayla dağıtılan içeriğin kaynakları; yalnızca testte kullanılan kaynaklar (Tanzil) yazılmaz.
   ///
   /// In tr, this message translates to:
-  /// **'Kur\'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur\'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur\'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel), Tanzil Project (tanzil.net).'**
+  /// **'Kur\'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur\'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur\'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).'**
   String get aboutLegalese;
 
   /// Ekran okuyucu için yükleniyor göstergesinin adı (M13-03).

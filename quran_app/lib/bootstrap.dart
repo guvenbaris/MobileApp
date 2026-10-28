@@ -18,7 +18,7 @@ Future<void> bootstrap(Flavor flavor) async {
   if (flavor.isDev) PerfProbe.enable();
 
   final contentDb = await openContentDatabase();
-  registerContentLicenses(contentDb);
+  registerContentLicenses();
   // Gerekirse migration öncesi yedek alınarak açılır (NF-G03).
   final userDb = await openUserDatabase();
   final userData = await UserDataSnapshot.load(userDb);

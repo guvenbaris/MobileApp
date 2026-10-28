@@ -228,7 +228,6 @@ class DriftQuranRepository implements QuranRepository {
     hizb: r.hizb,
     rub: r.rub,
     sajdah: r.sajdah,
-    textUthmani: r.textUthmani,
     textQpcHafs: r.textQpcHafs,
     textDigitalKhatt: r.textDigitalKhatt,
   );

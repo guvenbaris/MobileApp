@@ -6,8 +6,8 @@
 // - KFGQPC metni (`text_qpc_hafs`): esas kelime bölünmesi (77.430 kelime)
 // - QUL: Medine 1421H düzeni (satırlar, ortalı satırlar), glif birimleri ve
 //   ekranda gösterilen DigitalKhatt kelime metni
-// - Tanzil: yalnızca telif notu (`content_meta.notice.tanzil`); `text_uthmani`
-//   Tanzil kökenlidir ve Tanzil koşulları notun bu dosyada bulunmasını ister
+// - Tanzil: kullanılmaz; yalnızca testlerde bağımsız referanstır. Quran.com'un
+//   Tanzil kökenli `text_uthmani` alanı ham veride durur ama saklanmaz (S9).
 //
 // Üç kaynağın kelime/glif bölünmeleri harf iskeleti üzerinden otomatik
 // hizalanır; hiçbir yer elle eşlenmez. Tekrar çalıştırılabilir; kaynakta
@@ -27,7 +27,6 @@ import 'text_rules.dart';
 
 const _quranComDir = 'tool/content/sources/quran_com';
 const _qulDir = 'tool/content/sources/qul';
-const _tanzilText = 'tool/content/sources/tanzil/quran-uthmani.txt';
 
 const _surahCount = 114;
 const _ayahCount = 6236;
@@ -97,7 +96,6 @@ Future<void> main() async {
                 'QUL ${_layout.qulLayoutFile}, ${_layout.qulGlyphFile}, '
                 '${_layout.digitalKhattFile}',
           ),
-          ('notice.tanzil', _tanzilNotice()),
           ('builtAt', DateTime.now().toUtc().toIso8601String()),
         ])
           ContentMetaCompanion.insert(key: key, value: value),
@@ -117,23 +115,6 @@ Future<void> main() async {
   stdout.writeln(
     'Üretildi: $kContentAssetPath ($mb MB, sürüm $kContentVersion)',
   );
-}
-
-/// Tanzil telif bloğu, kaynak dosyadaki haliyle (değiştirilmeden).
-/// `ayahs.text_uthmani` Tanzil metnidir; Tanzil koşulları bu notun metnin
-/// önemli bir bölümünü içeren her dosyada yer almasını ister
-/// (VERI_KAYNAKLARI.md §4).
-String _tanzilNotice() {
-  final block = File(_tanzilText)
-      .readAsLinesSync()
-      .skipWhile((l) => !l.startsWith('#'))
-      .toList();
-  _check(
-    block.any((l) => l.contains('Tanzil Quran Text')) &&
-        block.any((l) => l.contains('CHANGING IT IS NOT ALLOWED')),
-    'Tanzil telif notu bulunamadı: $_tanzilText',
-  );
-  return block.join('\n').trimRight();
 }
 
 // ---------------------------------------------------------------------------
@@ -228,9 +209,6 @@ Future<Map<String, _AyahWords>> _insertText(
           hizb: v['hizb'] as int,
           rub: v['rub'] as int,
           sajdah: Value(v['sajdah'] as int?),
-          // Q-9: Quran.com 110 surenin 1. ayetinde besmeleyi çıkarırken başta
-          // bir boşluk bırakmış; yalnızca bu boşluk kırpılır.
-          textUthmani: (v['textUthmani'] as String).trimLeft(),
           textQpcHafs: qpc,
           textDigitalKhatt: digitalKhatt['$surah:$ayah']!,
         ),

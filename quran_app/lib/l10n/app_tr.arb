@@ -121,12 +121,12 @@
   "settingsAbout": "Hakkında",
   "settingsLicenses": "Lisanslar",
   "@settingsLicenses": {
-    "description": "Flutter'ın lisans sayfasını açar (font, Tanzil notu, paket lisansları)."
+    "description": "Flutter'ın lisans sayfasını açar (Kur'an fontu ve paket lisansları)."
   },
   "settingsLicensesSubtitle": "Kur'an fontu, metin kaynakları ve yazılım lisansları",
-  "aboutLegalese": "Kur'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel), Tanzil Project (tanzil.net).",
+  "aboutLegalese": "Kur'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).",
   "@aboutLegalese": {
-    "description": "Lisans sayfasının üstündeki kaynak ve atıf metni. Tanzil koşulu: kaynak açıkça belirtilir ve tanzil.net'e bağlantı verilir."
+    "description": "Lisans sayfasının üstündeki kaynak ve atıf metni (İÇ-01). Uygulamayla dağıtılan içeriğin kaynakları; yalnızca testte kullanılan kaynaklar (Tanzil) yazılmaz."
   },
   "loading": "Yükleniyor",
   "@loading": {

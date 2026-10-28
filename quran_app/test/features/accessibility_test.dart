@@ -133,6 +133,6 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
     expect(find.byType(LicensePage), findsOneWidget);
-    expect(find.textContaining('Tanzil Project'), findsWidgets);
+    expect(find.textContaining('DigitalKhatt'), findsWidgets);
   });
 }

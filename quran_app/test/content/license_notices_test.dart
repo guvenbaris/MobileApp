@@ -13,21 +13,19 @@ import '../helpers/content_db.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test(
-    'Tanzil telif notu içerik veritabanında, kaynak dosyadaki haliyle',
-    () async {
-      final db = openTestContentDatabase();
-      final notice = await db.metaValue('notice.tanzil');
-      final source = File('tool/content/sources/tanzil/quran-uthmani.txt')
-          .readAsLinesSync()
-          .skipWhile((l) => !l.startsWith('#'))
-          .join('\n');
-      expect(notice, source.trimRight());
-      expect(notice, contains('Copyright (C)'));
-      expect(notice, contains('Tanzil Project'));
-      expect(notice, contains('CHANGING IT IS NOT ALLOWED'));
-    },
-  );
+  test('Tanzil metni uygulamaya girmez: içerik veritabanında Tanzil kökenli alan yok', () async {
+    // Faz 1 S9: Tanzil yalnızca test referansıdır. Tanzil metni dağıtılsaydı
+    // telif notu ve atıf yükümlülükleri doğardı (VERI_KAYNAKLARI §4).
+    final db = openTestContentDatabase();
+    final columns = await db
+        .customSelect("SELECT name FROM pragma_table_info('ayahs')")
+        .map((r) => r.read<String>('name'))
+        .get();
+    expect(columns, isNot(contains('text_uthmani')));
+    expect(columns, containsAll(['text_qpc_hafs', 'text_digital_khatt']));
+    final meta = await db.select(db.contentMeta).get();
+    expect(meta.map((m) => m.value).join(), isNot(contains('Tanzil')));
+  });
 
   test(
     'DigitalKhatt fontu OFL lisansını ve telif notunu kendi içinde taşır',
@@ -61,8 +59,7 @@ void main() {
     expect(pubspec, contains('- $kQuranFontLicenseAsset'));
   });
 
-  test('lisans sayfasına font ve Tanzil lisansı eklenir', () async {
-    final db = openTestContentDatabase();
+  test('lisans sayfasına font lisansı eklenir', () async {
     // Testte varlık paketi yok; lisans dosyası diskten verilir.
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMessageHandler('flutter/assets', (message) async {
@@ -77,19 +74,14 @@ void main() {
           .setMockMessageHandler('flutter/assets', null),
     );
 
-    registerContentLicenses(db);
+    registerContentLicenses();
     final entries = await LicenseRegistry.licenses.toList();
-    final packages = entries.expand((e) => e.packages).toSet();
-    expect(
-      packages,
-      containsAll(['DigitalKhatt New Madina', 'Tanzil Quran Text']),
-    );
-    final tanzil = entries.firstWhere(
-      (e) => e.packages.contains('Tanzil Quran Text'),
+    final font = entries.firstWhere(
+      (e) => e.packages.contains('DigitalKhatt New Madina'),
     );
     expect(
-      tanzil.paragraphs.map((p) => p.text).join('\n'),
-      contains('Tanzil Project'),
+      font.paragraphs.map((p) => p.text).join(' '),
+      contains('SIL OPEN FONT LICENSE'),
     );
   });
 }
