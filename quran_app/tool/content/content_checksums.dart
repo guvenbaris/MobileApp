@@ -32,6 +32,7 @@ Future<Map<String, dynamic>> computeChecksums(ContentDatabase db) async {
     text['$surah'] = {
       'textUthmani': hash(a.map((r) => r.textUthmani)),
       'textQpcHafs': hash(a.map((r) => r.textQpcHafs)),
+      'textDigitalKhatt': hash(a.map((r) => r.textDigitalKhatt)),
       'meta': hash(
         a.map((r) => '${r.ayah}|${r.juz}|${r.hizb}|${r.rub}|${r.sajdah}'),
       ),
@@ -67,7 +68,9 @@ Future<Map<String, dynamic>> computeChecksums(ContentDatabase db) async {
             '${l.firstGlyphId}|${l.lastGlyphId}',
       ),
       ...glyphs.map(
-        (g) => '${g.id}|${g.firstWordId}|${g.lastWordId}|${g.glyph}',
+        (g) =>
+            '${g.id}|${g.firstWordId}|${g.lastWordId}|${g.glyph}|'
+            '${g.digitalKhattText}',
       ),
     ]);
   }

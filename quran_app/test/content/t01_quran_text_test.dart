@@ -12,6 +12,7 @@ import 'package:quran_app/features/quran/data/content_database.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
 
 import '../../tool/content/content_checksums.dart';
+import '../../tool/content/text_rules.dart';
 import '../helpers/content_db.dart';
 import '../helpers/tanzil_reference.dart';
 
@@ -149,6 +150,43 @@ void main() {
     expect(mismatches, isEmpty, reason: mismatches.take(10).join('\n'));
   });
 
+  group('ekranda gösterilen metin (DigitalKhatt)', () {
+    test('her ayetin harfleri KFGQPC ve Tanzil metniyle aynı', () {
+      final mismatches = <String>[];
+      for (final a in ayahs) {
+        final dk = letterSkeleton(a.textDigitalKhatt);
+        if (dk != letterSkeleton(a.textQpcHafs) ||
+            dk != letterSkeleton(a.textUthmani)) {
+          mismatches.add('${a.surah}:${a.ayah}');
+        }
+      }
+      expect(mismatches, isEmpty, reason: mismatches.take(10).join(', '));
+    });
+
+    test('durak işaretleri resmi 1421H metniyle (KFGQPC) aynı', () {
+      // Tanzil'in durak işaretleri 1405H baskısını izler ve 323 ayette
+      // farklıdır; bu yüzden burada referans değildir (VERI_KAYNAKLARI Q-15).
+      final mismatches = [
+        for (final a in ayahs)
+          if (waqfMarks(a.textDigitalKhatt) != waqfMarks(a.textQpcHafs))
+            '${a.surah}:${a.ayah}',
+      ];
+      expect(mismatches, isEmpty, reason: mismatches.join(', '));
+    });
+
+    test('her ayet kendi numarasıyla biter', () {
+      String digits(int n) =>
+          String.fromCharCodes('$n'.codeUnits.map((c) => c - 0x30 + 0x0660));
+      for (final a in ayahs) {
+        expect(
+          a.textDigitalKhatt.endsWith(digits(a.ayah)),
+          isTrue,
+          reason: '${a.surah}:${a.ayah}',
+        );
+      }
+    });
+  });
+
   test(
     'metin, kelimeler ve düzen doğrulanmış sağlama değerleriyle aynı',
     () async {
@@ -160,10 +198,15 @@ void main() {
       final changed = <String>[];
       final expectedText = expected['text'] as Map<String, dynamic>;
       final actualText = actual['text'] as Map<String, dynamic>;
-      for (final surah in expectedText.keys) {
-        final e = expectedText[surah] as Map<String, dynamic>;
-        final a = actualText[surah] as Map<String, String>;
-        for (final field in e.keys) {
+      for (final surah in {...expectedText.keys, ...actualText.keys}) {
+        final e =
+            (expectedText[surah] ?? const <String, dynamic>{})
+                as Map<String, dynamic>;
+        final a =
+            (actualText[surah] ?? const <String, String>{})
+                as Map<String, String>;
+        // Yeni eklenen veya kaldırılan alanlar da değişiklik sayılır.
+        for (final field in {...e.keys, ...a.keys}) {
           if (e[field] != a[field]) changed.add('Sure $surah: $field');
         }
       }

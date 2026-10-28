@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../quran/application/quran_providers.dart';
-import '../application/mushaf_font_providers.dart';
 import '../application/reader_providers.dart';
 import '../application/reader_settings.dart';
 import 'ayah_list_view.dart';
@@ -97,16 +96,11 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
     super.dispose();
   }
 
-  /// Önceki ve sonraki iki sayfanın verisini (ve gerekirse fontunu) arka
-  /// planda yükler.
+  /// Önceki ve sonraki iki sayfanın verisini arka planda yükler.
   void _prefetchAround(int page) {
-    final pageFonts =
-        ref.read(readerSettingsProvider).renderMode ==
-        MushafRenderMode.pageFonts;
     for (final p in [page + 1, page - 1, page + 2, page - 2]) {
       if (p < 1 || p > ReaderPage.pageCount) continue;
       ref.read(mushafPageProvider(p).future).ignore();
-      if (pageFonts) ref.read(pageFontFamilyProvider(p).future).ignore();
     }
   }
 
@@ -120,8 +114,6 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
       _resetController(_page);
     }
     final juz = ref.watch(mushafPageProvider(_page)).value?.juz;
-    final packInstalled =
-        ref.watch(mushafFontPackInstalledProvider).value ?? false;
     final selected = ref.watch(selectedWordProvider);
     final ayahView = settings.viewMode == ReaderViewMode.ayah;
     final anchor = ref.watch(readerAnchorProvider);
@@ -176,25 +168,6 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
                       MushafTheme.values.length],
                 ),
           ),
-          if (!ayahView)
-            IconButton(
-              key: const Key('reader.renderMode'),
-              tooltip: packInstalled
-                  ? 'Birebir mushaf fontu'
-                  : 'Birebir font paketi yüklü değil',
-              isSelected: settings.renderMode == MushafRenderMode.pageFonts,
-              icon: const Icon(Icons.text_fields),
-              selectedIcon: const Icon(Icons.auto_stories),
-              onPressed: packInstalled
-                  ? () => ref
-                        .read(readerSettingsProvider.notifier)
-                        .setRenderMode(
-                          settings.renderMode == MushafRenderMode.pageFonts
-                              ? MushafRenderMode.unicodeFont
-                              : MushafRenderMode.pageFonts,
-                        )
-                  : null,
-            ),
         ],
       ),
       body: ayahView
@@ -233,19 +206,11 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
                         children: [
                           for (final page in [index * 2 + 1, index * 2 + 2])
                             Expanded(
-                              child: _PageSlot(
-                                page: page,
-                                renderMode: settings.renderMode,
-                                colors: colors,
-                              ),
+                              child: _PageSlot(page: page, colors: colors),
                             ),
                         ],
                       )
-                    : _PageSlot(
-                        page: index + 1,
-                        renderMode: settings.renderMode,
-                        colors: colors,
-                      ),
+                    : _PageSlot(page: index + 1, colors: colors),
               ),
             ),
       bottomNavigationBar: selected == null
@@ -268,16 +233,11 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
   }
 }
 
-/// Bir sayfanın verisini ve (gerekirse) fontunu yükleyip çizer.
+/// Bir sayfanın verisini yükleyip çizer.
 class _PageSlot extends ConsumerWidget {
-  const _PageSlot({
-    required this.page,
-    required this.renderMode,
-    required this.colors,
-  });
+  const _PageSlot({required this.page, required this.colors});
 
   final int page;
-  final MushafRenderMode renderMode;
   final MushafColors colors;
 
   @override
@@ -285,21 +245,14 @@ class _PageSlot extends ConsumerWidget {
     final data = ref.watch(mushafPageProvider(page));
     final surahs = ref.watch(surahByIdProvider);
     final basmala = ref.watch(basmalaTextProvider);
-    final pageFont = renderMode == MushafRenderMode.pageFonts
-        ? ref.watch(pageFontFamilyProvider(page))
-        : null;
 
-    final error =
-        data.error ?? surahs.error ?? basmala.error ?? pageFont?.error;
+    final error = data.error ?? surahs.error ?? basmala.error;
     if (error != null) {
       return Center(
         child: Text('$error', style: TextStyle(color: colors.text)),
       );
     }
-    if (!data.hasValue ||
-        !surahs.hasValue ||
-        !basmala.hasValue ||
-        (pageFont != null && !pageFont.hasValue)) {
+    if (!data.hasValue || !surahs.hasValue || !basmala.hasValue) {
       return ColoredBox(color: colors.background);
     }
     return MushafPageView(
@@ -307,9 +260,7 @@ class _PageSlot extends ConsumerWidget {
       page: data.requireValue,
       surahs: surahs.requireValue,
       basmala: basmala.requireValue,
-      renderMode: renderMode,
       colors: colors,
-      pageFontFamily: pageFont?.value,
     );
   }
 }

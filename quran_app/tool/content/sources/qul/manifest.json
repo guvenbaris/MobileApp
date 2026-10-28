@@ -6,6 +6,9 @@
   "files": {
     "qpc-v2-15-lines.db": "https://qul.tarteel.ai/resources/mushaf-layout/10 (KFGQPC V2 layout, 1421H print) - Download sqlite",
     "qpc-v2.db": "https://qul.tarteel.ai/resources/quran-script/61 (QPC V2 Glyph - Word by Word) - sqlite",
-    "fonts (depoda değil)": "https://qul.tarteel.ai/resources/font/249 (QPC V2 Font - Page by Page), 604 TTF, 208 MB"
+    "fonts (depoda değil)": "https://qul.tarteel.ai/resources/font/249 (QPC V2 Font - Page by Page), 604 TTF, 208 MB",
+    "digital-khatt-v2.db": "https://qul.tarteel.ai/resources/quran-script/48 (Digital Khatt V2 script - Word by word) - sqlite. Kelime numaraları qpc-v2.db ile aynı.",
+    "digital-khatt-15-lines.db (depoda değil)": "https://qul.tarteel.ai/resources/mushaf-layout/21 - qpc-v2-15-lines.db ile satır satır aynı olduğu doğrulandı (28.10.2026), bu yüzden ayrıca saklanmadı.",
+    "DigitalKhattV2.otf (assets/fonts/)": "https://qul.tarteel.ai/resources/font/247 (Digital Khatt V2 Font) - SIL OFL 1.1, Amine Anane & Tarteel Inc."
   }
 }

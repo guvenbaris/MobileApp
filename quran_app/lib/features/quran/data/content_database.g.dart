@@ -871,6 +871,17 @@ class $AyahsTable extends Ayahs with TableInfo<$AyahsTable, AyahRow> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _textDigitalKhattMeta = const VerificationMeta(
+    'textDigitalKhatt',
+  );
+  @override
+  late final GeneratedColumn<String> textDigitalKhatt = GeneratedColumn<String>(
+    'text_digital_khatt',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -882,6 +893,7 @@ class $AyahsTable extends Ayahs with TableInfo<$AyahsTable, AyahRow> {
     sajdah,
     textUthmani,
     textQpcHafs,
+    textDigitalKhatt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -966,6 +978,17 @@ class $AyahsTable extends Ayahs with TableInfo<$AyahsTable, AyahRow> {
     } else if (isInserting) {
       context.missing(_textQpcHafsMeta);
     }
+    if (data.containsKey('text_digital_khatt')) {
+      context.handle(
+        _textDigitalKhattMeta,
+        textDigitalKhatt.isAcceptableOrUnknown(
+          data['text_digital_khatt']!,
+          _textDigitalKhattMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_textDigitalKhattMeta);
+    }
     return context;
   }
 
@@ -1015,6 +1038,10 @@ class $AyahsTable extends Ayahs with TableInfo<$AyahsTable, AyahRow> {
         DriftSqlType.string,
         data['${effectivePrefix}text_qpc_hafs'],
       )!,
+      textDigitalKhatt: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}text_digital_khatt'],
+      )!,
     );
   }
 
@@ -1034,6 +1061,10 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
   final int? sajdah;
   final String textUthmani;
   final String textQpcHafs;
+
+  /// Ekranda gösterilen metin: DigitalKhatt yazılışı (kelimeler + ayet sonu
+  /// işareti). Harfleri ve durak işaretleri T-01'de KFGQPC metniyle denetlenir.
+  final String textDigitalKhatt;
   const AyahRow({
     required this.id,
     required this.surah,
@@ -1044,6 +1075,7 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
     this.sajdah,
     required this.textUthmani,
     required this.textQpcHafs,
+    required this.textDigitalKhatt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1059,6 +1091,7 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
     }
     map['text_uthmani'] = Variable<String>(textUthmani);
     map['text_qpc_hafs'] = Variable<String>(textQpcHafs);
+    map['text_digital_khatt'] = Variable<String>(textDigitalKhatt);
     return map;
   }
 
@@ -1075,6 +1108,7 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
           : Value(sajdah),
       textUthmani: Value(textUthmani),
       textQpcHafs: Value(textQpcHafs),
+      textDigitalKhatt: Value(textDigitalKhatt),
     );
   }
 
@@ -1093,6 +1127,7 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
       sajdah: serializer.fromJson<int?>(json['sajdah']),
       textUthmani: serializer.fromJson<String>(json['textUthmani']),
       textQpcHafs: serializer.fromJson<String>(json['textQpcHafs']),
+      textDigitalKhatt: serializer.fromJson<String>(json['textDigitalKhatt']),
     );
   }
   @override
@@ -1108,6 +1143,7 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
       'sajdah': serializer.toJson<int?>(sajdah),
       'textUthmani': serializer.toJson<String>(textUthmani),
       'textQpcHafs': serializer.toJson<String>(textQpcHafs),
+      'textDigitalKhatt': serializer.toJson<String>(textDigitalKhatt),
     };
   }
 
@@ -1121,6 +1157,7 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
     Value<int?> sajdah = const Value.absent(),
     String? textUthmani,
     String? textQpcHafs,
+    String? textDigitalKhatt,
   }) => AyahRow(
     id: id ?? this.id,
     surah: surah ?? this.surah,
@@ -1131,6 +1168,7 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
     sajdah: sajdah.present ? sajdah.value : this.sajdah,
     textUthmani: textUthmani ?? this.textUthmani,
     textQpcHafs: textQpcHafs ?? this.textQpcHafs,
+    textDigitalKhatt: textDigitalKhatt ?? this.textDigitalKhatt,
   );
   AyahRow copyWithCompanion(AyahsCompanion data) {
     return AyahRow(
@@ -1147,6 +1185,9 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
       textQpcHafs: data.textQpcHafs.present
           ? data.textQpcHafs.value
           : this.textQpcHafs,
+      textDigitalKhatt: data.textDigitalKhatt.present
+          ? data.textDigitalKhatt.value
+          : this.textDigitalKhatt,
     );
   }
 
@@ -1161,7 +1202,8 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
           ..write('rub: $rub, ')
           ..write('sajdah: $sajdah, ')
           ..write('textUthmani: $textUthmani, ')
-          ..write('textQpcHafs: $textQpcHafs')
+          ..write('textQpcHafs: $textQpcHafs, ')
+          ..write('textDigitalKhatt: $textDigitalKhatt')
           ..write(')'))
         .toString();
   }
@@ -1177,6 +1219,7 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
     sajdah,
     textUthmani,
     textQpcHafs,
+    textDigitalKhatt,
   );
   @override
   bool operator ==(Object other) =>
@@ -1190,7 +1233,8 @@ class AyahRow extends DataClass implements Insertable<AyahRow> {
           other.rub == this.rub &&
           other.sajdah == this.sajdah &&
           other.textUthmani == this.textUthmani &&
-          other.textQpcHafs == this.textQpcHafs);
+          other.textQpcHafs == this.textQpcHafs &&
+          other.textDigitalKhatt == this.textDigitalKhatt);
 }
 
 class AyahsCompanion extends UpdateCompanion<AyahRow> {
@@ -1203,6 +1247,7 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
   final Value<int?> sajdah;
   final Value<String> textUthmani;
   final Value<String> textQpcHafs;
+  final Value<String> textDigitalKhatt;
   const AyahsCompanion({
     this.id = const Value.absent(),
     this.surah = const Value.absent(),
@@ -1213,6 +1258,7 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
     this.sajdah = const Value.absent(),
     this.textUthmani = const Value.absent(),
     this.textQpcHafs = const Value.absent(),
+    this.textDigitalKhatt = const Value.absent(),
   });
   AyahsCompanion.insert({
     this.id = const Value.absent(),
@@ -1224,13 +1270,15 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
     this.sajdah = const Value.absent(),
     required String textUthmani,
     required String textQpcHafs,
+    required String textDigitalKhatt,
   }) : surah = Value(surah),
        ayah = Value(ayah),
        juz = Value(juz),
        hizb = Value(hizb),
        rub = Value(rub),
        textUthmani = Value(textUthmani),
-       textQpcHafs = Value(textQpcHafs);
+       textQpcHafs = Value(textQpcHafs),
+       textDigitalKhatt = Value(textDigitalKhatt);
   static Insertable<AyahRow> custom({
     Expression<int>? id,
     Expression<int>? surah,
@@ -1241,6 +1289,7 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
     Expression<int>? sajdah,
     Expression<String>? textUthmani,
     Expression<String>? textQpcHafs,
+    Expression<String>? textDigitalKhatt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1252,6 +1301,7 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
       if (sajdah != null) 'sajdah': sajdah,
       if (textUthmani != null) 'text_uthmani': textUthmani,
       if (textQpcHafs != null) 'text_qpc_hafs': textQpcHafs,
+      if (textDigitalKhatt != null) 'text_digital_khatt': textDigitalKhatt,
     });
   }
 
@@ -1265,6 +1315,7 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
     Value<int?>? sajdah,
     Value<String>? textUthmani,
     Value<String>? textQpcHafs,
+    Value<String>? textDigitalKhatt,
   }) {
     return AyahsCompanion(
       id: id ?? this.id,
@@ -1276,6 +1327,7 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
       sajdah: sajdah ?? this.sajdah,
       textUthmani: textUthmani ?? this.textUthmani,
       textQpcHafs: textQpcHafs ?? this.textQpcHafs,
+      textDigitalKhatt: textDigitalKhatt ?? this.textDigitalKhatt,
     );
   }
 
@@ -1309,6 +1361,9 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
     if (textQpcHafs.present) {
       map['text_qpc_hafs'] = Variable<String>(textQpcHafs.value);
     }
+    if (textDigitalKhatt.present) {
+      map['text_digital_khatt'] = Variable<String>(textDigitalKhatt.value);
+    }
     return map;
   }
 
@@ -1323,7 +1378,8 @@ class AyahsCompanion extends UpdateCompanion<AyahRow> {
           ..write('rub: $rub, ')
           ..write('sajdah: $sajdah, ')
           ..write('textUthmani: $textUthmani, ')
-          ..write('textQpcHafs: $textQpcHafs')
+          ..write('textQpcHafs: $textQpcHafs, ')
+          ..write('textDigitalKhatt: $textDigitalKhatt')
           ..write(')'))
         .toString();
   }
@@ -3244,6 +3300,17 @@ class $LayoutGlyphsTable extends LayoutGlyphs
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _digitalKhattTextMeta = const VerificationMeta(
+    'digitalKhattText',
+  );
+  @override
+  late final GeneratedColumn<String> digitalKhattText = GeneratedColumn<String>(
+    'digital_khatt_text',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     layoutId,
@@ -3251,6 +3318,7 @@ class $LayoutGlyphsTable extends LayoutGlyphs
     firstWordId,
     lastWordId,
     glyph,
+    digitalKhattText,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3307,6 +3375,15 @@ class $LayoutGlyphsTable extends LayoutGlyphs
     } else if (isInserting) {
       context.missing(_glyphMeta);
     }
+    if (data.containsKey('digital_khatt_text')) {
+      context.handle(
+        _digitalKhattTextMeta,
+        digitalKhattText.isAcceptableOrUnknown(
+          data['digital_khatt_text']!,
+          _digitalKhattTextMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -3336,6 +3413,10 @@ class $LayoutGlyphsTable extends LayoutGlyphs
         DriftSqlType.string,
         data['${effectivePrefix}glyph'],
       )!,
+      digitalKhattText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}digital_khatt_text'],
+      ),
     );
   }
 
@@ -3350,13 +3431,19 @@ class LayoutGlyphRow extends DataClass implements Insertable<LayoutGlyphRow> {
   final int id;
   final int firstWordId;
   final int lastWordId;
+
+  /// Sayfa fontundaki (QCF V2) karakter kodu.
   final String glyph;
+
+  /// Aynı birimin DigitalKhatt yazılışı (DigitalKhatt fontuyla çizilir).
+  final String? digitalKhattText;
   const LayoutGlyphRow({
     required this.layoutId,
     required this.id,
     required this.firstWordId,
     required this.lastWordId,
     required this.glyph,
+    this.digitalKhattText,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3366,6 +3453,9 @@ class LayoutGlyphRow extends DataClass implements Insertable<LayoutGlyphRow> {
     map['first_word_id'] = Variable<int>(firstWordId);
     map['last_word_id'] = Variable<int>(lastWordId);
     map['glyph'] = Variable<String>(glyph);
+    if (!nullToAbsent || digitalKhattText != null) {
+      map['digital_khatt_text'] = Variable<String>(digitalKhattText);
+    }
     return map;
   }
 
@@ -3376,6 +3466,9 @@ class LayoutGlyphRow extends DataClass implements Insertable<LayoutGlyphRow> {
       firstWordId: Value(firstWordId),
       lastWordId: Value(lastWordId),
       glyph: Value(glyph),
+      digitalKhattText: digitalKhattText == null && nullToAbsent
+          ? const Value.absent()
+          : Value(digitalKhattText),
     );
   }
 
@@ -3390,6 +3483,7 @@ class LayoutGlyphRow extends DataClass implements Insertable<LayoutGlyphRow> {
       firstWordId: serializer.fromJson<int>(json['firstWordId']),
       lastWordId: serializer.fromJson<int>(json['lastWordId']),
       glyph: serializer.fromJson<String>(json['glyph']),
+      digitalKhattText: serializer.fromJson<String?>(json['digitalKhattText']),
     );
   }
   @override
@@ -3401,6 +3495,7 @@ class LayoutGlyphRow extends DataClass implements Insertable<LayoutGlyphRow> {
       'firstWordId': serializer.toJson<int>(firstWordId),
       'lastWordId': serializer.toJson<int>(lastWordId),
       'glyph': serializer.toJson<String>(glyph),
+      'digitalKhattText': serializer.toJson<String?>(digitalKhattText),
     };
   }
 
@@ -3410,12 +3505,16 @@ class LayoutGlyphRow extends DataClass implements Insertable<LayoutGlyphRow> {
     int? firstWordId,
     int? lastWordId,
     String? glyph,
+    Value<String?> digitalKhattText = const Value.absent(),
   }) => LayoutGlyphRow(
     layoutId: layoutId ?? this.layoutId,
     id: id ?? this.id,
     firstWordId: firstWordId ?? this.firstWordId,
     lastWordId: lastWordId ?? this.lastWordId,
     glyph: glyph ?? this.glyph,
+    digitalKhattText: digitalKhattText.present
+        ? digitalKhattText.value
+        : this.digitalKhattText,
   );
   LayoutGlyphRow copyWithCompanion(LayoutGlyphsCompanion data) {
     return LayoutGlyphRow(
@@ -3428,6 +3527,9 @@ class LayoutGlyphRow extends DataClass implements Insertable<LayoutGlyphRow> {
           ? data.lastWordId.value
           : this.lastWordId,
       glyph: data.glyph.present ? data.glyph.value : this.glyph,
+      digitalKhattText: data.digitalKhattText.present
+          ? data.digitalKhattText.value
+          : this.digitalKhattText,
     );
   }
 
@@ -3438,13 +3540,21 @@ class LayoutGlyphRow extends DataClass implements Insertable<LayoutGlyphRow> {
           ..write('id: $id, ')
           ..write('firstWordId: $firstWordId, ')
           ..write('lastWordId: $lastWordId, ')
-          ..write('glyph: $glyph')
+          ..write('glyph: $glyph, ')
+          ..write('digitalKhattText: $digitalKhattText')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(layoutId, id, firstWordId, lastWordId, glyph);
+  int get hashCode => Object.hash(
+    layoutId,
+    id,
+    firstWordId,
+    lastWordId,
+    glyph,
+    digitalKhattText,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3453,7 +3563,8 @@ class LayoutGlyphRow extends DataClass implements Insertable<LayoutGlyphRow> {
           other.id == this.id &&
           other.firstWordId == this.firstWordId &&
           other.lastWordId == this.lastWordId &&
-          other.glyph == this.glyph);
+          other.glyph == this.glyph &&
+          other.digitalKhattText == this.digitalKhattText);
 }
 
 class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
@@ -3462,6 +3573,7 @@ class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
   final Value<int> firstWordId;
   final Value<int> lastWordId;
   final Value<String> glyph;
+  final Value<String?> digitalKhattText;
   final Value<int> rowid;
   const LayoutGlyphsCompanion({
     this.layoutId = const Value.absent(),
@@ -3469,6 +3581,7 @@ class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
     this.firstWordId = const Value.absent(),
     this.lastWordId = const Value.absent(),
     this.glyph = const Value.absent(),
+    this.digitalKhattText = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   LayoutGlyphsCompanion.insert({
@@ -3477,6 +3590,7 @@ class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
     required int firstWordId,
     required int lastWordId,
     required String glyph,
+    this.digitalKhattText = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : layoutId = Value(layoutId),
        id = Value(id),
@@ -3489,6 +3603,7 @@ class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
     Expression<int>? firstWordId,
     Expression<int>? lastWordId,
     Expression<String>? glyph,
+    Expression<String>? digitalKhattText,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3497,6 +3612,7 @@ class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
       if (firstWordId != null) 'first_word_id': firstWordId,
       if (lastWordId != null) 'last_word_id': lastWordId,
       if (glyph != null) 'glyph': glyph,
+      if (digitalKhattText != null) 'digital_khatt_text': digitalKhattText,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3507,6 +3623,7 @@ class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
     Value<int>? firstWordId,
     Value<int>? lastWordId,
     Value<String>? glyph,
+    Value<String?>? digitalKhattText,
     Value<int>? rowid,
   }) {
     return LayoutGlyphsCompanion(
@@ -3515,6 +3632,7 @@ class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
       firstWordId: firstWordId ?? this.firstWordId,
       lastWordId: lastWordId ?? this.lastWordId,
       glyph: glyph ?? this.glyph,
+      digitalKhattText: digitalKhattText ?? this.digitalKhattText,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3537,6 +3655,9 @@ class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
     if (glyph.present) {
       map['glyph'] = Variable<String>(glyph.value);
     }
+    if (digitalKhattText.present) {
+      map['digital_khatt_text'] = Variable<String>(digitalKhattText.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -3551,6 +3672,7 @@ class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
           ..write('firstWordId: $firstWordId, ')
           ..write('lastWordId: $lastWordId, ')
           ..write('glyph: $glyph, ')
+          ..write('digitalKhattText: $digitalKhattText, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -4125,6 +4247,7 @@ typedef $$AyahsTableCreateCompanionBuilder = AyahsCompanion Function({
   Value<int?> sajdah,
   required String textUthmani,
   required String textQpcHafs,
+  required String textDigitalKhatt,
 });
 typedef $$AyahsTableUpdateCompanionBuilder = AyahsCompanion Function({
   Value<int> id,
@@ -4136,6 +4259,7 @@ typedef $$AyahsTableUpdateCompanionBuilder = AyahsCompanion Function({
   Value<int?> sajdah,
   Value<String> textUthmani,
   Value<String> textQpcHafs,
+  Value<String> textDigitalKhatt,
 });
 
 final class $$AyahsTableReferences
@@ -4225,6 +4349,11 @@ class $$AyahsTableFilterComposer
 
   ColumnFilters<String> get textQpcHafs => $composableBuilder(
     column: $table.textQpcHafs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get textDigitalKhatt => $composableBuilder(
+    column: $table.textDigitalKhatt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4326,6 +4455,11 @@ class $$AyahsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get textDigitalKhatt => $composableBuilder(
+    column: $table.textDigitalKhatt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$SurahsTableOrderingComposer get surah {
     final $$SurahsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -4384,6 +4518,11 @@ class $$AyahsTableAnnotationComposer
 
   GeneratedColumn<String> get textQpcHafs => $composableBuilder(
     column: $table.textQpcHafs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get textDigitalKhatt => $composableBuilder(
+    column: $table.textDigitalKhatt,
     builder: (column) => column,
   );
 
@@ -4473,6 +4612,7 @@ class $$AyahsTableTableManager
                 Value<int?> sajdah = const Value.absent(),
                 Value<String> textUthmani = const Value.absent(),
                 Value<String> textQpcHafs = const Value.absent(),
+                Value<String> textDigitalKhatt = const Value.absent(),
               }) => AyahsCompanion(
                 id: id,
                 surah: surah,
@@ -4483,6 +4623,7 @@ class $$AyahsTableTableManager
                 sajdah: sajdah,
                 textUthmani: textUthmani,
                 textQpcHafs: textQpcHafs,
+                textDigitalKhatt: textDigitalKhatt,
               ),
           createCompanionCallback:
               ({
@@ -4495,6 +4636,7 @@ class $$AyahsTableTableManager
                 Value<int?> sajdah = const Value.absent(),
                 required String textUthmani,
                 required String textQpcHafs,
+                required String textDigitalKhatt,
               }) => AyahsCompanion.insert(
                 id: id,
                 surah: surah,
@@ -4505,6 +4647,7 @@ class $$AyahsTableTableManager
                 sajdah: sajdah,
                 textUthmani: textUthmani,
                 textQpcHafs: textQpcHafs,
+                textDigitalKhatt: textDigitalKhatt,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -6191,6 +6334,7 @@ typedef $$LayoutGlyphsTableCreateCompanionBuilder =
       required int firstWordId,
       required int lastWordId,
       required String glyph,
+      Value<String?> digitalKhattText,
       Value<int> rowid,
     });
 typedef $$LayoutGlyphsTableUpdateCompanionBuilder =
@@ -6200,6 +6344,7 @@ typedef $$LayoutGlyphsTableUpdateCompanionBuilder =
       Value<int> firstWordId,
       Value<int> lastWordId,
       Value<String> glyph,
+      Value<String?> digitalKhattText,
       Value<int> rowid,
     });
 
@@ -6277,6 +6422,11 @@ class $$LayoutGlyphsTableFilterComposer
 
   ColumnFilters<String> get glyph => $composableBuilder(
     column: $table.glyph,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get digitalKhattText => $composableBuilder(
+    column: $table.digitalKhattText,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6369,6 +6519,11 @@ class $$LayoutGlyphsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get digitalKhattText => $composableBuilder(
+    column: $table.digitalKhattText,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$MushafLayoutsTableOrderingComposer get layoutId {
     final $$MushafLayoutsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -6453,6 +6608,11 @@ class $$LayoutGlyphsTableAnnotationComposer
 
   GeneratedColumn<String> get glyph =>
       $composableBuilder(column: $table.glyph, builder: (column) => column);
+
+  GeneratedColumn<String> get digitalKhattText => $composableBuilder(
+    column: $table.digitalKhattText,
+    builder: (column) => column,
+  );
 
   $$MushafLayoutsTableAnnotationComposer get layoutId {
     final $$MushafLayoutsTableAnnotationComposer composer = $composerBuilder(
@@ -6563,6 +6723,7 @@ class $$LayoutGlyphsTableTableManager
                 Value<int> firstWordId = const Value.absent(),
                 Value<int> lastWordId = const Value.absent(),
                 Value<String> glyph = const Value.absent(),
+                Value<String?> digitalKhattText = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LayoutGlyphsCompanion(
                 layoutId: layoutId,
@@ -6570,6 +6731,7 @@ class $$LayoutGlyphsTableTableManager
                 firstWordId: firstWordId,
                 lastWordId: lastWordId,
                 glyph: glyph,
+                digitalKhattText: digitalKhattText,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -6579,6 +6741,7 @@ class $$LayoutGlyphsTableTableManager
                 required int firstWordId,
                 required int lastWordId,
                 required String glyph,
+                Value<String?> digitalKhattText = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LayoutGlyphsCompanion.insert(
                 layoutId: layoutId,
@@ -6586,6 +6749,7 @@ class $$LayoutGlyphsTableTableManager
                 firstWordId: firstWordId,
                 lastWordId: lastWordId,
                 glyph: glyph,
+                digitalKhattText: digitalKhattText,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

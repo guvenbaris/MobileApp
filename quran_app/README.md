@@ -36,6 +36,8 @@ dart run tool/content/build_content_db.dart   # → assets/db/content.sqlite
 | `test/content/` | T-01 (metin bütünlüğü) ve T-02 (sayfa düzeni, cüz/hizb/rubu'/secde) testleri |
 
 Kaynaklar, lisanslar ve bilinen veri durumları: `../VERI_KAYNAKLARI.md`.
+
+**Kur'an fontu:** `assets/fonts/DigitalKhattV2.otf` (DigitalKhatt New Madina, SIL OFL 1.1; lisans metni `assets/fonts/DigitalKhatt-OFL.txt`, fontla birlikte dağıtılmalı). Ekranda gösterilen metin DigitalKhatt kelime metnidir; harfleri ve durak işaretleri T-01'de KFGQPC metniyle denetlenir.
 Drift şeması değişince: `dart run build_runner build`.
 
 ## Çalıştırma

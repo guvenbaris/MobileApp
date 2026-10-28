@@ -12,7 +12,7 @@
 5. [F0-03 Kur'an Veri Hattı](#5-f0-03-kuran-veri-hattı)
 6. [F0-04 Metin Bütünlüğü Testleri](#6-f0-04-metin-bütünlüğü-testleri)
 7. [F0-04 Ek: QUL Doğrulaması, Esas Kelime ve Font Kararı](#7-f0-04-ek-qul-doğrulaması-esas-kelime-ve-font-kararı)
-8. [F0-05 Mushaf Sayfası Çizimi (devam ediyor)](#8-f0-05-mushaf-sayfası-çizimi-devam-ediyor)
+8. [F0-05 Mushaf Sayfası Çizimi](#8-f0-05-mushaf-sayfası-çizimi)
 9. [Genel durum ve bekleyen kararlar](#9-genel-durum-ve-bekleyen-kararlar)
 
 ---
@@ -391,7 +391,7 @@ Karşılaştırmada **beş kaynağın kelime bölünmesinin 7 yerde farklı oldu
   - 254. sayfa düzeltmesi yerinde.
 - **Sonuç:** 44 test geçiyor, analiz temiz, emülatörde entegrasyon testi geçiyor.
 
-### 7.6 Font kararı (TK-06)
+### 7.6 Font kararı (TK-06) — ⚠️ güncellendi, bkz. §8.7 (yalnız DigitalKhatt)
 - **Sorun:** QCF V2 sayfa fontları 604 dosya, toplam **208 MB**. Ağırlığın tamamına yakını harf çizimleri olduğu için küçültülemiyor. Hedefimiz uygulama ≤ 60 MB (NF-PF06) ve ilk açılışta internetsiz çalışma (M16-01).
 - **Karar (kullanıcı, 28.10.2026):**
   - Uygulama **tek bir Kur'an fontuyla** gelir; 604 sayfanın hepsi aynı fontla, aynı satır düzeniyle görünür.
@@ -404,8 +404,8 @@ QUL'den indirilen dosyalar `C:\Users\HUAWEI\Desktop\GuvenBaris\Projects\qul_indi
 
 ---
 
-## 8. F0-05 Mushaf Sayfası Çizimi (devam ediyor)
-**Durum:** 🔨 Neredeyse tamam · **Gereksinimler:** M2-01, M2-02, M2-08, M3-03, M8-02, NF-PF02, NF-PF06, TK-06
+## 8. F0-05 Mushaf Sayfası Çizimi
+**Durum:** ✅ (ertelenen 2 doğrulama hariç) · **Gereksinimler:** M2-01, M2-02, M2-08, M3-03, M8-02, NF-PF02, NF-PF06, TK-06
 
 ### 8.1 Yapılanlar
 | Parça | Dosya | Açıklama |
@@ -462,11 +462,39 @@ QPC Hafs ve QCF fontlarının ikisi de KFGQPC'nin malı; lisans metni yazılı i
 - **Hızlı kaydırma:** ayet görünümünde çok hızlı otomatik kaydırma komutları ilk denemede listeyi kaydırmadı; normal hızda çalışıyor. Gerçek cihazda bakılacak.
 - **Tek font görünümü:** satırlar kelimeler arasına boşluk eklenerek yaslanıyor; basılı nüsha harf uzatmasıyla (keşide) yaslar. Satır ve sayfa sınırları aynı; görsel fark yalnızca kelime aralıklarında.
 
-### 8.7 Kalan işler
-- **Font paketi izin sorusu ve indirme akışı (TK-06):** paketin nereden indirileceği belirlenmeli (aşağıda).
+### 8.7 Font kararı: yalnız DigitalKhatt
+**Soru (kullanıcı):** ücretsiz kullanılabilecek fontlar var mı (Diyanet vb.)?
+
+**Araştırma:**
+| Font | Sonuç |
+|---|---|
+| Diyanet / TDV | İndirilebilir, serbest lisanslı bir Kur'an fontu bulunamadı. Diyanet uygulamaları sayfa görüntüsü kullanıyor; Türkiye mushaf düzeni için Diyanet'le görüşmek gerekecek. |
+| KFGQPC Hafs, QCF V2 | Yazılı izin olmadan çoğaltılamaz (fontun içindeki lisans metni de bunu söylüyor). |
+| **DigitalKhatt New Madina** | **SIL OFL 1.1** (Amine Anane, Tarteel). Medine hattının dijital yeniden çizimi. QUL'de fontu (247), kelime metni (48) ve 1421H düzeni (21) var. |
+| Amiri Quran | OFL, ama nesih görünümünde (Medine mushafına benzemez); yedek. |
+
+**Doğrulama (QUL'den indirilen 3 dosyayla):**
+- **Düzen:** DigitalKhatt düzeni QPC V2 düzeniyle **9.046 satırda birebir aynı**; kelime numaraları da aynı. Metin, veritabanındaki glif birimlerine doğrudan bağlandı.
+- **Font kapsaması:** DigitalKhatt kelime metnindeki tüm karakterler fontta var. Flutter Android'de CFF2 fontu sorunsuz çiziyor.
+- **Performans (emülatör):** kare p90 ~16–17 ms, tek font kadar akıcı (QCF: 50–74 ms).
+- **Ekrandaki metnin doğruluğu (Q-15):** kodlaması farklı olduğu için iki kodlamadan bağımsız denetim T-01'e eklendi:
+  - **Harf iskeleti:** DigitalKhatt = KFGQPC = Tanzil, 6.236 ayette.
+  - **Durak işaretleri:** DigitalKhatt = resmi 1421H metni (KFGQPC), 6.236 ayette. Tanzil'in durak işaretleri 323 ayette farklı, çünkü 1405H baskısını izliyor.
+  - **Ek denetimler:** her ayetin kendi numarasıyla bitmesi ve sağlama değeri.
+  - **52:37:** DigitalKhatt küçük sîni harfin altına yazıyor; basılı nüshayla uyumlu.
+
+**Karar (kullanıcı, 28.10.2026): yalnız DigitalKhatt.**
+- **Kaldırılanlar:** KFGQPC Hafs fontu, QCF font paketi kodu (`MushafFontPack`), çizim yöntemi seçimi.
+- **Eklenenler:** `assets/fonts/DigitalKhattV2.otf` + `DigitalKhatt-OFL.txt`, `layout_glyphs.digital_khatt_text`, `ayahs.text_digital_khatt`; `kContentVersion` 5.
+- **Sonuç:** sayfa, ayet görünümü, sure başlıkları ve besmele DigitalKhatt ile çiziliyor. Font izni ihtiyacı ve 130 MB'lık paket ortadan kalktı.
+- **Bulunan sorun ve düzeltmesi:** DigitalKhatt'ın boşluk karakteri dar (0,1 em), çünkü kelime aralığını yaslama motoru açıyor. Akan metinde (ayet görünümü, başlık, besmele) kelimeler yapışıktı; `wordSpacing` ile düzeltildi.
+- **Saklanan veri:** QCF glif kodları veritabanında duruyor (kullanılmıyor); izin alınırsa birebir görünüm yeniden eklenebilir.
+- **İleride:** basılı nüshadaki gibi keşideyle (harf uzatma) yaslama. Şu an satırlar kelime aralığıyla yaslanıyor.
+
+### 8.8 Kalan işler
 - ⏸ **Gerçek cihazda performans ölçümü:** ertelendi (kullanıcı kararı).
 - ⏸ **7 sayfanın basılı nüshayla karşılaştırılması:** ertelendi (kullanıcı kararı; düzen F0-04'te çapraz doğrulandı).
-- **Sonuç raporu:** bu bölüm; yöntem kararı F0-10'da `CLAUDE.md`'ye.
+- **Yöntem kararı:** F0-10'da `CLAUDE.md`'ye yazılacak.
 
 ---
 
@@ -479,14 +507,14 @@ QPC Hafs ve QCF fontlarının ikisi de KFGQPC'nin malı; lisans metni yazılı i
 | F0-02 Mimari iskelet | ✅ |
 | F0-03 Kur'an veri hattı | ✅ |
 | F0-04 Metin bütünlüğü testleri (T-01, T-02) | ✅ (25 sayfa QUL ile doğrulandı; esas kelime KFGQPC) |
-| F0-05 Mushaf sayfası çizimi (en riskli) | 🔨 Neredeyse tamam (çizim, dokunma, temalar, boyut, ayet görünümü, çift sayfa); kalan: font paketi indirme (§8.7); gerçek cihaz ve basılı nüsha ertelendi |
+| F0-05 Mushaf sayfası çizimi (en riskli) | ✅ Font: DigitalKhatt (OFL). ⏸ Gerçek cihaz ve basılı nüsha ertelendi |
 | F0-06 Kullanıcı veritabanı | ⬜ |
 | F0-07 Dil · F0-08 Tema · F0-10 `CLAUDE.md` · F0-11 Erişilebilirlik | ⬜ |
 | F0-09 Test ve CI | ✅ · ⏳ kırmızıya düşme denemesi |
 
 **Bekleyen kararlar ve işler**
 - **Uygulama adı:** aday "Kur'anla Yaşamak"; karar sonraya bırakıldı (AK-04).
-- **Veri ve font lisansı (AK-11):** Quran.com / KFGQPC; yayından önce yazılı izin gerekecek.
+- **Veri lisansı (AK-11):** Quran.com, QUL düzen ve kelime metinleri; yayından önce netleşmeli. **Font lisansı çözüldü** (DigitalKhatt, OFL).
 - ~~**Secde listesi (Q-8)**~~: ✅ Karar (28.10.2026): **14 secde** (Hanefi). 22:77'deki ۩ işareti basılı metnin parçası olarak sayfada görünür, ama uygulama onu secde ayeti olarak işaretlemez.
 - **Arama metni (Faz 1):** `ayahs.text_uthmani` Tanzil kökenli (Tanzil metniyle aynı); uygulamada kaldığı sürece "Hakkında" ekranında Tanzil atfı zorunlu. Arama KFGQPC metniyle yapılabilirse alan kaldırılır (~1,3 MB, atıf yükümlülüğü kalkar). Tanzil dosyalarının APK'ya girmediği doğrulandı.
 - **Yayın öncesi kelime bölünmesi teyidi:** lisans görüşmelerinde (AK-11) Diyanet'in dijital mushafındaki bölünmeye de bakılması önerilir (Q-12).

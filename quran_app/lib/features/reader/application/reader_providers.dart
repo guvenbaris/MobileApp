@@ -30,13 +30,12 @@ final surahByIdProvider = FutureProvider<Map<int, Surah>>((ref) async {
   return {for (final s in surahs) s.id: s};
 });
 
-/// Besmele metni (KFGQPC): Fatiha'nın 1. ayeti, ayet numarası olmadan.
+/// Besmele (DigitalKhatt yazılışı): Fatiha 1. ayetin ilk dört glif birimi,
+/// ayet numarası olmadan.
 final basmalaTextProvider = FutureProvider<String>((ref) async {
-  final ayah = _unwrap(
-    await ref.watch(quranRepositoryProvider).getAyah(const AyahRef(1, 1)),
-  );
-  final tokens = ayah.textQpcHafs.split(RegExp('[ \u00A0]'));
-  return tokens.sublist(0, tokens.length - 1).join(' ');
+  final page = await ref.watch(mushafPageProvider(1).future);
+  final glyphs = page.lines.expand((l) => l.glyphs).take(4);
+  return glyphs.map((g) => g.digitalKhattText ?? '').join(' ');
 });
 
 /// Kullanıcının dokunduğu kelime (M3-03, M8-02 ön koşulu).

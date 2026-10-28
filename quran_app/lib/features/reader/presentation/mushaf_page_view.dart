@@ -4,37 +4,36 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
 import '../application/reader_providers.dart';
-import '../application/reader_settings.dart';
 import 'mushaf_colors.dart';
 
-/// Tek Kur'an fontunun aile adı (pubspec `fonts`). KFGQPC lisansı
-/// alınamazsa yalnızca burası ve font dosyası değişir (AK-11).
-const kQuranFontFamily = 'QuranHafs';
+/// Uygulamanın Kur'an fontu: DigitalKhatt New Madina (SIL OFL 1.1,
+/// `assets/fonts/DigitalKhatt-OFL.txt`). Medine mushafı hattının dijital
+/// yeniden çizimi (TK-06).
+const kQuranFontFamily = 'DigitalKhatt';
+
+/// DigitalKhatt'ın boşluk karakteri dar (0,1 em): kelime aralığını basılı
+/// nüshada yaslama motoru açar. Akan metinde (ayet görünümü, başlık, besmele)
+/// kelime aralığı bu oranda genişletilir.
+const kQuranWordSpacing = 0.2;
 
 /// Bir mushaf sayfasını basılı nüshadaki satır düzeniyle çizer (M2-01, M2-02).
 ///
-/// Her satır basılı nüshadaki kelimeleri taşır: iki yana yaslı satırlarda
-/// kelimeler satıra yayılır, ortalı satırlar ortalanır. Yazı boyutu,
-/// sayfanın en uzun satırı ekrana sığacak şekilde hesaplanır.
+/// Her satır basılı nüshadaki glif birimlerini (kelimeleri) taşır: iki yana
+/// yaslı satırlarda kelimeler satıra yayılır, ortalı satırlar ortalanır. Yazı
+/// boyutu, sayfanın en uzun satırı ekrana sığacak şekilde hesaplanır.
 class MushafPageView extends ConsumerWidget {
   const MushafPageView({
     required this.page,
     required this.surahs,
     required this.basmala,
-    required this.renderMode,
     required this.colors,
-    this.pageFontFamily,
     super.key,
   });
 
   final MushafPage page;
   final Map<int, Surah> surahs;
   final String basmala;
-  final MushafRenderMode renderMode;
   final MushafColors colors;
-
-  /// QCF V2 sayfa fontunun yüklenmiş aile adı ([MushafRenderMode.pageFonts]).
-  final String? pageFontFamily;
 
   static const _linesPerPage = 15;
 
@@ -44,8 +43,11 @@ class MushafPageView extends ConsumerWidget {
   /// Sayfanın bundan daha geniş çizilmesine izin verilmez.
   static const _maxAspect = 0.8;
 
-  bool get _useGlyphs =>
-      renderMode == MushafRenderMode.pageFonts && pageFontFamily != null;
+  /// Ortalı satırlarda kelimeler arası boşluk (yazı boyutuna oranla).
+  static const _centeredGap = 0.24;
+
+  /// İki yana yaslı satırlarda kelimeler arasında bırakılacak en az boşluk.
+  static const _minJustifiedGap = 0.15;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -62,8 +64,9 @@ class MushafPageView extends ConsumerWidget {
               // Ekran sayfadan çok genişse (yatay mod, M2-03): yeterince
               // yüksek ekranda (tablet) sayfa daraltılıp ortalanır; telefonda
               // sayfa genişliğe sığdırılıp dikey kaydırılır.
-              final scroll = width / height > _maxAspect && height < 500;
-              if (width / height > _maxAspect) {
+              final tooWide = width / height > _maxAspect;
+              final scroll = tooWide && height < 500;
+              if (tooWide) {
                 if (scroll) {
                   height = width / _pageAspect;
                 } else {
@@ -87,13 +90,7 @@ class MushafPageView extends ConsumerWidget {
                         SizedBox(
                           height: lineHeight,
                           width: width,
-                          child: _buildLine(
-                            context,
-                            ref,
-                            line,
-                            fontSize,
-                            selected,
-                          ),
+                          child: _buildLine(ref, line, fontSize, selected),
                         ),
                     ],
                   ),
@@ -110,12 +107,12 @@ class MushafPageView extends ConsumerWidget {
   }
 
   Widget _buildLine(
-    BuildContext context,
     WidgetRef ref,
     MushafLine line,
     double fontSize,
     WordRef? selected,
   ) {
+    final style = _style(fontSize);
     switch (line.type) {
       case LayoutLineType.surahName:
         return _SurahHeader(
@@ -124,64 +121,42 @@ class MushafPageView extends ConsumerWidget {
           fontSize: fontSize,
         );
       case LayoutLineType.basmala:
-        return Center(child: Text(basmala, style: _unicodeStyle(fontSize)));
+        return Center(child: Text(basmala, style: style));
       case LayoutLineType.ayah:
-        final pieces = _useGlyphs
-            ? [
-                for (final g in line.glyphs)
-                  _Piece(g.glyph, g.words, g.words.contains(selected)),
-              ]
-            : [
-                for (final w in line.words)
-                  _Piece(w.text, [w.ref], w.ref == selected),
-              ];
-        final style = _useGlyphs
-            ? TextStyle(
-                fontFamily: pageFontFamily,
-                fontSize: fontSize,
-                color: colors.text,
-              )
-            : _unicodeStyle(fontSize);
         return Row(
           mainAxisAlignment: line.isCentered
               ? MainAxisAlignment.center
               : MainAxisAlignment.spaceBetween,
           children: [
-            for (final p in pieces)
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => ref
+            for (final g in line.glyphs)
+              _GlyphUnit(
+                glyph: g,
+                style: style,
+                selected: g.words.contains(selected),
+                highlight: colors.highlight,
+                padding: line.isCentered
+                    ? EdgeInsets.symmetric(
+                        horizontal: fontSize * _centeredGap / 2,
+                      )
+                    : null,
+                onTap: (selectedNow) => ref
                     .read(selectedWordProvider.notifier)
-                    .select(p.selected ? null : p.words.first),
-                child: Container(
-                  color: p.selected ? colors.highlight : null,
-                  padding: line.isCentered
-                      ? EdgeInsets.symmetric(
-                          horizontal: fontSize * _centeredGap / 2,
-                        )
-                      : null,
-                  child: Text(p.text, style: style, softWrap: false),
-                ),
+                    .select(selectedNow ? null : g.words.first),
               ),
           ],
         );
     }
   }
 
-  TextStyle _unicodeStyle(double fontSize) => TextStyle(
+  TextStyle _style(double fontSize) => TextStyle(
     fontFamily: kQuranFontFamily,
     fontSize: fontSize,
-    height: 1.6,
+    height: 1.5,
+    wordSpacing: fontSize * kQuranWordSpacing,
     color: colors.text,
   );
 
-  /// Ortalı satırlarda kelimeler arası boşluk (yazı boyutuna oranla).
-  static const _centeredGap = 0.24;
-
-  /// İki yana yaslı satırlarda kelimeler arasında bırakılacak en az boşluk.
-  double get _minJustifiedGap => _useGlyphs ? 0.05 : 0.18;
-
-  /// Hesaplanan yazı boyutları: (sayfa, yöntem, genişlik, yükseklik) → boyut.
+  /// Hesaplanan yazı boyutları: (sayfa, genişlik, yükseklik) → boyut.
   /// Kelime seçimi gibi her yeniden çizimde ölçümün tekrarlanmasını önler.
   static final Map<String, double> _fontSizeCache = {};
 
@@ -189,33 +164,27 @@ class MushafPageView extends ConsumerWidget {
   /// yazı boyutunu bulur.
   double _fontSizeFor(double width, double lineHeight) {
     final key =
-        '${page.layoutId}/${page.number}/${_useGlyphs ? pageFontFamily : 'u'}/'
+        '${page.layoutId}/${page.number}/'
         '${width.round()}x${lineHeight.round()}';
     final cached = _fontSizeCache[key];
     if (cached != null) return cached;
 
     const reference = 100.0;
-    final style = _useGlyphs
-        ? TextStyle(fontFamily: pageFontFamily, fontSize: reference)
-        : _unicodeStyle(reference);
+    final style = _style(reference);
     var widest = 0.0;
     for (final line in page.lines) {
       if (line.type != LayoutLineType.ayah) continue;
-      final texts = _useGlyphs
-          ? line.glyphs.map((g) => g.glyph)
-          : line.words.map((w) => w.text);
       var total = 0.0;
-      var count = 0;
-      for (final text in texts) {
+      for (final g in line.glyphs) {
         final painter = TextPainter(
-          text: TextSpan(text: text, style: style),
+          text: TextSpan(text: g.digitalKhattText ?? '', style: style),
           textDirection: TextDirection.rtl,
           maxLines: 1,
         )..layout();
         total += painter.width;
         painter.dispose();
-        count++;
       }
+      final count = line.glyphs.length;
       total +=
           reference *
           (line.isCentered
@@ -223,7 +192,7 @@ class MushafPageView extends ConsumerWidget {
               : _minJustifiedGap * (count - 1));
       if (total > widest) widest = total;
     }
-    final byHeight = lineHeight * (_useGlyphs ? 0.62 : 0.5);
+    final byHeight = lineHeight * 0.5;
     final size = widest == 0
         ? byHeight
         : [
@@ -235,12 +204,40 @@ class MushafPageView extends ConsumerWidget {
   }
 }
 
-class _Piece {
-  const _Piece(this.text, this.words, this.selected);
+/// Dokunulabilir glif birimi. Dokununca kapsadığı ilk kelime seçilir.
+class _GlyphUnit extends StatelessWidget {
+  const _GlyphUnit({
+    required this.glyph,
+    required this.style,
+    required this.selected,
+    required this.highlight,
+    required this.onTap,
+    this.padding,
+  });
 
-  final String text;
-  final List<WordRef> words;
+  final PageGlyph glyph;
+  final TextStyle style;
   final bool selected;
+  final Color highlight;
+  final EdgeInsets? padding;
+  final void Function(bool selectedNow) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => onTap(selected),
+      child: Container(
+        color: selected ? highlight : null,
+        padding: padding,
+        child: Text(
+          glyph.digitalKhattText ?? '',
+          style: style,
+          softWrap: false,
+        ),
+      ),
+    );
+  }
 }
 
 /// Sure başlığı satırı. Basılı nüshadaki süslü çerçeve, sure adı fontu
@@ -270,6 +267,7 @@ class _SurahHeader extends StatelessWidget {
         style: TextStyle(
           fontFamily: kQuranFontFamily,
           fontSize: fontSize * 0.9,
+          wordSpacing: fontSize * 0.9 * kQuranWordSpacing,
           color: colors.ornament,
         ),
       ),

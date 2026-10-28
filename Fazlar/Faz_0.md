@@ -2,7 +2,7 @@
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
 > **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`, `Faz_0_Notlar.md` (her iş paketinde ne yapıldığı ve neden)
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 sürüyor; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
+> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 tamam (2 doğrulama ertelendi); iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
@@ -35,7 +35,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | TK-03 | Yönlendirme | **go_router** | Derin bağlantı (ayet paylaşımı) desteği |
 | TK-04 | Klasör yapısı | **Özellik bazlı (feature-first)** + katmanlar: `presentation / application / domain / data` | Modüller (M2, M8…) birbirinden bağımsız büyüyebilir |
 | TK-05 | Dil dosyaları | Flutter `gen_l10n` + ARB dosyaları | Resmi yöntem; NF-Y01 |
-| TK-06 | **Mushaf çizim yöntemi** | ✅ **Karar (28.10.2026):** Uygulama **tek bir Kur'an fontuyla** (ör. KFGQPC Uthmanic Hafs, ~1 MB) ve QUL'ün satır düzeniyle gelir; 604 sayfanın hepsi aynı fontla, satır ve sayfa sınırları basılı nüshayla aynı. **QCF V2 sayfa fontları (birebir görünüm, 604 dosya, 208 MB) isteğe bağlı pakettir:** kullanıcıya sorulur, onay verirse indirilir ve **tamamı indikten sonra** tüm sayfalar birlikte geçer; karışık görünüm olmaz. | 208 MB, uygulama boyutu hedefini (NF-PF06 ≤ 60 MB) aşıyor ve ilk açılış internetsiz olmalı (M16-01). Glif fontlarının ağırlığı harf çizimleri; küçültme payı yok. Kelimeye dokunma iki yöntemde de düzen verisiyle çalışır. F0-05'te iki yöntem ekranda denenir. |
+| TK-06 | **Mushaf çizim yöntemi** | ✅ **Güncel karar (28.10.2026, F0-05 sonrası): yalnız DigitalKhatt New Madina** (SIL OFL, 0,5 MB). Medine hattının dijital yeniden çizimi; sayfa, ayet görünümü ve başlıklar bu fontla; satırlar QUL 1421H düzeniyle. KFGQPC fontları ve QCF paketi kullanılmaz (izin ihtiyacı ve 130 MB indirme ortadan kalktı). ~~İlk karar: Uygulama **tek bir Kur'an fontuyla** (ör. KFGQPC Uthmanic Hafs, ~1 MB) ve QUL'ün satır düzeniyle gelir; 604 sayfanın hepsi aynı fontla, satır ve sayfa sınırları basılı nüshayla aynı. **QCF V2 sayfa fontları (birebir görünüm, 604 dosya, 208 MB) isteğe bağlı pakettir:** kullanıcıya sorulur, onay verirse indirilir ve **tamamı indikten sonra** tüm sayfalar birlikte geçer; karışık görünüm olmaz.~~ | 208 MB, uygulama boyutu hedefini (NF-PF06 ≤ 60 MB) aşıyor ve ilk açılış internetsiz olmalı (M16-01). Glif fontlarının ağırlığı harf çizimleri; küçültme payı yok. Kelimeye dokunma iki yöntemde de düzen verisiyle çalışır. F0-05'te iki yöntem ekranda denenir. |
 | TK-07 | Ortamlar (flavor) | `dev` ve `prod` | Sahte ve gerçek servislerin ayrılması |
 | TK-08 | Kod kalitesi | `flutter_lints` + ek katı kurallar, `dart format` | |
 | TK-09 | CI | GitHub Actions (analiz, test, Android derleme) | Repo GitHub'da olacaksa; değilse eşdeğeri |
@@ -85,13 +85,13 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 
 ### F0-05 Mushaf Sayfası Çizim Denemesi (Spike) [Z] — M2-01, M2-02, TK-06
 > Projenin en riskli teknik konusu. Faz 1'e geçmeden çözülmelidir.
-- [x] Tek Kur'an fontuyla (varsayılan) ve QCF V2 sayfa fontlarıyla (isteğe bağlı paket) sayfa çizimi; satır düzeni ve ortalı satırlar birebir (TK-06). Tek font: KFGQPC HAFS Uthmanic Script v2.2.
+- [x] Sayfa çizimi; satır düzeni ve ortalı satırlar birebir (TK-06). Üç yöntem denendi (KFGQPC Hafs, QCF V2 birebir, DigitalKhatt); **seçilen: DigitalKhatt** (açık lisans, Medine hattı, akıcı).
 - [x] Kelimeye dokununca kelime kimliğinin alınması (M3-03 ve M8-02'nin ön koşulu); iki çizim yönteminde de
 - [x] Açık / sepya / koyu temada çizim (M2-08); koyu temada metin alanı da koyu, QCF glifleri temaya göre renkleniyor
 - [x] Yazı boyutu ölçekleme ve tablette çift sayfa ön denemesi (M2-03, M2-07): ayet görünümünde %50–%250; yatay tablette çift sayfa (açılım 1–2, 3–4…; widget testleriyle); telefonda yatayda sayfa genişliğe sığar ve dikey kaydırılır; döndürmede sayfa korunur (M2-10). Sayfa görünümünde yakınlaştırma Faz 1'de.
 - [x] Uygulama boyutu (NF-PF06): prod release arm64 **22,4 MB** (içerik veritabanı dahil)
 - [~] Performans (NF-PF02): emülatörde ölçüldü (tek font akıcı; QCF'de çizim yavaş, emülatörün yazılım GPU'su nedeniyle). ⏸ **Gerçek cihaz ölçümü ertelendi** (kullanıcı kararı 28.10.2026; geçişler çalışıyor).
-- [ ] Font paketi indirme akışı ve izin sorusu (TK-06)
+- [x] ~~Font paketi indirme akışı ve izin sorusu (TK-06)~~: gerek kalmadı; DigitalKhatt uygulamayla gelir (karar 28.10.2026)
 - [x] **Düzen değiştirme denemesi (M2-14, M2-15):** mushaf sayfası ↔ ayet görünümü geçişinde aynı ayette kalınıyor (emülatörde: ayet görünümünde 2:30 → sayfa 6 → tekrar 2:30). Konum düzenden bağımsız `sure:ayet` çapasıyla tutuluyor.
 - [ ] Sonuç raporu: seçilen yöntem, karşılaşılan sorunlar, Türkiye mushaf düzeni için uygulanabilirlik
 - **Bitti:** Seçilen 7 sayfa (Fatiha, Bakara 2, rastgele 5) basılı nüshayla yan yana karşılaştırıldı ve farksız; yöntem kararı `CLAUDE.md`'ye yazıldı.
@@ -162,5 +162,6 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | CI de her commit yerine haftalık + PR + elle çalışacak şekilde değiştirildi |
 | 28.10.2026 | F0-03 Kur'an veri hattı tamamlandı; ilk düzen Medine 1421H (QCF V2) |
 | 28.10.2026 | F0-04 metin bütünlüğü testleri tamamlandı; Tanzil test referansı |
+| 28.10.2026 | F0-05: font kararı yalnız DigitalKhatt (OFL); ekrandaki metin harf ve durak işaretiyle doğrulanıyor (T-01) |
 | 28.10.2026 | F0-05 başladı: sayfa çizimi (iki yöntem), kelimeye dokunma, temalar, boyut ve ilk performans ölçümleri |
 | 28.10.2026 | F0-04 ek: QUL düzen/glif kaynağı oldu; esas kelime bölünmesi KFGQPC (77.430); satır genişliği doğrulaması; TK-06 font kararı |

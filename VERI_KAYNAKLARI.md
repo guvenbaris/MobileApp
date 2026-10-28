@@ -11,8 +11,9 @@
 | Quran.com API v4 | Ayet metinleri (`text_uthmani`, `text_qpc_hafs`), cüz/hizb/rubu'/secde, sure bilgileri; Corpus kelime bölünmesi ve QCF V2 glif kodları (yalnızca eşleme köprüsü) | ✅ Kullanılıyor | ❓ **Belirsiz**: AK-11 |
 | **KFGQPC metni** (`text_qpc_hafs`, Quran.com üzerinden) | **Esas kelime bölünmesi** (77.430 kelime) | ✅ Kullanılıyor | Asıl hak sahibi KFGQPC: AK-11 |
 | QUL (Tarteel) | Medine 1421H düzeni: satırlar, ortalı satırlar, QCF V2 glif birimleri | ✅ Kullanılıyor (elle indirildi) | ❓ Kaynak sayfalarında "telif bilgisi yok" |
-| QPC Hafs fontu (tek Kur'an fontu, KFGQPC) | Varsayılan sayfa görünümü (TK-06) | ⏳ İndirilecek (QUL kaynak 245) | ❌ Lisans: "KFGQPC'nin malıdır; yazılı izin olmadan çoğaltılamaz" → **yazılı izin gerekli** (AK-11). Yedek: OFL lisanslı Amiri Quran |
-| QCF V2 sayfa fontları (QUL üzerinden) | Birebir mushaf görünümü (604 TTF, 208 MB); düzen doğrulaması | ⬜ Depoda değil; F0-05'te isteğe bağlı paket | Asıl hak sahibi KFGQPC: AK-11 |
+| **DigitalKhatt New Madina fontu + kelime metni** (QUL font 247, script 48) | **Uygulamanın tek Kur'an fontu ve ekranda gösterilen metin** (sayfa, ayet görünümü, başlıklar) | ✅ Kullanılıyor (karar 28.10.2026) | ✅ **SIL OFL 1.1** (Amine Anane, Tarteel Inc.): uygulamaya gömülebilir, lisans metni `assets/fonts/DigitalKhatt-OFL.txt` ile dağıtılır. Kelime metninin lisansı QUL'de belirtilmemiş (AK-11). |
+| ~~QPC Hafs fontu (KFGQPC)~~ | ~~Varsayılan görünüm~~ | ❌ **Kaldırıldı** (28.10.2026): DigitalKhatt seçildi | Yazılı izin gerektiriyordu |
+| QCF V2 sayfa fontları (QUL üzerinden) | Yalnızca düzen doğrulaması (`check_line_widths.dart`) | 🟡 Depoda değil; uygulamada **kullanılmıyor**. Glif kodları veritabanında duruyor; izin alınırsa birebir paket ileride eklenebilir | Asıl hak sahibi KFGQPC: AK-11 |
 | Tanzil | **Dosyaları yalnızca test referansı** (T-01 metin, T-02 sayfa/cüz/rubu'/secde); uygulama paketine girmez. ⚠️ Ancak Quran.com'dan gelen `ayahs.text_uthmani` metni Tanzil metninin aynısıdır (Tanzil kökenli) ve veritabanıyla uygulamaya girer. | ✅ Testlerde kullanılıyor | ✅ CC BY 3.0 (değiştirmeden, atıfla). `text_uthmani` uygulamada kaldığı sürece "Hakkında" ekranında Tanzil atfı ve bağlantısı **zorunlu** |
 
 **Kur'an metninde hiçbir karakter değiştirilmedi.** Yapılan tüm işlemler aşağıda (Q-1…Q-14) gerekçesiyle listelenmiştir.
@@ -28,6 +29,8 @@
 | `quran_app/tool/content/sources/quran_com/manifest.json` | `fetch_sources.dart` üretir | Kaynak adresi ve indirme zamanı | Kayıt: verinin ne zaman, nereden indirildiği; veritabanının `content_meta` tablosuna yazılır |
 | `quran_app/tool/content/sources/qul/qpc-v2-15-lines.db` | QUL, "KFGQPC V2 layout (1421H print)", https://qul.tarteel.ai/resources/mushaf-layout/10; ücretsiz hesapla elle | 604 sayfa × 15 satırlık düzen: satır türü, ortalı mı, satırdaki ilk/son glif, sure numarası | 🟢 Mushaf sayfa düzeni → `layout_lines` ve `layout_pages` tabloları. Sayfaların basılı nüshayla aynı satırlara bölünmesi bundan gelir (M2-02). İlk indirme amacı Quran.com düzenini doğrulamaktı; Quran.com'da satır hataları çıkınca düzen kaynağı yapıldı (Q-13). |
 | `quran_app/tool/content/sources/qul/qpc-v2.db` | QUL, "QPC V2 Glyph – Word by Word", https://qul.tarteel.ai/resources/quran-script/61; ücretsiz hesapla elle | 83.668 glif birimi (konum ve QCF V2 glif kodu) | 🟢 Glif birimleri → `layout_glyphs` tablosu: sayfanın birebir fontla çizimi ve kelimeye dokunma için (M3-03, M8-02). 🔵 Satırlardaki glif numaralarını kelimelere bağlamak için. |
+| `quran_app/tool/content/sources/qul/digital-khatt-v2.db` | QUL, "Digital Khatt V2 script – Word by word", https://qul.tarteel.ai/resources/quran-script/48; ücretsiz hesapla elle | 83.668 kelime birimi, DigitalKhatt kodlamasıyla; kelime numaraları `qpc-v2.db` ile aynı | 🟢 Ekranda gösterilen metin (sayfa ve ayet görünümü) |
+| `quran_app/assets/fonts/DigitalKhattV2.otf` + `DigitalKhatt-OFL.txt` | QUL, "Digital Khatt V2 Font", https://qul.tarteel.ai/resources/font/247 (font); OFL metni https://github.com/DigitalKhatt/madinafont | DigitalKhatt New Madina v0.1 (CFF2, 522 KB) | 🟢 Uygulamanın tek Kur'an fontu. OFL gereği lisans metniyle dağıtılır. |
 | `quran_app/tool/content/sources/qul/manifest.json` | Elle yazıldı | QUL dosyalarının kaynağı, tarihi, lisans notu | Kayıt |
 | QCF V2 sayfa fontları, 604 TTF, 208 MB (**depoda değil**; `Projects/qul_indirilenler/QPC V2 Font.ttf`) | QUL, "QPC V2 Font – Page by Page", https://qul.tarteel.ai/resources/font/249; ücretsiz hesapla elle | Her mushaf sayfası için ayrı font dosyası | 🟡 Düzen doğrulaması: `check_line_widths.dart` ile satır genişliklerinin ölçülmesi (Q-13). İleride 🟢 kullanıcının onayıyla indirilecek "birebir görünüm" font paketi (TK-06, F0-05). Boyutu nedeniyle uygulama paketine girmez. |
 | `quran_app/tool/content/sources/tanzil/quran-uthmani.txt` | Tanzil, https://tanzil.net/download (Osmanlı yazımı, tüm işaretler); `fetch_sources.dart tanzil` ile | 6.236 ayetin metni, telif notu dosya sonunda | 🟡 Yalnızca test: Quran.com'dan gelen ayet metninin bağımsız bir kaynakla karakter karakter karşılaştırılması (T-01). Metindeki ۞ ve ۩ işaretleri rubu' ve secde kontrollerinde kullanılır (T-02). |
@@ -40,6 +43,9 @@
 | Quran.com 1421H sayfa/satır numaraları (eski `layout_madani_1421.json`) | İlk düzen kaynağı olarak (F0-03) | QUL ve font ölçümüyle 4 sayfada satır hatası bulundu (Q-13); düzen kaynağı QUL oldu, dosya silindi |
 | Quran.com 1405H (QCF V1) satır verisi | İkinci Medine düzeni adayı olarak (F0-03) | 8 sayfada tutarsız (Q-7); depoya hiç alınmadı |
 | Quran.com 1405H sayfa başları (20 sayfa, tek seferlik sorgu) | Tanzil sayfa verisinin hangi baskıya ait olduğunu anlamak için (F0-04) | Yalnızca kontrol amaçlıydı; sonuç Q-10'a yazıldı, saklanmadı |
+| QUL "Digital Khatt layout" (kaynak 21) | DigitalKhatt'a özel düzen var mı diye | `qpc-v2-15-lines.db` ile 9.046 satırın hepsi aynı çıktı; ayrıca saklanmadı |
+| KFGQPC HAFS Uthmanic Script fontu (QUL kaynak 245) | Varsayılan font olarak (F0-05) | Yazılı izin gerektirdiği için DigitalKhatt seçildi; uygulamadan kaldırıldı |
+| DigitalKhatt GitHub `madina.otf` (2,6 MB) | Kapsama denetimi için | QUL'deki V2 sürümü (522 KB) ve onun kelime metni kullanıldı |
 | Quranic Arabic Corpus web sayfaları (2:75, 2:181, 15:7, 36:22, 37:130) | Kelime bölünmesindeki tutarsızlığı çift kontrol etmek için (F0-04) | Yalnızca karşılaştırma amaçlıydı; sonuç Q-12'ye yazıldı, veri saklanmadı |
 
 > Not: Kök klasördeki `reviews/` (rakip uygulama yorumları) Kur'an içeriği değildir; yalnızca gereksinim analizinde kullanıldı ve depoya girmez.
@@ -49,14 +55,16 @@
 | Tablo / alan | Kaynak | Kullanım |
 |---|---|---|
 | `surahs.*` | Quran.com `chapters.json` | 🟢 Sure listesi, sure bilgileri |
-| `ayahs.text_qpc_hafs` | Quran.com (KFGQPC metni) | 🟢 Ekranda gösterilen ayet metni (tek Kur'an fontuyla); esas kelime bölünmesinin kaynağı |
+| `ayahs.text_qpc_hafs` | Quran.com (KFGQPC metni) | Esas kelime bölünmesinin kaynağı; 🟡 DigitalKhatt metninin harf ve durak işareti referansı. Ekranda gösterilmiyor. |
 | `ayahs.text_uthmani` | Quran.com; **Tanzil kökenli** (Tanzil metniyle karakteri karakterine aynı, T-01) | 🟢 Ekranda gösterilmiyor; ileride arama için düşünülüyor (Faz 1). 🟡 T-01'de Tanzil ile karşılaştırılan metin. ⚠️ Uygulamada kaldığı sürece Tanzil lisansı geçerlidir (değiştirmeden + atıf). Arama KFGQPC metniyle yapılabilirse Faz 1'de kaldırılabilir: veritabanı ~1,3 MB küçülür, atıf yükümlülüğü kalkar. |
 | `ayahs.juz`, `hizb`, `rub` | Quran.com | 🟢 Cüz, hizb ve rubu' göstergeleri (M2-04, M2-05) |
 | `ayahs.sajdah` | Quran.com | 🟢 Secde ayeti göstergesi; **14 secde** (Hanefi, karar Q-8) |
 | `words.word_text`, `position` | KFGQPC metni (`text_qpc_hafs` bölünerek) | 🟢 Kelime konumu (sure:ayet:kelime), kelimeye dokunma, hata işaretleri, arama |
 | `words.morph_first`, `morph_last` | Quran.com/Corpus kelimeleriyle otomatik hizalama | 🔵→🟢 İleride kelime meali ve ses verisini doğru kelimeye bağlamak için (M3) |
 | `layout_lines.*`, `layout_pages.*` | QUL `qpc-v2-15-lines.db` (+ 254. sayfa düzeltmesi) | 🟢 Mushaf sayfa düzeni; ayet ↔ sayfa dönüşümü (M2-15) |
-| `layout_glyphs.glyph` | QUL `qpc-v2.db` | 🟢 Birebir font paketiyle çizim (isteğe bağlı, TK-06) |
+| `layout_glyphs.glyph` | QUL `qpc-v2.db` | 🟡 Uygulamada kullanılmıyor (QCF paketi kaldırıldı); izin alınırsa birebir görünüm için saklanıyor |
+| `layout_glyphs.digital_khatt_text` | QUL `digital-khatt-v2.db` (kelime numaraları QPC V2 ile aynı; betik doğrular) | 🟢 Mushaf sayfasında gösterilen metin |
+| `ayahs.text_digital_khatt` | QUL `digital-khatt-v2.db` (ayetin glif birimleri birleştirilerek) | 🟢 Ayet görünümünde gösterilen metin. 🟡 T-01: harf iskeleti ve durak işaretleri denetimi (Q-15) |
 | `layout_glyphs.first_word_id`, `last_word_id` | Otomatik hizalama (QUL glifi ↔ Quran.com glifi ↔ KFGQPC kelimesi) | 🟢 Glife dokununca hangi kelimenin seçileceği |
 | `content_meta.*` | Betik | Kayıt: içerik sürümü, kaynak, üretim zamanı |
 
@@ -100,6 +108,7 @@
 | Q-11 | Tanzil meta verisi 106. rubu'u 15:50'de başlatıyor; kendi metnindeki ۞ işareti 15:49'da. | Bizim veri (15:49) işaretle uyumlu; T-02'de belgeli istisna. |
 | **Q-12** | **Kelime bölünmesi kaynaklara göre değişir.** Harfler her kaynakta aynı, yalnızca 7 yerde kelime sınırı farklı (aşağıdaki tablo). | **Esas: KFGQPC metni (77.430 kelime)**, kullanıcı kararı 28.10.2026. Corpus ve glif eşlemeleri harf iskeletiyle **otomatik** çıkarılır; testler farkların yalnızca bu yerlerde olduğunu denetler. Hizalamada tek imla farkı 11:13 (KFGQPC افتريه / Quran.com افتراه). |
 | **Q-13** | **Satır hataları.** Quran.com'un satır verisi 27, 177, 400, 443. sayfalarda birer kelimeyi yanlış satıra koyuyor (satır genişliği ±%9–16 sapıyor). QUL bu sayfalarda doğru. 254. sayfada iki kaynak da hatalı: Quran.com "بَعۡدَ مَا"yı 7. satıra (−%5,9), QUL 6. satıra (+%4,1) koyuyor. | Düzen **QUL'den** alınır. 254. sayfa için tek, gerekçeli düzeltme: "بَعۡدَ" 6. satırın sonu, "مَا" 7. satırın başı (+%0,5 / −%0,9). Doğrulama: `check_line_widths.dart` ile 8.790 iki yana yaslı satırın tamamı %3 içinde (ortanca %0,37, en büyük %2,63). |
+| **Q-15** | **Ekranda gösterilen metin DigitalKhatt'ın kelime metnidir** ve farklı bir Unicode kodlaması kullanır (ayrık hemze, açık tenvin U+08F0–08F2, iklabda tek hareke + küçük mim, kelimeye bitişik vakf/rubu' işaretleri). Ham karşılaştırmada Tanzil ile yalnızca 298 ayet aynı. | Kodlamadan bağımsız iki denetim (T-01): **(1) harf iskeleti** DigitalKhatt = KFGQPC = Tanzil, **6.236 ayetin tamamında**; **(2) durak işaretleri** (U+06D6–06DB) DigitalKhatt = KFGQPC (resmi 1421H metni), **6.236 ayetin tamamında**. Tanzil'in durak işaretleri 323 ayette farklı: 1405H baskısını izliyor, bu yüzden durak için referans değil. 52:37'de DigitalKhatt küçük sîni harfin **altına** (U+06E3) yazıyor; basılı nüshayla uyumlu (KFGQPC Unicode metni üstte U+06DC kullanıyor). Ek olarak her ayetin kendi numarasıyla bittiği ve tüm metnin sağlama değeri denetleniyor. |
 | **Q-14** | KFGQPC metninde ayırıcılar: ayet numarası ve ۞ işaretinden sonra genelde bölünmez boşluk (U+00A0); 2:72'de ayet numarasından önce normal boşluk. | Kelime bölmede iki tür boşluk da ayırıcı sayılır; metin olduğu gibi saklanır. |
 
 ### Q-12 Kelime bölünmesi karşılaştırması
@@ -186,5 +195,6 @@ Her kaynak için doldurulur. ❓ olan maddeler yayından önce kapatılmalıdır
 | 28.10.2026 | İlk sürüm: Quran.com API v4 kaynağı, bilinen durumlar Q-1…Q-8, lisans kontrol listesi |
 | 28.10.2026 | Tanzil test referansı olarak eklendi; karşılaştırma sonuçları; Q-8 güncellendi, Q-9…Q-11 eklendi; bütünlük güvenceleri bölümü |
 | 28.10.2026 | QUL eklendi (düzen ve glif kaynağı); esas kelime bölünmesi KFGQPC (77.430); Q-1…Q-6 ve Q-10 çözüldü/güncellendi; Q-12…Q-14 eklendi; satır genişliği doğrulaması |
+| 28.10.2026 | **Font kararı: yalnız DigitalKhatt (OFL).** KFGQPC fontları kaldırıldı; DigitalKhatt kelime metni ve fontu eklendi; Q-15 (ekrandaki metnin doğrulanması) |
 | 28.10.2026 | Tanzil kökenli `ayahs.text_uthmani` alanı ve atıf yükümlülüğü açıkça yazıldı; Faz 1'de arama metni kararıyla birlikte değerlendirilecek |
 | 28.10.2026 | Q-8 kararı: 14 secde. Dosya düzeyinde "İndirilen dosyalar ve indirme amaçları", "İndirilip kullanılmayan veriler" ve "Veritabanı alanlarının kaynağı ve kullanımı" bölümleri eklendi |

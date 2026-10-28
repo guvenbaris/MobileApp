@@ -66,6 +66,7 @@ class Ayah {
     required this.rub,
     required this.textUthmani,
     required this.textQpcHafs,
+    required this.textDigitalKhatt,
     this.sajdah,
   });
 
@@ -80,6 +81,9 @@ class Ayah {
   final int? sajdah;
   final String textUthmani;
 
-  /// KFGQPC Hafs metni; KFGQPC Uthmanic Hafs fontuyla gösterilir.
+  /// KFGQPC Hafs metni: esas kelime bölünmesinin kaynağı.
   final String textQpcHafs;
+
+  /// Ekranda gösterilen metin (DigitalKhatt fontuyla, ayet numarası dahil).
+  final String textDigitalKhatt;
 }

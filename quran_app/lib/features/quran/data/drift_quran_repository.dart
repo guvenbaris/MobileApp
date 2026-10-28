@@ -175,7 +175,13 @@ class DriftQuranRepository implements QuranRepository {
       final covered = [
         for (var w = g.firstWordId; w <= g.lastWordId; w++) words[w]!,
       ];
-      glyphs.add(PageGlyph(glyph: g.glyph, words: covered.map(ref).toList()));
+      glyphs.add(
+        PageGlyph(
+          glyph: g.glyph,
+          words: covered.map(ref).toList(),
+          digitalKhattText: g.digitalKhattText,
+        ),
+      );
       for (final w in covered) {
         // Birden fazla glife bölünen kelime bir kez eklenir.
         if (lineWords.isEmpty || lineWords.last.ref != ref(w)) {
@@ -224,5 +230,6 @@ class DriftQuranRepository implements QuranRepository {
     sajdah: r.sajdah,
     textUthmani: r.textUthmani,
     textQpcHafs: r.textQpcHafs,
+    textDigitalKhatt: r.textDigitalKhatt,
   );
 }

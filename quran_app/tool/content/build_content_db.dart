@@ -20,6 +20,8 @@ import 'package:quran_app/features/quran/data/content_database.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
 import 'package:sqlite3/sqlite3.dart' as sqlite;
 
+import 'text_rules.dart';
+
 const _quranComDir = 'tool/content/sources/quran_com';
 const _qulDir = 'tool/content/sources/qul';
 
@@ -36,6 +38,7 @@ const _layout = (
   version: 1,
   qulLayoutFile: 'qpc-v2-15-lines.db',
   qulGlyphFile: 'qpc-v2.db',
+  digitalKhattFile: 'digital-khatt-v2.db',
 );
 
 /// Kaynak düzendeki satır sonu hatalarının belgelenmiş düzeltmeleri.
@@ -72,7 +75,12 @@ Future<void> main() async {
   );
   final db = ContentDatabase(NativeDatabase(temp));
   try {
-    final text = await _insertText(db, chapters, verses);
+    final text = await _insertText(
+      db,
+      chapters,
+      verses,
+      _digitalKhattAyahTexts(),
+    );
     final glyphToWords = _alignGlyphs(verses, text, qulGlyphs);
     await _insertLayout(db, text, glyphToWords, qulGlyphs, qulLayout);
     await db.batch((b) {
@@ -131,10 +139,33 @@ final _tokenSeparator = RegExp('[  ]');
 final _arabicIndicNumber = RegExp('^[٠-٩]+\$');
 
 /// Sure, ayet ve kelimeleri yazar.
+/// DigitalKhatt kelimelerinden ayet metinleri: `sure:ayet` → metin.
+Map<String, String> _digitalKhattAyahTexts() {
+  final dk = sqlite.sqlite3.open(
+    '$_qulDir/${_layout.digitalKhattFile}',
+    mode: sqlite.OpenMode.readOnly,
+  );
+  try {
+    final words = <String, List<String>>{};
+    for (final row in dk.select(
+      'SELECT surah, ayah, text FROM words ORDER BY id',
+    )) {
+      words
+          .putIfAbsent('${row['surah']}:${row['ayah']}', () => [])
+          .add(row['text'] as String);
+    }
+    _check(words.length == _ayahCount, 'DigitalKhatt ayet sayısı');
+    return {for (final e in words.entries) e.key: e.value.join(' ')};
+  } finally {
+    dk.close();
+  }
+}
+
 Future<Map<String, _AyahWords>> _insertText(
   ContentDatabase db,
   List<Map<String, dynamic>> chapters,
   List<Map<String, dynamic>> verses,
+  Map<String, String> digitalKhatt,
 ) async {
   final result = <String, _AyahWords>{};
   var wordId = 0;
@@ -178,6 +209,7 @@ Future<Map<String, _AyahWords>> _insertText(
           // bir boşluk bırakmış; yalnızca bu boşluk kırpılır.
           textUthmani: (v['textUthmani'] as String).trimLeft(),
           textQpcHafs: qpc,
+          textDigitalKhatt: digitalKhatt['$surah:$ayah']!,
         ),
       );
 
@@ -268,16 +300,16 @@ void _alignBySkeleton(
   while (i < a.length && j < b.length) {
     final ga = [i + 1];
     final gb = [j + 1];
-    var sa = _skeleton(a[i++]);
-    var sb = _skeleton(b[j++]);
+    var sa = letterSkeleton(a[i++]);
+    var sb = letterSkeleton(b[j++]);
     while (sa.length != sb.length) {
       if (sa.length < sb.length) {
         _check(i < a.length, '$where hizalanamadı');
-        sa += _skeleton(a[i++]);
+        sa += letterSkeleton(a[i++]);
         ga.add(i);
       } else {
         _check(j < b.length, '$where hizalanamadı');
-        sb += _skeleton(b[j++]);
+        sb += letterSkeleton(b[j++]);
         gb.add(j);
       }
     }
@@ -285,23 +317,6 @@ void _alignBySkeleton(
     groups.add((ga, gb));
   }
   _check(i == a.length && j == b.length, '$where hizalanamadı (artan kelime)');
-}
-
-/// Harf iskeleti: yalnızca temel Arap harfleri; hareke, işaret, tatvîl ve
-/// tek başına hemze atılır; elif, ye ve vav aileleri tek harfe katlanır.
-/// Yalnızca hizalama içindir, saklanan metni etkilemez.
-String _skeleton(String word) {
-  final out = StringBuffer();
-  for (final rune in word.runes) {
-    final c = switch (rune) {
-      0x0671 || 0x0623 || 0x0625 || 0x0622 => 0x0627,
-      0x0649 || 0x0626 => 0x064A,
-      0x0624 => 0x0648,
-      _ => rune,
-    };
-    if (c >= 0x0622 && c <= 0x064A && c != 0x0640) out.writeCharCode(c);
-  }
-  return out.toString();
 }
 
 int _arabicIndicToInt(String s) =>
@@ -398,6 +413,35 @@ Future<void> _insertLayout(
     for (final row in qulGlyphs.select('SELECT id, text FROM words'))
       row['id'] as int: row['text'] as String,
   };
+
+  // DigitalKhatt kelime metni: QUL'de aynı kelime numaralarını kullanır;
+  // her numaranın konumu QPC V2 glif listesiyle aynı olmalı.
+  final digitalKhatt = sqlite.sqlite3.open(
+    '$_qulDir/${_layout.digitalKhattFile}',
+    mode: sqlite.OpenMode.readOnly,
+  );
+  final digitalKhattText = <int, String>{};
+  final locationById = {
+    for (final MapEntry(:key, :value) in qulIdByLocation.entries) value: key,
+  };
+  try {
+    for (final row in digitalKhatt.select(
+      'SELECT id, location, text FROM words',
+    )) {
+      final id = row['id'] as int;
+      _check(
+        locationById[id] == row['location'],
+        'DigitalKhatt kelime $id konumu QPC V2 ile farklı',
+      );
+      digitalKhattText[id] = row['text'] as String;
+    }
+  } finally {
+    digitalKhatt.close();
+  }
+  _check(
+    digitalKhattText.length == glyphText.length,
+    'DigitalKhatt kelime sayısı ${digitalKhattText.length}',
+  );
 
   // QUL satırları; düzeltmeler uygulanarak.
   final rows = [
@@ -530,6 +574,7 @@ Future<void> _insertLayout(
           firstWordId: glyphToWords[id]!.$1,
           lastWordId: glyphToWords[id]!.$2,
           glyph: glyph,
+          digitalKhattText: Value(digitalKhattText[id]),
         ),
     ]);
     b.insertAll(db.layoutLines, [

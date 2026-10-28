@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quran_app/features/quran/application/quran_providers.dart';
-import 'package:quran_app/features/reader/application/mushaf_font_providers.dart';
 import 'package:quran_app/features/reader/presentation/reader_page.dart';
 
 import '../../helpers/fake_quran_repository.dart';
 
 Widget _reader(int page) => ProviderScope(
-  overrides: [
-    quranRepositoryProvider.overrideWithValue(FakeQuranRepository()),
-    mushafFontPackInstalledProvider.overrideWith((ref) async => false),
-  ],
+  overrides: [quranRepositoryProvider.overrideWithValue(FakeQuranRepository())],
   child: MaterialApp(home: ReaderPage(initialPage: page)),
 );
 

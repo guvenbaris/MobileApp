@@ -10,15 +10,18 @@ import 'package:quran_app/features/reader/presentation/mushaf_page_view.dart';
 
 import '../../helpers/fake_quran_repository.dart';
 
-PageWord _word(int position, String text, {bool end = false}) =>
-    PageWord(ref: WordRef(1, 1, position), text: text, isAyahEnd: end);
+PageGlyph _glyph(String text, List<int> positions) => PageGlyph(
+  glyph: '',
+  digitalKhattText: text,
+  words: [for (final p in positions) WordRef(37, 130, p)],
+);
 
 final _page = MushafPage(
   layoutId: 'test',
-  number: 1,
-  firstAyah: const AyahRef(1, 1),
-  juz: 1,
-  hizb: 1,
+  number: 451,
+  firstAyah: const AyahRef(37, 130),
+  juz: 23,
+  hizb: 45,
   lines: [
     const MushafLine(
       number: 1,
@@ -32,51 +35,57 @@ final _page = MushafPage(
       number: 2,
       type: LayoutLineType.ayah,
       isCentered: true,
-      words: [
-        _word(1, 'بِسۡمِ'),
-        _word(2, 'ٱللَّهِ'),
-        _word(3, '١', end: true),
+      words: const [],
+      glyphs: [
+        _glyph('سَلَٰمٌ', [1]),
+        _glyph('عَلَىٰٓ', [2]),
+        // Tek glif iki kelimeyi kapsar (37:130 "إِلۡ يَاسِينَ").
+        _glyph('إِلْيَاسِينَ', [3, 4]),
       ],
-      glyphs: const [],
     ),
   ],
 );
 
 Widget _host() => ProviderScope(
   child: MaterialApp(
-    home: Consumer(
-      builder: (context, ref, _) => MushafPageView(
-        page: _page,
-        surahs: {for (final s in FakeQuranRepository.surahs) s.id: s},
-        basmala: 'بِسۡمِ ٱللَّهِ',
-        renderMode: MushafRenderMode.unicodeFont,
-        colors: MushafColors.of(MushafTheme.sepia),
-      ),
+    home: MushafPageView(
+      page: _page,
+      surahs: {for (final s in FakeQuranRepository.surahs) s.id: s},
+      basmala: 'بِسْمِ ٱللَّهِ',
+      colors: MushafColors.of(MushafTheme.sepia),
     ),
   ),
 );
 
 void main() {
-  testWidgets('sure başlığı ve satırdaki kelimeler çizilir', (tester) async {
-    await tester.pumpWidget(_host());
-    expect(find.text('سُورَةُ الفاتحة'), findsOneWidget);
-    expect(find.text('ٱللَّهِ'), findsOneWidget);
-  });
-
-  testWidgets('kelimeye dokununca konumu seçilir, tekrar dokununca kalkar', (
+  testWidgets('sure başlığı ve satırdaki glif birimleri çizilir', (
     tester,
   ) async {
     await tester.pumpWidget(_host());
-    final container = ProviderScope.containerOf(
-      tester.element(find.byType(MushafPageView)),
-    );
-
-    await tester.tap(find.text('ٱللَّهِ'));
-    await tester.pump();
-    expect(container.read(selectedWordProvider), const WordRef(1, 1, 2));
-
-    await tester.tap(find.text('ٱللَّهِ'));
-    await tester.pump();
-    expect(container.read(selectedWordProvider), isNull);
+    expect(find.text('سُورَةُ الفاتحة'), findsOneWidget);
+    expect(find.text('عَلَىٰٓ'), findsOneWidget);
   });
+
+  testWidgets(
+    'dokunulan birimin ilk kelimesi seçilir, tekrar dokununca kalkar',
+    (tester) async {
+      await tester.pumpWidget(_host());
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(MushafPageView)),
+      );
+
+      await tester.tap(find.text('عَلَىٰٓ'));
+      await tester.pump();
+      expect(container.read(selectedWordProvider), const WordRef(37, 130, 2));
+
+      await tester.tap(find.text('عَلَىٰٓ'));
+      await tester.pump();
+      expect(container.read(selectedWordProvider), isNull);
+
+      // İki kelimelik glif: ilk kelime seçilir.
+      await tester.tap(find.text('إِلْيَاسِينَ'));
+      await tester.pump();
+      expect(container.read(selectedWordProvider), const WordRef(37, 130, 3));
+    },
+  );
 }

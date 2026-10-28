@@ -9,7 +9,7 @@ part 'content_database.g.dart';
 /// Kaynak veri veya şema değiştiğinde artırılır; uygulama yeni sürümü
 /// görünce paketteki veritabanını yeniden kopyalar. Kullanıcı verisi ayrı
 /// veritabanındadır (MK-05) ve bundan etkilenmez.
-const int kContentVersion = 3;
+const int kContentVersion = 5;
 
 /// Paketteki veritabanının yolu (pubspec `assets` ile aynı olmalı).
 const String kContentAssetPath = 'assets/db/content.sqlite';
@@ -51,6 +51,10 @@ class Ayahs extends Table {
   IntColumn get sajdah => integer().nullable()();
   TextColumn get textUthmani => text()();
   TextColumn get textQpcHafs => text()();
+
+  /// Ekranda gösterilen metin: DigitalKhatt yazılışı (kelimeler + ayet sonu
+  /// işareti). Harfleri ve durak işaretleri T-01'de KFGQPC metniyle denetlenir.
+  TextColumn get textDigitalKhatt => text()();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -158,7 +162,12 @@ class LayoutGlyphs extends Table {
   IntColumn get id => integer()();
   IntColumn get firstWordId => integer().references(Words, #id)();
   IntColumn get lastWordId => integer().references(Words, #id)();
+
+  /// Sayfa fontundaki (QCF V2) karakter kodu.
   TextColumn get glyph => text()();
+
+  /// Aynı birimin DigitalKhatt yazılışı (DigitalKhatt fontuyla çizilir).
+  TextColumn get digitalKhattText => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {layoutId, id};

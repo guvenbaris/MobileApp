@@ -108,18 +108,20 @@ class _AyahTile extends ConsumerWidget {
                 style: TextStyle(
                   fontFamily: kQuranFontFamily,
                   fontSize: 22 * textScale,
+                  wordSpacing: 22 * textScale * kQuranWordSpacing,
                   color: colors.ornament,
                 ),
               ),
             ),
           Text(
-            ayah.textQpcHafs,
+            ayah.textDigitalKhatt,
             textDirection: TextDirection.rtl,
             textAlign: TextAlign.justify,
             style: TextStyle(
               fontFamily: kQuranFontFamily,
               fontSize: 26 * textScale,
               height: 1.9,
+              wordSpacing: 26 * textScale * kQuranWordSpacing,
               color: colors.text,
             ),
           ),

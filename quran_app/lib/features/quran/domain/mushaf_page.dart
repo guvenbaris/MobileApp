@@ -45,9 +45,17 @@ class PageWord {
 
 /// Sayfa fontundaki bir glif birimi ve kapsadığı kelimeler.
 class PageGlyph {
-  const PageGlyph({required this.glyph, required this.words});
+  const PageGlyph({
+    required this.glyph,
+    required this.words,
+    this.digitalKhattText,
+  });
 
+  /// QCF V2 sayfa fontundaki karakter kodu.
   final String glyph;
+
+  /// Aynı birimin DigitalKhatt yazılışı.
+  final String? digitalKhattText;
 
   /// Genellikle tek kelime; düzenin bölünmesi farklıysa birden fazla.
   final List<WordRef> words;
