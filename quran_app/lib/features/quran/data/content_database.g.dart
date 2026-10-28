@@ -3704,6 +3704,9 @@ abstract class _$ContentDatabase extends GeneratedDatabase {
     layoutPages,
     layoutGlyphs,
   ];
+  @override
+  DriftDatabaseOptions get options =>
+      const DriftDatabaseOptions(storeDateTimeAsText: true);
 }
 
 typedef $$ContentMetaTableCreateCompanionBuilder =

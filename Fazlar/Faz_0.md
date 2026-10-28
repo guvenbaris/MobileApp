@@ -2,7 +2,7 @@
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
 > **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`, `Faz_0_Notlar.md` (her iş paketinde ne yapıldığı ve neden)
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 tamam (2 doğrulama ertelendi); iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
+> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 tamam (2 doğrulama ertelendi); F0-06 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
@@ -98,13 +98,13 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - ⏸ **Ertelendi (kullanıcı kararı 28.10.2026):** basılı nüsha karşılaştırması ileride yapılacak. Gerekçe: düzen kelime kelime üç kaynakla ve font genişliği ölçümüyle doğrulandı (F0-04). Yöntem kararı F0-10'da `CLAUDE.md` yazılırken eklenecek.
 
 ### F0-06 Kullanıcı Veritabanı Altyapısı [Z] — MK-02, MK-03, MK-04, MK-09
-- [ ] İçerik veritabanından **ayrı** kullanıcı veritabanı (MK-05)
-- [ ] Temel tablo şablonu: UUID id, `createdAt`, `updatedAt`, `deletedAt`
-- [ ] **Konum tipi:** tüm kullanıcı kayıtlarında konum `sure:ayet(:kelime)` olarak tutulur; sayfa numarası asla saklanmaz (M2-15)
-- [ ] İlk tablolar (iskelet düzeyinde): `user_profile` (localUserId), `settings`
-- [ ] Migration altyapısı ve migration test şablonu (T-04 temeli)
-- [ ] Güncelleme öncesi otomatik yerel yedek mekanizmasının iskeleti (NF-G03)
-- **Bitti:** Örnek bir v1→v2 migration'ı test ile doğrulandı; veri kaybı yok.
+- [x] İçerik veritabanından **ayrı** kullanıcı veritabanı (MK-05): `lib/core/database/user_database.dart`, cihazda `user/user.sqlite`
+- [x] Temel tablo şablonu: UUID id, `createdAt`, `updatedAt`, `deletedAt` (`SyncedRecord`; tarihler UTC, ISO-8601 metin)
+- [x] **Konum tipi:** tüm kullanıcı kayıtlarında konum `sure:ayet(:kelime)` olarak tutulur; sayfa numarası asla saklanmaz (M2-15): `reading_positions` (surah, ayah, word)
+- [x] İlk tablolar: `user_profiles` (localUserId), `settings`; v2'de `reading_positions` (son okunan yer)
+- [x] Migration altyapısı ve migration test şablonu (T-04 temeli): `drift_dev make-migrations`, şema fotoğrafları `drift_schemas/`, testler `test/drift/`
+- [x] Güncelleme öncesi otomatik yerel yedek (NF-G03): şema sürümü eskiyse migration'dan önce kopya, son 3 yedek
+- **Bitti:** Örnek bir v1→v2 migration'ı test ile doğrulandı; veri kaybı yok. ✅ (bilerek bozulan migration testi kırdı)
 
 ### F0-07 Dil ve Yerelleştirme [Z] — M13-01, NF-Y01, NF-Y03
 - [ ] `gen_l10n` + TR / AR / EN ARB dosyaları
@@ -162,6 +162,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | CI de her commit yerine haftalık + PR + elle çalışacak şekilde değiştirildi |
 | 28.10.2026 | F0-03 Kur'an veri hattı tamamlandı; ilk düzen Medine 1421H (QCF V2) |
 | 28.10.2026 | F0-04 metin bütünlüğü testleri tamamlandı; Tanzil test referansı |
+| 28.10.2026 | F0-06 kullanıcı veritabanı tamamlandı; okuma ayarları ve son okunan yer kalıcı |
 | 28.10.2026 | F0-05: font kararı yalnız DigitalKhatt (OFL); ekrandaki metin harf ve durak işaretiyle doğrulanıyor (T-01) |
 | 28.10.2026 | F0-05 başladı: sayfa çizimi (iki yöntem), kelimeye dokunma, temalar, boyut ve ilk performans ölçümleri |
 | 28.10.2026 | F0-04 ek: QUL düzen/glif kaynağı oldu; esas kelime bölünmesi KFGQPC (77.430); satır genişliği doğrulaması; TK-06 font kararı |

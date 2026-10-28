@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/routing/app_routes.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/quran_models.dart';
+import '../../reader/application/reader_providers.dart';
+import '../../user_data/application/user_data_providers.dart';
 
 // Metinler F0-07'de ARB dosyalarına taşınır.
 class HomePage extends ConsumerWidget {
@@ -27,8 +29,13 @@ class HomePage extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         key: const Key('home.read'),
-        onPressed: () => context.go(AppRoutes.reader),
-        label: const Text('Okumaya başla'),
+        onPressed: () => _openAt(context, ref, ref.read(readerAnchorProvider)),
+        // Son okunan yer varsa oradan devam edilir (M6).
+        label: Text(
+          ref.watch(userDataSnapshotProvider).lastRead == null
+              ? 'Okumaya başla'
+              : 'Okumaya devam et',
+        ),
       ),
       body: switch (surahs) {
         AsyncData(:final value) => ListView.builder(
@@ -56,15 +63,20 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Future<void> _openSurah(
+  Future<void> _openSurah(BuildContext context, WidgetRef ref, int surah) =>
+      _openAt(context, ref, AyahRef(surah, 1));
+
+  /// Okuma ekranını ayetin sayfasında açar; okunan konum o ayet olur.
+  Future<void> _openAt(
     BuildContext context,
     WidgetRef ref,
-    int surah,
+    AyahRef ayah,
   ) async {
     final page = await ref
         .read(quranRepositoryProvider)
-        .pageOf(kDefaultLayoutId, AyahRef(surah, 1));
+        .pageOf(kDefaultLayoutId, ayah);
     if (!context.mounted) return;
+    ref.read(readerAnchorProvider.notifier).set(ayah);
     context.go(AppRoutes.readerAt(page.valueOrNull ?? 1));
   }
 }

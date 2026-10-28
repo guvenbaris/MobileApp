@@ -13,7 +13,8 @@
 6. [F0-04 Metin Bütünlüğü Testleri](#6-f0-04-metin-bütünlüğü-testleri)
 7. [F0-04 Ek: QUL Doğrulaması, Esas Kelime ve Font Kararı](#7-f0-04-ek-qul-doğrulaması-esas-kelime-ve-font-kararı)
 8. [F0-05 Mushaf Sayfası Çizimi](#8-f0-05-mushaf-sayfası-çizimi)
-9. [Genel durum ve bekleyen kararlar](#9-genel-durum-ve-bekleyen-kararlar)
+9. [F0-06 Kullanıcı Veritabanı](#9-f0-06-kullanıcı-veritabanı)
+10. [Genel durum ve bekleyen kararlar](#10-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -498,7 +499,63 @@ QPC Hafs ve QCF fontlarının ikisi de KFGQPC'nin malı; lisans metni yazılı i
 
 ---
 
-## 9. Genel durum ve bekleyen kararlar
+## 9. F0-06 Kullanıcı Veritabanı
+**Durum:** ✅ · **Gereksinimler:** MK-01…MK-05, MK-09, M2-15, NF-G02, NF-G03, T-04, T-05
+
+### 9.1 Amaç
+Kullanıcının verisi için **ayrı, sürümlü ve senkrona hazır** bir veritabanı: bugün ayarlar ve son okunan yer, Faz 1–2'de yer imleri, notlar ve ezber durumu. Kur'an içerik veritabanı her sürümde baştan değişebilir; kullanıcı veritabanı ise **asla kaybolmamalı** (NF-G02: kullanıcı verisi kaybı 0).
+
+### 9.2 Yapı
+| Parça | Dosya | Açıklama |
+|---|---|---|
+| Veritabanı | `lib/core/database/user_database.dart` | Drift; cihazda `<uygulama destek klasörü>/user/user.sqlite`. İçerik veritabanından tamamen ayrı (MK-05). |
+| Kayıt şablonu | `SyncedRecord` (aynı dosya) | Her tabloya eklenen ortak sütunlar: `id` (UUID v4), `createdAt`, `updatedAt` (UTC), `deletedAt` (yumuşak silme). .NET'te ortak bir `BaseEntity` sınıfına benzer (MK-02, MK-03). |
+| Tablolar | | `user_profiles`: yerel kullanıcı; `accountId` hesap bağlanınca dolar (MK-09, M1-05). `settings`: anahtar → JSON değer. `reading_positions` (v2): `kind`, `surah`, `ayah`, `word`; sayfa numarası yok (M2-15). |
+| Tarih biçimi | `build.yaml` | Tarihler ISO-8601 metin olarak, saat dilimiyle saklanır; cihazlar arası senkronda karşılaştırma için. |
+| Migration | `user_database.steps.dart` (üretilen), `drift_schemas/user_database/` | Her şema sürümünün "fotoğrafı" JSON olarak saklanır; sürümler arası adım adım migration kodu (`stepByStep`). EF Core migration'larına benzer. |
+| Yedek | `user_database_opener.dart` | Açılışta dosyanın şema sürümü kodun beklediğinden eskiyse (yani migration çalışacaksa) önce `user/backups/user_v{eski}_{UTC zaman}.sqlite` kopyası alınır; en yeni 3 yedek tutulur (NF-G03). Sıralama dosya adındaki zamana göre yapılır. |
+| Repository'ler | `lib/features/user_data/` | `UserProfileRepository` (yerel kimlik), `SettingsRepository` (JSON), `ReadingPositionRepository` (son okunan). Arayüz `domain`'de, Drift uygulaması `data`'da (MK-07). |
+| Açılış | `bootstrap.dart` | Kullanıcı veritabanı açılır, yerel kullanıcı oluşturulur, ayarlar ve son okunan yer bir kez okunur (`UserDataSnapshot`); ilk karede hazır. |
+
+### 9.3 Yeni şema sürümü nasıl eklenir
+1. `user_database.dart`'ta tabloyu veya sütunu değiştirin ve `currentSchemaVersion`'ı 1 artırın.
+2. Şu iki komutu çalıştırın; yeni şemanın fotoğrafı ve migration yardımcıları üretilir:
+   ```
+   dart run build_runner build
+   dart run drift_dev make-migrations
+   ```
+3. `migration` içindeki `stepByStep`'e `fromNToM` adımını yazın.
+4. `test/drift/user_database/migration_test.dart`'a gerçek örnek verili yeni bir "veri korunur" testi ekleyin.
+5. Testleri çalıştırın. Şema testi her sürümden her sürüme geçişi kendiliğinden denetler.
+
+### 9.4 Kalıcılık (uygulamada görünen sonuç)
+- **Okuma ayarları** (tema, görünüm, yazı boyutu) değişince kaydedilir: `reader.theme`, `reader.viewMode`, `reader.textScale`.
+- **Son okunan yer** sayfa değişince veya ayet görünümünde kaydırınca kaydedilir. Kaydırma sırasında sürekli yazmamak için yazma 0,8 sn beklemeyle yapılır; uygulama kapanırken bekleyen kayıt tamamlanır.
+- **Ana sayfa:** son okunan yer varsa düğme "Okumaya devam et" olur ve okumayı o ayetin sayfasından açar. Okunan ayet o sayfadaysa sayfanın başına kaymaz.
+- **Kayıt hataları** okumayı engellemez, loglanır.
+- **Teknik ayrıntı:** gecikmeli kayıt işi, sağlayıcı kapanmışken `ref`'e erişmesin diye kayıt isteği geldiği anda hazırlanır.
+
+### 9.5 Testler
+| Test | Kontrol |
+|---|---|
+| `test/drift/user_database/migration_test.dart` | **Şema:** her sürümden sonrakilere geçiş doğru şemayı üretiyor. **Veri:** v1'deki 2 profil (biri hesaba bağlı ve yumuşak silinmiş) ve 2 ayar v2'de birebir korunuyor; yeni tablo boş. |
+| `test/core/database/user_database_backup_test.dart` | Eski sürümde yedek alınıyor (içerik birebir aynı); güncel sürümde ve dosya yokken alınmıyor; en fazla 3 yedek tutuluyor, en yeniler kalıyor. |
+| `test/features/user_data/drift_user_data_repositories_test.dart` | Yerel kimlik UUID v4 ve sabit; ayarlar JSON olarak gidip geliyor; güncellemede aynı kayıt kalıyor, `createdAt` korunuyor, `updatedAt` ilerliyor (UTC); son okunan yer yazılıp güncelleniyor. |
+| `test/features/reader/reader_persistence_test.dart` | Uygulamanın yeniden açılışı taklit ediliyor: tema, görünüm, yazı boyutu, son okunan yer (18:45) ve yerel kimlik korunuyor (T-05); gecikmeli kayıt yalnızca son konumu yazıyor. |
+
+**"Bitti" kanıtı:** v1→v2 migration'ı bilerek boşaltıldığında iki migration testi de "Schema does not match" ile kırıldı; geri alınınca geçti.
+
+**Emülatör:** tema koyu yapılıp 6. sayfaya gidildi → uygulama kapatıldı → yeniden açılışta düğme "Okumaya devam et" oldu → okuma 6. sayfadan, koyu temayla açıldı. Uygulama bir kez daha kapatılıp açıldığında tema yine koyuydu.
+
+**Toplam:** 71 test geçiyor, analiz temiz.
+
+### 9.6 Notlar
+- **Yedekler** şimdilik yalnızca cihazda. Kullanıcının dosyaya dışa aktarması ve geri yüklemesi (M1-08) Faz 2'de.
+- **`settings` tablosu:** her anahtar için tek kayıt (benzersiz `key`). Senkronda çakışmada son yazılan kazanır (11. bölüm).
+
+---
+
+## 10. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 28.10.2026
 
 | İş paketi | Durum |
@@ -508,7 +565,7 @@ QPC Hafs ve QCF fontlarının ikisi de KFGQPC'nin malı; lisans metni yazılı i
 | F0-03 Kur'an veri hattı | ✅ |
 | F0-04 Metin bütünlüğü testleri (T-01, T-02) | ✅ (25 sayfa QUL ile doğrulandı; esas kelime KFGQPC) |
 | F0-05 Mushaf sayfası çizimi (en riskli) | ✅ Font: DigitalKhatt (OFL). ⏸ Gerçek cihaz ve basılı nüsha ertelendi |
-| F0-06 Kullanıcı veritabanı | ⬜ |
+| F0-06 Kullanıcı veritabanı | ✅ |
 | F0-07 Dil · F0-08 Tema · F0-10 `CLAUDE.md` · F0-11 Erişilebilirlik | ⬜ |
 | F0-09 Test ve CI | ✅ · ⏳ kırmızıya düşme denemesi |
 

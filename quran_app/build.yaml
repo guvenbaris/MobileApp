@@ -1,0 +1,14 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          # Tarihler ISO-8601 metin (saat dilimiyle) saklanır: senkronda
+          # cihazlar arası karşılaştırma için (MK-03).
+          store_date_time_values_as_text: true
+          # Kullanıcı veritabanının sürüm fotoğrafları ve migration testleri
+          # (MK-04, T-04): dart run drift_dev make-migrations
+          databases:
+            user_database: lib/core/database/user_database.dart
+          schema_dir: drift_schemas/
+          test_dir: test/drift/

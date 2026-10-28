@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../quran/application/quran_providers.dart';
+import '../../quran/domain/mushaf_page.dart';
+import '../../quran/domain/quran_models.dart';
 import '../application/reader_providers.dart';
 import '../application/reader_settings.dart';
 import 'ayah_list_view.dart';
@@ -51,17 +53,20 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _prefetchAround(widget.initialPage);
-      _anchorToPage(widget.initialPage);
+      _anchorToPage(widget.initialPage, keepIfOnPage: true);
     });
   }
 
   /// Sayfa görünümünde okunan konum, sayfanın ilk ayetidir (M2-15).
-  Future<void> _anchorToPage(int page) async {
+  /// [keepIfOnPage]: okunan ayet zaten bu sayfadaysa korunur (ör. son
+  /// okunan yerden devam ederken sayfanın başına kaymaz).
+  Future<void> _anchorToPage(int page, {bool keepIfOnPage = false}) async {
     try {
       final data = await ref.read(mushafPageProvider(page).future);
-      if (mounted && page == _page) {
-        ref.read(readerAnchorProvider.notifier).set(data.firstAyah);
-      }
+      if (!mounted || page != _page) return;
+      final anchor = ref.read(readerAnchorProvider);
+      if (keepIfOnPage && _pageContains(data, anchor)) return;
+      ref.read(readerAnchorProvider.notifier).set(data.firstAyah);
     } on Object {
       // Sayfa okunamadıysa hata sayfada gösterilir; konum değişmez.
     }
@@ -231,6 +236,11 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
             ),
     );
   }
+}
+
+bool _pageContains(MushafPage page, AyahRef ayah) {
+  final refs = page.lines.expand((l) => l.glyphs).expand((g) => g.words);
+  return refs.any((w) => w.surah == ayah.surah && w.ayah == ayah.ayah);
 }
 
 /// Bir sayfanın verisini yükleyip çizer.

@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/diagnostics/perf_probe.dart';
+import '../../../core/logging/app_logger.dart';
 import '../../../core/result/result.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
+import '../../user_data/application/user_data_providers.dart';
+import '../../user_data/domain/user_data_repositories.dart';
 
 T _unwrap<T>(Result<T> result) => switch (result) {
   Ok(:final value) => value,
@@ -53,12 +58,60 @@ final selectedWordProvider = NotifierProvider<SelectedWordNotifier, WordRef?>(
 /// Okunan konum: düzenden ve görünümden bağımsız ayet (M2-15). Sayfa
 /// görünümünde sayfanın ilk ayeti, ayet görünümünde ekranın en üstündeki
 /// ayettir; görünüm değişince yeni görünüm buradan açılır.
+///
+/// Son okunan yer olarak kalıcıdır: değişiklik kısa bir beklemeden sonra
+/// yazılır (ayet görünümünde her kaydırma karesinde yazmamak için).
 class ReaderAnchorNotifier extends Notifier<AyahRef> {
-  @override
-  AyahRef build() => const AyahRef(1, 1);
+  static const _saveDelay = Duration(milliseconds: 800);
 
-  void set(AyahRef ref) {
-    if (ref != state) state = ref;
+  Timer? _saveTimer;
+  Future<void> Function()? _pendingSave;
+
+  @override
+  AyahRef build() {
+    ref.onDispose(_flush);
+    return ref.read(userDataSnapshotProvider).lastRead ?? const AyahRef(1, 1);
+  }
+
+  void set(AyahRef position) {
+    if (position == state) return;
+    state = position;
+    // Kayıt işi şimdi hazırlanır: gecikmeli çalışırken `ref` kullanılmaz
+    // (sağlayıcı o arada kapanmış olabilir).
+    final save = _savePositionLater(position);
+    if (save == null) return;
+    _pendingSave = save;
+    _saveTimer?.cancel();
+    _saveTimer = Timer(_saveDelay, _flush);
+  }
+
+  /// Kullanıcı veritabanı yoksa (ör. testler) null döner; kayıt atlanır.
+  Future<void> Function()? _savePositionLater(AyahRef position) {
+    final ReadingPositionRepository repository;
+    final AppLogger logger;
+    try {
+      repository = ref.read(readingPositionRepositoryProvider);
+      logger = ref.read(appLoggerProvider);
+    } on Object {
+      return null;
+    }
+    return () => repository
+        .save(ReadingPositionKind.lastRead, position)
+        .catchError((Object e, StackTrace st) {
+          logger.error(
+            'Son okunan yer kaydedilemedi',
+            error: e,
+            stackTrace: st,
+          );
+        });
+  }
+
+  void _flush() {
+    _saveTimer?.cancel();
+    _saveTimer = null;
+    final save = _pendingSave;
+    _pendingSave = null;
+    save?.call().ignore();
   }
 }
 
