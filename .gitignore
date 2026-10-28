@@ -9,7 +9,10 @@ __pycache__/
 # İşletim sistemi / editör
 .DS_Store
 Thumbs.db
-.vscode/
+.vscode/*
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/extensions.json
 *.swp
 
 # Claude Code yerel ayarları

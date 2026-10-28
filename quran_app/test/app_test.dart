@@ -1,13 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quran_app/app.dart';
 import 'package:quran_app/core/config/flavor.dart';
+import 'package:quran_app/core/config/flavor_provider.dart';
+import 'package:quran_app/features/home/presentation/home_page.dart';
+import 'package:quran_app/features/reader/presentation/reader_page.dart';
+import 'package:quran_app/features/settings/presentation/settings_page.dart';
+
+Widget _app(Flavor flavor) => ProviderScope(
+  overrides: [flavorProvider.overrideWithValue(flavor)],
+  child: const QuranApp(),
+);
 
 void main() {
   for (final flavor in Flavor.values) {
-    testWidgets('uygulama ${flavor.name} ortamında açılır', (tester) async {
-      await tester.pumpWidget(QuranApp(flavor: flavor));
-      expect(find.byType(MaterialApp), findsOneWidget);
+    testWidgets('uygulama ${flavor.name} ortamında ana sayfayla açılır', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_app(flavor));
+      expect(find.byType(HomePage), findsOneWidget);
     });
   }
+
+  testWidgets('ana sayfadan okuma ve ayarlar ekranına gidilir', (tester) async {
+    await tester.pumpWidget(_app(Flavor.dev));
+
+    await tester.tap(find.byKey(const Key('home.read')));
+    await tester.pumpAndSettle();
+    expect(find.byType(ReaderPage), findsOneWidget);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('home.settings')));
+    await tester.pumpAndSettle();
+    expect(find.byType(SettingsPage), findsOneWidget);
+  });
 }

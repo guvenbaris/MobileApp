@@ -24,6 +24,8 @@ flutter run --flavor prod -t lib/main_prod.dart
 ```
 iOS'ta flavor şemaları henüz yok; yalnızca `-t` ile hedef seçilir: `flutter run -t lib/main_dev.dart`.
 
+**VS Code:** depo kökünü açın; Çalıştır ve Hata Ayıkla panelinde `dev`, `prod`, `prod (release)` profilleri hazırdır.
+
 ## Kontroller
 ```sh
 dart format .

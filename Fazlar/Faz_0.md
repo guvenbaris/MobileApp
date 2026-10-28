@@ -2,7 +2,7 @@
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
 > **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı tamam; iOS doğrulaması CI ile)
+> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı ve F0-02 tamam; iOS doğrulaması CI ile)
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
@@ -58,11 +58,11 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - **Bitti:** Uygulama iki platformda ve iki flavor'da boş ekranla açılıyor.
 
 ### F0-02 Mimari İskelet [Z] — MK-06, MK-07
-- [ ] Feature-first klasör yapısı (TK-04)
-- [ ] Riverpod kurulumu ve bağımlılık sağlayıcıları
-- [ ] go_router ile temel rotalar (Ana sayfa, Okuma, Ayarlar)
-- [ ] Hata ve sonuç tipleri (ör. `Result<T>`), loglama arayüzü
-- [ ] **Sahte servis arayüzleri:** `AuthService`, `SyncService`, `LessonRepository`, `BillingService`, `CrashReporter`. Her biri için `Fake…` uygulaması; flavor'a göre seçilir.
+- [x] Feature-first klasör yapısı (TK-04)
+- [x] Riverpod kurulumu ve bağımlılık sağlayıcıları (Riverpod 3, kod üretimsiz)
+- [x] go_router ile temel rotalar (Ana sayfa, Okuma, Ayarlar)
+- [x] Hata ve sonuç tipleri (`Result<T>` = `Ok`/`Err`, `AppFailure`), loglama arayüzü (`AppLogger`); yakalanmamış hatalar `CrashReporter`'a yönlenir
+- [x] **Sahte servis arayüzleri:** `AuthService`, `SyncService`, `LessonRepository`, `BillingService`, `CrashReporter`. Her biri için `Fake…` uygulaması; flavor'a göre seçilir. `prod`'da gerçek uygulaması olmayan servis açık bir `UnimplementedError` verir (sessizce sahteye düşmez); `CrashReporter` TK-10 kararına kadar iki ortamda da sahtedir. Arayüzler iskelet düzeyindedir; ayrıntıları veri modeli dondurulurken kesinleşir.
 - **Bitti:** Bir sahte servisin gerçeğiyle değiştirilmesi tek satırlık sağlayıcı değişikliğiyle yapılabiliyor (örnek testle gösterilir).
 
 ### F0-03 Kur'an Veri Hattı [Z] — İÇ-01, İÇ-02, İÇ-10, MK-05
@@ -151,3 +151,4 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 |---|---|
 | 28.10.2026 | İlk sürüm |
 | 28.10.2026 | S4 güncellendi, S5 (depo yapısı) eklendi; F0-01 Android tarafı tamamlandı |
+| 28.10.2026 | F0-02 Mimari İskelet tamamlandı; editör VS Code (paylaşılan `.vscode/launch.json` ile dev/prod profilleri) |

@@ -1,0 +1,11 @@
+﻿{
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll": "explicit"
+    },
+    "editor.rulers": [80]
+  },
+  "files.eol": "\n"
+}
