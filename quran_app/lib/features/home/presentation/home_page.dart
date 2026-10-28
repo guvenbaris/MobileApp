@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/routing/app_routes.dart';
+import '../../../core/widgets/app_list_item.dart';
+import '../../../core/widgets/state_views.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/quran_models.dart';
 import '../../quran/presentation/surah_l10n.dart';
@@ -46,16 +48,14 @@ class HomePage extends ConsumerWidget {
           itemCount: value.length,
           itemBuilder: (context, i) {
             final surah = value[i];
-            return ListTile(
+            return AppListItem(
               key: Key('home.surah.${surah.id}'),
               onTap: () => _openSurah(context, ref, surah.id),
               leading: Text(context.formatInt(surah.id)),
-              title: Text(surah.localizedName(context)),
-              subtitle: Text(
-                l10n.surahAyahCount(
-                  surah.ayahCount,
-                  context.formatInt(surah.ayahCount),
-                ),
+              title: surah.localizedName(context),
+              subtitle: l10n.surahAyahCount(
+                surah.ayahCount,
+                context.formatInt(surah.ayahCount),
               ),
               // Arapça arayüzde başlık zaten Arapça addır.
               trailing: arabicUi
@@ -68,8 +68,11 @@ class HomePage extends ConsumerWidget {
             );
           },
         ),
-        AsyncError(:final error) => Center(child: Text('$error')),
-        _ => const Center(child: CircularProgressIndicator()),
+        AsyncError(:final error) => ErrorState(
+          error: error,
+          onRetry: () => ref.invalidate(surahsProvider),
+        ),
+        _ => const LoadingState(),
       },
     );
   }

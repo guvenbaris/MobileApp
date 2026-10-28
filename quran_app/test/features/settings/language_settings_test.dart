@@ -37,6 +37,14 @@ Future<void> _openSettings(WidgetTester tester) async {
 }
 
 Future<void> _choose(WidgetTester tester, String key) async {
+  // Seçenek ekranın altında kalabilir; önce görünene kadar kaydırılır.
+  await tester.scrollUntilVisible(
+    find.byKey(Key(key)),
+    100,
+    scrollable: find.byType(Scrollable).first,
+  );
+  await tester.ensureVisible(find.byKey(Key(key)));
+  await tester.pumpAndSettle();
   await tester.tap(find.byKey(Key(key)));
   await tester.pumpAndSettle();
 }

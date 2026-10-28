@@ -2,14 +2,14 @@
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
 > **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`, `Faz_0_Notlar.md` (her iş paketinde ne yapıldığı ve neden)
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 tamam (2 doğrulama ertelendi); F0-06 ve F0-07 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
+> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 tamam (2 doğrulama ertelendi); F0-06, F0-07 ve F0-08 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
 - [ ] Kur'an verisi veritabanından okunuyor ve **seçilen bir mushaf sayfası basılı nüshayla birebir çiziliyor** (Fatiha, Bakara 1. sayfa ve rastgele 5 sayfa elle kontrol edildi).
 - [x] Kur'an metin bütünlüğü (T-01) ve sayfa düzeni (T-02) testleri otomatik çalışıyor ve geçiyor. (25 baskı farkı QUL'ün 1421H düzeniyle doğrulandı; satırlar fontla ölçüldü)
 - [ ] Katmanlı mimari, kullanıcı veritabanı (UUID, zaman damgaları, migration altyapısı) ve sahte servis arayüzleri hazır.
-- [ ] TR/AR/EN dil altyapısı ve tema altyapısı çalışıyor (AR'de RTL).
+- [x] TR/AR/EN dil altyapısı ve tema altyapısı çalışıyor (AR'de RTL).
 - [ ] CI analiz + test çalıştırıyor (haftalık, PR'da ve elle; her commit'te değil, karar 28.10.2026).
 - [ ] `CLAUDE.md` mimari ve kod kurallarıyla yazıldı.
 
@@ -114,11 +114,12 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - **Bitti:** Dil değişince tüm iskelet ekranları o dile ve yöne geçiyor. ✅
 
 ### F0-08 Tema ve Tasarım Temeli [Z] — M2-08, NF-E01, NF-E03
-- [ ] Renk sistemi: açık, sepya, koyu (WCAG AA kontrast)
-- [ ] Tipografi ölçeği (arayüz fontu + Arapça fontlar)
-- [ ] Temel bileşenler: buton, liste öğesi, boş durum, hata durumu
-- [ ] Minimum dokunma alanı 44×44
-- **Bitti:** Üç tema iskelet ekranlarında çalışıyor ve seçim kalıcı.
+> Tasarım ilk aşamada sade; görünüm sonradan yalnızca tema katmanı (`lib/core/theme/`, `lib/core/widgets/`) değiştirilerek geliştirilir (kullanıcı kararı 29.10.2026).
+- [x] Renk sistemi: açık, sepya, koyu (WCAG AA kontrast): `AppPalette`; 3 tema × 14 renk çifti testle denetleniyor, ekrandaki metinler `textContrastGuideline` ile. Uygulama ve mushaf tek temayı izler; varsayılan "Cihaz ayarı"
+- [x] Tipografi ölçeği (arayüz fontu + Arapça fontlar): Material 3 ölçeği + sistem fontu; Kur'an için DigitalKhatt (`AppTypography`)
+- [x] Temel bileşenler: buton, liste öğesi, boş durum, hata durumu (`AppButton`, `AppListItem`, `EmptyState`, `ErrorState`, `LoadingState`)
+- [x] Minimum dokunma alanı 44×44: 48 kullanıldı (Android önerisi); Android ve iOS dokunma kuralı testleri geçiyor
+- **Bitti:** Üç tema iskelet ekranlarında çalışıyor ve seçim kalıcı. ✅
 
 ### F0-09 Test ve CI Altyapısı [Z] — 12. bölüm
 - [x] Birim, widget ve entegrasyon testi klasör yapısı (`test/` lib yapısını izler, `integration_test/` cihaz testleri, `test/helpers/` ortak yardımcılar)
@@ -164,6 +165,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | F0-04 metin bütünlüğü testleri tamamlandı; Tanzil test referansı |
 | 28.10.2026 | F0-06 kullanıcı veritabanı tamamlandı; okuma ayarları ve son okunan yer kalıcı |
 | 28.10.2026 | F0-07 dil ve yerelleştirme tamamlandı; TR/AR/EN, RTL, rakam seçimi, gömülü metin denetimi |
+| 29.10.2026 | F0-08 tema ve tasarım temeli tamamlandı; tek tema (uygulama + mushaf), AA kontrast ve dokunma alanı testleri, temel bileşenler |
 | 28.10.2026 | F0-05: font kararı yalnız DigitalKhatt (OFL); ekrandaki metin harf ve durak işaretiyle doğrulanıyor (T-01) |
 | 28.10.2026 | F0-05 başladı: sayfa çizimi (iki yöntem), kelimeye dokunma, temalar, boyut ve ilk performans ölçümleri |
 | 28.10.2026 | F0-04 ek: QUL düzen/glif kaynağı oldu; esas kelime bölünmesi KFGQPC (77.430); satır genişliği doğrulaması; TK-06 font kararı |

@@ -23,5 +23,13 @@
   "settingsNumerals": "الأرقام",
   "settingsNumeralsAuto": "حسب اللغة",
   "settingsNumeralsWestern": "أرقام غربية (0123)",
-  "settingsNumeralsArabic": "أرقام عربية (٠١٢٣)"
+  "settingsNumeralsArabic": "أرقام عربية (٠١٢٣)",
+  "settingsTheme": "السمة",
+  "themeSystem": "حسب إعداد الجهاز",
+  "themeLight": "فاتح",
+  "themeSepia": "بني فاتح",
+  "themeDark": "داكن",
+  "errorTitle": "حدث خطأ ما",
+  "errorLoadContent": "تعذّر تحميل المحتوى.",
+  "errorRetry": "إعادة المحاولة"
 }

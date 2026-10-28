@@ -46,6 +46,11 @@ Drift şeması değişince: `dart run build_runner build`.
 - Sayılar `context.formatInt(n)`, konumlar (`2:255`) `context.formatDigits(ref)` ile yazılır; böylece seçilen rakam sistemine uyar.
 - `test/l10n/` testleri: arayüz kodunda gömülü metin olmadığını ve üç ARB dosyasının aynı anahtarlara sahip olduğunu denetler. Çevrilmemesi gereken bir metin (ör. mushaftaki Arapça sure başlığı) için satıra `// l10n-ignore: gerekçe` yazılır.
 
+## Tema ve bileşenler (F0-08)
+- Renkler yalnızca `lib/core/theme/app_palette.dart`'ta (açık, sepya, koyu); ekranlarda `context.palette.<rol>` ile okunur, renk kodu yazılmaz.
+- Bileşen görünümleri `buildAppTheme` (`app_theme.dart`) içinde; ortak bileşenler `lib/core/widgets/` (`AppButton`, `AppListItem`, `EmptyState`, `ErrorState`, `LoadingState`).
+- `test/core/theme/contrast_test.dart` her paleti WCAG AA'ya göre denetler; yeni renk veya tema eklenince kendiliğinden kapsar.
+
 ## Çalıştırma
 ```sh
 flutter run --flavor dev -t lib/main_dev.dart

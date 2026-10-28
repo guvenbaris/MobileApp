@@ -96,4 +96,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsNumeralsArabic => 'Arabic digits (٠١٢٣)';
+
+  @override
+  String get settingsTheme => 'Theme';
+
+  @override
+  String get themeSystem => 'Device setting';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeSepia => 'Sepia';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get errorTitle => 'Something went wrong';
+
+  @override
+  String get errorLoadContent => 'The content could not be loaded.';
+
+  @override
+  String get errorRetry => 'Try again';
 }

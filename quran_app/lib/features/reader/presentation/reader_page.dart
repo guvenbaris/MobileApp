@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/state_views.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
+import '../../settings/application/theme_settings.dart';
 import '../application/reader_providers.dart';
 import '../application/reader_settings.dart';
 import 'ayah_list_view.dart';
-import 'mushaf_colors.dart';
 import 'mushaf_page_view.dart';
 
 // F0-05 denemesi: okuma ekranının tam özellikleri (gösterge çubukları,
@@ -113,7 +115,7 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(readerSettingsProvider);
-    final colors = MushafColors.of(settings.theme);
+    final colors = context.palette.mushaf;
     final twoPage = _useTwoPages(MediaQuery.sizeOf(context));
     if (twoPage != _twoPage) {
       _twoPage = twoPage;
@@ -172,11 +174,8 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
             tooltip: l10n.readerTheme,
             icon: const Icon(Icons.palette_outlined),
             onPressed: () => ref
-                .read(readerSettingsProvider.notifier)
-                .setTheme(
-                  MushafTheme.values[(settings.theme.index + 1) %
-                      MushafTheme.values.length],
-                ),
+                .read(themeSettingsProvider.notifier)
+                .cycleFrom(context.palette.id),
           ),
         ],
       ),
@@ -263,8 +262,13 @@ class _PageSlot extends ConsumerWidget {
 
     final error = data.error ?? surahs.error ?? basmala.error;
     if (error != null) {
-      return Center(
-        child: Text('$error', style: TextStyle(color: colors.text)),
+      return ErrorState(
+        error: error,
+        onRetry: () => ref
+          ..invalidate(mushafPageProvider(page))
+          ..invalidate(surahsProvider)
+          ..invalidate(surahByIdProvider)
+          ..invalidate(basmalaTextProvider),
       );
     }
     if (!data.hasValue || !surahs.hasValue || !basmala.hasValue) {

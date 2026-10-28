@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
 import '../application/reader_providers.dart';
-import 'mushaf_colors.dart';
-
-/// Uygulamanın Kur'an fontu: DigitalKhatt New Madina (SIL OFL 1.1,
-/// `assets/fonts/DigitalKhatt-OFL.txt`). Medine mushafı hattının dijital
-/// yeniden çizimi (TK-06).
-const kQuranFontFamily = 'DigitalKhatt'; // l10n-ignore: font adı
-
-/// DigitalKhatt'ın boşluk karakteri dar (0,1 em): kelime aralığını basılı
-/// nüshada yaslama motoru açar. Akan metinde (ayet görünümü, başlık, besmele)
-/// kelime aralığı bu oranda genişletilir.
-const kQuranWordSpacing = 0.2;
 
 /// Bir mushaf sayfasını basılı nüshadaki satır düzeniyle çizer (M2-01, M2-02).
 ///

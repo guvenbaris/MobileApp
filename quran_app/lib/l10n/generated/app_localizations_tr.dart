@@ -95,4 +95,28 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsNumeralsArabic => 'Arap rakamları (٠١٢٣)';
+
+  @override
+  String get settingsTheme => 'Tema';
+
+  @override
+  String get themeSystem => 'Cihaz ayarı';
+
+  @override
+  String get themeLight => 'Açık';
+
+  @override
+  String get themeSepia => 'Sepya';
+
+  @override
+  String get themeDark => 'Koyu';
+
+  @override
+  String get errorTitle => 'Bir sorun oluştu';
+
+  @override
+  String get errorLoadContent => 'İçerik yüklenemedi.';
+
+  @override
+  String get errorRetry => 'Tekrar dene';
 }

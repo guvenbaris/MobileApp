@@ -15,7 +15,8 @@
 8. [F0-05 Mushaf Sayfası Çizimi](#8-f0-05-mushaf-sayfası-çizimi)
 9. [F0-06 Kullanıcı Veritabanı](#9-f0-06-kullanıcı-veritabanı)
 10. [F0-07 Dil ve Yerelleştirme](#10-f0-07-dil-ve-yerelleştirme)
-11. [Genel durum ve bekleyen kararlar](#11-genel-durum-ve-bekleyen-kararlar)
+11. [F0-08 Tema ve Tasarım Temeli](#11-f0-08-tema-ve-tasarım-temeli)
+12. [Genel durum ve bekleyen kararlar](#12-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -651,8 +652,73 @@ Hata mesajı dosya ve satır numarasını verir. Denetim `flutter test` ile ve C
 
 ---
 
-## 11. Genel durum ve bekleyen kararlar
-**Son güncelleme:** 28.10.2026
+## 11. F0-08 Tema ve Tasarım Temeli
+**Durum:** ✅ · **Gereksinimler:** M2-08, M13-02, NF-E01, NF-E03
+
+### 11.1 Amaç
+Tüm uygulama için **açık, sepya ve koyu** tema; renklerin, yazıların ve temel bileşenlerin tek yerden yönetilmesi. Tasarım bilerek sade tutuldu (kullanıcı kararı 29.10.2026). Amaç, sonradan görünüm geliştirilirken ekranlara dokunmadan **yalnızca tema katmanının değişmesi**.
+
+### 11.2 Yapı
+| Parça | Dosya | Açıklama |
+|---|---|---|
+| Palet | `lib/core/theme/app_palette.dart` | `AppThemeId` (light, sepia, dark) ve `AppPalette`. Her temanın **anlamsal** renkleri burada: `background`, `surface`, `onSurface`, `onSurfaceMuted`, `primary`, `primaryContainer`, `outline`, `error` ve mushaf renkleri (`MushafColors`). Widget'larda renk kodu yazılmaz; `context.palette.primary` gibi okunur. `ThemeExtension` olduğu için tema değişiminde renkler yumuşak geçer. |
+| Tema üretici | `lib/core/theme/app_theme.dart` | `buildAppTheme(palette)` paletten Material 3 `ThemeData` üretir: düğme, liste, çubuk, radyo düğmesi görünümleri tek yerde. `ThemePreference` (system, light, sepia, dark), `AppSpacing` (4'ün katları boşluklar, `minTapTarget` 48, köşe yarıçapı). |
+| Tipografi | `lib/core/theme/app_typography.dart` | Arayüz: Material 3 ölçeği + sistem fontu (`uiFontFamily = null`; marka fontu seçilince tek satır). Kur'an: `kQuranFontFamily` (DigitalKhatt), `kQuranWordSpacing`, `AppTypography.quran(...)`, temel boyutlar (`quranAyahSize` 26, `quranHeaderSize` 22). Bu sabitler okuma ekranı dosyalarından buraya taşındı. |
+| Bileşenler | `lib/core/widgets/` | `AppButton` (primary/secondary/text), `AppListItem`, `AppSectionHeader`, `EmptyState`, `ErrorState`, `LoadingState`. |
+| Ayar | `lib/features/settings/application/theme_settings.dart` | `ThemeSettingsNotifier`: `app.theme` ayarı; `cycleFrom()` okuma ekranındaki tema düğmesi için. |
+| Uygulama | `lib/app.dart` | `theme`/`darkTheme`/`themeMode` seçime göre verilir. |
+
+**.NET karşılığı:** `AppPalette` bir WPF `ResourceDictionary`'deki renk kaynaklarına, `buildAppTheme` ise ortak `Style` tanımlarına benzer. Ekranlar renk değil kaynak adı kullanır.
+
+### 11.3 Davranış ve alınan kararlar
+- **Tek tema, tüm uygulama.** Önceden tema yalnızca okuma ekranındaydı (`reader.theme`). Artık uygulama ve mushaf sayfası aynı temayı kullanıyor (`app.theme`).
+  - **Gerekçe:** iki ayrı tema ayarı kullanıcıyı karıştırır; koyu arayüzde beyaz mushaf ya da tersi tutarsız görünür.
+  - **Sonuç:** eski `reader.theme` değeri artık okunmuyor. Yayınlanmış sürüm olmadığı için geçiş kodu yazılmadı; emülatörde tema bir kez yeniden seçilmeli.
+- **Varsayılan: Cihaz ayarı.** Telefon açık moddaysa açık tema, koyu moddaysa koyu tema. Sepya her zaman açık mod sayılır.
+  - Önceki varsayılan sepyaydı; ilk açılışta mushaf artık beyaz görünür. İstenirse varsayılan tek satırla sepya yapılır.
+- **Okuma ekranındaki tema düğmesi** sırayla açık → sepya → koyu arasında geçer ve seçimi ayarlara yazar. Ayarlardaki "Cihaz ayarı" seçimi bu düğmeyle bırakılır.
+- **Ayarlar ekranı:** Tema / Dil / Rakamlar bölümleri.
+- **Hata durumu:** ham hata metni artık kullanıcıya gösterilmiyor. "Bir sorun oluştu · İçerik yüklenemedi" ve "Tekrar dene" düğmesi çıkıyor; teknik ayrıntı yalnızca debug derlemesinde görünüyor. "Tekrar dene", ilgili veri sağlayıcılarını yeniden çalıştırır. Ana sayfa ve okuma ekranında kullanılıyor.
+- **Dokunma alanı (NF-E03):** gereksinim 44×44 pt. Android'in önerisi 48×48 olduğu için ikisini de karşılayan **48** kullanıldı. Düğme, ikon düğmesi ve liste satırları temadan bu en küçük ölçüyü alıyor.
+- **Arayüz fontu:** sistem fontu (Roboto/SF; Arapça için sistemin Arapça fontu). Uygulama boyutu artmasın diye ayrı font eklenmedi. Marka kararıyla (AK-04) değişebilir.
+
+### 11.4 Renkler ve kontrast (NF-E01)
+Her temada 14 renk çifti WCAG 2.1 AA'ya göre otomatik denetleniyor (`test/core/theme/contrast_test.dart`):
+- **Metin çiftleri ≥ 4,5:1:** ana ve ikincil metin, vurgu, düğme metni, hata, mushaf metni ve süsü, seçili kelime.
+- **Kenarlık ≥ 3:1.**
+
+| Tema | Arka plan | Metin | Vurgu |
+|---|---|---|---|
+| Açık | `#FAFAF7` (mushaf `#FFFFFF`) | `#1B1C1A` | yeşil `#1F6F4A` |
+| Sepya | `#F7EEDB` | `#2B2116` | kahve `#7A4E14` |
+| Koyu | `#121212` (mushaf da koyu) | `#E8E2D6` | altın `#C9A55C` |
+
+Ayrıca widget testlerinde Flutter'ın erişilebilirlik kuralları ekranda **gerçekten çizilen** metinlere uygulanıyor: `textContrastGuideline`, `androidTapTargetGuideline` (48) ve `iOSTapTargetGuideline` (44). Üç temada ana sayfa, ayarlar ve bileşenler bu kurallardan geçiyor.
+
+**Kanıt:** koyu temanın ikincil metin rengi bilerek `#5A5650` yapıldığında test "dark: ikincil metin / arka plan = 2.57:1" ile kırıldı; geri alınınca geçti.
+
+### 11.5 Testler
+| Test | Kontrol |
+|---|---|
+| `test/core/theme/contrast_test.dart` | 3 tema × 14 renk çifti AA; koyu temada mushaf sayfası koyu; hesaplamanın kendisi bilinen değerlerle (siyah/beyaz 21:1). |
+| `test/core/widgets/components_test.dart` | Düğmeler ≥ 48×48; hata durumu genel metni ve "Tekrar dene"yi gösteriyor, düğme çalışıyor; boş durum; üç temada bileşenler kontrast ve dokunma kurallarına uyuyor. |
+| `test/features/settings/theme_settings_test.dart` | Cihaz ayarı açık/koyu modu izliyor. Ayarlardan her tema seçilince ayarlar, ana sayfa ve okuma ekranı (mushaf rengi dahil) o temada. Okuma ekranındaki düğme açık → sepya → koyu → açık. Erişilebilirlik kuralları üç temada geçiyor. Seçim yeniden açılışta korunuyor. |
+
+**Emülatör:** açık ve koyu temada okuma ekranı (koyuda mushaf alanı koyu, süsler altın), açık temada ana sayfa ve ayarlar kontrol edildi.
+
+**Toplam:** 150 test geçiyor, analiz temiz.
+
+### 11.6 Tasarımı geliştirirken
+- **Renk değiştirmek:** yalnızca `app_palette.dart`. Kontrast testi yeni rengi kendiliğinden denetler.
+- **Yeni tema eklemek** (ör. yüksek kontrast, M13-04): `AppThemeId` ve `ThemePreference`'a değer, `AppPalette`'e bir palet, ARB'ye ad. Kontrast testi yeni temayı da kapsar.
+- **Bileşen görünümünü değiştirmek:** `buildAppTheme` içindeki ilgili tema (ör. `filledButtonTheme`) ya da `lib/core/widgets/` altındaki bileşen. Ekranlara dokunmak gerekmez.
+- **Yeni ekran yazarken:** renkler `context.palette`'ten, boşluklar `AppSpacing`'den, düğmeler `AppButton`'dan, liste satırları `AppListItem`'dan, yükleniyor/boş/hata durumları `state_views.dart`'tan alınır. Gömülü metin denetimi artık `lib/core/widgets/` klasörünü de tarıyor.
+- **Bilinen sınır:** mushaf sayfası çiziminde (`mushaf_page_view.dart`) kelimeler dokunulabilir ama küçüktür; 48'lik dokunma kuralı orada uygulanamaz, bu yüzden testler okuma ekranının gövdesini kapsamaz. Ekran okuyucu ve kelime seçimi erişilebilirliği F0-11 ve Faz 1'de.
+
+---
+
+## 12. Genel durum ve bekleyen kararlar
+**Son güncelleme:** 29.10.2026
 
 | İş paketi | Durum |
 |---|---|
@@ -663,7 +729,8 @@ Hata mesajı dosya ve satır numarasını verir. Denetim `flutter test` ile ve C
 | F0-05 Mushaf sayfası çizimi (en riskli) | ✅ Font: DigitalKhatt (OFL). ⏸ Gerçek cihaz ve basılı nüsha ertelendi |
 | F0-06 Kullanıcı veritabanı | ✅ |
 | F0-07 Dil ve yerelleştirme | ✅ TR/AR/EN, RTL, rakam seçimi |
-| F0-08 Tema · F0-10 `CLAUDE.md` · F0-11 Erişilebilirlik | ⬜ |
+| F0-08 Tema ve tasarım temeli | ✅ Açık/sepya/koyu, AA kontrast, 48'lik dokunma alanı |
+| F0-10 `CLAUDE.md` · F0-11 Erişilebilirlik | ⬜ |
 | F0-09 Test ve CI | ✅ · ⏳ kırmızıya düşme denemesi |
 
 **Bekleyen kararlar ve işler**
@@ -673,6 +740,7 @@ Hata mesajı dosya ve satır numarasını verir. Denetim `flutter test` ile ve C
 - **Arama metni (Faz 1):** `ayahs.text_uthmani` Tanzil kökenli (Tanzil metniyle aynı); uygulamada kaldığı sürece "Hakkında" ekranında Tanzil atfı zorunlu. Arama KFGQPC metniyle yapılabilirse alan kaldırılır (~1,3 MB, atıf yükümlülüğü kalkar). Tanzil dosyalarının APK'ya girmediği doğrulandı.
 - **Yayın öncesi kelime bölünmesi teyidi:** lisans görüşmelerinde (AK-11) Diyanet'in dijital mushafındaki bölünmeye de bakılması önerilir (Q-12).
 - **Varsayılan dil (F0-07):** cihaz dili desteklenmiyorsa İngilizce açılıyor (öneri). Türkçe istenirse `kFallbackLocale` değişir.
+- **Varsayılan tema (F0-08):** "Cihaz ayarı" (öneri; önceki varsayılan sepyaydı). Sepya istenirse tek satır.
 - **Arapça çevirilerin gözden geçirilmesi:** yayından önce anadili Arapça olan biri tarafından.
 - **Android `cmdline-tools` kurulumu:** lisans onayı için.
 - **GitHub'da yapılacaklar:** iOS iş akışını elle çalıştırmak; bilerek bozulmuş bir PR ile CI'ın kırmızıya düştüğünü görmek.

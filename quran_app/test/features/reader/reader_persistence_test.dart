@@ -32,7 +32,6 @@ void main() {
     final session = await _openSession(db);
     addTearDown(session.dispose);
     final settings = session.read(readerSettingsProvider);
-    expect(settings.theme, MushafTheme.sepia);
     expect(settings.viewMode, ReaderViewMode.page);
     expect(session.read(readerAnchorProvider), const AyahRef(1, 1));
     expect(session.read(userDataSnapshotProvider).localUserId, isNotNull);
@@ -42,7 +41,6 @@ void main() {
     final first = await _openSession(db);
     final localUserId = first.read(userDataSnapshotProvider).localUserId;
     first.read(readerSettingsProvider.notifier)
-      ..setTheme(MushafTheme.dark)
       ..setViewMode(ReaderViewMode.ayah)
       ..setTextScale(1.75);
     first.read(readerAnchorProvider.notifier).set(const AyahRef(18, 45));
@@ -53,7 +51,6 @@ void main() {
     final second = await _openSession(db);
     addTearDown(second.dispose);
     final settings = second.read(readerSettingsProvider);
-    expect(settings.theme, MushafTheme.dark);
     expect(settings.viewMode, ReaderViewMode.ayah);
     expect(settings.textScale, 1.75);
     expect(second.read(readerAnchorProvider), const AyahRef(18, 45));

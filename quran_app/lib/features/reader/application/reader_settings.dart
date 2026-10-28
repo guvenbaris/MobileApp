@@ -2,15 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../user_data/application/user_data_providers.dart';
 
-/// Mushaf sayfa teması (M2-08). Koyu temada metin alanı da koyudur.
-enum MushafTheme { light, sepia, dark }
-
 /// Okuma görünümü (M2-01): mushaf sayfası veya ayet ayet liste.
 enum ReaderViewMode { page, ayah }
 
 class ReaderSettings {
   const ReaderSettings({
-    this.theme = MushafTheme.sepia,
     this.viewMode = ReaderViewMode.page,
     this.textScale = 1.0,
   });
@@ -19,26 +15,21 @@ class ReaderSettings {
   static const minTextScale = 0.5;
   static const maxTextScale = 2.5;
 
-  final MushafTheme theme;
   final ReaderViewMode viewMode;
 
   /// Ayet görünümünde yazı boyutu çarpanı.
   final double textScale;
 
-  ReaderSettings copyWith({
-    MushafTheme? theme,
-    ReaderViewMode? viewMode,
-    double? textScale,
-  }) => ReaderSettings(
-    theme: theme ?? this.theme,
-    viewMode: viewMode ?? this.viewMode,
-    textScale: textScale ?? this.textScale,
-  );
+  ReaderSettings copyWith({ReaderViewMode? viewMode, double? textScale}) =>
+      ReaderSettings(
+        viewMode: viewMode ?? this.viewMode,
+        textScale: textScale ?? this.textScale,
+      );
 }
 
-/// Okuma ayarları; kullanıcı veritabanında kalıcıdır (M13-02, T-05).
+/// Okuma ayarları; kullanıcı veritabanında kalıcıdır (M13-02, T-05). Tema
+/// uygulamayla ortaktır (`themeSettingsProvider`).
 class ReaderSettingsNotifier extends Notifier<ReaderSettings> {
-  static const _themeKey = 'reader.theme';
   static const _viewModeKey = 'reader.viewMode';
   static const _textScaleKey = 'reader.textScale';
 
@@ -47,7 +38,6 @@ class ReaderSettingsNotifier extends Notifier<ReaderSettings> {
     final saved = ref.read(userDataSnapshotProvider).settings;
     const defaults = ReaderSettings();
     return ReaderSettings(
-      theme: enumSetting(MushafTheme.values, saved[_themeKey], defaults.theme),
       viewMode: enumSetting(
         ReaderViewMode.values,
         saved[_viewModeKey],
@@ -61,11 +51,6 @@ class ReaderSettingsNotifier extends Notifier<ReaderSettings> {
         _ => defaults.textScale,
       },
     );
-  }
-
-  void setTheme(MushafTheme theme) {
-    state = state.copyWith(theme: theme);
-    persistSetting(ref, _themeKey, theme.name);
   }
 
   void setViewMode(ReaderViewMode mode) {

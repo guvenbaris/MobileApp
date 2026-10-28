@@ -1,11 +1,9 @@
 {
   "@@locale": "tr",
-
   "appTitle": "Kur'an",
   "@appTitle": {
     "description": "Görev değiştiricide görünen geçici uygulama adı (AK-04 kararına kadar)."
   },
-
   "homeTitle": "Ana Sayfa",
   "settingsTitle": "Ayarlar",
   "@settingsTitle": {
@@ -20,26 +18,46 @@
   "@surahAyahCount": {
     "description": "Sure listesinde surenin ayet sayısı. countText, seçili rakam sistemiyle biçimlenmiş sayıdır.",
     "placeholders": {
-      "count": { "type": "int" },
-      "countText": { "type": "String", "example": "286" }
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String",
+        "example": "286"
+      }
     }
   },
-
   "readerPageTitle": "Sayfa {page}",
   "@readerPageTitle": {
-    "placeholders": { "page": { "type": "String", "example": "5" } }
+    "placeholders": {
+      "page": {
+        "type": "String",
+        "example": "5"
+      }
+    }
   },
   "readerPageJuzTitle": "Sayfa {page} · Cüz {juz}",
   "@readerPageJuzTitle": {
     "placeholders": {
-      "page": { "type": "String", "example": "5" },
-      "juz": { "type": "String", "example": "1" }
+      "page": {
+        "type": "String",
+        "example": "5"
+      },
+      "juz": {
+        "type": "String",
+        "example": "1"
+      }
     }
   },
   "readerAyahTitle": "Ayet {ayah}",
   "@readerAyahTitle": {
     "description": "Ayet görünümünde okunan ayet (sure:ayet).",
-    "placeholders": { "ayah": { "type": "String", "example": "2:255" } }
+    "placeholders": {
+      "ayah": {
+        "type": "String",
+        "example": "2:255"
+      }
+    }
   },
   "readerShowPageView": "Sayfa görünümü",
   "readerShowAyahView": "Ayet görünümü",
@@ -49,26 +67,55 @@
   "readerSelectedWord": "Seçilen kelime: {word}",
   "@readerSelectedWord": {
     "description": "Dokunulan kelimenin konumu (sure:ayet:kelime).",
-    "placeholders": { "word": { "type": "String", "example": "2:255:3" } }
+    "placeholders": {
+      "word": {
+        "type": "String",
+        "example": "2:255:3"
+      }
+    }
   },
-
   "settingsLanguage": "Dil",
   "settingsLanguageSystem": "Cihaz dili",
   "@settingsLanguageSystem": {
     "description": "Dil seçeneği: cihazın dilini izler; desteklenmiyorsa İngilizce."
   },
   "languageTurkish": "Türkçe",
-  "@languageTurkish": { "description": "Dilin kendi adı; her dilde aynı yazılır." },
+  "@languageTurkish": {
+    "description": "Dilin kendi adı; her dilde aynı yazılır."
+  },
   "languageArabic": "العربية",
-  "@languageArabic": { "description": "Dilin kendi adı; her dilde aynı yazılır." },
+  "@languageArabic": {
+    "description": "Dilin kendi adı; her dilde aynı yazılır."
+  },
   "languageEnglish": "English",
-  "@languageEnglish": { "description": "Dilin kendi adı; her dilde aynı yazılır." },
+  "@languageEnglish": {
+    "description": "Dilin kendi adı; her dilde aynı yazılır."
+  },
   "settingsNumerals": "Rakamlar",
-  "@settingsNumerals": { "description": "NF-Y03: sayıların rakam sistemi." },
+  "@settingsNumerals": {
+    "description": "NF-Y03: sayıların rakam sistemi."
+  },
   "settingsNumeralsAuto": "Dile göre",
   "@settingsNumeralsAuto": {
     "description": "Arapçada Doğu Arap rakamları (٠١٢), diğer dillerde 0123."
   },
   "settingsNumeralsWestern": "Batı rakamları (0123)",
-  "settingsNumeralsArabic": "Arap rakamları (٠١٢٣)"
+  "settingsNumeralsArabic": "Arap rakamları (٠١٢٣)",
+  "settingsTheme": "Tema",
+  "themeSystem": "Cihaz ayarı",
+  "@themeSystem": {
+    "description": "Tema seçeneği: cihaz açık moddaysa açık, koyu moddaysa koyu tema."
+  },
+  "themeLight": "Açık",
+  "themeSepia": "Sepya",
+  "@themeSepia": {
+    "description": "Krem/sepya mushaf rengi (M2-08)."
+  },
+  "themeDark": "Koyu",
+  "errorTitle": "Bir sorun oluştu",
+  "errorLoadContent": "İçerik yüklenemedi.",
+  "@errorLoadContent": {
+    "description": "Hata durumu bileşeninin genel açıklaması (veri okunamadı)."
+  },
+  "errorRetry": "Tekrar dene"
 }

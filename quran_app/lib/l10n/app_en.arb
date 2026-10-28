@@ -23,5 +23,13 @@
   "settingsNumerals": "Numerals",
   "settingsNumeralsAuto": "Match language",
   "settingsNumeralsWestern": "Western digits (0123)",
-  "settingsNumeralsArabic": "Arabic digits (٠١٢٣)"
+  "settingsNumeralsArabic": "Arabic digits (٠١٢٣)",
+  "settingsTheme": "Theme",
+  "themeSystem": "Device setting",
+  "themeLight": "Light",
+  "themeSepia": "Sepia",
+  "themeDark": "Dark",
+  "errorTitle": "Something went wrong",
+  "errorLoadContent": "The content could not be loaded.",
+  "errorRetry": "Try again"
 }

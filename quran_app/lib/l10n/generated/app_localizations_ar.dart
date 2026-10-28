@@ -98,4 +98,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsNumeralsArabic => 'أرقام عربية (٠١٢٣)';
+
+  @override
+  String get settingsTheme => 'السمة';
+
+  @override
+  String get themeSystem => 'حسب إعداد الجهاز';
+
+  @override
+  String get themeLight => 'فاتح';
+
+  @override
+  String get themeSepia => 'بني فاتح';
+
+  @override
+  String get themeDark => 'داكن';
+
+  @override
+  String get errorTitle => 'حدث خطأ ما';
+
+  @override
+  String get errorLoadContent => 'تعذّر تحميل المحتوى.';
+
+  @override
+  String get errorRetry => 'إعادة المحاولة';
 }

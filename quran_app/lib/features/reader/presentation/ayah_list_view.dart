@@ -3,11 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../quran/domain/quran_models.dart';
 import '../../quran/presentation/surah_l10n.dart';
 import '../application/reader_providers.dart';
-import 'mushaf_colors.dart';
-import 'mushaf_page_view.dart';
 
 /// Ayet ayet görünüm (M2-01). Tüm Kur'an tek listededir; açılışta okunan
 /// konumdaki ayete gider, kaydırıldıkça en üstteki ayeti konum olarak
@@ -112,10 +111,8 @@ class _AyahTile extends ConsumerWidget {
                   if (localName != surah.nameArabic) localName,
                 ].join(' · '),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: kQuranFontFamily,
-                  fontSize: 22 * textScale,
-                  wordSpacing: 22 * textScale * kQuranWordSpacing,
+                style: AppTypography.quran(
+                  fontSize: AppTypography.quranHeaderSize * textScale,
                   color: colors.ornament,
                 ),
               ),
@@ -124,11 +121,9 @@ class _AyahTile extends ConsumerWidget {
             ayah.textDigitalKhatt,
             textDirection: TextDirection.rtl,
             textAlign: TextAlign.justify,
-            style: TextStyle(
-              fontFamily: kQuranFontFamily,
-              fontSize: 26 * textScale,
+            style: AppTypography.quran(
+              fontSize: AppTypography.quranAyahSize * textScale,
               height: 1.9,
-              wordSpacing: 26 * textScale * kQuranWordSpacing,
               color: colors.text,
             ),
           ),

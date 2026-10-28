@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/quran/domain/mushaf_page.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
 import 'package:quran_app/features/reader/application/reader_providers.dart';
-import 'package:quran_app/features/reader/application/reader_settings.dart';
-import 'package:quran_app/features/reader/presentation/mushaf_colors.dart';
 import 'package:quran_app/features/reader/presentation/mushaf_page_view.dart';
 
 import '../../helpers/fake_quran_repository.dart';
@@ -53,7 +52,7 @@ Widget _host() => ProviderScope(
       page: _page,
       surahs: {for (final s in FakeQuranRepository.surahs) s.id: s},
       basmala: 'بِسْمِ ٱللَّهِ',
-      colors: MushafColors.of(MushafTheme.sepia),
+      colors: AppPalette.sepia.mushaf,
     ),
   ),
 );

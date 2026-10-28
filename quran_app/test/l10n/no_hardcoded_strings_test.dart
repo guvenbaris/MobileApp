@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// NF-Y01: arayüz metinleri koda gömülmez, ARB dosyalarından gelir.
 ///
-/// Arayüz kodunda (`presentation/` klasörleri ve `app.dart`) harf içeren her
+/// Arayüz kodunda (`presentation/` klasörleri, `core/widgets/` ve `app.dart`) harf içeren her
 /// metin sabiti hata sayılır. İstisnalar:
 /// - `import`/`export`/`part` yolları ve açıklamalar (annotation),
 /// - `Key(...)`, `ValueKey(...)` gibi widget anahtarları,
@@ -68,7 +68,9 @@ bool _isUiFile(String path) =>
     path.endsWith('.dart') &&
     !path.endsWith('.g.dart') &&
     !path.contains('/l10n/generated/') &&
-    (path.contains('/presentation/') || path == 'lib/app.dart');
+    (path.contains('/presentation/') ||
+        path.startsWith('lib/core/widgets/') ||
+        path == 'lib/app.dart');
 
 final _letter = RegExp(r'\p{L}', unicode: true);
 const _keyTypes = {'Key', 'ValueKey', 'ObjectKey', 'PageStorageKey'};

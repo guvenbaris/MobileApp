@@ -243,6 +243,54 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Arap rakamları (٠١٢٣)'**
   String get settingsNumeralsArabic;
+
+  /// No description provided for @settingsTheme.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tema'**
+  String get settingsTheme;
+
+  /// Tema seçeneği: cihaz açık moddaysa açık, koyu moddaysa koyu tema.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cihaz ayarı'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açık'**
+  String get themeLight;
+
+  /// Krem/sepya mushaf rengi (M2-08).
+  ///
+  /// In tr, this message translates to:
+  /// **'Sepya'**
+  String get themeSepia;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In tr, this message translates to:
+  /// **'Koyu'**
+  String get themeDark;
+
+  /// No description provided for @errorTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir sorun oluştu'**
+  String get errorTitle;
+
+  /// Hata durumu bileşeninin genel açıklaması (veri okunamadı).
+  ///
+  /// In tr, this message translates to:
+  /// **'İçerik yüklenemedi.'**
+  String get errorLoadContent;
+
+  /// No description provided for @errorRetry.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar dene'**
+  String get errorRetry;
 }
 
 class _AppLocalizationsDelegate

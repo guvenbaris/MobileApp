@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/app_list_item.dart';
 import '../application/locale_settings.dart';
+import '../application/theme_settings.dart';
 
-/// Tema seçimi (F0-08) buraya eklenir.
+/// Tema, dil ve rakam seçimi. Seçimler anında uygulanır ve kalıcıdır.
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
@@ -13,11 +16,35 @@ class SettingsPage extends ConsumerWidget {
     final l10n = context.l10n;
     final settings = ref.watch(localeSettingsProvider);
     final notifier = ref.read(localeSettingsProvider.notifier);
+    final theme = ref.watch(themeSettingsProvider);
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         children: [
-          _SectionHeader(l10n.settingsLanguage),
+          AppSectionHeader(l10n.settingsTheme),
+          RadioGroup<ThemePreference>(
+            groupValue: theme,
+            onChanged: (v) => v == null
+                ? null
+                : ref.read(themeSettingsProvider.notifier).set(v),
+            child: Column(
+              children: [
+                for (final preference in ThemePreference.values)
+                  RadioListTile<ThemePreference>(
+                    key: Key('settings.theme.${preference.name}'),
+                    value: preference,
+                    title: Text(switch (preference) {
+                      ThemePreference.system => l10n.themeSystem,
+                      ThemePreference.light => l10n.themeLight,
+                      ThemePreference.sepia => l10n.themeSepia,
+                      ThemePreference.dark => l10n.themeDark,
+                    }),
+                  ),
+              ],
+            ),
+          ),
+          const Divider(),
+          AppSectionHeader(l10n.settingsLanguage),
           RadioGroup<AppLanguage>(
             groupValue: settings.language,
             onChanged: (v) => v == null ? null : notifier.setLanguage(v),
@@ -38,7 +65,7 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
           const Divider(),
-          _SectionHeader(l10n.settingsNumerals),
+          AppSectionHeader(l10n.settingsNumerals),
           RadioGroup<NumeralSystem>(
             groupValue: settings.numerals,
             onChanged: (v) => v == null ? null : notifier.setNumerals(v),
@@ -58,26 +85,6 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 4),
-      child: Text(
-        text,
-        style: theme.textTheme.titleSmall?.copyWith(
-          color: theme.colorScheme.primary,
-        ),
       ),
     );
   }
