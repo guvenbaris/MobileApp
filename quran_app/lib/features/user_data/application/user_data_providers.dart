@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/user_database.dart';
+import '../../../core/logging/app_logger.dart';
 import '../../quran/domain/quran_models.dart';
 import '../data/drift_user_data_repositories.dart';
 import '../domain/user_data_repositories.dart';
@@ -52,3 +53,23 @@ class UserDataSnapshot {
 final userDataSnapshotProvider = Provider<UserDataSnapshot>(
   (ref) => const UserDataSnapshot(),
 );
+
+/// Ayarı arka planda kaydeder (M13-02). Kayıt hatası uygulamayı engellemez;
+/// loglanır. Kullanıcı veritabanı yoksa (ör. testler) kayıt atlanır.
+void persistSetting(Ref ref, String key, Object? value) {
+  final SettingsRepository repository;
+  final AppLogger logger;
+  try {
+    repository = ref.read(settingsRepositoryProvider);
+    logger = ref.read(appLoggerProvider);
+  } on Object {
+    return;
+  }
+  repository.save(key, value).catchError((Object e, StackTrace st) {
+    logger.error('Ayar kaydedilemedi: $key', error: e, stackTrace: st);
+  }).ignore();
+}
+
+/// Kayıtlı ayardaki enum adını çözer; tanınmıyorsa [fallback].
+T enumSetting<T extends Enum>(List<T> values, Object? name, T fallback) =>
+    values.where((v) => v.name == name).firstOrNull ?? fallback;

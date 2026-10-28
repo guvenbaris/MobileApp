@@ -1,0 +1,12 @@
+# F0-07 (NF-Y01): arayüz metinleri lib/l10n/app_<dil>.arb dosyalarından gelir.
+# Şablon Türkçedir; yeni anahtar önce app_tr.arb'ye, sonra diğer dillere eklenir.
+# Üretilen kod `flutter pub get` / `flutter gen-l10n` ile lib/l10n/generated/ altına yazılır.
+arb-dir: lib/l10n
+template-arb-file: app_tr.arb
+output-dir: lib/l10n/generated
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+nullable-getter: false
+# Bir dilde eksik anahtar varsa derleme uyarısı yerine bu dosyaya yazılır;
+# testler eksik anahtarı ayrıca hata sayar.
+untranslated-messages-file: build/untranslated_messages.json

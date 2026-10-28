@@ -2,7 +2,7 @@
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
 > **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`, `Faz_0_Notlar.md` (her iş paketinde ne yapıldığı ve neden)
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 tamam (2 doğrulama ertelendi); F0-06 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
+> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 tamam (2 doğrulama ertelendi); F0-06 ve F0-07 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
@@ -107,11 +107,11 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - **Bitti:** Örnek bir v1→v2 migration'ı test ile doğrulandı; veri kaybı yok. ✅ (bilerek bozulan migration testi kırdı)
 
 ### F0-07 Dil ve Yerelleştirme [Z] — M13-01, NF-Y01, NF-Y03
-- [ ] `gen_l10n` + TR / AR / EN ARB dosyaları
-- [ ] AR için tam RTL düzen kontrolü
-- [ ] Dil seçimi ayarı ve kalıcılığı (M13-02)
-- [ ] Kodda gömülü metin olmadığını denetleyen lint/kontrol
-- **Bitti:** Dil değişince tüm iskelet ekranları o dile ve yöne geçiyor.
+- [x] `gen_l10n` + TR / AR / EN ARB dosyaları (`lib/l10n/`, şablon `app_tr.arb`; Arapça çoğul kuralları dahil)
+- [x] AR için tam RTL düzen kontrolü (widget testi + emülatör: ana sayfa, okuma, ayarlar)
+- [x] Dil seçimi ayarı ve kalıcılığı (M13-02): Cihaz dili / Türkçe / العربية / English; cihaz dili desteklenmiyorsa İngilizce. Ek: rakam seçimi (NF-Y03): dile göre / Batı / Doğu Arap
+- [x] Kodda gömülü metin olmadığını denetleyen lint/kontrol: `test/l10n/no_hardcoded_strings_test.dart` (bilerek eklenen metni yakaladı)
+- **Bitti:** Dil değişince tüm iskelet ekranları o dile ve yöne geçiyor. ✅
 
 ### F0-08 Tema ve Tasarım Temeli [Z] — M2-08, NF-E01, NF-E03
 - [ ] Renk sistemi: açık, sepya, koyu (WCAG AA kontrast)
@@ -163,6 +163,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | F0-03 Kur'an veri hattı tamamlandı; ilk düzen Medine 1421H (QCF V2) |
 | 28.10.2026 | F0-04 metin bütünlüğü testleri tamamlandı; Tanzil test referansı |
 | 28.10.2026 | F0-06 kullanıcı veritabanı tamamlandı; okuma ayarları ve son okunan yer kalıcı |
+| 28.10.2026 | F0-07 dil ve yerelleştirme tamamlandı; TR/AR/EN, RTL, rakam seçimi, gömülü metin denetimi |
 | 28.10.2026 | F0-05: font kararı yalnız DigitalKhatt (OFL); ekrandaki metin harf ve durak işaretiyle doğrulanıyor (T-01) |
 | 28.10.2026 | F0-05 başladı: sayfa çizimi (iki yöntem), kelimeye dokunma, temalar, boyut ve ilk performans ölçümleri |
 | 28.10.2026 | F0-04 ek: QUL düzen/glif kaynağı oldu; esas kelime bölünmesi KFGQPC (77.430); satır genişliği doğrulaması; TK-06 font kararı |

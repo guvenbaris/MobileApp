@@ -10,6 +10,7 @@ import 'package:quran_app/features/reader/presentation/reader_page.dart';
 import 'package:quran_app/features/settings/presentation/settings_page.dart';
 
 import 'helpers/fake_quran_repository.dart';
+import 'helpers/localized_app.dart';
 
 Widget _app(Flavor flavor) => ProviderScope(
   overrides: [
@@ -20,6 +21,18 @@ Widget _app(Flavor flavor) => ProviderScope(
 );
 
 void main() {
+  setUp(() {
+    // Sure adları Türkçe görünsün diye cihaz dili Türkçe.
+    TestWidgetsFlutterBinding.instance.platformDispatcher.localesTestValue =
+        const [Locale('tr', 'TR')];
+    addTearDown(
+      TestWidgetsFlutterBinding
+          .instance
+          .platformDispatcher
+          .clearLocalesTestValue,
+    );
+  });
+
   for (final flavor in Flavor.values) {
     testWidgets('uygulama ${flavor.name} ortamında ana sayfayla açılır', (
       tester,
@@ -38,8 +51,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ReaderPage), findsOneWidget);
 
-    await tester.pageBack();
-    await tester.pumpAndSettle();
+    await tapBack(tester);
     await tester.tap(find.byKey(const Key('home.settings')));
     await tester.pumpAndSettle();
     expect(find.byType(SettingsPage), findsOneWidget);

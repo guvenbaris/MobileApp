@@ -40,6 +40,12 @@ Kaynaklar, lisanslar ve bilinen veri durumları: `../VERI_KAYNAKLARI.md`.
 **Kur'an fontu:** `assets/fonts/DigitalKhattV2.otf` (DigitalKhatt New Madina, SIL OFL 1.1; lisans metni `assets/fonts/DigitalKhatt-OFL.txt`, fontla birlikte dağıtılmalı). Ekranda gösterilen metin DigitalKhatt kelime metnidir; harfleri ve durak işaretleri T-01'de KFGQPC metniyle denetlenir.
 Drift şeması değişince: `dart run build_runner build`.
 
+## Arayüz metinleri ve diller (F0-07)
+- Metinler `lib/l10n/app_tr.arb` (şablon), `app_ar.arb`, `app_en.arb` dosyalarındadır. Yeni metin önce `app_tr.arb`'ye, sonra diğer iki dosyaya aynı anahtarla eklenir.
+- Kod `flutter pub get` sırasında (veya `flutter gen-l10n` ile) `lib/l10n/generated/` altına üretilir; ekranda `context.l10n.anahtar` ile kullanılır.
+- Sayılar `context.formatInt(n)`, konumlar (`2:255`) `context.formatDigits(ref)` ile yazılır; böylece seçilen rakam sistemine uyar.
+- `test/l10n/` testleri: arayüz kodunda gömülü metin olmadığını ve üç ARB dosyasının aynı anahtarlara sahip olduğunu denetler. Çevrilmemesi gereken bir metin (ör. mushaftaki Arapça sure başlığı) için satıra `// l10n-ignore: gerekçe` yazılır.
+
 ## Çalıştırma
 ```sh
 flutter run --flavor dev -t lib/main_dev.dart
@@ -55,7 +61,7 @@ iOS'ta flavor şemaları henüz yok; yalnızca `-t` ile hedef seçilir: `flutter
 | `test/` | Birim ve widget testleri; klasör yapısı `lib/` ile aynıdır | `flutter test` |
 | `integration_test/` | Gerçek cihazda/emülatörde uçtan uca testler | `flutter test integration_test --flavor dev` |
 
-Ortak test yardımcıları `test/helpers/` altındadır.
+Ortak test yardımcıları `test/helpers/` altındadır. Arayüz testlerinde geri tuşu için `tester.pageBack()` yerine `tapBack(tester)` kullanılır (`pageBack` İngilizce "Back" ipucunu arar).
 
 ## Kontroller (CI ile aynı)
 ```sh

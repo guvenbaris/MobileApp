@@ -9,6 +9,8 @@ import 'package:quran_app/features/home/presentation/home_page.dart';
 import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/quran/data/content_database_opener.dart';
 import 'package:quran_app/features/reader/presentation/reader_page.dart';
+import 'package:quran_app/features/settings/application/locale_settings.dart';
+import 'package:quran_app/features/user_data/application/user_data_providers.dart';
 
 /// Gerçek cihazda/emülatörde uygulamanın açıldığını ve paketteki içerik
 /// veritabanının internetsiz okunduğunu doğrular (F0-03, M16-01).
@@ -27,6 +29,12 @@ void main() {
         overrides: [
           flavorProvider.overrideWithValue(Flavor.dev),
           contentDatabaseProvider.overrideWithValue(contentDb),
+          // Emülatörün dili ne olursa olsun Türkçe açılır.
+          userDataSnapshotProvider.overrideWithValue(
+            const UserDataSnapshot(
+              settings: {LocaleSettingsNotifier.languageKey: 'tr'},
+            ),
+          ),
         ],
         child: const QuranApp(),
       ),

@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/logging/app_logger.dart';
 import '../../user_data/application/user_data_providers.dart';
-import '../../user_data/domain/user_data_repositories.dart';
 
 /// Mushaf sayfa teması (M2-08). Koyu temada metin alanı da koyudur.
 enum MushafTheme { light, sepia, dark }
@@ -49,8 +47,8 @@ class ReaderSettingsNotifier extends Notifier<ReaderSettings> {
     final saved = ref.read(userDataSnapshotProvider).settings;
     const defaults = ReaderSettings();
     return ReaderSettings(
-      theme: _enumOr(MushafTheme.values, saved[_themeKey], defaults.theme),
-      viewMode: _enumOr(
+      theme: enumSetting(MushafTheme.values, saved[_themeKey], defaults.theme),
+      viewMode: enumSetting(
         ReaderViewMode.values,
         saved[_viewModeKey],
         defaults.viewMode,
@@ -67,12 +65,12 @@ class ReaderSettingsNotifier extends Notifier<ReaderSettings> {
 
   void setTheme(MushafTheme theme) {
     state = state.copyWith(theme: theme);
-    _persist(_themeKey, theme.name);
+    persistSetting(ref, _themeKey, theme.name);
   }
 
   void setViewMode(ReaderViewMode mode) {
     state = state.copyWith(viewMode: mode);
-    _persist(_viewModeKey, mode.name);
+    persistSetting(ref, _viewModeKey, mode.name);
   }
 
   void setTextScale(double scale) {
@@ -82,27 +80,8 @@ class ReaderSettingsNotifier extends Notifier<ReaderSettings> {
         ReaderSettings.maxTextScale,
       ),
     );
-    _persist(_textScaleKey, state.textScale);
+    persistSetting(ref, _textScaleKey, state.textScale);
   }
-
-  /// Kayıt hatası okumayı engellemez; loglanır. Kullanıcı veritabanı yoksa
-  /// (ör. testler) kayıt atlanır.
-  void _persist(String key, Object value) {
-    final SettingsRepository repository;
-    final AppLogger logger;
-    try {
-      repository = ref.read(settingsRepositoryProvider);
-      logger = ref.read(appLoggerProvider);
-    } on Object {
-      return;
-    }
-    repository.save(key, value).catchError((Object e, StackTrace st) {
-      logger.error('Ayar kaydedilemedi: $key', error: e, stackTrace: st);
-    }).ignore();
-  }
-
-  static T _enumOr<T extends Enum>(List<T> values, Object? name, T fallback) =>
-      values.where((v) => v.name == name).firstOrNull ?? fallback;
 }
 
 final readerSettingsProvider =

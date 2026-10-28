@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../../../core/l10n/l10n.dart';
 import '../../quran/domain/quran_models.dart';
+import '../../quran/presentation/surah_l10n.dart';
 import '../application/reader_providers.dart';
 import 'mushaf_colors.dart';
 import 'mushaf_page_view.dart';
@@ -93,6 +95,8 @@ class _AyahTile extends ConsumerWidget {
       return SizedBox(height: 80 * textScale);
     }
     final ayah = ayahs[ayahRef.ayah - 1];
+    // Sure başlığı mushaftaki gibi Arapçadır; arayüz dilindeki ad eklenir.
+    final localName = surah.localizedName(context);
     return Padding(
       key: Key('reader.ayah.$ayahRef'),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -103,7 +107,10 @@ class _AyahTile extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Text(
-                'سُورَةُ ${surah.nameArabic} · ${surah.nameTr}',
+                [
+                  'سُورَةُ ${surah.nameArabic}', // l10n-ignore: mushaf metni
+                  if (localName != surah.nameArabic) localName,
+                ].join(' · '),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: kQuranFontFamily,
@@ -127,7 +134,7 @@ class _AyahTile extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '$ayahRef',
+            context.formatDigits(ayahRef),
             style: TextStyle(fontSize: 12, color: colors.ornament),
           ),
         ],

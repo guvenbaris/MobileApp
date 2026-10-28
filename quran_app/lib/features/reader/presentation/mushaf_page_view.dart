@@ -9,7 +9,7 @@ import 'mushaf_colors.dart';
 /// Uygulamanın Kur'an fontu: DigitalKhatt New Madina (SIL OFL 1.1,
 /// `assets/fonts/DigitalKhatt-OFL.txt`). Medine mushafı hattının dijital
 /// yeniden çizimi (TK-06).
-const kQuranFontFamily = 'DigitalKhatt';
+const kQuranFontFamily = 'DigitalKhatt'; // l10n-ignore: font adı
 
 /// DigitalKhatt'ın boşluk karakteri dar (0,1 em): kelime aralığını basılı
 /// nüshada yaslama motoru açar. Akan metinde (ayet görünümü, başlık, besmele)
@@ -165,7 +165,7 @@ class MushafPageView extends ConsumerWidget {
   double _fontSizeFor(double width, double lineHeight) {
     final key =
         '${page.layoutId}/${page.number}/'
-        '${width.round()}x${lineHeight.round()}';
+        '${width.round()}/${lineHeight.round()}';
     final cached = _fontSizeCache[key];
     if (cached != null) return cached;
 
@@ -263,7 +263,7 @@ class _SurahHeader extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: Text(
-        'سُورَةُ $name',
+        'سُورَةُ $name', // l10n-ignore: mushaf metni
         style: TextStyle(
           fontFamily: kQuranFontFamily,
           fontSize: fontSize * 0.9,

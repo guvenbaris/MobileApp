@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
@@ -10,8 +11,8 @@ import 'ayah_list_view.dart';
 import 'mushaf_colors.dart';
 import 'mushaf_page_view.dart';
 
-// Metinler F0-07'de ARB dosyalarına taşınır. F0-05 denemesi: okuma ekranının
-// tam özellikleri (gösterge çubukları, otomatik kaydırma vb.) Faz 1'dedir.
+// F0-05 denemesi: okuma ekranının tam özellikleri (gösterge çubukları,
+// otomatik kaydırma vb.) Faz 1'dedir.
 class ReaderPage extends ConsumerStatefulWidget {
   const ReaderPage({this.initialPage = 1, super.key});
 
@@ -123,22 +124,26 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
     final ayahView = settings.viewMode == ReaderViewMode.ayah;
     final anchor = ref.watch(readerAnchorProvider);
     final index = ayahView ? ref.watch(ayahIndexProvider).value : null;
+    final l10n = context.l10n;
+    final pageText = context.formatInt(_page);
 
     return Scaffold(
       backgroundColor: colors.background,
       appBar: AppBar(
         title: Text(
           ayahView
-              ? 'Ayet $anchor'
+              ? l10n.readerAyahTitle(context.formatDigits(anchor))
               : juz == null
-              ? 'Sayfa $_page'
-              : 'Sayfa $_page · Cüz $juz',
+              ? l10n.readerPageTitle(pageText)
+              : l10n.readerPageJuzTitle(pageText, context.formatInt(juz)),
           key: const Key('reader.title'),
         ),
         actions: [
           IconButton(
             key: const Key('reader.viewMode'),
-            tooltip: ayahView ? 'Sayfa görünümü' : 'Ayet görünümü',
+            tooltip: ayahView
+                ? l10n.readerShowPageView
+                : l10n.readerShowAyahView,
             icon: Icon(ayahView ? Icons.menu_book : Icons.view_agenda_outlined),
             onPressed: () => _setViewMode(
               ayahView ? ReaderViewMode.page : ReaderViewMode.ayah,
@@ -147,7 +152,7 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
           if (ayahView) ...[
             IconButton(
               key: const Key('reader.textSmaller'),
-              tooltip: 'Yazıyı küçült',
+              tooltip: l10n.readerTextSmaller,
               icon: const Icon(Icons.text_decrease),
               onPressed: () => ref
                   .read(readerSettingsProvider.notifier)
@@ -155,7 +160,7 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
             ),
             IconButton(
               key: const Key('reader.textLarger'),
-              tooltip: 'Yazıyı büyüt',
+              tooltip: l10n.readerTextLarger,
               icon: const Icon(Icons.text_increase),
               onPressed: () => ref
                   .read(readerSettingsProvider.notifier)
@@ -164,7 +169,7 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
           ],
           IconButton(
             key: const Key('reader.theme'),
-            tooltip: 'Tema',
+            tooltip: l10n.readerTheme,
             icon: const Icon(Icons.palette_outlined),
             onPressed: () => ref
                 .read(readerSettingsProvider.notifier)
@@ -226,7 +231,7 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Text(
-                    'Seçilen kelime: $selected',
+                    l10n.readerSelectedWord(context.formatDigits(selected)),
                     key: const Key('reader.selectedWord'),
                     textAlign: TextAlign.center,
                     style: TextStyle(color: colors.text),

@@ -5,10 +5,11 @@ import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/reader/presentation/reader_page.dart';
 
 import '../../helpers/fake_quran_repository.dart';
+import '../../helpers/localized_app.dart';
 
 Widget _reader(int page) => ProviderScope(
   overrides: [quranRepositoryProvider.overrideWithValue(FakeQuranRepository())],
-  child: MaterialApp(home: ReaderPage(initialPage: page)),
+  child: localizedApp(ReaderPage(initialPage: page)),
 );
 
 Future<void> _setScreen(WidgetTester tester, Size logical) async {

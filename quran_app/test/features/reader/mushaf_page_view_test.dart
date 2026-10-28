@@ -9,6 +9,7 @@ import 'package:quran_app/features/reader/presentation/mushaf_colors.dart';
 import 'package:quran_app/features/reader/presentation/mushaf_page_view.dart';
 
 import '../../helpers/fake_quran_repository.dart';
+import '../../helpers/localized_app.dart';
 
 PageGlyph _glyph(String text, List<int> positions) => PageGlyph(
   glyph: '',
@@ -47,8 +48,8 @@ final _page = MushafPage(
 );
 
 Widget _host() => ProviderScope(
-  child: MaterialApp(
-    home: MushafPageView(
+  child: localizedApp(
+    MushafPageView(
       page: _page,
       surahs: {for (final s in FakeQuranRepository.surahs) s.id: s},
       basmala: 'بِسْمِ ٱللَّهِ',

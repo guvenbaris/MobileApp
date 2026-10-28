@@ -14,7 +14,8 @@
 7. [F0-04 Ek: QUL Doğrulaması, Esas Kelime ve Font Kararı](#7-f0-04-ek-qul-doğrulaması-esas-kelime-ve-font-kararı)
 8. [F0-05 Mushaf Sayfası Çizimi](#8-f0-05-mushaf-sayfası-çizimi)
 9. [F0-06 Kullanıcı Veritabanı](#9-f0-06-kullanıcı-veritabanı)
-10. [Genel durum ve bekleyen kararlar](#10-genel-durum-ve-bekleyen-kararlar)
+10. [F0-07 Dil ve Yerelleştirme](#10-f0-07-dil-ve-yerelleştirme)
+11. [Genel durum ve bekleyen kararlar](#11-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -231,7 +232,7 @@ lib/features/quran/
 ```
 - **`QuranRepository`** (MK-07): sureler, tek ayet, surenin ayetleri, ayet → sayfa, sayfa → ilk ayet. Hatalar `Result` ile döner.
 - **`bootstrap.dart`**: önce içerik veritabanını açar, sonra arayüzü başlatır.
-- **Ana sayfa**: veritabanından gelen sure listesini gösteriyor (veri hattının görünür kanıtı). Metinler F0-07'de dil dosyalarına taşınacak.
+- **Ana sayfa**: veritabanından gelen sure listesini gösteriyor (veri hattının görünür kanıtı). Metinler F0-07'de dil dosyalarına taşındı (bkz. §10).
 - **`AppFailure`** artık `Exception` sınıfından türüyor (Riverpod hata akışıyla uyum).
 
 ### 5.7 Testler ve ölçümler
@@ -555,7 +556,102 @@ Kullanıcının verisi için **ayrı, sürümlü ve senkrona hazır** bir verita
 
 ---
 
-## 10. Genel durum ve bekleyen kararlar
+## 10. F0-07 Dil ve Yerelleştirme
+**Durum:** ✅ · **Gereksinimler:** M13-01, M13-02, NF-Y01, NF-Y03
+
+### 10.1 Amaç
+Arayüzün tamamının **TR, AR (sağdan sola) ve EN** dillerinde gösterilmesi. Seçilen dilde karışık dil olmaması (M13-01), metinlerin koda gömülmemesi (NF-Y01) ve sayıların yerel biçimde, istenirse Arap rakamlarıyla gösterilmesi (NF-Y03).
+
+### 10.2 Yapı
+| Parça | Dosya | Açıklama |
+|---|---|---|
+| Çeviri dosyaları | `lib/l10n/app_tr.arb`, `app_ar.arb`, `app_en.arb` | Anahtar → metin (JSON). **Şablon Türkçedir**: açıklamalar ve yer tutucu tanımları (`@anahtar`) yalnızca `app_tr.arb`'de durur. .NET'teki `.resx` dosyalarına karşılık gelir. |
+| Ayar | `l10n.yaml` | `gen_l10n` ayarları: şablon, çıktı klasörü, `nullable-getter: false` (her yerde `!` yazmamak için). |
+| Üretilen kod | `lib/l10n/generated/` | `AppLocalizations` sınıfı; her anahtar bir getter veya metot olur (ör. `l10n.readerPageTitle('5')`). `flutter pub get` sırasında kendiliğinden yeniden üretilir. Drift çıktıları gibi depoya eklenir; analizden hariçtir. |
+| Dil ve rakam türleri | `lib/core/l10n/app_language.dart` | `AppLanguage` (system, tr, ar, en), `NumeralSystem` (auto, western, arabic), `resolveAppLocale()`. |
+| Yardımcılar | `lib/core/l10n/l10n.dart` | `context.l10n`, `context.formatInt(n)`, `context.formatDigits(ref)`, `NumeralScope`. `NumeralScope` rakam seçimini alt ağaca taşıyan bir InheritedWidget'tır; .NET'teki ambient context'e benzer. |
+| Ayar sağlayıcısı | `lib/features/settings/application/locale_settings.dart` | `LocaleSettingsNotifier`: `app.language` ve `app.numerals` ayarları; kullanıcı veritabanına yazılır. |
+| Uygulama | `lib/app.dart` | `MaterialApp.router`'a dil temsilcileri, desteklenen diller, seçili dil ve `NumeralScope` verilir. |
+| Sure adı | `lib/features/quran/presentation/surah_l10n.dart` | `surah.localizedName(context)`: TR'de Türkçe okunuş (Bakara), AR'de Arapça ad, EN'de Latin harfli okunuş (Al-Baqarah). |
+| Ayarlar ekranı | `lib/features/settings/presentation/settings_page.dart` | Dil ve rakam seçimi (radyo düğmeleri). Tema seçimi F0-08'de eklenecek. |
+| iOS | `ios/Runner/Info.plist` | `CFBundleLocalizations` (tr, ar, en): iOS uygulamanın bu dilleri desteklediğini bilir (sistem diyalogları ve ayarlardaki uygulama dili). |
+
+### 10.3 Davranış ve alınan kararlar
+- **Varsayılan dil cihaz dilidir.** Cihazın tercih ettiği dillerden desteklenen ilki seçilir; bölge kodu yok sayılır (`tr_TR` → `tr`).
+- **Cihaz dili desteklenmiyorsa İngilizce açılır** (ör. Almanca telefon). *Bu benim önerim. Türkçe yapılması istenirse `kFallbackLocale` tek satırla değişir.*
+- **Dil seçimi anında uygulanır** ve kalıcıdır (`app.language`). "Cihaz dili" seçiliyken telefonun dili değişirse uygulama da değişir.
+- **Dil adları** listede her dilde kendi yazımıyla görünür (Türkçe, العربية, English). Böylece kullanıcı dilini tanımadığı bir arayüzde de bulabilir.
+- **Sağdan sola (RTL):**
+  - Arapçada Flutter yönü kendiliğinden çevirir: geri oku, AppBar düğmeleri, liste öğesinin başı ve sonu yer değiştirir.
+  - Mushaf sayfası her dilde RTL çizilmeye devam eder; sayfa çevirme yönü değişmez.
+  - Arapça arayüzde sure listesinde Arapça ad zaten başlıktır, bu yüzden sağdaki ikinci Arapça ad gösterilmez.
+- **Rakamlar (NF-Y03):**
+  - "Dile göre" (varsayılan): Arapçada Doğu Arap rakamları (٢٨٦), diğer dillerde 286.
+  - Kullanıcı dilden bağımsız olarak Batı veya Arap rakamlarını seçebilir (`app.numerals`).
+  - Binlik ayıracı dile göredir (TR `6.236`, EN `6,236`).
+- **Çoğul kuralları (ICU biçimi):**
+  - Arapça: "آية واحدة" (1), "آيتان" (2), "٧ آيات" (3–10), "٢٨٦ آية" (11 ve üstü).
+  - Türkçe tek biçim ("7 ayet"); İngilizce "1 verse / 7 verses".
+- **Çevrilmeyen metinler:** mushaftaki sure başlığı "سُورَةُ …" her dilde Arapçadır, çünkü mushaf metninin parçasıdır. Ayet görünümünde başlığın yanına arayüz dilindeki ad eklenir.
+- **Tarih ve para birimi:** arayüzde henüz tarih veya fiyat yok. Gelince `intl` ile aynı yaklaşım kullanılacak (ödeme metinleri Faz 4, NF-Y02).
+
+### 10.4 Gömülü metin denetimi (NF-Y01)
+`test/l10n/no_hardcoded_strings_test.dart` arayüz kodunu Dart çözümleyicisiyle (analyzer paketi; Roslyn'e benzer) tarar. Taranan yerler: `presentation/` klasörleri ve `app.dart`. **Harf içeren her metin sabiti hatadır.** İstisnalar:
+- `import` yolları ve açıklamalar,
+- `Key(...)`/`ValueKey(...)` widget anahtarları,
+- karşılaştırma ve `switch` durumlarındaki sabitler (ör. dil kodu `'ar'`),
+- satırında `// l10n-ignore: gerekçe` olan metinler.
+
+Hata mesajı dosya ve satır numarasını verir. Denetim `flutter test` ile ve CI'da çalışır; ayrı bir lint eklentisi gerekmez.
+
+**Kanıt:** ana sayfa başlığı bilerek `const Text('Ana Sayfa')` yapıldığında test `home_page.dart:23 'Ana Sayfa'` ile kırıldı; geri alınınca geçti.
+
+`test/l10n/arb_files_test.dart` üç ARB dosyasının aynı anahtarlara sahip olduğunu ve hiçbir metnin boş olmadığını denetler. M13-01'deki "karışık dil olmaz" kuralının güvencesi budur: bir dilde eksik çeviri testi kırar.
+
+**Kapsam sınırı:**
+- Denetim yalnızca arayüz katmanına bakar. `application`/`data` katmanındaki log ve hata mesajları geliştirici içindir, Türkçe kalabilir; ama kullanıcıya gösterilmemelidir.
+- Ekrandaki hata durumları, F0-08'deki "hata durumu" bileşeniyle ARB'den gelecek. Şu an hata olursa ham hata metni gösteriliyor.
+
+### 10.5 Yapılan küçük düzenlemeler
+- **Ortak ayar yazma:** okuma ayarlarındaki "arka planda kaydet, hata olursa logla" kodu `persistSetting()` ve `enumSetting()` olarak `user_data_providers.dart`'a taşındı. Okuma ve dil ayarları aynı kodu kullanıyor.
+- **Mushaf önbellek anahtarı:** `'…x…'` yerine `'…/…'` kullanılıyor. Denetim `x` harfini metin sandığı için değişti; davranış aynı.
+- **Testler:**
+  - Tek ekranlı widget testleri artık `localizedApp()` (`test/helpers/localized_app.dart`) ile sarılıyor.
+  - Uygulama testlerinde cihaz dili Türkçe sabitlendi.
+  - Entegrasyon testi emülatörün dilinden bağımsız olarak Türkçe açılıyor.
+
+### 10.6 Testler
+| Test | Kontrol |
+|---|---|
+| `test/l10n/no_hardcoded_strings_test.dart` | Arayüz kodunda gömülü metin yok; denetimin kendisi örnek kodla sınanıyor. |
+| `test/l10n/arb_files_test.dart` | TR/AR/EN anahtarları aynı, boş metin yok. |
+| `test/core/l10n_test.dart` | Dil çözümleme (seçim > cihaz dili > İngilizce; bölge kodu yok sayılır); rakam çevirisi; sayı biçimi dile ve seçime göre. |
+| `test/features/settings/language_settings_test.dart` | Açılış dili: Türkçe cihazda Türkçe, Almanca cihazda İngilizce. **Ayarlardan Arapça seçilince ayarlar, ana sayfa ve okuma ekranı Arapça ve RTL olur**: sure numarası sağda, rakamlar ٢٨٦, çoğul "٧ آيات". Rakam seçimi Türkçe arayüzde de çalışır; cihaz diline geri dönülebilir. Dil ve rakam seçimi yeniden açılışta korunur; kayıtlı dil ilk karede uygulanır. |
+
+**Emülatör (sistem dili İngilizce):**
+- Uygulama İngilizce açıldı (cihaz dili).
+- Ayarlar → العربية seçilince ayarlar ekranı hemen Arapça ve RTL oldu.
+- Ana sayfada sure adları Arapça, rakamlar Doğu Arap rakamıydı. Okuma ekranının başlığı "الصفحة ١ · الجزء ١" oldu.
+- Uygulama kapatılıp açıldığında Arapça kaldı.
+- Entegrasyon testi geçti.
+
+**Toplam:** 90 test geçiyor, analiz temiz.
+
+### 10.7 Bilmeniz gerekenler
+- **Yeni metin eklemek:**
+  1. Anahtarı `app_tr.arb`'ye ekleyin (gerekirse `@anahtar` açıklamasıyla).
+  2. Aynı anahtarı `app_ar.arb` ve `app_en.arb`'ye ekleyin.
+  3. Kod kaydedince ya da `flutter gen-l10n` ile üretilir; ekranda `context.l10n.anahtar` kullanın.
+
+  Bir dil eksik kalırsa `arb_files_test` kırılır.
+- **Sayı içeren metinler:** rakam seçimine uyması için yer tutucuya ham sayı değil, `context.formatInt(n)` sonucu verilir. Çoğul gereken yerde ICU `plural` ile hem `count` (int) hem `countText` (biçimli metin) geçirilir.
+- **Testlerde geri tuşu:** `tester.pageBack()` İngilizce "Back" ipucunu aradığı için Türkçe/Arapça arayüzde çalışmaz; bunun yerine `tapBack(tester)` kullanılır.
+- **Çeviri kalitesi:** Arapça ve İngilizce metinleri ben yazdım. Yayın öncesinde anadili Arapça olan birinin gözden geçirmesi önerilir; özellikle Faz 1'de metinler çoğalınca.
+- **Yeni bağımlılıklar:** `flutter_localizations` (SDK), `intl` ^0.20.3 ve geliştirme için `analyzer` ^14.6.0. `analyzer` yalnızca testte kullanılır, uygulamaya girmez.
+
+---
+
+## 11. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 28.10.2026
 
 | İş paketi | Durum |
@@ -566,7 +662,8 @@ Kullanıcının verisi için **ayrı, sürümlü ve senkrona hazır** bir verita
 | F0-04 Metin bütünlüğü testleri (T-01, T-02) | ✅ (25 sayfa QUL ile doğrulandı; esas kelime KFGQPC) |
 | F0-05 Mushaf sayfası çizimi (en riskli) | ✅ Font: DigitalKhatt (OFL). ⏸ Gerçek cihaz ve basılı nüsha ertelendi |
 | F0-06 Kullanıcı veritabanı | ✅ |
-| F0-07 Dil · F0-08 Tema · F0-10 `CLAUDE.md` · F0-11 Erişilebilirlik | ⬜ |
+| F0-07 Dil ve yerelleştirme | ✅ TR/AR/EN, RTL, rakam seçimi |
+| F0-08 Tema · F0-10 `CLAUDE.md` · F0-11 Erişilebilirlik | ⬜ |
 | F0-09 Test ve CI | ✅ · ⏳ kırmızıya düşme denemesi |
 
 **Bekleyen kararlar ve işler**
@@ -575,5 +672,7 @@ Kullanıcının verisi için **ayrı, sürümlü ve senkrona hazır** bir verita
 - ~~**Secde listesi (Q-8)**~~: ✅ Karar (28.10.2026): **14 secde** (Hanefi). 22:77'deki ۩ işareti basılı metnin parçası olarak sayfada görünür, ama uygulama onu secde ayeti olarak işaretlemez.
 - **Arama metni (Faz 1):** `ayahs.text_uthmani` Tanzil kökenli (Tanzil metniyle aynı); uygulamada kaldığı sürece "Hakkında" ekranında Tanzil atfı zorunlu. Arama KFGQPC metniyle yapılabilirse alan kaldırılır (~1,3 MB, atıf yükümlülüğü kalkar). Tanzil dosyalarının APK'ya girmediği doğrulandı.
 - **Yayın öncesi kelime bölünmesi teyidi:** lisans görüşmelerinde (AK-11) Diyanet'in dijital mushafındaki bölünmeye de bakılması önerilir (Q-12).
+- **Varsayılan dil (F0-07):** cihaz dili desteklenmiyorsa İngilizce açılıyor (öneri). Türkçe istenirse `kFallbackLocale` değişir.
+- **Arapça çevirilerin gözden geçirilmesi:** yayından önce anadili Arapça olan biri tarafından.
 - **Android `cmdline-tools` kurulumu:** lisans onayı için.
 - **GitHub'da yapılacaklar:** iOS iş akışını elle çalıştırmak; bilerek bozulmuş bir PR ile CI'ın kırmızıya düştüğünü görmek.
