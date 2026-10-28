@@ -51,10 +51,11 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. L
 Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taşındı (Yol Haritası, faz geçiş kuralı 2).
 - [ ] iOS: `ios.yml`'ın GitHub'da ilk çalıştırılması ve simülatörde açılış (F0-01)
 - [ ] CI: bilerek bozulan bir PR'ın kırmızıya düştüğünün görülmesi (F0-09)
-- [ ] F0-05 sonuç raporu: seçilen yöntem, sorunlar, Türkiye düzeni için uygulanabilirlik (F1-03 ile birlikte)
-- [ ] Gerçek cihazda performans ölçümü (NF-PF01, NF-PF02) ve 7 sayfanın basılı nüshayla karşılaştırılması (ertelenmişti)
-- [ ] TalkBack ile elle kontrol (F0-11; adımlar Faz_0_Notlar §13.3)
-- [ ] Arapça arayüz çevirilerinin anadili Arapça biri tarafından gözden geçirilmesi (yayın öncesi; metinler bu fazda çoğalacak)
+- [x] F0-05 sonuç raporu: seçilen yöntem, sorunlar, Türkiye düzeni için uygulanabilirlik (`Faz_1_Notlar.md` §2.5; Türkiye kısmı ön değerlendirme, kesinleşmesi F1-03'te)
+- [~] Gerçek cihazda performans ölçümü (NF-PF01, NF-PF02): araçlar hazır ve emülatörde denendi (`tool/perf/startup.dart`, `integration_test/perf_test.dart`); ⏳ gerçek telefonda çalıştırılması
+- [~] 7 sayfanın basılı nüshayla karşılaştırılması: paket hazır (`test/manual/page_sheet_test.dart` → `build/page_check/`); ⏳ basılı mushafla karşılaştırma
+- [~] TalkBack ile elle kontrol (F0-11): etiketlerin Android erişilebilirlik ağacına ulaştığı emülatörde doğrulandı; ⏳ kulakla dinleme (adımlar Faz_0_Notlar §13.3)
+- [~] Arapça arayüz çevirilerinin anadili Arapça biri tarafından gözden geçirilmesi: tablo aracı hazır (`tool/l10n/export_review_sheet.dart`); ⏳ gözden geçirme (Faz 1 sonuna yakın önerilir)
 
 ### F1-01 Uygulama Kabuğu ve Gezinme [Z] — M4-01, M4-07, M6-05
 - [ ] Alt sekmeli kabuk (S8, TK-16); her sekme kendi geçmişini korur; Arapçada sekme sırası sağdan sola
@@ -192,5 +193,6 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 ## Değişiklik Geçmişi
 | Tarih | Değişiklik |
 |---|---|
+| 29.10.2026 | F1-00: F0-05 sonuç raporu; sayfa karşılaştırma paketi, gerçek cihaz performans araçları ve çeviri gözden geçirme tablosu |
 | 29.10.2026 | S9 uygulandı (`text_uthmani` kaldırıldı, içerik sürümü 7); S1/S2 meal lisansı yolları netleştirildi (atıf izin yerine geçmez; izin + kamu malı yedek) |
 | 29.10.2026 | İlk sürüm: Faz 0 kullanıcı kararıyla kapandı, açık kalanlar F1-00'a devredildi; ekran tasarımı `Ekran_Tasarimi.md` ile birlikte planlandı |

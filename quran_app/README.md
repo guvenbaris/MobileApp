@@ -67,9 +67,19 @@ iOS'ta flavor şemaları henüz yok; yalnızca `-t` ile hedef seçilir: `flutter
 | Klasör | Tür | Çalıştırma |
 |---|---|---|
 | `test/` | Birim ve widget testleri; klasör yapısı `lib/` ile aynıdır | `flutter test` |
-| `integration_test/` | Gerçek cihazda/emülatörde uçtan uca testler | `flutter test integration_test --flavor dev` |
+| `integration_test/` | Gerçek cihazda/emülatörde uçtan uca testler. `perf_test.dart` yalnızca `flutter drive --profile` ile çalışır (aşağıda) | `flutter test integration_test/app_launch_test.dart --flavor dev` |
 
 Ortak test yardımcıları `test/helpers/` altındadır. Arayüz testlerinde geri tuşu için `tester.pageBack()` yerine `tapBack(tester)` kullanılır (`pageBack` İngilizce "Back" ipucunu arar).
+
+## Ölçüm ve kontrol araçları (F1-00)
+| Ne | Komut | Çıktı |
+|---|---|---|
+| Basılı nüsha karşılaştırma paketi (7 sayfa PNG + kontrol çizelgesi) | PowerShell: `$env:PAGE_SHEET=1; flutter test test/manual/page_sheet_test.dart` | `build/page_check/` |
+| Soğuk açılış (gerçek cihaz, profile) | `dart run tool/perf/startup.dart <cihaz_kimliği>` | konsol + `build/perf_startup.json` |
+| Sayfa yükleme ve kaydırma kare süreleri (gerçek cihaz, profile) | `flutter drive --profile --no-dds --flavor dev --driver=test_driver/perf_driver.dart --target=integration_test/perf_test.dart -d <cihaz_kimliği>` | konsol + `build/perf_result.json` |
+| Çeviri gözden geçirme tablosu | `dart run tool/l10n/export_review_sheet.dart` | `build/l10n_review.csv` |
+
+Cihaz kimliği `flutter devices` çıktısındadır. Performans sayıları yalnızca **gerçek telefonda** anlamlıdır; emülatörün grafik birimi yazılımla taklit edilir.
 
 ## Kontroller (CI ile aynı)
 ```sh

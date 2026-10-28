@@ -176,6 +176,7 @@ flutter gen-l10n                                     # dil dosyalarından kod (p
 dart format --output=none --set-exit-if-changed lib test integration_test
 flutter analyze --fatal-infos
 flutter test
-flutter test integration_test --flavor dev           # emülatör açıkken
+flutter test integration_test/app_launch_test.dart --flavor dev   # emülatör açıkken
 ```
+Ölçüm araçları (basılı nüsha paketi, açılış ve kaydırma performansı, çeviri tablosu): `quran_app/README.md` "Ölçüm ve kontrol araçları".
 Emülatör: `Medium_Phone_API_37.0`. Yeni kurulan debug APK simgeden açılınca bir kez açılış ekranında takıldı (29.10.2026, nedeni bulunamadı; bkz. Faz_0_Notlar "Genel durum"). Sorun olursa `flutter run` kullanılır.

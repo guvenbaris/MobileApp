@@ -6,7 +6,8 @@
 
 ## İçindekiler
 1. [S9: Tanzil metninin uygulamadan çıkarılması ve meal lisansı](#1-s9-tanzil-metninin-uygulamadan-çıkarılması-ve-meal-lisansı)
-2. [Genel durum ve bekleyen kararlar](#2-genel-durum-ve-bekleyen-kararlar)
+2. [F1-00 Faz 0'dan Devredilenler](#2-f1-00-faz-0dan-devredilenler)
+3. [Genel durum ve bekleyen kararlar](#3-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -57,13 +58,115 @@
 
 ---
 
-## 2. Genel durum ve bekleyen kararlar
+## 2. F1-00 Faz 0'dan Devredilenler
+**Tarih:** 29.10.2026 · **Durum:** 🔨 Yazılı işler ve araçlar ✅ · fiziksel kontroller kullanıcıda · CI ve iOS işleri bu adımda yapılmadı (kullanıcı isteği)
+
+F1-00'daki işlerin çoğu bilgisayarda yapılamaz: gerçek telefon, basılı mushaf, TalkBack'i dinleme, anadili Arapça biri. Bu yüzden her biri için **işi birkaç dakikaya indiren bir araç** hazırlandı ve araçlar emülatörde uçtan uca denendi. Yazılı iş olan F0-05 sonuç raporu doğrudan yazıldı (§2.5).
+
+### 2.1 Basılı nüsha karşılaştırma paketi
+- **Araç:** `test/manual/page_sheet_test.dart`. Normal `flutter test`'te atlanır.
+- **Çalıştırma:** PowerShell'de `$env:PAGE_SHEET=1; flutter test test/manual/page_sheet_test.dart`.
+- **Çıktı:** `build/page_check/`. 7 sayfanın uygulamadaki gibi çizilmiş PNG'si (gerçek veri, DigitalKhatt, açık tema) ve `README.md` kontrol çizelgesi: her satırın türü, ilk ve son kelimesi, "☐ aynı" kutusu.
+- **Sayfa seçimi:** F0-05'teki "rastgele 5" yerine düzenin özel durumlarını kapsayan 5 sayfa seçildi.
+
+| Sayfa | Neden |
+|---|---|
+| 1 | Fatiha: ortalı satırlar, sure başlığı |
+| 2 | Bakara başı: sure başlığı ve besmele |
+| 176 | İlk secde ayeti (7:206) |
+| 187 | Tevbe başı: besmelesiz sure |
+| 254 | Tek düzen düzeltmesinin yapıldığı sayfa (Q-13, 13:37) |
+| 440 | Yasin başı |
+| 604 | Son sayfa: üç kısa sure, ortalı satırlar |
+
+- **Kontrol:** 254. sayfanın görüntüsünde düzeltme yerinde: 6. satır "بَعۡدَ" ile bitiyor, 7. satır "مَا" ile başlıyor. 604. sayfada üç sure, başlıkları ve besmeleleri ve ortalı son satırlar doğru yerde.
+- **Bulunan ve düzeltilen:** ilk denemede metinlerin altında sarı çizgiler vardı. Bu, Flutter'ın "üstünde Material yok" uyarısıdır. Uygulamada görünmez (okuma ekranı Scaffold içinde); araçta sayfa Material ile sarıldı.
+
+### 2.2 Gerçek cihaz performans testi
+| Ölçüm | Araç | Komut (quran_app içinde, telefon USB ile bağlı) |
+|---|---|---|
+| Soğuk açılış (motor başlangıcı → ilk kare), NF-PF01 | `tool/perf/startup.dart` (Flutter'ın `--trace-startup` ölçümü, 4 tekrar) | `dart run tool/perf/startup.dart <cihaz_kimliği>` |
+| Sayfa yükleme ve 20 sayfa kaydırmada kare süreleri, NF-PF02 | `integration_test/perf_test.dart` + `test_driver/perf_driver.dart` | `flutter drive --profile --no-dds --flavor dev --driver=test_driver/perf_driver.dart --target=integration_test/perf_test.dart -d <cihaz_kimliği>` |
+
+Sonuçlar konsolda özetlenir; ayrıntı `build/perf_startup.json` ve `build/perf_result.json` dosyalarındadır. İkisi de **profile** derlemesiyle çalışır; debug sayıları anlamsızdır.
+
+**Emülatörde deneme** (araçların çalıştığını göstermek için; sayılar gerçek cihazı temsil etmez, grafik birimi yazılımla taklit ediliyor):
+
+| Ölçüm | Emülatör | Hedef |
+|---|---|---|
+| Soğuk açılış | 1.053 ms (1. ölçüm), 884 ms (2.) | ≤ 2.000 ms |
+| Uygulama içi açılış (veritabanları → ana sayfa ilk kare) | 306 ms | — |
+| Sayfa yükleme (veritabanı) | p50 5 ms, p90 6 ms, en uzun 13 ms | — |
+| Kaydırma, 555 kare | build p90 1,2 ms · raster p90 16,7 ms · bütçeyi aşan 18 (build) / 78 (raster) | takılma yok, sayfa geçişi ≤ 100 ms |
+
+Raster süresi emülatörün yazılım grafik biriminden etkileniyor (F0-05 §8.3'teki gözlemle aynı). Asıl sonuç gerçek cihazda alınacak.
+
+**Bulunan:** `flutter drive` varsayılan ayarla VM servisine bağlanamıyor ("Failed to connect to VM Service… try adding `--no-dds`"). Komuta `--no-dds` eklendi.
+
+**Açılış sırası notu:** uygulama şu an ana sayfayla açılıyor; son okunan sayfa tek dokunuşla açılıyor (M6-05). NF-PF01'in "son okunan sayfaya kadar" ölçümü, F1-01'de "Devam et" akışı tamamlanınca bu araca eklenecek.
+
+### 2.3 TalkBack
+- **Otomatik kanıt:** emülatörde uygulamanın Android erişilebilirlik ağacı (`uiautomator dump`, TalkBack'in okuduğu ağaç) okundu. Ayarlar düğmesinin adı var; sure satırları tek parça okunuyor: "Surah 2 / Al-Baqarah / 286 verses / البقرة". Emülatör dili İngilizce olduğu için metinler İngilizce. F0-11'deki etiketler gerçek Android'e ulaşıyor.
+- **Kalan:** kulakla dinleme. Adımlar Faz_0_Notlar §13.3'te.
+
+### 2.4 Arapça gözden geçirme tablosu
+- **Araç:** `dart run tool/l10n/export_review_sheet.dart` → `build/l10n_review.csv`. Excel'de doğru açılır (UTF-8 BOM).
+- **İçerik:** 39 metin. Sütunlar: anahtar, açıklama, Türkçe, English, العربية, boş "Öneri (العربية)" ve "Not".
+- **Kullanım:** gözden geçiren doldurup geri gönderir; öneriler `app_ar.arb`'ye işlenir.
+- **Zamanlama:** metinler Faz 1 boyunca çoğalacak. Tablo her an yeniden üretilebilir; asıl gözden geçirme Faz 1 sonuna yakın yapılırsa tek seferde biter.
+
+### 2.5 F0-05 Sonuç Raporu: Mushaf Sayfası Çizim Yöntemi
+**Seçilen yöntem (TK-06):**
+- Font: **DigitalKhatt New Madina** (SIL OFL).
+- Ekrandaki metin: DigitalKhatt kelime metni.
+- Satırlar: QUL'ün Medine 1421H düzeni (604 sayfa × 15 satır).
+- Yazı boyutu, sayfanın en uzun satırı ekrana sığacak şekilde parça parça ölçülerek hesaplanır.
+- Yaslama: iki yana yaslı satırlarda kelimeler satıra yayılır, ortalı satırlar ortalanır.
+- Konum düzenden bağımsız `sure:ayet(:kelime)` olarak tutulur.
+
+**Denenen yöntemler:**
+
+| Yöntem | Sonuç | Neden seçilmedi / seçildi |
+|---|---|---|
+| KFGQPC Hafs (tek font) | Çalıştı; akıcı | Yazılı izin gerekiyor |
+| QCF V2 (sayfa başına font, birebir görünüm) | Basılı sayfanın aynısı; emülatörde yavaş (kare p90 55–74 ms); 208 MB | Yazılı izin; boyut; indirme gerekir (internetsiz ilk açılış ilkesiyle çelişir) |
+| **DigitalKhatt** | Medine hattı; akıcı (kare p90 ~17 ms, emülatör); 0,5 MB; OFL | **Seçildi**: açık lisans, uygulamayla gelir, metni harf ve durak işaretiyle doğrulanıyor (T-01, Q-15) |
+
+**Karşılaşılan sorunlar ve çözümleri:**
+
+| Sorun | Çözüm |
+|---|---|
+| Quran.com satır verisinde 4 sayfada hatalı satır | Düzen QUL'den alındı (Q-13) |
+| 254. sayfada iki kaynak da hatalı | Font genişliği ölçümüyle tek, gerekçeli düzeltme |
+| Kelime bölünmesi kaynaklara göre farklı (7 yer) | Esas KFGQPC; eşlemeler otomatik (Q-12) |
+| DigitalKhatt'ın boşluk karakteri dar | Akan metinde `wordSpacing` |
+| Ortalı satırların taşması | Ölçüm ekrandaki gibi parça parça yapıldı |
+| DigitalKhatt'ın farklı Unicode kodlaması | Kodlamadan bağımsız denetim: harf iskeleti + durak işaretleri (Q-15) |
+
+**Basılı nüshadan bilinen tek görsel fark:** basılı Medine mushafı satırları harf uzatmasıyla (keşide) yaslar; uygulama kelime aralığıyla yaslar. Satır ve sayfa sınırları aynıdır. Keşideyle yaslama ileride değerlendirilecek (DigitalKhatt'ın yaslama motoru bunu destekliyor; Flutter'da uygulanabilirliği ayrı bir deneme ister).
+
+**Türkiye mushaf düzeni için uygulanabilirlik (ön değerlendirme; kesinleşmesi F1-03'te):**
+- **Veri modeli hazır.** Bir düzen = `mushaf_layouts` kaydı + sayfa → satır → kelime aralığı eşlemesi. Türkiye düzeni kod değişikliği olmadan veri olarak eklenebilir (M2-14). Kayıtlar düzenden bağımsız olduğu için düzen değişince kaybolmaz (M2-15).
+- **Asıl engel veri.** Türkiye'de yaygın mushafların satır satır dijital düzen verisi açık kaynaklarda bulunamadı. Diyanet uygulamaları sayfa görüntüsü kullanıyor (F0-05 §8.7). Yollar:
+  1. Diyanet'ten düzen verisi veya izin,
+  2. basılı bir Türkiye mushafından düzen verisinin üretilmesi (≈ 9.000 satır sonu; yarı otomatik bir araçla ve çift kontrolle).
+  
+  İkisinin de lisans ve emek boyutu F1-03'te çıkarılacak.
+- **Görünüm farkı.** Türkiye mushafları farklı bir hat geleneğiyle yazılıdır. DigitalKhatt ise Medine hattıdır. Satır ve sayfa sınırları birebir yapılabilir; hafızlar için asıl önemli olan sayfa ve satır konumudur. Ama harflerin görünümü basılı Türkiye nüshasının aynısı olmaz. Türkiye hattına uygun, lisansı serbest bir font araştırılmalı.
+- **Satır genişliği riski.** Başka bir hat için dizilmiş satırlar DigitalKhatt ile çizildiğinde bazı satırlar sığmayabilir veya fazla boş kalabilir. `check_line_widths.dart` benzeri bir ölçüm Türkiye düzeni için de çalıştırılmalı.
+- **Doğrulanacak bilgiler** (F1-03): Türkiye'de yaygın hafız mushaflarının sayfa sayısı ve satır yapısı, sayfaların ayet sonuyla bitip bitmediği ("ayet berkenar") ve cüz başına sayfa sayısı. Bunlar, düzen verisinin üretilmesini kolaylaştırabilir.
+
+**Sonuç:** Medine düzeni için yöntem tamam ve doğrulandı. Türkiye düzeni için yöntem uygun, ama veri ve lisans yok; bu, v1.0'ı bloklayabilecek bir risktir (Faz_1.md riskler tablosu). F1-03 bu yüzden öncelikli.
+
+---
+
+## 3. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 29.10.2026
 
 | İş paketi | Durum |
 |---|---|
 | S9 (Tanzil metni uygulamadan çıkarıldı) | ✅ |
-| F1-00 Faz 0'dan devredilenler | ⬜ |
+| F1-00 Faz 0'dan devredilenler | 🔨 F0-05 raporu ✅; araçlar hazır (sayfa paketi, performans, çeviri tablosu); gerçek cihaz, basılı nüsha, TalkBack dinleme ve Arapça gözden geçirme kullanıcıda; CI ve iOS sonra |
 | F1-01 … F1-14 | ⬜ |
 
 **Bekleyen kararlar ve işler**

@@ -47,4 +47,4 @@ jobs:
           echo "udid=$UDID" >> "$GITHUB_OUTPUT"
 
       - name: Açılış testi
-        run: flutter test integration_test -d ${{ steps.sim.outputs.udid }}
+        run: flutter test integration_test/app_launch_test.dart -d ${{ steps.sim.outputs.udid }}
