@@ -122,4 +122,31 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorRetry => 'إعادة المحاولة';
+
+  @override
+  String get settingsAbout => 'حول التطبيق';
+
+  @override
+  String get settingsLicenses => 'التراخيص';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'خط المصحف ومصادر النص وتراخيص البرمجيات';
+
+  @override
+  String get aboutLegalese =>
+      'خط المصحف: DigitalKhatt New Madina (رخصة SIL Open Font License 1.1).\nمصادر نص القرآن وتخطيط الصفحات: مجمع الملك فهد لطباعة المصحف الشريف، Quran.com، Quranic Universal Library (Tarteel)، Tanzil Project (tanzil.net).';
+
+  @override
+  String get loading => 'جارٍ التحميل';
+
+  @override
+  String surahNumber(String number) {
+    return 'السورة $number';
+  }
+
+  @override
+  String mushafPageLabel(String page) {
+    return 'المصحف، الصفحة $page';
+  }
 }

@@ -119,4 +119,31 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get errorRetry => 'Tekrar dene';
+
+  @override
+  String get settingsAbout => 'Hakkında';
+
+  @override
+  String get settingsLicenses => 'Lisanslar';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'Kur\'an fontu, metin kaynakları ve yazılım lisansları';
+
+  @override
+  String get aboutLegalese =>
+      'Kur\'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur\'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur\'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel), Tanzil Project (tanzil.net).';
+
+  @override
+  String get loading => 'Yükleniyor';
+
+  @override
+  String surahNumber(String number) {
+    return '$number. sure';
+  }
+
+  @override
+  String mushafPageLabel(String page) {
+    return 'Mushaf, sayfa $page';
+  }
 }

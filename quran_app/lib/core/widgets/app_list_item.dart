@@ -43,17 +43,21 @@ class AppSectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(
-        AppSpacing.md,
-        AppSpacing.md,
-        AppSpacing.md,
-        AppSpacing.xs,
-      ),
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.titleSmall
-            ?.copyWith(color: context.palette.primary),
+    // Ekran okuyucu bölüm başlıkları arasında atlayabilir (M13-03).
+    return Semantics(
+      header: true,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(
+          AppSpacing.md,
+          AppSpacing.md,
+          AppSpacing.md,
+          AppSpacing.xs,
+        ),
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.titleSmall
+              ?.copyWith(color: context.palette.primary),
+        ),
       ),
     );
   }

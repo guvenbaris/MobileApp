@@ -40,6 +40,9 @@ Kaynaklar, lisanslar ve bilinen veri durumları: `../VERI_KAYNAKLARI.md`.
 **Kur'an fontu:** `assets/fonts/DigitalKhattV2.otf` (DigitalKhatt New Madina, SIL OFL 1.1; lisans metni `assets/fonts/DigitalKhatt-OFL.txt`, fontla birlikte dağıtılmalı). Ekranda gösterilen metin DigitalKhatt kelime metnidir; harfleri ve durak işaretleri T-01'de KFGQPC metniyle denetlenir.
 Drift şeması değişince: `dart run build_runner build`.
 
+## Kurallar
+Mimari, kod ve test kuralları depo kökündeki `CLAUDE.md`'dedir; veri ve lisans envanteri `VERI_KAYNAKLARI.md`'de. Uygulama içi lisans sayfası: Ayarlar → Lisanslar (DigitalKhatt OFL, Tanzil telif notu, paket lisansları).
+
 ## Arayüz metinleri ve diller (F0-07)
 - Metinler `lib/l10n/app_tr.arb` (şablon), `app_ar.arb`, `app_en.arb` dosyalarındadır. Yeni metin önce `app_tr.arb`'ye, sonra diğer iki dosyaya aynı anahtarla eklenir.
 - Kod `flutter pub get` sırasında (veya `flutter gen-l10n` ile) `lib/l10n/generated/` altına üretilir; ekranda `context.l10n.anahtar` ile kullanılır.

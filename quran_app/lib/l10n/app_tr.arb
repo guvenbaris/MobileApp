@@ -117,5 +117,39 @@
   "@errorLoadContent": {
     "description": "Hata durumu bileşeninin genel açıklaması (veri okunamadı)."
   },
-  "errorRetry": "Tekrar dene"
+  "errorRetry": "Tekrar dene",
+  "settingsAbout": "Hakkında",
+  "settingsLicenses": "Lisanslar",
+  "@settingsLicenses": {
+    "description": "Flutter'ın lisans sayfasını açar (font, Tanzil notu, paket lisansları)."
+  },
+  "settingsLicensesSubtitle": "Kur'an fontu, metin kaynakları ve yazılım lisansları",
+  "aboutLegalese": "Kur'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel), Tanzil Project (tanzil.net).",
+  "@aboutLegalese": {
+    "description": "Lisans sayfasının üstündeki kaynak ve atıf metni. Tanzil koşulu: kaynak açıkça belirtilir ve tanzil.net'e bağlantı verilir."
+  },
+  "loading": "Yükleniyor",
+  "@loading": {
+    "description": "Ekran okuyucu için yükleniyor göstergesinin adı (M13-03)."
+  },
+  "surahNumber": "{number}. sure",
+  "@surahNumber": {
+    "description": "Ekran okuyucu: sure listesindeki numara.",
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "2"
+      }
+    }
+  },
+  "mushafPageLabel": "Mushaf, sayfa {page}",
+  "@mushafPageLabel": {
+    "description": "Ekran okuyucu: mushaf sayfasının adı.",
+    "placeholders": {
+      "page": {
+        "type": "String",
+        "example": "5"
+      }
+    }
+  }
 }

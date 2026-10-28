@@ -51,7 +51,10 @@ class HomePage extends ConsumerWidget {
             return AppListItem(
               key: Key('home.surah.${surah.id}'),
               onTap: () => _openSurah(context, ref, surah.id),
-              leading: Text(context.formatInt(surah.id)),
+              leading: Text(
+                context.formatInt(surah.id),
+                semanticsLabel: l10n.surahNumber(context.formatInt(surah.id)),
+              ),
               title: surah.localizedName(context),
               subtitle: l10n.surahAyahCount(
                 surah.ayahCount,

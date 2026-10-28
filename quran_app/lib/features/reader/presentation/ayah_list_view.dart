@@ -130,6 +130,10 @@ class _AyahTile extends ConsumerWidget {
           const SizedBox(height: 4),
           Text(
             context.formatDigits(ayahRef),
+            // Ekran okuyucu: "Ayet 2:255" (M13-03).
+            semanticsLabel: context.l10n.readerAyahTitle(
+              context.formatDigits(ayahRef),
+            ),
             style: TextStyle(fontSize: 12, color: colors.ornament),
           ),
         ],

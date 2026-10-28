@@ -80,6 +80,8 @@ flutter:
   assets:
     # İçerik veritabanı: `dart run tool/content/build_content_db.dart` ile üretilir.
     - assets/db/content.sqlite
+    # OFL gereği fontla birlikte dağıtılır; lisans sayfasında gösterilir.
+    - assets/fonts/DigitalKhatt-OFL.txt
 
   fonts:
     # DigitalKhatt New Madina v0.1 (QUL kaynak 247). SIL OFL 1.1:

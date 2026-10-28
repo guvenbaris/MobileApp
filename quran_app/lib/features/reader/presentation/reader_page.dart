@@ -224,16 +224,20 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
             ),
       bottomNavigationBar: selected == null
           ? null
-          : Material(
-              color: colors.highlight,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(
-                    l10n.readerSelectedWord(context.formatDigits(selected)),
-                    key: const Key('reader.selectedWord'),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: colors.text),
+          // Seçim değişince ekran okuyucu yeni kelimeyi duyurur.
+          : Semantics(
+              liveRegion: true,
+              child: Material(
+                color: colors.highlight,
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Text(
+                      l10n.readerSelectedWord(context.formatDigits(selected)),
+                      key: const Key('reader.selectedWord'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: colors.text),
+                    ),
                   ),
                 ),
               ),

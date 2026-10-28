@@ -31,5 +31,12 @@
   "themeDark": "داكن",
   "errorTitle": "حدث خطأ ما",
   "errorLoadContent": "تعذّر تحميل المحتوى.",
-  "errorRetry": "إعادة المحاولة"
+  "errorRetry": "إعادة المحاولة",
+  "settingsAbout": "حول التطبيق",
+  "settingsLicenses": "التراخيص",
+  "settingsLicensesSubtitle": "خط المصحف ومصادر النص وتراخيص البرمجيات",
+  "aboutLegalese": "خط المصحف: DigitalKhatt New Madina (رخصة SIL Open Font License 1.1).\nمصادر نص القرآن وتخطيط الصفحات: مجمع الملك فهد لطباعة المصحف الشريف، Quran.com، Quranic Universal Library (Tarteel)، Tanzil Project (tanzil.net).",
+  "loading": "جارٍ التحميل",
+  "surahNumber": "السورة {number}",
+  "mushafPageLabel": "المصحف، الصفحة {page}"
 }

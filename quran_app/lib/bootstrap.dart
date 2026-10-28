@@ -9,6 +9,7 @@ import 'core/database/user_database_opener.dart';
 import 'core/diagnostics/perf_probe.dart';
 import 'features/quran/application/quran_providers.dart';
 import 'features/quran/data/content_database_opener.dart';
+import 'features/quran/data/content_licenses.dart';
 import 'features/user_data/application/user_data_providers.dart';
 
 /// Tüm giriş noktalarının ortak başlangıcı.
@@ -17,6 +18,7 @@ Future<void> bootstrap(Flavor flavor) async {
   if (flavor.isDev) PerfProbe.enable();
 
   final contentDb = await openContentDatabase();
+  registerContentLicenses(contentDb);
   // Gerekirse migration öncesi yedek alınarak açılır (NF-G03).
   final userDb = await openUserDatabase();
   final userData = await UserDataSnapshot.load(userDb);

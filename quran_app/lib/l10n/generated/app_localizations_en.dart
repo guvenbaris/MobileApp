@@ -120,4 +120,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorRetry => 'Try again';
+
+  @override
+  String get settingsAbout => 'About';
+
+  @override
+  String get settingsLicenses => 'Licenses';
+
+  @override
+  String get settingsLicensesSubtitle =>
+      'Quran font, text sources and software licenses';
+
+  @override
+  String get aboutLegalese =>
+      'Quran font: DigitalKhatt New Madina (SIL Open Font License 1.1).\nQuran text and page layout sources: King Fahd Glorious Quran Printing Complex (KFGQPC), Quran.com, Quranic Universal Library (Tarteel), Tanzil Project (tanzil.net).';
+
+  @override
+  String get loading => 'Loading';
+
+  @override
+  String surahNumber(String number) {
+    return 'Surah $number';
+  }
+
+  @override
+  String mushafPageLabel(String page) {
+    return 'Mushaf, page $page';
+  }
 }

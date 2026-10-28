@@ -4,7 +4,10 @@
 // Kaynaklar:
 // - Quran.com: ayet metinleri, meta veri, Corpus kelime bölünmesi (eşleme için)
 // - KFGQPC metni (`text_qpc_hafs`): esas kelime bölünmesi (77.430 kelime)
-// - QUL: Medine 1421H düzeni (satırlar, ortalı satırlar) ve QCF V2 glifleri
+// - QUL: Medine 1421H düzeni (satırlar, ortalı satırlar), glif birimleri ve
+//   ekranda gösterilen DigitalKhatt kelime metni
+// - Tanzil: yalnızca telif notu (`content_meta.notice.tanzil`); `text_uthmani`
+//   Tanzil kökenlidir ve Tanzil koşulları notun bu dosyada bulunmasını ister
 //
 // Üç kaynağın kelime/glif bölünmeleri harf iskeleti üzerinden otomatik
 // hizalanır; hiçbir yer elle eşlenmez. Tekrar çalıştırılabilir; kaynakta
@@ -24,6 +27,7 @@ import 'text_rules.dart';
 
 const _quranComDir = 'tool/content/sources/quran_com';
 const _qulDir = 'tool/content/sources/qul';
+const _tanzilText = 'tool/content/sources/tanzil/quran-uthmani.txt';
 
 const _surahCount = 114;
 const _ayahCount = 6236;
@@ -34,7 +38,7 @@ const _layout = (
   name: 'Medine Mushafı (KFGQPC, 1421H baskısı)',
   pageCount: 604,
   linesPerPage: 15,
-  fontPack: 'qcf_v2',
+  fontPack: 'digital_khatt',
   version: 1,
   qulLayoutFile: 'qpc-v2-15-lines.db',
   qulGlyphFile: 'qpc-v2.db',
@@ -90,8 +94,10 @@ Future<void> main() async {
           (
             'source',
             '${manifest['source']} (${manifest['fetchedAt']}); '
-                'QUL ${_layout.qulLayoutFile}, ${_layout.qulGlyphFile}',
+                'QUL ${_layout.qulLayoutFile}, ${_layout.qulGlyphFile}, '
+                '${_layout.digitalKhattFile}',
           ),
+          ('notice.tanzil', _tanzilNotice()),
           ('builtAt', DateTime.now().toUtc().toIso8601String()),
         ])
           ContentMetaCompanion.insert(key: key, value: value),
@@ -111,6 +117,23 @@ Future<void> main() async {
   stdout.writeln(
     'Üretildi: $kContentAssetPath ($mb MB, sürüm $kContentVersion)',
   );
+}
+
+/// Tanzil telif bloğu, kaynak dosyadaki haliyle (değiştirilmeden).
+/// `ayahs.text_uthmani` Tanzil metnidir; Tanzil koşulları bu notun metnin
+/// önemli bir bölümünü içeren her dosyada yer almasını ister
+/// (VERI_KAYNAKLARI.md §4).
+String _tanzilNotice() {
+  final block = File(_tanzilText)
+      .readAsLinesSync()
+      .skipWhile((l) => !l.startsWith('#'))
+      .toList();
+  _check(
+    block.any((l) => l.contains('Tanzil Quran Text')) &&
+        block.any((l) => l.contains('CHANGING IT IS NOT ALLOWED')),
+    'Tanzil telif notu bulunamadı: $_tanzilText',
+  );
+  return block.join('\n').trimRight();
 }
 
 // ---------------------------------------------------------------------------

@@ -9,12 +9,13 @@ part 'content_database.g.dart';
 /// Kaynak veri veya şema değiştiğinde artırılır; uygulama yeni sürümü
 /// görünce paketteki veritabanını yeniden kopyalar. Kullanıcı verisi ayrı
 /// veritabanındadır (MK-05) ve bundan etkilenmez.
-const int kContentVersion = 5;
+const int kContentVersion = 6;
 
 /// Paketteki veritabanının yolu (pubspec `assets` ile aynı olmalı).
 const String kContentAssetPath = 'assets/db/content.sqlite';
 
-/// Anahtar-değer: `contentVersion`, `source`, `builtAt`.
+/// Anahtar-değer: `contentVersion`, `source`, `builtAt`, `notice.tanzil`
+/// (Tanzil telif notu; `ayahs.text_uthmani` Tanzil kökenlidir).
 class ContentMeta extends Table {
   TextColumn get key => text()();
   TextColumn get value => text()();
@@ -108,7 +109,8 @@ class MushafLayouts extends Table {
   IntColumn get pageCount => integer()();
   IntColumn get linesPerPage => integer()();
 
-  /// Sayfa fontlarının paket kimliği (ör. `qcf_v2`).
+  /// Sayfanın çizildiği font (`digital_khatt`). Başka bir font paketiyle
+  /// gelen düzen kendi kimliğini yazar (ör. izin alınırsa `qcf_v2`).
   TextColumn get fontPack => text()();
   IntColumn get version => integer()();
 
@@ -194,4 +196,9 @@ class ContentDatabase extends _$ContentDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  /// `content_meta` değeri; yoksa `null`.
+  Future<String?> metaValue(String key) async => (await (select(
+    contentMeta,
+  )..where((m) => m.key.equals(key))).getSingleOrNull())?.value;
 }

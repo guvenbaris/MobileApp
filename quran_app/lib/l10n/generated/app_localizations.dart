@@ -291,6 +291,48 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Tekrar dene'**
   String get errorRetry;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hakkında'**
+  String get settingsAbout;
+
+  /// Flutter'ın lisans sayfasını açar (font, Tanzil notu, paket lisansları).
+  ///
+  /// In tr, this message translates to:
+  /// **'Lisanslar'**
+  String get settingsLicenses;
+
+  /// No description provided for @settingsLicensesSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kur\'an fontu, metin kaynakları ve yazılım lisansları'**
+  String get settingsLicensesSubtitle;
+
+  /// Lisans sayfasının üstündeki kaynak ve atıf metni. Tanzil koşulu: kaynak açıkça belirtilir ve tanzil.net'e bağlantı verilir.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kur\'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur\'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur\'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel), Tanzil Project (tanzil.net).'**
+  String get aboutLegalese;
+
+  /// Ekran okuyucu için yükleniyor göstergesinin adı (M13-03).
+  ///
+  /// In tr, this message translates to:
+  /// **'Yükleniyor'**
+  String get loading;
+
+  /// Ekran okuyucu: sure listesindeki numara.
+  ///
+  /// In tr, this message translates to:
+  /// **'{number}. sure'**
+  String surahNumber(String number);
+
+  /// Ekran okuyucu: mushaf sayfasının adı.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mushaf, sayfa {page}'**
+  String mushafPageLabel(String page);
 }
 
 class _AppLocalizationsDelegate

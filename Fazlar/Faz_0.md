@@ -2,7 +2,7 @@
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
 > **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`, `Faz_0_Notlar.md` (her iş paketinde ne yapıldığı ve neden)
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 tamam (2 doğrulama ertelendi); F0-06, F0-07 ve F0-08 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
+> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 tamam (2 doğrulama ertelendi); F0-06, F0-07, F0-08 ve F0-10 tamam; F0-11 tamam (TalkBack elle kontrolü bekliyor); iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
@@ -11,7 +11,7 @@
 - [ ] Katmanlı mimari, kullanıcı veritabanı (UUID, zaman damgaları, migration altyapısı) ve sahte servis arayüzleri hazır.
 - [x] TR/AR/EN dil altyapısı ve tema altyapısı çalışıyor (AR'de RTL).
 - [ ] CI analiz + test çalıştırıyor (haftalık, PR'da ve elle; her commit'te değil, karar 28.10.2026).
-- [ ] `CLAUDE.md` mimari ve kod kurallarıyla yazıldı.
+- [x] `CLAUDE.md` mimari ve kod kurallarıyla yazıldı.
 
 ## Faz 0 Başlangıç Kararları
 | # | Konu | Karar |
@@ -70,7 +70,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - [x] Ham veriyi işleyip **salt okunur içerik veritabanı** üreten dönüştürme betiği (depoda, tekrar çalıştırılabilir): `tool/content/fetch_sources.dart` (ham veri, depoda) + `tool/content/build_content_db.dart` (veritabanı, depo dışında; üretimde veriyi doğrular)
 - [x] Şema: sure, ayet, kelime, cüz, hizb/rubu', secde işaretleri, sure meta verisi (ad TR/AR/EN, iniş yeri, ayet sayısı)
 - [x] **Çoklu mushaf düzeni şeması (M2-14):** metin (ayet/kelime) bir kez saklanır; her düzen ayrı bir `mushaf_layout` kaydı ve kendi `sayfa → satır → kelime aralığı` eşlemesiyle tanımlanır. Yeni düzen eklemek kod değişikliği değil, veri + font paketi eklemektir. Tablolar: `mushaf_layouts`, `layout_lines` (sayfa/satır → tür + kelime aralığı), `layout_pages` (sayfa → ilk/son ayet), `layout_word_glyphs` (kelime → sayfa fontu glifi).
-- [x] İçerik veritabanı uygulama paketine gömülü gelir (M16-01); sürüm numarası taşır (`kContentVersion`; ilk açılışta cihaza kopyalanır, salt okunur açılır; 11,6 MB)
+- [x] İçerik veritabanı uygulama paketine gömülü gelir (M16-01); sürüm numarası taşır (`kContentVersion`; ilk açılışta cihaza kopyalanır, salt okunur açılır; 11,6 MB, DigitalKhatt metinleriyle 15,5 MB)
 - [x] Veri kaynağı, sürümü ve lisansı `VERI_KAYNAKLARI.md` dosyasına yazılır (bilinen veri durumları Q-1…Q-8 dahil)
 - [x] Doğrulama: emülatörde temiz kurulumda sure listesi veritabanından ≤ 2 sn'de geliyor (entegrasyon testi)
 - **Bitti:** Uygulama ilk açılışta internetsiz olarak tüm Kur'an verisine erişiyor.
@@ -95,7 +95,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - [x] **Düzen değiştirme denemesi (M2-14, M2-15):** mushaf sayfası ↔ ayet görünümü geçişinde aynı ayette kalınıyor (emülatörde: ayet görünümünde 2:30 → sayfa 6 → tekrar 2:30). Konum düzenden bağımsız `sure:ayet` çapasıyla tutuluyor.
 - [ ] Sonuç raporu: seçilen yöntem, karşılaşılan sorunlar, Türkiye mushaf düzeni için uygulanabilirlik
 - **Bitti:** Seçilen 7 sayfa (Fatiha, Bakara 2, rastgele 5) basılı nüshayla yan yana karşılaştırıldı ve farksız; yöntem kararı `CLAUDE.md`'ye yazıldı.
-- ⏸ **Ertelendi (kullanıcı kararı 28.10.2026):** basılı nüsha karşılaştırması ileride yapılacak. Gerekçe: düzen kelime kelime üç kaynakla ve font genişliği ölçümüyle doğrulandı (F0-04). Yöntem kararı F0-10'da `CLAUDE.md` yazılırken eklenecek.
+- ⏸ **Ertelendi (kullanıcı kararı 28.10.2026):** basılı nüsha karşılaştırması ileride yapılacak. Gerekçe: düzen kelime kelime üç kaynakla ve font genişliği ölçümüyle doğrulandı (F0-04). Yöntem kararı `CLAUDE.md`'ye yazıldı (F0-10, 29.10.2026).
 
 ### F0-06 Kullanıcı Veritabanı Altyapısı [Z] — MK-02, MK-03, MK-04, MK-09
 - [x] İçerik veritabanından **ayrı** kullanıcı veritabanı (MK-05): `lib/core/database/user_database.dart`, cihazda `user/user.sqlite`
@@ -129,14 +129,14 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - **Bitti:** Hatalı bir commit CI'da kırmızıya düşüyor.
 
 ### F0-10 Proje Dokümantasyonu [Z]
-- [ ] `CLAUDE.md`: mimari, klasör yapısı, teknik kararlar (TK-01…TK-10), kod kuralları, test kuralları, gereksinim kodlarına atıf kuralı
-- [ ] `VERI_KAYNAKLARI.md`: veri ve lisans envanteri
-- [ ] Commit mesajlarında gereksinim kodu kullanımı (ör. `feat(M2-01): sayfa görünümü`)
-- **Bitti:** Yeni bir oturumda/geliştiricide proje yalnızca bu dosyalarla anlaşılabiliyor.
+- [x] `CLAUDE.md`: mimari, klasör yapısı, teknik kararlar (TK-01…TK-10), kod kuralları, test kuralları, gereksinim kodlarına atıf kuralı (depo kökünde; F0-05 yöntem kararı dahil)
+- [x] `VERI_KAYNAKLARI.md`: veri ve lisans envanteri. Baştan sona gözden geçirildi (29.10.2026): 13 düzeltme, Tanzil telif notu veritabanına eklendi, uygulama paketi içeriği ve yazılım lisansları bölümleri; uygulama içi lisans sayfası (Ayarlar → Lisanslar)
+- [x] Commit mesajlarında gereksinim kodu kullanımı (ör. `feat(M2-01): sayfa görünümü`): `CLAUDE.md` "Commit mesajları"
+- **Bitti:** Yeni bir oturumda/geliştiricide proje yalnızca bu dosyalarla anlaşılabiliyor. ✅
 
 ### F0-11 Erişilebilirlik Temeli [Ö] — M13-03
-- [ ] İskelet ekranlarda semantik etiketler
-- [ ] TalkBack/VoiceOver ile hızlı kontrol
+- [x] İskelet ekranlarda semantik etiketler (sure numarası, bölüm başlıkları, mushaf sayfası ve kelimeleri, seçim ve hata için canlı bölge; TR/AR/EN'de etiket kuralı testi)
+- [~] TalkBack/VoiceOver ile hızlı kontrol: otomatik semantik testleri geçiyor; ⏳ TalkBack elle kontrolü kullanıcıda (adımlar Faz_0_Notlar §13.3), VoiceOver iOS cihaz erişimi olunca
 
 ---
 
@@ -166,6 +166,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | F0-06 kullanıcı veritabanı tamamlandı; okuma ayarları ve son okunan yer kalıcı |
 | 28.10.2026 | F0-07 dil ve yerelleştirme tamamlandı; TR/AR/EN, RTL, rakam seçimi, gömülü metin denetimi |
 | 29.10.2026 | F0-08 tema ve tasarım temeli tamamlandı; tek tema (uygulama + mushaf), AA kontrast ve dokunma alanı testleri, temel bileşenler |
+| 29.10.2026 | F0-10: `CLAUDE.md` yazıldı; `VERI_KAYNAKLARI.md` gözden geçirildi ve düzeltildi; lisans sayfası. F0-11: semantik etiketler ve erişilebilirlik testleri |
 | 28.10.2026 | F0-05: font kararı yalnız DigitalKhatt (OFL); ekrandaki metin harf ve durak işaretiyle doğrulanıyor (T-01) |
 | 28.10.2026 | F0-05 başladı: sayfa çizimi (iki yöntem), kelimeye dokunma, temalar, boyut ve ilk performans ölçümleri |
 | 28.10.2026 | F0-04 ek: QUL düzen/glif kaynağı oldu; esas kelime bölünmesi KFGQPC (77.430); satır genişliği doğrulaması; TK-06 font kararı |

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
@@ -42,54 +43,60 @@ class MushafPageView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selected = ref.watch(selectedWordProvider);
-    return ColoredBox(
-      color: colors.background,
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              var width = constraints.maxWidth;
-              var height = constraints.maxHeight;
-              // Ekran sayfadan çok genişse (yatay mod, M2-03): yeterince
-              // yüksek ekranda (tablet) sayfa daraltılıp ortalanır; telefonda
-              // sayfa genişliğe sığdırılıp dikey kaydırılır.
-              final tooWide = width / height > _maxAspect;
-              final scroll = tooWide && height < 500;
-              if (tooWide) {
-                if (scroll) {
-                  height = width / _pageAspect;
-                } else {
-                  width = height * _maxAspect;
+    // Ekran okuyucu sayfayı adıyla duyurur, ardından kelimeleri okur
+    // (M13-03).
+    return Semantics(
+      container: true,
+      label: context.l10n.mushafPageLabel(context.formatInt(page.number)),
+      child: ColoredBox(
+        color: colors.background,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                var width = constraints.maxWidth;
+                var height = constraints.maxHeight;
+                // Ekran sayfadan çok genişse (yatay mod, M2-03): yeterince
+                // yüksek ekranda (tablet) sayfa daraltılıp ortalanır; telefonda
+                // sayfa genişliğe sığdırılıp dikey kaydırılır.
+                final tooWide = width / height > _maxAspect;
+                final scroll = tooWide && height < 500;
+                if (tooWide) {
+                  if (scroll) {
+                    height = width / _pageAspect;
+                  } else {
+                    width = height * _maxAspect;
+                  }
                 }
-              }
-              final lineHeight = height / _linesPerPage;
-              final fontSize = _fontSizeFor(width, lineHeight);
-              final content = SizedBox(
-                width: width,
-                height: height,
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Column(
-                    // İlk iki sayfa kısa ve ortalıdır.
-                    mainAxisAlignment: page.lines.length < _linesPerPage
-                        ? MainAxisAlignment.center
-                        : MainAxisAlignment.start,
-                    children: [
-                      for (final line in page.lines)
-                        SizedBox(
-                          height: lineHeight,
-                          width: width,
-                          child: _buildLine(ref, line, fontSize, selected),
-                        ),
-                    ],
+                final lineHeight = height / _linesPerPage;
+                final fontSize = _fontSizeFor(width, lineHeight);
+                final content = SizedBox(
+                  width: width,
+                  height: height,
+                  child: Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Column(
+                      // İlk iki sayfa kısa ve ortalıdır.
+                      mainAxisAlignment: page.lines.length < _linesPerPage
+                          ? MainAxisAlignment.center
+                          : MainAxisAlignment.start,
+                      children: [
+                        for (final line in page.lines)
+                          SizedBox(
+                            height: lineHeight,
+                            width: width,
+                            child: _buildLine(ref, line, fontSize, selected),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-              return scroll
-                  ? SingleChildScrollView(child: content)
-                  : Center(child: content);
-            },
+                );
+                return scroll
+                    ? SingleChildScrollView(child: content)
+                    : Center(child: content);
+              },
+            ),
           ),
         ),
       ),
@@ -214,16 +221,23 @@ class _GlyphUnit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => onTap(selected),
-      child: Container(
-        color: selected ? highlight : null,
-        padding: padding,
-        child: Text(
-          glyph.digitalKhattText ?? '',
-          style: style,
-          softWrap: false,
+    // Ekran okuyucuda her kelime seçilebilir bir düğmedir; seçili olduğu
+    // duyurulur (M13-03).
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => onTap(selected),
+        child: Container(
+          color: selected ? highlight : null,
+          padding: padding,
+          child: Text(
+            glyph.digitalKhattText ?? '',
+            style: style,
+            softWrap: false,
+            textDirection: TextDirection.rtl,
+          ),
         ),
       ),
     );

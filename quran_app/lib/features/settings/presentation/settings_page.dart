@@ -84,6 +84,21 @@ class SettingsPage extends ConsumerWidget {
               ],
             ),
           ),
+          const Divider(),
+          AppSectionHeader(l10n.settingsAbout),
+          // Font, Kur'an metni (Tanzil notu) ve paket lisansları
+          // (VERI_KAYNAKLARI.md). Ayrıntılı "Hakkında" ekranı İÇ-01 ile gelir.
+          AppListItem(
+            key: const Key('settings.licenses'),
+            leading: const Icon(Icons.description_outlined),
+            title: l10n.settingsLicenses,
+            subtitle: l10n.settingsLicensesSubtitle,
+            onTap: () => showLicensePage(
+              context: context,
+              applicationName: l10n.appTitle,
+              applicationLegalese: l10n.aboutLegalese,
+            ),
+          ),
         ],
       ),
     );

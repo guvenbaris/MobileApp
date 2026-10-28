@@ -88,4 +88,39 @@ void main() {
       expect(container.read(selectedWordProvider), const WordRef(37, 130, 3));
     },
   );
+
+  testWidgets(
+    'ekran okuyucu: sayfa adı, kelimeler seçilebilir düğme (M13-03)',
+    (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(_host());
+
+      // Sayfa adı önce okunur; etkileşimsiz satırlar (sure başlığı) aynı
+      // düğüme katılır, kelimeler ayrı düğmelerdir.
+      expect(
+        tester.getSemantics(find.byType(MushafPageView)).label,
+        startsWith('Mushaf, sayfa 451\n'),
+      );
+      final word = find.text('عَلَىٰٓ');
+      expect(
+        tester.getSemantics(word),
+        isSemantics(
+          label: 'عَلَىٰٓ',
+          isButton: true,
+          hasTapAction: true,
+          hasSelectedState: true,
+          isSelected: false,
+        ),
+      );
+
+      await tester.tap(word);
+      await tester.pump();
+      expect(
+        tester.getSemantics(word),
+        isSemantics(isButton: true, isSelected: true),
+      );
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      handle.dispose();
+    },
+  );
 }

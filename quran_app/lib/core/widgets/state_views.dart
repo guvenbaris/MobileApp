@@ -10,8 +10,9 @@ class LoadingState extends StatelessWidget {
   const LoadingState({super.key});
 
   @override
-  Widget build(BuildContext context) =>
-      const Center(child: CircularProgressIndicator());
+  Widget build(BuildContext context) => Center(
+    child: CircularProgressIndicator(semanticsLabel: context.l10n.loading),
+  );
 }
 
 /// Boş durum: gösterilecek bir şey yokken (ör. yer imi yok). İsteğe bağlı
@@ -60,20 +61,24 @@ class ErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return _StateLayout(
-      icon: Icons.error_outline,
-      iconColor: context.palette.error,
-      title: l10n.errorTitle,
-      message: message ?? l10n.errorLoadContent,
-      detail: kDebugMode && error != null ? '$error' : null,
-      action: onRetry == null
-          ? null
-          : AppButton(
-              key: const Key('errorState.retry'),
-              label: l10n.errorRetry,
-              icon: Icons.refresh,
-              onPressed: onRetry,
-            ),
+    // Hata belirince ekran okuyucu duyurur (M13-03).
+    return Semantics(
+      liveRegion: true,
+      child: _StateLayout(
+        icon: Icons.error_outline,
+        iconColor: context.palette.error,
+        title: l10n.errorTitle,
+        message: message ?? l10n.errorLoadContent,
+        detail: kDebugMode && error != null ? '$error' : null,
+        action: onRetry == null
+            ? null
+            : AppButton(
+                key: const Key('errorState.retry'),
+                label: l10n.errorRetry,
+                icon: Icons.refresh,
+                onPressed: onRetry,
+              ),
+      ),
     );
   }
 }
@@ -105,9 +110,17 @@ class _StateLayout extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 48, color: iconColor),
+            // Simge süstür; anlamı başlık taşır.
+            ExcludeSemantics(child: Icon(icon, size: 48, color: iconColor)),
             const SizedBox(height: AppSpacing.md),
-            Text(title, style: text.titleMedium, textAlign: TextAlign.center),
+            Semantics(
+              header: true,
+              child: Text(
+                title,
+                style: text.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+            ),
             if (message != null) ...[
               const SizedBox(height: AppSpacing.sm),
               Text(

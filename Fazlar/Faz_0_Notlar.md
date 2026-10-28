@@ -16,7 +16,9 @@
 9. [F0-06 Kullanıcı Veritabanı](#9-f0-06-kullanıcı-veritabanı)
 10. [F0-07 Dil ve Yerelleştirme](#10-f0-07-dil-ve-yerelleştirme)
 11. [F0-08 Tema ve Tasarım Temeli](#11-f0-08-tema-ve-tasarım-temeli)
-12. [Genel durum ve bekleyen kararlar](#12-genel-durum-ve-bekleyen-kararlar)
+12. [F0-10 Proje Dokümantasyonu ve Lisans Gözden Geçirmesi](#12-f0-10-proje-dokümantasyonu-ve-lisans-gözden-geçirmesi)
+13. [F0-11 Erişilebilirlik Temeli](#13-f0-11-erişilebilirlik-temeli)
+14. [Genel durum ve bekleyen kararlar](#14-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -247,7 +249,7 @@ lib/features/quran/
 Sonuç: 23 birim/ekran testi + 1 entegrasyon testi geçiyor, analiz temiz.
 
 ### 5.8 Boyut
-İçerik veritabanı **11,6 MB** (APK'da sıkıştırılır). Hedef: uygulama en fazla 60 MB (NF-PF06). QCF V2 sayfa fontları F0-05'te eklenince toplam boyut yeniden ölçülecek; gerekirse yardımcı alanlar küçültülecek.
+İçerik veritabanı **11,6 MB** (APK'da sıkıştırılır; F0-05'te DigitalKhatt metinleri eklenince **15,5 MB**, içerik sürümü 6). Hedef: uygulama en fazla 60 MB (NF-PF06). QCF V2 sayfa fontları F0-05'te eklenince toplam boyut yeniden ölçülecek; gerekirse yardımcı alanlar küçültülecek.
 
 ### 5.9 Değişen diğer dosyalar
 - **`pubspec.yaml`:** yeni paketler `drift`, `sqlite3`, `path_provider`, `path`; geliştirme için `drift_dev`, `build_runner`. Asset tanımı eklendi.
@@ -497,7 +499,7 @@ QPC Hafs ve QCF fontlarının ikisi de KFGQPC'nin malı; lisans metni yazılı i
 ### 8.8 Kalan işler
 - ⏸ **Gerçek cihazda performans ölçümü:** ertelendi (kullanıcı kararı).
 - ⏸ **7 sayfanın basılı nüshayla karşılaştırılması:** ertelendi (kullanıcı kararı; düzen F0-04'te çapraz doğrulandı).
-- **Yöntem kararı:** F0-10'da `CLAUDE.md`'ye yazılacak.
+- ~~**Yöntem kararı:** F0-10'da `CLAUDE.md`'ye yazılacak.~~ ✅ Yazıldı (29.10.2026).
 
 ---
 
@@ -717,7 +719,124 @@ Ayrıca widget testlerinde Flutter'ın erişilebilirlik kuralları ekranda **ger
 
 ---
 
-## 12. Genel durum ve bekleyen kararlar
+## 12. F0-10 Proje Dokümantasyonu ve Lisans Gözden Geçirmesi
+**Durum:** ✅ · **Gereksinimler:** İÇ-01, İÇ-10, AK-11
+
+### 12.1 `CLAUDE.md` (depo kökünde)
+Projede çalışan herkes için tek giriş noktası. İçerdikleri:
+- Proje özeti ve dil kuralları.
+- Dokümanların görevleri ve çalışma düzeni (faz dosyası, notlar, commit'i kullanıcının atması).
+- Depo ve klasör yapısı.
+- Mimari: katmanlar ve bağımlılık yönü, Riverpod, sahte servisler, `Result`, flavor.
+- Veri kuralları: iki veritabanı, içerik sürümü, migration akışı, konumun sayfa numarasıyla saklanmaması.
+- **Kur'an metni ve mushaf kuralları:**
+  - metin değiştirilmez; esas kelime bölünmesi KFGQPC,
+  - **F0-05'in yöntem kararı:** DigitalKhatt + QUL 1421H düzeni (F0-05'te "F0-10'da yazılacak" diye bekliyordu),
+  - secde 14,
+  - yeni kaynak indirildiğinde yapılacaklar ve lisans yükümlülüklerinin korunması.
+- **Kod kuralları:** lint, ARB, sayı biçimi, yön, tema, bileşenler, erişilebilirlik, widget anahtarları, gereksinim kodlarına atıf.
+- **Test kuralları:** yardımcılar, içerik testleri, bilerek bozarak deneme, erişilebilirlik kuralları.
+- **Commit mesajı biçimi:** `feat(F0-08): …`, `feat(M2-01): …`.
+- TK-01…TK-10 özeti ve sık kullanılan komutlar.
+
+**Kontrol:** `CLAUDE.md`'deki mimari kural kodla karşılaştırıldı. `data` katmanını yalnızca aynı özelliğin `application` katmanı kullanıyor ve `domain` hiçbir yere bağımlı değil. Kural bu gerçek duruma göre yazıldı.
+
+### 12.2 `VERI_KAYNAKLARI.md` gözden geçirmesi
+Kullanıcının isteğiyle belge baştan sona yeniden doğrulandı. Her iddia depodaki dosyalarla, üretilen veritabanıyla, APK içeriğiyle ve fontun kendi meta verisiyle karşılaştırıldı.
+
+**Bulunan yanlışlar ve eksikler, yapılan düzeltmeler:**
+
+| # | Bulgu | Önem | Yapılan |
+|---|---|---|---|
+| 1 | **Tanzil'in bir koşulu yazılmamıştı:** telif notu, metnin önemli bir bölümünü içeren *her dosyada* bulunmalı. `content.sqlite` Tanzil kökenli `text_uthmani`'yi içeriyor ama notu içermiyordu. | Yüksek | Betik notu kaynak dosyadan **aynen** `content_meta.notice.tanzil`'e kopyalıyor. İçerik sürümü 5 → 6. Test notun kaynakla aynı olduğunu denetliyor. |
+| 2 | **"Hiçbir karakter değiştirilmedi"** ifadesi eksikti: Q-9'da baştaki boşluk kırpılıyor. Besmelenin 1. ayetten ayrılması Tanzil'in "değiştirmeden" koşuluyla ilgili bir soru doğuruyor. | Orta | İfade düzeltildi. Besmele ayrımı ❓ **açık soru** olarak eklendi; en temiz çözüm Faz 1'de `text_uthmani`'yi kaldırmak. |
+| 3 | DigitalKhatt **kelime metni** fontla aynı satırda ve "OFL" ile birlikte anılıyordu; oysa fontun lisansı metni kapsamaz. | Orta | Ayrı kaynak satırı ve kontrol listesi sütunu: lisansı ❓ (AK-11). |
+| 4 | **OFL metni uygulama paketine girmiyordu**; yalnızca depodaydı. Font, telif ve lisansı kendi meta verisinde taşıdığı için OFL koşulu yine de karşılanıyordu (fontun `name` tablosu okunarak doğrulandı). | Düşük | OFL dosyası pakete eklendi ve Ayarlar → Lisanslar'da gösteriliyor. |
+| 5 | Fontun içindeki telif notu "2020-2024 Amine Anane, 2024 Tarteel Inc.", OFL dosyasındaki "2020-2025 / 2024-2025" (dosya GitHub deposundan). Sürüm "0.1"; ayrılmış font adı yok. | Bilgi | Belgelendi. Hak sahipleri ve lisans aynı olduğu için dosya değiştirilmedi. |
+| 6 | `qpc-v2.db` satırı "sayfanın birebir fontla çizimi" diyordu; QCF glif kodları artık kullanılmıyor. Kullanılan, glif birimleri (satırdaki parçalar). | Orta | Düzeltildi. |
+| 7 | QCF fontları için "kullanıcının onayıyla indirilecek paket" yazıyordu; bu plan F0-05'te kaldırılmıştı. | Orta | "İzin alınırsa yeniden değerlendirilebilir; şu an plan yok" diye düzeltildi. |
+| 8 | §2 (QUL) `digital-khatt-v2.db` ve font 247'yi listelemiyordu. | Orta | Eklendi; lisans satırı ikiye ayrıldı (font ✅ OFL, diğerleri ❓). |
+| 9 | `words` tablosu 83.666 satır, belge 77.430 kelime diyordu. Fark açıklanmamıştı. | Düşük | 77.430 kelime + 6.236 ayet sonu işareti (`is_ayah_end`) olarak yazıldı. Glif birimleriyle farkın (+3 −1) nedeni eklendi. |
+| 10 | `mushaf_layouts.font_pack` `qcf_v2` yazıyordu (uygulama okumuyordu). `content_meta.source` DigitalKhatt dosyasını yazmıyordu. | Düşük | `digital_khatt` yapıldı; kaynak listesine dosya eklendi. |
+| 11 | Q-14 ile Q-15'in sırası karışıktı. | Düşük | Düzeltildi. |
+| 12 | Yazılım bağımlılıklarının lisansları belgede yoktu. | Orta | §7: paket lisansları LICENSE dosyalarından okundu (MIT / BSD-3-Clause). SQLite kamu malı. GPL gibi kaynak açmayı gerektiren lisans yok. |
+| 13 | "Uygulamaya ne giriyor" sorusunun tek yerde cevabı yoktu. | Orta | Yeni bölüm: APK içeriği listelendi. Tanzil, QUL ve Quran.com kaynak dosyaları pakette yok. |
+
+**Değişmeyenler (doğrulandı):**
+- Dosya yolları ve QUL kaynak numaraları (`qul/manifest.json` ile aynı).
+- İndirme zamanları (manifest dosyalarıyla aynı).
+- Tanzil'in CC BY 3.0 ve "değiştirilemez" koşulu (dosyadaki metinle aynı).
+- `.gitattributes` kuralı.
+- Q-1…Q-15'in içerikleri ve sayılar (betik çıktısı: 114 sure, 6.236 ayet, 77.430 kelime, 9.046 satır, 83.668 glif).
+
+**Önemli not:** belge geliştirme kayıtlarıdır, hukuki görüş değildir. Bu uyarı belgenin başına eklendi. Yayın öncesi kapatılacak 4 madde §6'nın sonunda listelendi.
+
+### 12.3 Uygulama içi lisans sayfası
+- **Yer:** Ayarlar → Hakkında → **Lisanslar**. Flutter'ın standart lisans sayfası (`showLicensePage`) açılır.
+- **Üst metin** (`aboutLegalese`, üç dilde): Kur'an fontu ve OFL; kaynaklar KFGQPC, Quran.com, QUL (Tarteel), Tanzil Project (tanzil.net).
+- **Liste:**
+  - DigitalKhatt OFL metni,
+  - Tanzil telif notu (veritabanından okunur),
+  - tüm paket lisansları (Flutter'ın `NOTICES` dosyası).
+- **Kod:** `lib/features/quran/data/content_licenses.dart` (`registerContentLicenses`, `bootstrap.dart`'ta çağrılır), `ContentDatabase.metaValue()`.
+- **Eksik:** tanzil.net bağlantısı şimdilik **metin**; tıklanabilir bağlantı ve ayrıntılı "Hakkında" ekranı İÇ-01 ile gelecek.
+
+### 12.4 Testler
+`test/content/license_notices_test.dart` şunları denetler:
+- Tanzil notu veritabanında ve kaynakla bire bir aynı,
+- font OFL lisansını ve hak sahiplerini meta verisinde taşıyor,
+- OFL dosyası `pubspec.yaml` varlıklarında,
+- lisans sayfasına font ve Tanzil kaydı ekleniyor.
+
+---
+
+## 13. F0-11 Erişilebilirlik Temeli
+**Durum:** ✅ otomatik denetimler · ⏳ TalkBack ile elle kontrol kullanıcıda · **Gereksinimler:** M13-03, NF-E02, NF-E03
+
+### 13.1 Yapılanlar
+Flutter, ekrandaki widget'lardan bir **semantik ağaç** üretir; TalkBack ve VoiceOver bu ağacı okur (.NET'teki UI Automation ağacına benzer). Eklenenler:
+
+| Yer | Ekran okuyucunun duyduğu |
+|---|---|
+| Sure satırı | "2. sure, Bakara, 286 ayet, البقرة". Numara artık çıplak "2" değil. Arapça ad sağdan sola yön işaretleriyle okunur. |
+| Simge düğmeleri (ayarlar, görünüm, yazı boyutu, tema) | Adları ipucundan (tooltip) gelir; zaten vardı, testle güvenceye alındı. |
+| Bölüm başlıkları (Tema, Dil, Rakamlar, Hakkında) | "Başlık" olarak işaretli; TalkBack'te başlıklar arasında atlanabilir. |
+| Mushaf sayfası | Önce "Mushaf, sayfa 5", ardından kelimeler. **Her kelime seçilebilir bir düğme**; seçilince "seçili" duyurulur. |
+| Seçilen kelime çubuğu | Canlı bölge: seçim değişince kendiliğinden duyurulur. |
+| Ayet görünümü | Ayet numarası "Ayet 2:255" diye okunur. |
+| Hata durumu | Canlı bölge; başlık "Bir sorun oluştu" başlık olarak işaretli; süs simgesi okunmaz. |
+| Yükleniyor göstergesi | "Yükleniyor". |
+
+Üç dilde de çalışır; etiketler ARB'den gelir (`surahNumber`, `mushafPageLabel`, `loading`).
+
+### 13.2 Testler
+| Test | Kontrol |
+|---|---|
+| `test/features/accessibility_test.dart` | TR/AR/EN'de ana sayfa, ayarlar ve okuma ekranında **her dokunulabilir öğenin adı var** (`labeledTapTargetGuideline`). Sure satırının tam okunuşu. Ayarlar simge düğmesinin adı. Ayarlardaki 4 bölüm adı başlık. Okuma ekranında hata durumu başlık ve canlı bölge. Lisans sayfası açılıyor ve Tanzil'i gösteriyor. |
+| `test/features/reader/mushaf_page_view_test.dart` | Sayfa adı önce okunuyor. Kelime düğme, dokunma eylemi var, seçili değil; dokununca seçili. Etiket kuralı geçiyor. |
+| (F0-08'den) `theme_settings_test`, `components_test` | Dokunma alanı (Android 48, iOS 44) ve metin kontrastı, üç temada. |
+
+**Toplam:** 162 test geçiyor; `flutter analyze --fatal-infos` temiz.
+
+### 13.3 TalkBack ile hızlı kontrol (sizde)
+Emülatörü siz kullandığınız için uygulamayı yeniden kurup TalkBack açmadım; sizin oturumunuzu bozmak istemedim. Elle kontrol için:
+1. Uygulamayı güncel kodla açın: `flutter run --flavor dev -t lib/main_dev.dart`.
+2. TalkBack'i açın: Ayarlar → Erişilebilirlik → TalkBack. Emülatörde yoksa Play Store'dan "Android Accessibility Suite" yüklenir.
+3. Ana sayfada sağa kaydırarak öğeleri gezin. "Ayarlar, düğme", "2. sure, Bakara, 286 ayet…" ve "Okumaya başla, düğme" duyulmalı.
+4. Ayarlar'da başlıkları ve radyo düğmelerini ("seçili / seçili değil") dinleyin.
+5. Okuma ekranında sayfa adını ve bir kelimeye çift dokununca "seçili" duyurusunu dinleyin.
+6. Dili Arapçaya alıp aynısını deneyin; okuma sırası sağdan sola olmalı.
+
+Sonucu bana söylerseniz bu bölüme işlerim. VoiceOver kontrolü Mac/iPhone gerektiriyor; iOS cihaz erişimi olunca yapılacak.
+
+### 13.4 Bilinen sınırlar
+- Mushaf kelimeleri tek tek okunuyor; **ayet ayet okuma** (ayetin tamamını tek seferde duyma, M13-03 "ayetler okunabilir") Faz 1'de okuma ekranıyla birlikte gelecek.
+- Kelimeler 48'lik dokunma alanından küçük. Mushaf düzeni gereği bu değişmez; ayet görünümü ve yazı boyutu büyütme alternatif yoldur.
+- Sistem yazı boyutu (M13-04) Flutter tarafından uygulanıyor; çok büyük boyutlarda taşma denetimi Faz 1'de.
+
+---
+
+## 14. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 29.10.2026
 
 | İş paketi | Durum |
@@ -730,17 +849,20 @@ Ayrıca widget testlerinde Flutter'ın erişilebilirlik kuralları ekranda **ger
 | F0-06 Kullanıcı veritabanı | ✅ |
 | F0-07 Dil ve yerelleştirme | ✅ TR/AR/EN, RTL, rakam seçimi |
 | F0-08 Tema ve tasarım temeli | ✅ Açık/sepya/koyu, AA kontrast, 48'lik dokunma alanı |
-| F0-10 `CLAUDE.md` · F0-11 Erişilebilirlik | ⬜ |
+| F0-10 Proje dokümantasyonu | ✅ `CLAUDE.md`; `VERI_KAYNAKLARI.md` gözden geçirildi (13 düzeltme); lisans sayfası |
+| F0-11 Erişilebilirlik temeli | ✅ semantik etiketler ve testler · ⏳ TalkBack elle kontrolü |
 | F0-09 Test ve CI | ✅ · ⏳ kırmızıya düşme denemesi |
 
 **Bekleyen kararlar ve işler**
 - **Uygulama adı:** aday "Kur'anla Yaşamak"; karar sonraya bırakıldı (AK-04).
-- **Veri lisansı (AK-11):** Quran.com, QUL düzen ve kelime metinleri; yayından önce netleşmeli. **Font lisansı çözüldü** (DigitalKhatt, OFL).
+- **Veri lisansı (AK-11):** Quran.com API koşulları, KFGQPC metni ve düzeni, DigitalKhatt kelime metni; yayından önce netleşmeli. **Font lisansı çözüldü** (DigitalKhatt, OFL). Yayın öncesi kapatılacak 4 madde: `VERI_KAYNAKLARI.md` §6 sonu.
 - ~~**Secde listesi (Q-8)**~~: ✅ Karar (28.10.2026): **14 secde** (Hanefi). 22:77'deki ۩ işareti basılı metnin parçası olarak sayfada görünür, ama uygulama onu secde ayeti olarak işaretlemez.
-- **Arama metni (Faz 1):** `ayahs.text_uthmani` Tanzil kökenli (Tanzil metniyle aynı); uygulamada kaldığı sürece "Hakkında" ekranında Tanzil atfı zorunlu. Arama KFGQPC metniyle yapılabilirse alan kaldırılır (~1,3 MB, atıf yükümlülüğü kalkar). Tanzil dosyalarının APK'ya girmediği doğrulandı.
+- **Arama metni (Faz 1):** `ayahs.text_uthmani` Tanzil kökenli; uygulamada kaldığı sürece Tanzil yükümlülükleri geçerli (telif notu veritabanında ve lisans sayfasında ✅; tıklanabilir tanzil.net bağlantısı İÇ-01'de; ❓ besmele ayrımı sorusu, `VERI_KAYNAKLARI.md` §4). Arama KFGQPC metniyle yapılabilirse alan kaldırılır (~1,3 MB, atıf yükümlülüğü kalkar). Tanzil dosyalarının APK'ya girmediği doğrulandı.
 - **Yayın öncesi kelime bölünmesi teyidi:** lisans görüşmelerinde (AK-11) Diyanet'in dijital mushafındaki bölünmeye de bakılması önerilir (Q-12).
 - **Varsayılan dil (F0-07):** cihaz dili desteklenmiyorsa İngilizce açılıyor (öneri). Türkçe istenirse `kFallbackLocale` değişir.
 - **Varsayılan tema (F0-08):** "Cihaz ayarı" (öneri; önceki varsayılan sepyaydı). Sepya istenirse tek satır.
 - **Arapça çevirilerin gözden geçirilmesi:** yayından önce anadili Arapça olan biri tarafından.
+- **TalkBack elle kontrolü (F0-11):** adımlar §13.3; VoiceOver iOS cihaz erişimi olunca.
+- **Emülatör notu (29.10.2026):** yeni kurulan debug APK simgeden açılınca açılış ekranında takıldı (iki deneme, logda hata yok, içerik veritabanı kopyalanmaya başlamamıştı); `flutter run` ile açılınca düzeldi ve sonra simgeden de açıldı. Nedeni bulunamadı; tekrar ederse araştırılacak.
 - **Android `cmdline-tools` kurulumu:** lisans onayı için.
 - **GitHub'da yapılacaklar:** iOS iş akışını elle çalıştırmak; bilerek bozulmuş bir PR ile CI'ın kırmızıya düştüğünü görmek.
