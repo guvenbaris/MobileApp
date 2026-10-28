@@ -31,6 +31,9 @@ jobs:
 
       - run: flutter pub get
 
+      - name: İçerik veritabanı
+        run: dart run tool/content/build_content_db.dart
+
       - name: Derleme (imzasız)
         run: flutter build ios --debug --no-codesign -t lib/main_dev.dart
 

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/routing/app_routes.dart';
+import '../../quran/application/quran_providers.dart';
 
 // Metinler F0-07'de ARB dosyalarına taşınır.
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final surahs = ref.watch(surahsProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ana Sayfa'),
@@ -21,13 +24,32 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: FilledButton(
-          key: const Key('home.read'),
-          onPressed: () => context.go(AppRoutes.reader),
-          child: const Text('Okumaya başla'),
-        ),
+      floatingActionButton: FloatingActionButton.extended(
+        key: const Key('home.read'),
+        onPressed: () => context.go(AppRoutes.reader),
+        label: const Text('Okumaya başla'),
       ),
+      body: switch (surahs) {
+        AsyncData(:final value) => ListView.builder(
+          key: const Key('home.surahList'),
+          itemCount: value.length,
+          itemBuilder: (context, i) {
+            final surah = value[i];
+            return ListTile(
+              leading: Text('${surah.id}'),
+              title: Text(surah.nameTr),
+              subtitle: Text('${surah.ayahCount} ayet'),
+              trailing: Text(
+                surah.nameArabic,
+                textDirection: TextDirection.rtl,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            );
+          },
+        ),
+        AsyncError(:final error) => Center(child: Text('$error')),
+        _ => const Center(child: CircularProgressIndicator()),
+      },
     );
   }
 }

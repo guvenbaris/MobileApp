@@ -16,9 +16,25 @@ Gereksinimler: `../Proje_Gereksinimleri.md` · Yol haritası: `../Yol_Haritasi.m
 
 > Paket adı geçicidir; ilk mağaza yüklemesinden önce kalıcı adla değiştirilir.
 
-## Çalıştırma
+## İlk kurulum
+İçerik veritabanı depoda yoktur, kaynak veriden üretilir. Klonladıktan sonra ve `tool/content/` değiştiğinde bir kez çalıştırın:
 ```sh
 flutter pub get
+dart run tool/content/build_content_db.dart   # → assets/db/content.sqlite
+```
+
+## Kur'an içerik verisi (F0-03)
+| Dosya | Görev |
+|---|---|
+| `tool/content/fetch_sources.dart` | Ham veriyi Quran.com API'den indirir → `tool/content/sources/quran_com/` (depoda). Yalnızca kaynak güncellenirken çalıştırılır. |
+| `tool/content/build_content_db.dart` | Ham veriden salt okunur `assets/db/content.sqlite` üretir ve veriyi doğrular. |
+| `lib/features/quran/data/content_database.dart` | Drift şeması ve `kContentVersion`. Şema veya veri değişince sürüm artırılır. |
+
+Kaynaklar, lisanslar ve bilinen veri durumları: `../VERI_KAYNAKLARI.md`.
+Drift şeması değişince: `dart run build_runner build`.
+
+## Çalıştırma
+```sh
 flutter run --flavor dev -t lib/main_dev.dart
 flutter run --flavor prod -t lib/main_prod.dart
 ```

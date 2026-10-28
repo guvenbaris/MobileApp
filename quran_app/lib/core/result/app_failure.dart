@@ -2,7 +2,7 @@
 ///
 /// Mesajlar geliştirici içindir; kullanıcıya gösterilecek metin arayüz
 /// katmanında hata türüne göre yerelleştirilir.
-sealed class AppFailure {
+sealed class AppFailure implements Exception {
   const AppFailure(this.message);
 
   final String message;

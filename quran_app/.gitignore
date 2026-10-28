@@ -46,3 +46,7 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Üretilen içerik veritabanı (tool/content/build_content_db.dart)
+/assets/db/content.sqlite
+/assets/db/*.tmp

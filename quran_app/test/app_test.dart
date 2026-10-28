@@ -5,11 +5,17 @@ import 'package:quran_app/app.dart';
 import 'package:quran_app/core/config/flavor.dart';
 import 'package:quran_app/core/config/flavor_provider.dart';
 import 'package:quran_app/features/home/presentation/home_page.dart';
+import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/reader/presentation/reader_page.dart';
 import 'package:quran_app/features/settings/presentation/settings_page.dart';
 
+import 'helpers/fake_quran_repository.dart';
+
 Widget _app(Flavor flavor) => ProviderScope(
-  overrides: [flavorProvider.overrideWithValue(flavor)],
+  overrides: [
+    flavorProvider.overrideWithValue(flavor),
+    quranRepositoryProvider.overrideWithValue(FakeQuranRepository()),
+  ],
   child: const QuranApp(),
 );
 
@@ -19,7 +25,9 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(_app(flavor));
+      await tester.pumpAndSettle();
       expect(find.byType(HomePage), findsOneWidget);
+      expect(find.text('Bakara'), findsOneWidget);
     });
   }
 

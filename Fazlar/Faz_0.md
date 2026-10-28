@@ -1,8 +1,8 @@
 # Faz 0: Temel ve İskelet
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
-> **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02 ve F0-09 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
+> **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`, `Faz_0_Notlar.md` (her iş paketinde ne yapıldığı ve neden)
+> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03 ve F0-09 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
@@ -66,12 +66,13 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - **Bitti:** Bir sahte servisin gerçeğiyle değiştirilmesi tek satırlık sağlayıcı değişikliğiyle yapılabiliyor (örnek testle gösterilir).
 
 ### F0-03 Kur'an Veri Hattı [Z] — İÇ-01, İÇ-02, İÇ-10, MK-05
-- [ ] Geliştirme için açık lisanslı kaynak seçimi ve **lisans kontrol listesi** (İÇ-10). Örnek adaylar: Tanzil Uthmani metni, açık mushaf düzen verileri. Yayın lisansı AK-11 ile ayrıca çözülür.
-- [ ] Ham veriyi işleyip **salt okunur içerik veritabanı** üreten dönüştürme betiği (depoda, tekrar çalıştırılabilir)
-- [ ] Şema: sure, ayet, kelime, cüz, hizb/rubu', secde işaretleri, sure meta verisi (ad TR/AR/EN, iniş yeri, ayet sayısı)
-- [ ] **Çoklu mushaf düzeni şeması (M2-14):** metin (ayet/kelime) bir kez saklanır; her düzen ayrı bir `mushaf_layout` kaydı ve kendi `sayfa → satır → kelime aralığı` eşlemesiyle tanımlanır. Yeni düzen eklemek kod değişikliği değil, veri + font paketi eklemektir.
-- [ ] İçerik veritabanı uygulama paketine gömülü gelir (M16-01); sürüm numarası taşır
-- [ ] Veri kaynağı, sürümü ve lisansı `VERI_KAYNAKLARI.md` dosyasına yazılır
+- [x] Geliştirme için kaynak seçimi ve **lisans kontrol listesi** (İÇ-10): Quran.com API v4 (metin, kelime, sure meta verisi, Medine 1421H/QCF V2 düzeni). Tanzil F0-04'te bağımsız referans olarak eklenecek. Quran.com'un yayın lisansı belirsiz; AK-11 ile çözülür. 1405H (QCF V1) düzeni satır verisi tutarsız olduğu için alınmadı.
+- [x] Ham veriyi işleyip **salt okunur içerik veritabanı** üreten dönüştürme betiği (depoda, tekrar çalıştırılabilir): `tool/content/fetch_sources.dart` (ham veri, depoda) + `tool/content/build_content_db.dart` (veritabanı, depo dışında; üretimde veriyi doğrular)
+- [x] Şema: sure, ayet, kelime, cüz, hizb/rubu', secde işaretleri, sure meta verisi (ad TR/AR/EN, iniş yeri, ayet sayısı)
+- [x] **Çoklu mushaf düzeni şeması (M2-14):** metin (ayet/kelime) bir kez saklanır; her düzen ayrı bir `mushaf_layout` kaydı ve kendi `sayfa → satır → kelime aralığı` eşlemesiyle tanımlanır. Yeni düzen eklemek kod değişikliği değil, veri + font paketi eklemektir. Tablolar: `mushaf_layouts`, `layout_lines` (sayfa/satır → tür + kelime aralığı), `layout_pages` (sayfa → ilk/son ayet), `layout_word_glyphs` (kelime → sayfa fontu glifi).
+- [x] İçerik veritabanı uygulama paketine gömülü gelir (M16-01); sürüm numarası taşır (`kContentVersion`; ilk açılışta cihaza kopyalanır, salt okunur açılır; 11,6 MB)
+- [x] Veri kaynağı, sürümü ve lisansı `VERI_KAYNAKLARI.md` dosyasına yazılır (bilinen veri durumları Q-1…Q-8 dahil)
+- [x] Doğrulama: emülatörde temiz kurulumda sure listesi veritabanından ≤ 2 sn'de geliyor (entegrasyon testi)
 - **Bitti:** Uygulama ilk açılışta internetsiz olarak tüm Kur'an verisine erişiyor.
 
 ### F0-04 Metin Bütünlüğü Testleri [Z] — T-01, T-02
@@ -155,3 +156,4 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | F0-02 Mimari İskelet tamamlandı; editör VS Code (paylaşılan `.vscode/launch.json` ile dev/prod profilleri) |
 | 28.10.2026 | F0-09 Test ve CI altyapısı yazıldı; iOS iş akışı maliyet nedeniyle haftalık/elle |
 | 28.10.2026 | CI de her commit yerine haftalık + PR + elle çalışacak şekilde değiştirildi |
+| 28.10.2026 | F0-03 Kur'an veri hattı tamamlandı; ilk düzen Medine 1421H (QCF V2) |

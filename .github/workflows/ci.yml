@@ -35,6 +35,9 @@ jobs:
 
       - run: flutter pub get
 
+      - name: İçerik veritabanı
+        run: dart run tool/content/build_content_db.dart
+
       - name: Biçim kontrolü
         run: dart format --output=none --set-exit-if-changed lib test integration_test
 
@@ -89,6 +92,9 @@ jobs:
           cache: true
 
       - run: flutter pub get
+
+      - name: İçerik veritabanı
+        run: dart run tool/content/build_content_db.dart
 
       - name: APK (${{ matrix.flavor }})
         run: flutter build apk --debug --flavor ${{ matrix.flavor }} -t lib/main_${{ matrix.flavor }}.dart

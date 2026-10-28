@@ -1,0 +1,191 @@
+// Ham Kur'an verisini Quran.com API v4'ten indirip sadeleştirilmiş JSON
+// olarak `tool/content/sources/quran_com/` altına yazar (F0-03).
+//
+// Bu betik yalnızca kaynak güncellenirken çalıştırılır; çıktısı depoya
+// commit'lenir ve içerik veritabanı (`build_content_db.dart`) bu dosyalardan
+// üretilir. Metin hiçbir şekilde değiştirilmez.
+//
+// Çalıştırma (quran_app klasöründe): dart run tool/content/fetch_sources.dart
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+const _api = 'https://api.quran.com/api/v4';
+const _outDir = 'tool/content/sources/quran_com';
+const _pageCount = 604;
+
+/// API'deki `mushaf` parametresi → bizim düzen kimliğimiz ve glif alanı.
+///
+/// 1405H baskısı (`mushaf: 2`, `code_v1`) bilerek dışarıda: API'deki satır
+/// verisinde 8 sayfada açıklanamayan boş satırlar var (bkz. VERI_KAYNAKLARI.md).
+const _layouts = {'madani_1421': (mushaf: 1, glyphField: 'code_v2')};
+
+final _client = HttpClient()..connectionTimeout = const Duration(seconds: 30);
+
+Future<void> main() async {
+  await Directory(_outDir).create(recursive: true);
+
+  await _fetchChapters();
+  for (final MapEntry(key: id, value: layout) in _layouts.entries) {
+    await _fetchLayout(id, layout.mushaf, layout.glyphField);
+  }
+
+  await _writeJson('manifest.json', {
+    'source': 'Quran.com API v4',
+    'url': _api,
+    'fetchedAt': DateTime.now().toUtc().toIso8601String(),
+    'layouts': {
+      for (final MapEntry(key: id, value: l) in _layouts.entries)
+        id: {'mushafParam': l.mushaf, 'glyphField': l.glyphField},
+    },
+  });
+  _client.close();
+  stdout.writeln('Tamamlandı: $_outDir');
+}
+
+Future<void> _fetchChapters() async {
+  final en = await _getJson('$_api/chapters?language=en');
+  final tr = await _getJson('$_api/chapters?language=tr');
+  final trById = {for (final c in tr['chapters'] as List) (c as Map)['id']: c};
+  final chapters = [
+    for (final c in (en['chapters'] as List).cast<Map<String, dynamic>>())
+      {
+        'id': c['id'],
+        'nameArabic': c['name_arabic'],
+        'nameSimple': c['name_simple'],
+        'nameEn': (c['translated_name'] as Map)['name'],
+        'nameTr': ((trById[c['id']] as Map)['translated_name'] as Map)['name'],
+        'revelationPlace': c['revelation_place'],
+        'revelationOrder': c['revelation_order'],
+        'bismillahPre': c['bismillah_pre'],
+        'versesCount': c['verses_count'],
+      },
+  ];
+  await _writeJson('chapters.json', chapters);
+  stdout.writeln('Sureler: ${chapters.length}');
+}
+
+/// Bir düzenin 604 sayfasını indirir. Ayet metinleri ilk düzenden
+/// `verses.json`'a, kelime konumları her düzen için ayrı dosyaya yazılır.
+Future<void> _fetchLayout(String id, int mushaf, String glyphField) async {
+  final pages = List<List<Map<String, dynamic>>?>.filled(_pageCount, null);
+  var next = 1;
+  Future<void> worker() async {
+    while (next <= _pageCount) {
+      final page = next++;
+      pages[page - 1] = await _fetchPage(page, mushaf, glyphField);
+      if (page % 50 == 0) stdout.writeln('$id: sayfa $page/$_pageCount');
+    }
+  }
+
+  await Future.wait([for (var i = 0; i < 4; i++) worker()]);
+
+  final verses = [for (final p in pages) ...p!];
+  verses.sort(
+    (a, b) => (a['surah'] as int) != (b['surah'] as int)
+        ? (a['surah'] as int) - (b['surah'] as int)
+        : (a['ayah'] as int) - (b['ayah'] as int),
+  );
+
+  // Kelime konumu: [sure, ayet, sıra, sayfa, satır, glif]
+  await _writeJson('layout_$id.json', [
+    for (final v in verses)
+      for (final w in (v['words'] as List).cast<Map<String, dynamic>>())
+        [
+          v['surah'],
+          v['ayah'],
+          w['position'],
+          w['page'],
+          w['line'],
+          w['glyph'],
+        ],
+  ]);
+
+  if (!File('$_outDir/verses.json').existsSync()) {
+    await _writeJson('verses.json', [
+      for (final v in verses)
+        {
+          'surah': v['surah'],
+          'ayah': v['ayah'],
+          'juz': v['juz'],
+          'hizb': v['hizb'],
+          'rub': v['rub'],
+          'sajdah': v['sajdah'],
+          'textUthmani': v['textUthmani'],
+          'textQpcHafs': v['textQpcHafs'],
+          // Kelime: [sıra, tür (word/end), metin]
+          'words': [
+            for (final w in (v['words'] as List).cast<Map<String, dynamic>>())
+              [w['position'], w['type'], w['text']],
+          ],
+        },
+    ]);
+  }
+  stdout.writeln('$id: ${verses.length} ayet');
+}
+
+Future<List<Map<String, dynamic>>> _fetchPage(
+  int page,
+  int mushaf,
+  String glyphField,
+) async {
+  final json = await _getJson(
+    '$_api/verses/by_page/$page?mushaf=$mushaf&per_page=50&words=true'
+    '&fields=text_uthmani,text_qpc_hafs'
+    '&word_fields=text_uthmani,$glyphField,line_number,page_number,position',
+  );
+  final pagination = json['pagination'] as Map;
+  if (pagination['next_page'] != null) {
+    throw StateError('Sayfa $page 50 ayetten uzun; sayfalama gerekli');
+  }
+  return [
+    for (final v in (json['verses'] as List).cast<Map<String, dynamic>>())
+      {
+        'surah': int.parse((v['verse_key'] as String).split(':').first),
+        'ayah': v['verse_number'],
+        'juz': v['juz_number'],
+        'hizb': v['hizb_number'],
+        'rub': v['rub_el_hizb_number'],
+        'sajdah': v['sajdah_number'],
+        'textUthmani': v['text_uthmani'],
+        'textQpcHafs': v['text_qpc_hafs'],
+        'words': [
+          for (final w in (v['words'] as List).cast<Map<String, dynamic>>())
+            {
+              'position': w['position'],
+              'type': w['char_type_name'],
+              'text': w['text_uthmani'],
+              'page': w['page_number'],
+              'line': w['line_number'],
+              'glyph': w[glyphField],
+            },
+        ],
+      },
+  ];
+}
+
+Future<Map<String, dynamic>> _getJson(String url) async {
+  for (var attempt = 1; ; attempt++) {
+    try {
+      final request = await _client.getUrl(Uri.parse(url));
+      final response = await request.close();
+      final body = await response.transform(utf8.decoder).join();
+      if (response.statusCode != 200) {
+        throw HttpException('HTTP ${response.statusCode}', uri: Uri.parse(url));
+      }
+      return jsonDecode(body) as Map<String, dynamic>;
+    } on Exception catch (e) {
+      if (attempt >= 5) rethrow;
+      stderr.writeln('Tekrar deneniyor ($attempt): $url — $e');
+      await Future<void>.delayed(Duration(seconds: attempt * 2));
+    }
+  }
+}
+
+Future<void> _writeJson(String name, Object data) async {
+  // Satır başına bir kayıt: dosya okunabilir ve git farkları küçük kalır.
+  final encoded = data is List
+      ? '[\n${data.map(jsonEncode).join(',\n')}\n]\n'
+      : '${const JsonEncoder.withIndent('  ').convert(data)}\n';
+  await File('$_outDir/$name').writeAsString(encoded);
+}
