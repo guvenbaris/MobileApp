@@ -2,7 +2,7 @@
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
 > **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı ve F0-02 tamam; iOS doğrulaması CI ile)
+> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02 ve F0-09 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
@@ -54,7 +54,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - [x] `dev` / `prod` flavor yapılandırması (TK-07) — Android: productFlavors (dev paketi `.dev` ekli, yan yana kurulabilir); Dart: `main_dev.dart` / `main_prod.dart`. iOS Xcode şemaları Mac/CI erişimiyle eklenecek.
 - [x] Lint kuralları ve format ayarı (TK-08)
 - [x] `README.md`: kurulum ve çalıştırma
-- [ ] iOS'ta açılış doğrulaması (CI macOS makinesi, F0-09 ile)
+- [ ] iOS'ta açılış doğrulaması: `ios.yml` iş akışı hazır, GitHub'da ilk çalıştırma bekleniyor
 - **Bitti:** Uygulama iki platformda ve iki flavor'da boş ekranla açılıyor.
 
 ### F0-02 Mimari İskelet [Z] — MK-06, MK-07
@@ -116,9 +116,10 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - **Bitti:** Üç tema iskelet ekranlarında çalışıyor ve seçim kalıcı.
 
 ### F0-09 Test ve CI Altyapısı [Z] — 12. bölüm
-- [ ] Birim, widget ve entegrasyon testi klasör yapısı
-- [ ] GitHub Actions: `analyze` + `test` + Android derleme
-- [ ] Test kapsamı raporu
+- [x] Birim, widget ve entegrasyon testi klasör yapısı (`test/` lib yapısını izler, `integration_test/` cihaz testleri, `test/helpers/` ortak yardımcılar)
+- [x] GitHub Actions: `analyze` + `test` + Android derleme (`ci.yml`, her push/PR). iOS derleme + simülatörde açılış testi `ios.yml` ile haftalık/elle (macOS dakika maliyeti nedeniyle).
+- [x] Test kapsamı raporu (iş özeti + `lcov.info` çıktısı)
+- [ ] Doğrulama: bilerek bozulan bir commit/PR'ın CI'da kırmızıya düştüğü görülecek
 - **Bitti:** Hatalı bir commit CI'da kırmızıya düşüyor.
 
 ### F0-10 Proje Dokümantasyonu [Z]
@@ -152,3 +153,4 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | İlk sürüm |
 | 28.10.2026 | S4 güncellendi, S5 (depo yapısı) eklendi; F0-01 Android tarafı tamamlandı |
 | 28.10.2026 | F0-02 Mimari İskelet tamamlandı; editör VS Code (paylaşılan `.vscode/launch.json` ile dev/prod profilleri) |
+| 28.10.2026 | F0-09 Test ve CI altyapısı yazıldı; iOS iş akışı maliyet nedeniyle haftalık/elle |

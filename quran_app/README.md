@@ -26,9 +26,21 @@ iOS'ta flavor şemaları henüz yok; yalnızca `-t` ile hedef seçilir: `flutter
 
 **VS Code:** depo kökünü açın; Çalıştır ve Hata Ayıkla panelinde `dev`, `prod`, `prod (release)` profilleri hazırdır.
 
-## Kontroller
+## Testler
+| Klasör | Tür | Çalıştırma |
+|---|---|---|
+| `test/` | Birim ve widget testleri; klasör yapısı `lib/` ile aynıdır | `flutter test` |
+| `integration_test/` | Gerçek cihazda/emülatörde uçtan uca testler | `flutter test integration_test --flavor dev` |
+
+Ortak test yardımcıları `test/helpers/` altındadır.
+
+## Kontroller (CI ile aynı)
 ```sh
-dart format .
-flutter analyze
-flutter test
+dart format --output=none --set-exit-if-changed lib test integration_test
+flutter analyze --fatal-infos
+flutter test --coverage
 ```
+
+## CI (GitHub Actions)
+- `.github/workflows/ci.yml`: her `main` push'unda ve PR'da biçim, analiz, test (kapsam özeti ve `lcov.info` çıktısı) ve iki flavor için Android derlemesi.
+- `.github/workflows/ios.yml`: iOS derlemesi ve simülatörde açılış testi. macOS dakikaları pahalı olduğundan haftalık ve elle (Actions → iOS → Run workflow) çalışır.

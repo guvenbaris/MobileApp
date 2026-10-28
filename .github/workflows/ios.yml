@@ -1,0 +1,47 @@
+# F0-09 / F0-01: iOS derlemesi ve simülatörde açılış testi.
+# macOS dakikaları özel repolarda 10 kat sayıldığı için her commit'te değil,
+# haftalık ve elle tetiklenerek çalışır.
+name: iOS
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 1' # Her pazartesi 03:00 UTC
+
+env:
+  FLUTTER_VERSION: 3.47.8
+
+defaults:
+  run:
+    working-directory: quran_app
+
+jobs:
+  ios:
+    name: iOS derleme ve açılış testi
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Derleme (imzasız)
+        run: flutter build ios --debug --no-codesign -t lib/main_dev.dart
+
+      - name: Simülatörü başlat
+        id: sim
+        working-directory: .
+        run: |
+          UDID=$(xcrun simctl list devices available -j \
+            | python3 -c "import json,sys; d=json.load(sys.stdin)['devices']; print(next(x['udid'] for k,v in d.items() if 'iOS' in k for x in v if x['name'].startswith('iPhone')))")
+          xcrun simctl boot "$UDID"
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+
+      - name: Açılış testi
+        run: flutter test integration_test -d ${{ steps.sim.outputs.udid }}
