@@ -837,7 +837,7 @@ Sonucu bana söylerseniz bu bölüme işlerim. VoiceOver kontrolü Mac/iPhone ge
 ---
 
 ## 14. Genel durum ve bekleyen kararlar
-**Son güncelleme:** 29.10.2026
+**Son güncelleme:** 29.10.2026 · **Faz 0 kapandı** (kullanıcı kararı). Aşağıdaki açık maddeler Faz 1'e devredildi (`Faz_1.md` F1-00); Faz 1 notları `Faz_1_Notlar.md`'de tutulacak.
 
 | İş paketi | Durum |
 |---|---|

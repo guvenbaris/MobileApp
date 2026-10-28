@@ -14,11 +14,12 @@ Flutter ile Kur'an okuma, hafızlık ve (ileride) ücretli günlük eğitim uygu
 | `Yol_Haritasi.md` | Fazlar ve durumları; faz geçiş kuralları |
 | `Fazlar/Faz_N.md` | Fazın iş paketleri ve kutucukları. Faz dosyası yalnızca o faza başlarken yazılır (`Faz_0.md` şablondur). |
 | `Fazlar/Faz_N_Notlar.md` | Her iş paketinde ne yapıldığı, neden, dosyalar, bilinen sorunlar; sonda "Genel durum ve bekleyen kararlar" |
+| `Ekran_Tasarimi.md` | Tüm fazların ekranları (E-01…E-29), bilgi mimarisi, etkileşim kuralları, bileşen kataloğu. Yeni ekran yazılmadan önce ilgili E-xx bölümü okunur; tasarım değişirse belge güncellenir. |
 | `VERI_KAYNAKLARI.md` | Veri ve lisans envanteri: her kaynak, indirilen dosya, veritabanı alanı ve lisans yükümlülüğü |
 | `quran_app/README.md` | Kurulum, çalıştırma, komutlar |
 
 **Çalışma düzeni:**
-- Yeni oturumda önce `Fazlar/Faz_0.md` (kutucuklar), `Faz_0_Notlar.md` (son bölüm) ve `VERI_KAYNAKLARI.md` okunur.
+- Yeni oturumda önce yürüyen fazın dosyası (`Fazlar/Faz_N.md`, kutucuklar), notları (`Faz_N_Notlar.md`, son bölüm) ve `VERI_KAYNAKLARI.md` okunur. Faz 0 kapandı (29.10.2026); yürüyen faz **Faz 1**.
 - Her iş paketi bitince:
   - faz dosyasındaki kutucuklar işaretlenir,
   - notlar dosyasına bölüm eklenir ve genel durum tablosu güncellenir,

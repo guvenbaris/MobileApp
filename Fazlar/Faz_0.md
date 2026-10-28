@@ -2,7 +2,7 @@
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
 > **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`, `Faz_0_Notlar.md` (her iş paketinde ne yapıldığı ve neden)
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 tamam (2 doğrulama ertelendi); F0-06, F0-07, F0-08 ve F0-10 tamam; F0-11 tamam (TalkBack elle kontrolü bekliyor); iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
+> **Durum:** ✅ Tamamlandı (kullanıcı kararı, 29.10.2026). Açık kalan maddeler Faz 1'e devredildi (`Faz_1.md` F1-00): iOS'un GitHub'da ilk çalıştırılması (F0-01), CI kırmızı denemesi (F0-09), F0-05 sonuç raporu ve ertelenen 2 doğrulama (gerçek cihaz performansı, basılı nüsha karşılaştırması), TalkBack elle kontrolü (F0-11).
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
@@ -166,6 +166,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | F0-06 kullanıcı veritabanı tamamlandı; okuma ayarları ve son okunan yer kalıcı |
 | 28.10.2026 | F0-07 dil ve yerelleştirme tamamlandı; TR/AR/EN, RTL, rakam seçimi, gömülü metin denetimi |
 | 29.10.2026 | F0-08 tema ve tasarım temeli tamamlandı; tek tema (uygulama + mushaf), AA kontrast ve dokunma alanı testleri, temel bileşenler |
+| 29.10.2026 | **Faz 0 kapandı** (kullanıcı kararı); açık kalanlar Faz 1 F1-00'a devredildi |
 | 29.10.2026 | F0-10: `CLAUDE.md` yazıldı; `VERI_KAYNAKLARI.md` gözden geçirildi ve düzeltildi; lisans sayfası. F0-11: semantik etiketler ve erişilebilirlik testleri |
 | 28.10.2026 | F0-05: font kararı yalnız DigitalKhatt (OFL); ekrandaki metin harf ve durak işaretiyle doğrulanıyor (T-01) |
 | 28.10.2026 | F0-05 başladı: sayfa çizimi (iki yöntem), kelimeye dokunma, temalar, boyut ve ilk performans ölçümleri |
