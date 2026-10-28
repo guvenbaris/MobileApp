@@ -29,6 +29,9 @@ dart run tool/content/build_content_db.dart   # → assets/db/content.sqlite
 | `tool/content/fetch_sources.dart` | Ham veriyi Quran.com API'den indirir → `tool/content/sources/quran_com/` (depoda). Yalnızca kaynak güncellenirken çalıştırılır. |
 | `tool/content/build_content_db.dart` | Ham veriden salt okunur `assets/db/content.sqlite` üretir ve veriyi doğrular. |
 | `lib/features/quran/data/content_database.dart` | Drift şeması ve `kContentVersion`. Şema veya veri değişince sürüm artırılır. |
+| `tool/content/sources/tanzil/` | Bağımsız test referansı (Tanzil); uygulamaya girmez. `fetch_sources.dart tanzil` ile güncellenir. |
+| `tool/content/reference/checksums.json` | Doğrulanmış içeriğin sure başına SHA-256 değerleri (T-01). Yalnızca veri bilerek değiştirilip incelendikten sonra `dart run tool/content/update_checksums.dart` ile güncellenir. |
+| `test/content/` | T-01 (metin bütünlüğü) ve T-02 (sayfa düzeni, cüz/hizb/rubu'/secde) testleri |
 
 Kaynaklar, lisanslar ve bilinen veri durumları: `../VERI_KAYNAKLARI.md`.
 Drift şeması değişince: `dart run build_runner build`.

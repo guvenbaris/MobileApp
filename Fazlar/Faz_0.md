@@ -2,12 +2,12 @@
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
 > **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`, `Faz_0_Notlar.md` (her iş paketinde ne yapıldığı ve neden)
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03 ve F0-09 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
+> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
 - [ ] Kur'an verisi veritabanından okunuyor ve **seçilen bir mushaf sayfası basılı nüshayla birebir çiziliyor** (Fatiha, Bakara 1. sayfa ve rastgele 5 sayfa elle kontrol edildi).
-- [ ] Kur'an metin bütünlüğü (T-01) ve sayfa düzeni (T-02) testleri otomatik çalışıyor ve geçiyor.
+- [x] Kur'an metin bütünlüğü (T-01) ve sayfa düzeni (T-02) testleri otomatik çalışıyor ve geçiyor. (T-02'de 25 sayfa 1421H basılı nüshayla doğrulanmayı bekliyor, F0-05)
 - [ ] Katmanlı mimari, kullanıcı veritabanı (UUID, zaman damgaları, migration altyapısı) ve sahte servis arayüzleri hazır.
 - [ ] TR/AR/EN dil altyapısı ve tema altyapısı çalışıyor (AR'de RTL).
 - [ ] CI analiz + test çalıştırıyor (haftalık, PR'da ve elle; her commit'te değil, karar 28.10.2026).
@@ -76,10 +76,11 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - **Bitti:** Uygulama ilk açılışta internetsiz olarak tüm Kur'an verisine erişiyor.
 
 ### F0-04 Metin Bütünlüğü Testleri [Z] — T-01, T-02
-- [ ] T-01: 114 sure, 6.236 ayet; her ayetin metni referans kaynakla hash karşılaştırması
-- [ ] T-02: 604 sayfanın ilk ve son ayeti/kelimesi referansla eşleşiyor
-- [ ] Kelime sayısı ve cüz/hizb sınırları kontrolü
-- [ ] Testler CI'da çalışır (haftalık, PR'da ve elle) ve yerelde `flutter test` ile push öncesi çalıştırılır
+- [x] T-01: 114 sure, 6.236 ayet; her ayetin metni referans kaynakla karşılaştırması (Tanzil ile karakter karakter; KFGQPC metni, kelimeler ve düzen sure başına SHA-256 ile)
+- [x] T-02: 604 sayfanın ilk ve son ayeti referansla eşleşiyor (Tanzil 1405H; 1421H'ye özgü 25 fark tek tek listelendi, doğrulama bekliyor), satırlar tüm kelimeleri sırayla kapsıyor
+- [x] Kelime sayısı ve cüz/hizb/rubu'/secde sınırları kontrolü
+- [x] Testler CI'da çalışır (haftalık, PR'da ve elle) ve yerelde `flutter test` ile push öncesi çalıştırılır
+- [x] Doğrulama: 2:255'te bir hareke ve 36:1'de bir şedde değiştirildi; iki test de kırıldı ve yeri tam gösterdi
 - **Bitti:** Veride tek bir karakter değiştirildiğinde test başarısız oluyor (bilerek bozularak denenir).
 
 ### F0-05 Mushaf Sayfası Çizim Denemesi (Spike) [Z] — M2-01, M2-02, TK-06
@@ -157,3 +158,4 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | F0-09 Test ve CI altyapısı yazıldı; iOS iş akışı maliyet nedeniyle haftalık/elle |
 | 28.10.2026 | CI de her commit yerine haftalık + PR + elle çalışacak şekilde değiştirildi |
 | 28.10.2026 | F0-03 Kur'an veri hattı tamamlandı; ilk düzen Medine 1421H (QCF V2) |
+| 28.10.2026 | F0-04 metin bütünlüğü testleri tamamlandı; Tanzil test referansı |

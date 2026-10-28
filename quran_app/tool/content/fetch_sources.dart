@@ -1,11 +1,15 @@
-// Ham Kur'an verisini Quran.com API v4'ten indirip sadeleştirilmiş JSON
-// olarak `tool/content/sources/quran_com/` altına yazar (F0-03).
+// Ham Kur'an verisini indirir (F0-03, F0-04):
+// - Quran.com API v4 → sadeleştirilmiş JSON, `tool/content/sources/quran_com/`
+//   (uygulamadaki içeriğin kaynağı)
+// - Tanzil → dosyalar olduğu gibi, `tool/content/sources/tanzil/`
+//   (yalnızca testlerde bağımsız referans; uygulamaya girmez)
 //
 // Bu betik yalnızca kaynak güncellenirken çalıştırılır; çıktısı depoya
-// commit'lenir ve içerik veritabanı (`build_content_db.dart`) bu dosyalardan
-// üretilir. Metin hiçbir şekilde değiştirilmez.
+// commit'lenir. Metin hiçbir şekilde değiştirilmez.
 //
-// Çalıştırma (quran_app klasöründe): dart run tool/content/fetch_sources.dart
+// Çalıştırma (quran_app klasöründe):
+//   dart run tool/content/fetch_sources.dart            # ikisi birden
+//   dart run tool/content/fetch_sources.dart tanzil     # yalnızca Tanzil
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -13,6 +17,17 @@ import 'dart:io';
 const _api = 'https://api.quran.com/api/v4';
 const _outDir = 'tool/content/sources/quran_com';
 const _pageCount = 604;
+
+const _tanzilDir = 'tool/content/sources/tanzil';
+
+/// Tanzil dosyaları. Metin: Osmanlı yazımı, tüm işaretler (vakf, secde ۩,
+/// rubu' ۞) dahil; Quran.com `text_uthmani` alanının kaynağıyla aynı biçim.
+const _tanzilFiles = {
+  'quran-uthmani.txt':
+      'https://tanzil.net/pub/download/index.php?marks=true&sajdah=true'
+      '&rub=true&tatweel=true&quranType=uthmani&outType=txt-2&agree=true',
+  'quran-data.xml': 'https://tanzil.net/res/text/metadata/quran-data.xml',
+};
 
 /// API'deki `mushaf` parametresi → bizim düzen kimliğimiz ve glif alanı.
 ///
@@ -22,7 +37,32 @@ const _layouts = {'madani_1421': (mushaf: 1, glyphField: 'code_v2')};
 
 final _client = HttpClient()..connectionTimeout = const Duration(seconds: 30);
 
-Future<void> main() async {
+Future<void> main(List<String> args) async {
+  final targets = args.isEmpty ? {'quran_com', 'tanzil'} : args.toSet();
+  if (targets.contains('tanzil')) await _fetchTanzil();
+  if (targets.contains('quran_com')) await _fetchQuranCom();
+  _client.close();
+}
+
+/// Tanzil dosyalarını bayt bayt, değiştirmeden kaydeder (lisans gereği).
+Future<void> _fetchTanzil() async {
+  await Directory(_tanzilDir).create(recursive: true);
+  for (final MapEntry(key: name, value: url) in _tanzilFiles.entries) {
+    final request = await _client.getUrl(Uri.parse(url));
+    final response = await request.close();
+    if (response.statusCode != 200) {
+      throw HttpException('HTTP ${response.statusCode}', uri: Uri.parse(url));
+    }
+    final bytes = await response.fold<List<int>>([], (a, b) => a..addAll(b));
+    await File('$_tanzilDir/$name').writeAsBytes(bytes);
+    stdout.writeln('Tanzil: $name (${bytes.length} bayt)');
+  }
+  await File('$_tanzilDir/manifest.json').writeAsString(
+    '${const JsonEncoder.withIndent('  ').convert({'source': 'Tanzil Project (https://tanzil.net)', 'license': 'Creative Commons Attribution 3.0; değiştirilmeden kullanılır', 'fetchedAt': DateTime.now().toUtc().toIso8601String(), 'files': _tanzilFiles})}\n',
+  );
+}
+
+Future<void> _fetchQuranCom() async {
   await Directory(_outDir).create(recursive: true);
 
   await _fetchChapters();
@@ -39,7 +79,6 @@ Future<void> main() async {
         id: {'mushafParam': l.mushaf, 'glyphField': l.glyphField},
     },
   });
-  _client.close();
   stdout.writeln('Tamamlandı: $_outDir');
 }
 

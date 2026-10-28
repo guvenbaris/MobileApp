@@ -9,7 +9,7 @@
 | Kaynak | Ne için | Durum | Yayın için uygun mu |
 |---|---|---|---|
 | Quran.com API v4 | Ayet metni, kelimeler, sure meta verisi, Medine 1421H sayfa/satır düzeni, QCF V2 glif kodları | ✅ Geliştirmede kullanılıyor | ❓ **Belirsiz**: AK-11 ile çözülecek |
-| Tanzil | T-01 için bağımsız referans metin (planlanan, F0-04) | ⬜ Henüz eklenmedi | ✅ CC BY 3.0 (değiştirmeden, atıfla) |
+| Tanzil | **Yalnızca test referansı** (T-01 metin, T-02 sayfa/cüz/rubu'/secde). Uygulamaya girmez. | ✅ Testlerde kullanılıyor | ✅ CC BY 3.0 (değiştirmeden, atıfla) |
 | QUL (Tarteel) | Düzen verisinin doğrulanması, ortalı satır bilgisi, ek düzenler | ⬜ İndirmek için ücretsiz hesap gerekiyor | ❓ Kaynak sayfalarında "telif bilgisi yok" yazıyor |
 | KFGQPC (Kral Fahd Kompleksi) | Metnin ve QCF fontlarının asıl sahibi | ⬜ Yazılı izin alınmadı | Lisans/izin AK-11 kapsamında |
 
@@ -39,21 +39,43 @@ Metin **hiçbir yerde değiştirilmedi**. Aşağıdakiler kaynaktaki gözlemler 
 | Q-5 | Sure başlığı ve besmele satırları API'de yok (kelimesi olmayan satırlar). | Satır türü çıkarım gerektiriyor | Kural: surenin ilk satırının üstündeki 2 satır (Fatiha ve Tevbe'de 1). Başlık sayfa başından önceye taşarsa önceki sayfanın son satırına düşer (ör. 76/15 Nisâ başlığı, 77/1 besmele). 604 sayfanın tamamında kurala uymayan boş satır yok; betik her üretimde bunu denetler. |
 | Q-6 | Ortalı satır (`is_centered`) bilgisi yok. | Sayfa çiziminde gerekli (ilk iki sayfa ve bazı sure sonları) | F0-05'te QUL verisiyle veya kuralla çözülecek |
 | Q-7 | **1405H baskısı (QCF V1, `mushaf=2`) dışarıda bırakıldı:** satır verisinde 8 sayfada (123, 144, 534, 586, 590, 591, 594, 595) kuralla açıklanamayan boş satırlar var. | İkinci Medine düzeni şimdilik yok | QUL verisiyle doğrulanınca eklenebilir |
-| Q-8 | Secde sayısı 14 (22:77 secde olarak işaretli değil). Hanefi mezhebinde 14 secde vardır; bazı Medine baskıları 15 işaret taşır. | M2-05 gösterimi | F0-04'te basılı nüshayla teyit edilecek |
+| Q-8 | Meta veride 14 secde var (22:77 secde değil). Metinde ise **15 secde işareti (۩)** var, 22:77 dahil (Tanzil meta verisi de 15 sayar). 14 Hanefi sayısıdır; 22:77 Şafii'de secdedir. | M2-05: hangi listenin gösterileceği **fıkhi bir tercih**; kullanıcı / içerik kurulu kararı (AK-06) | Veri olduğu gibi saklandı; T-02 testi farkın yalnızca 22:77 olduğunu denetler. Mushaf sayfasında ۩ işareti zaten basılı metnin parçası olarak görünür. |
+| Q-9 | Quran.com `text_uthmani` alanı Tanzil metninin aynısı, ancak 110 surenin 1. ayetinde besmele çıkarılırken başta bir **boşluk karakteri** kalmış. | Metin karşılaştırması ve gösterim | `build_content_db.dart` yalnızca bu baştaki boşluğu kırpar (`trimLeft`). Sonuçta 6.236 ayetin tamamı, Tanzil metninden besmele çıkarılmış haliyle karakteri karakterine aynıdır (T-01). |
+| Q-10 | Tanzil'in sayfa verisi **1405H** baskısına aittir (Quran.com'un 1405H verisiyle birebir aynı). Bizim düzenimiz **1421H**: 25 sayfanın (121–123, 145, 532–534, 565, 568, 570, 576, 584, 586, 588–590, 592–600) ilk ayeti farklı. | T-02'nin bağımsız referansı yalnızca 579 sayfayı doğrulayabiliyor | 25 fark T-02 testinde tek tek listelendi; liste dışındaki her fark testi kırar. **Bu 25 sayfanın 1421H basılı nüshayla (veya QUL verisiyle) doğrulanması bekleniyor** (F0-05). |
+| Q-11 | Tanzil meta verisi 106. rubu'u 15:50'de başlatıyor, ama Tanzil'in kendi metnindeki ۞ işareti 15:49'da. | Referansın kendi içinde çelişkisi | Bizim veri (15:49) metindeki işaretle uyumlu; T-02'de istisna olarak belgelendi. Diğer 239 rubu' ve 30 cüz başlangıcı Tanzil ile aynı. |
 
 ---
 
-## 2. Tanzil (planlanan)
+## 2. Tanzil (test referansı)
 
 | Alan | Değer |
 |---|---|
 | Adres | https://tanzil.net |
 | Lisans | Creative Commons Attribution 3.0. Metin **değiştirilmeden** kopyalanabilir; kaynak (Tanzil Project) açıkça belirtilmeli ve tanzil.net'e bağlantı verilmeli; telif notu korunmalı |
-| Kullanım planı | F0-04 T-01: Quran.com metninden bağımsız ikinci referans olarak |
+| İndirme | `fetch_sources.dart tanzil` → `quran_app/tool/content/sources/tanzil/` (28.10.2026) |
+| Dosyalar | `quran-uthmani.txt`: Osmanlı yazımı, tüm işaretler (vakf, ۩, ۞), telif notu dosya sonunda. `quran-data.xml`: sure, cüz, rubu', sayfa (1405H), secde meta verisi |
+| Saklama | Bayt bayt, değiştirilmeden (`.gitattributes` ile git satır sonu dönüşümü kapalı) |
+| Kullanım | Yalnızca testlerde (`test/content/`). Uygulama paketine **girmez**. |
+
+### Karşılaştırma sonuçları (28.10.2026)
+- **Metin:** Quran.com `text_uthmani` Tanzil metniyle aynı kaynaktan geliyor. Tanzil'deki besmele çıkarılınca 6.236 ayetin **tamamı** karakteri karakterine aynı (Q-9 boşluğu kırpıldıktan sonra).
+- **Cüz:** 30 başlangıcın hepsi aynı.
+- **Rubu':** 240 başlangıcın 239'u aynı; tek fark Tanzil'in kendi çelişkisi (Q-11).
+- **Secde:** metin işaretleri 15, Quran.com meta verisi 14 (Q-8).
+- **Sayfa:** 604 sayfanın 579'u aynı; 25 fark 1405H/1421H baskı farkı (Q-10).
 
 ---
 
-## 3. Lisans Kontrol Listesi (İÇ-10)
+## 3. Bütünlük güvenceleri (F0-04)
+| Ne | Nasıl korunuyor |
+|---|---|
+| `text_uthmani` (6.236 ayet) | T-01: Tanzil ile karakter karakter karşılaştırma |
+| `text_qpc_hafs`, kelimeler, cüz/hizb/rubu'/secde, düzen satırları ve glifler | T-01: `tool/content/reference/checksums.json` içindeki sure başına SHA-256 değerleriyle karşılaştırma. Bu değerler veri bağımsız kontrollerden geçtikten sonra sabitlendi. |
+| Sayfa, cüz, rubu', secde | T-02: Tanzil meta verisi ve metindeki ۞/۩ işaretleriyle |
+
+Kaynak bilerek güncellenirse: `build_content_db.dart` → testler → farklar incelenir → `update_checksums.dart` → `checksums.json` farkı commit'te gözden geçirilir.
+
+## 4. Lisans Kontrol Listesi (İÇ-10)
 
 Her kaynak için doldurulur. ❓ olan maddeler yayından önce kapatılmalıdır.
 
@@ -75,3 +97,4 @@ Her kaynak için doldurulur. ❓ olan maddeler yayından önce kapatılmalıdır
 | Tarih | Değişiklik |
 |---|---|
 | 28.10.2026 | İlk sürüm: Quran.com API v4 kaynağı, bilinen durumlar Q-1…Q-8, lisans kontrol listesi |
+| 28.10.2026 | Tanzil test referansı olarak eklendi; karşılaştırma sonuçları; Q-8 güncellendi, Q-9…Q-11 eklendi; bütünlük güvenceleri bölümü |

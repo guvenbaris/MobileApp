@@ -127,7 +127,9 @@ Future<Map<String, int>> _insertText(
           hizb: v['hizb'] as int,
           rub: v['rub'] as int,
           sajdah: Value(v['sajdah'] as int?),
-          textUthmani: v['textUthmani'] as String,
+          // Q-9: Quran.com 110 surenin 1. ayetinde besmeleyi çıkarırken başta
+          // bir boşluk bırakmış; yalnızca bu boşluk kırpılır.
+          textUthmani: (v['textUthmani'] as String).trimLeft(),
           textQpcHafs: v['textQpcHafs'] as String,
         ),
       );

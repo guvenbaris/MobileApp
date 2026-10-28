@@ -10,7 +10,8 @@
 3. [F0-02 Mimari İskelet](#3-f0-02-mimari-iskelet)
 4. [F0-09 Test ve CI Altyapısı](#4-f0-09-test-ve-ci-altyapısı)
 5. [F0-03 Kur'an Veri Hattı](#5-f0-03-kuran-veri-hattı)
-6. [Genel durum ve bekleyen kararlar](#6-genel-durum-ve-bekleyen-kararlar)
+6. [F0-04 Metin Bütünlüğü Testleri](#6-f0-04-metin-bütünlüğü-testleri)
+7. [Genel durum ve bekleyen kararlar](#7-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -251,7 +252,79 @@ Sonuç: 23 birim/ekran testi + 1 entegrasyon testi geçiyor, analiz temiz.
 
 ---
 
-## 6. Genel durum ve bekleyen kararlar
+## 6. F0-04 Metin Bütünlüğü Testleri
+**Durum:** ✅ · **Gereksinimler:** İÇ-02, T-01, T-02, Y-06
+
+### 6.1 Amaç
+Kur'an metninde **tek bir harfin veya harekenin bile** fark edilmeden değişmesini engellemek. Değişiklik nereden gelirse gelsin (kaynağın yeniden indirilmesi, betikte bir hata, bir kütüphane güncellemesi) test kırılmalı ve **yerini** göstermeli.
+
+### 6.2 Referans: Tanzil
+- Tanzil'in Osmanlı yazımlı metni ve meta verisi `tool/content/sources/tanzil/` altına **bayt bayt, değiştirilmeden** kaydedildi (lisans gereği; telif notu dosyanın içinde).
+- **Uygulamaya girmez**, yalnızca testlerde kullanılır.
+- İndirme `fetch_sources.dart`'a eklendi: `dart run tool/content/fetch_sources.dart tanzil`.
+- **`.gitattributes` (kökte, yeni):** Windows'ta git satır sonlarını dönüştürüp dosyayı "değiştirmesin" diye kaynak klasörü dönüşümden muaf tutuldu.
+
+### 6.3 Karşılaştırma bulguları
+| Konu | Sonuç |
+|---|---|
+| **Ayet metni** | Quran.com'un `text_uthmani` alanı **Tanzil metninin ta kendisi**: 6.124 ayet birebir aynı. Kalan 112 farkın hepsi besmeleden: Tanzil her surenin 1. ayetinin başına besmele ekliyor. Quran.com bunu çıkarırken 110 ayetin başında bir **boşluk** bırakmış (Q-9). Boşluk kırpılınca **6.236 ayetin tamamı karakteri karakterine aynı**. |
+| **Cüz** | 30 başlangıcın hepsi aynı |
+| **Rubu'** | 240 başlangıcın 239'u aynı. Tek fark (106. rubu', 15:49/15:50) Tanzil'in kendi çelişkisi: metnindeki ۞ işareti 15:49'da, meta verisi 15:50 diyor. Bizim veri işaretle uyumlu (Q-11). |
+| **Secde** | Metinde 15 ۩ işareti var; Quran.com meta verisi 14 secde sayıyor (22:77 yok). 14 Hanefi sayısı, 22:77 Şafii'de secde. **Fıkhi tercih; karar bekliyor** (Q-8). |
+| **Sayfa** | 604 sayfanın 579'u aynı. Tanzil'in sayfaları **1405H** baskısına ait (Quran.com'un 1405H verisiyle birebir aynı olduğu doğrulandı); bizim düzen **1421H**. 25 sayfanın ilk ayeti farklı (Q-10). Bağımsız bir 1421H kaynağı olmadığı için bu 25 sayfa **henüz doğrulanmadı**. |
+| **Bölünmüş ayet** | Hiçbir ayet iki sayfaya bölünmemiş (Medine mushafının bilinen özelliği; veri tutarlı) |
+
+### 6.4 Yapılan değişiklikler
+- **`build_content_db.dart`:** Q-9 boşluğu kırpılıyor (`trimLeft`). Metin karakterlerine dokunulmuyor.
+- **`kContentVersion` 1 → 2:** veritabanı değiştiği için yüklü uygulamalar yeni sürümü görünce paketteki veritabanını yeniden kopyalar.
+
+### 6.5 Testler (`test/content/`)
+**`t01_quran_text_test.dart`: metin bütünlüğü (T-01)**
+| Test | Kontrol |
+|---|---|
+| Sayılar | 114 sure, 6.236 ayet; her surenin ayet sayısı Tanzil ile aynı; 77.429 kelime + 6.236 ayet sonu işareti |
+| Tanzil karşılaştırması | 6.236 ayetin her biri Tanzil metniyle (besmele çıkarılmış) **karakter karakter** aynı. Fark olursa ayeti, karakter sırasını ve iki tarafın Unicode kodunu yazar. |
+| Sağlama | KFGQPC metni (`text_qpc_hafs`), kelimeler, cüz/hizb/rubu'/secde, düzen satırları ve glifler için sure başına SHA-256 değerleri `tool/content/reference/checksums.json` ile karşılaştırılır. Fark olursa hangi surede hangi alanın değiştiğini yazar. |
+
+**`t02_mushaf_layout_test.dart`: sayfa düzeni ve bölüm sınırları (T-02)**
+| Test | Kontrol |
+|---|---|
+| Sayfa kapsamı | 604 sayfa, boşluksuz ve örtüşmesiz tüm ayetleri kapsar; 1. sayfa 1:1 ile başlar, 604. sayfa 114:6 ile biter |
+| Sayfa başı | Her sayfanın ilk ayeti Tanzil ile aynı; 25 bilinen 1421H farkı **tek tek listelenmiş** (beklenen değerleriyle). Liste dışındaki her fark ve listedeki bir değerin değişmesi testi kırar. |
+| Sayfa sonu | Her sayfanın son ayeti, sonraki sayfanın ilk ayetinden hemen önce |
+| Satırlar | Ayet satırları 83.665 kelimenin her birini sırayla ve bir kez kapsar |
+| Başlıklar | 114 sure başlığı; besmele satırı Fatiha ve Tevbe dışındaki 112 surede |
+| Cüz, hizb, rubu' | 30 cüz Tanzil ile aynı; 240 rubu' (15:49 istisnası belgeli); 60 hizb, her biri 4 rubu'; metindeki her ۞ bir rubu' başında |
+| Secde | Meta veride 14, metinde 15 işaret; tek fark 22:77 |
+
+### 6.6 Sağlama (checksum) düzeni
+- **Neden gerekli:** Tanzil yalnızca `text_uthmani` için bağımsız referans. KFGQPC metni, kelimeler ve düzen için bağımsız kaynak yok. Bunlar bağımsız kontrollerden (sayılar, Tanzil, yapısal testler) geçtikten **sonra** sabitlendi. .NET'teki "snapshot/approval testing" yaklaşımına benzer.
+- **Ortak kod:** hesaplama `tool/content/content_checksums.dart` içinde; hem test hem güncelleme betiği aynı kodu kullanıyor.
+- **Kaynak bilerek güncellenirse** sıra şöyle:
+  1. `build_content_db.dart` çalıştırılır.
+  2. Testler çalıştırılır; sağlama testi değişen sureleri listeler.
+  3. Farklar incelenir.
+  4. `dart run tool/content/update_checksums.dart` çalıştırılır.
+  5. `checksums.json`'daki git farkı commit'te gözden geçirilir.
+- **Üretim deterministik:** veritabanı yeniden üretildiğinde aynı sağlama değerleri çıkıyor (üretim zamanı sağlamaya dahil değil).
+
+### 6.7 "Bitti" kanıtı
+Veritabanında bilerek iki karakter bozuldu:
+- 2:255'te bir fetha dammeye çevrildi.
+- 36:1'in KFGQPC metnine bir şedde eklendi.
+
+Sonuç:
+- **Tanzil testi:** `2:255: 4. karakterde fark (veritabanı U+064F, Tanzil U+064E)`.
+- **Sağlama testi:** `İçerik değişmiş: Sure 2: textUthmani, Sure 36: textQpcHafs`.
+
+Veritabanı kaynaktan yeniden üretildi; bütün testler tekrar geçti.
+
+### 6.8 Sonuç
+37 test geçiyor (bunların 15'i içerik testi), analiz temiz. CI içerik testlerini de çalıştırıyor (haftalık, PR'da, elle).
+
+---
+
+## 7. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 28.10.2026
 
 | İş paketi | Durum |
@@ -259,8 +332,8 @@ Sonuç: 23 birim/ekran testi + 1 entegrasyon testi geçiyor, analiz temiz.
 | F0-01 Depo ve proje kurulumu | ✅ Android · ⏳ iOS ilk CI çalışması |
 | F0-02 Mimari iskelet | ✅ |
 | F0-03 Kur'an veri hattı | ✅ |
-| F0-04 Metin bütünlüğü testleri (T-01, T-02) | ⬜ Sıradaki önerilen adım |
-| F0-05 Mushaf sayfası çizimi (en riskli) | ⬜ |
+| F0-04 Metin bütünlüğü testleri (T-01, T-02) | ✅ · ⏳ 25 sayfa 1421H basılı nüshayla doğrulanacak |
+| F0-05 Mushaf sayfası çizimi (en riskli) | ⬜ Sıradaki önerilen adım |
 | F0-06 Kullanıcı veritabanı | ⬜ |
 | F0-07 Dil · F0-08 Tema · F0-10 `CLAUDE.md` · F0-11 Erişilebilirlik | ⬜ |
 | F0-09 Test ve CI | ✅ · ⏳ kırmızıya düşme denemesi |
@@ -268,5 +341,7 @@ Sonuç: 23 birim/ekran testi + 1 entegrasyon testi geçiyor, analiz temiz.
 **Bekleyen kararlar ve işler**
 - **Uygulama adı:** aday "Kur'anla Yaşamak"; karar sonraya bırakıldı (AK-04).
 - **Veri ve font lisansı (AK-11):** Quran.com / KFGQPC; yayından önce yazılı izin gerekecek.
+- **Secde listesi (Q-8):** uygulamada 14 (Hanefi) mi, 15 (22:77 dahil) secde mi gösterilecek? Fıkhi tercih; içerik kurulu (AK-06).
+- **25 sayfanın doğrulanması (Q-10):** 1421H basılı Medine mushafı veya QUL'ün 1421H düzen verisi (ücretsiz hesapla indirilebilir) ile.
 - **Android `cmdline-tools` kurulumu:** lisans onayı için.
 - **GitHub'da yapılacaklar:** iOS iş akışını elle çalıştırmak; bilerek bozulmuş bir PR ile CI'ın kırmızıya düştüğünü görmek.
