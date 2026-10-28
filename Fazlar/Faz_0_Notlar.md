@@ -12,7 +12,8 @@
 5. [F0-03 Kur'an Veri Hattı](#5-f0-03-kuran-veri-hattı)
 6. [F0-04 Metin Bütünlüğü Testleri](#6-f0-04-metin-bütünlüğü-testleri)
 7. [F0-04 Ek: QUL Doğrulaması, Esas Kelime ve Font Kararı](#7-f0-04-ek-qul-doğrulaması-esas-kelime-ve-font-kararı)
-8. [Genel durum ve bekleyen kararlar](#8-genel-durum-ve-bekleyen-kararlar)
+8. [F0-05 Mushaf Sayfası Çizimi (devam ediyor)](#8-f0-05-mushaf-sayfası-çizimi-devam-ediyor)
+9. [Genel durum ve bekleyen kararlar](#9-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -403,7 +404,73 @@ QUL'den indirilen dosyalar `C:\Users\HUAWEI\Desktop\GuvenBaris\Projects\qul_indi
 
 ---
 
-## 8. Genel durum ve bekleyen kararlar
+## 8. F0-05 Mushaf Sayfası Çizimi (devam ediyor)
+**Durum:** 🔨 Neredeyse tamam · **Gereksinimler:** M2-01, M2-02, M2-08, M3-03, M8-02, NF-PF02, NF-PF06, TK-06
+
+### 8.1 Yapılanlar
+| Parça | Dosya | Açıklama |
+|---|---|---|
+| Sayfa modeli | `lib/features/quran/domain/mushaf_page.dart` | `MushafPage` → `MushafLine` (tür, ortalı mı, kelimeler, glifler). `WordRef` = düzenden bağımsız `sure:ayet:kelime` konumu (M2-15) |
+| Sayfa sorgusu | `QuranRepository.getMushafPage` (`drift_quran_repository.dart`) | Bir sayfa için 3 sorgu: satırlar, glifler, kelimeler. Emülatörde 5–10 ms. |
+| Okuma ekranı | `lib/features/reader/presentation/reader_page.dart` | 604 sayfa sağdan sola (`PageView`, RTL). Üst çubukta sayfa/cüz, tema ve çizim yöntemi düğmeleri; altta seçilen kelimenin konumu. Komşu 2'şer sayfa önceden yüklenir. |
+| Sayfa çizimi | `mushaf_page_view.dart` | Satır yüksekliği = sayfa/15. İki yana yaslı satırda kelimeler satıra yayılır, ortalı satırlar ortalanır. Yazı boyutu, sayfanın en uzun satırı sığacak şekilde **parça parça ölçülür** ve önbelleğe alınır. İki çizim yöntemi aynı bileşende. |
+| Temalar | `mushaf_colors.dart`, `reader_settings.dart` | Açık / sepya / koyu (M2-08). Kalıcılık F0-06/F0-08'de. |
+| QCF font paketi | `reader/domain/mushaf_font_pack.dart`, `reader/data/directory_mushaf_font_pack.dart` | Arayüz + cihazdaki klasörden okuyan uygulama (`qcf_v2/p{n}.ttf`). Geliştirmede fontlar emülatöre `adb push` ile kopyalandı; indirme akışı bu klasörü dolduracak. |
+| Performans ölçümü | `lib/core/diagnostics/perf_probe.dart` | Yalnızca dev ortamında: kare süreleri (build/raster) ve sayfa yükleme süresi `adb logcat`'e `PERF` önekiyle yazılır. |
+| Yönlendirme | `AppRoutes.readerAt(page)` | Ana sayfadaki sureye dokununca o surenin sayfası açılır. |
+
+### 8.2 Görsel doğrulama (emülatör)
+- **1. sayfa (Fatiha):** başlık + 7 satır, hepsi ortalı; satır dağılımı basılı nüshayla aynı. QCF modunda süslü ayet numaraları ve gerçek hat.
+- **6. sayfa:** 15 satır, 2:30 ile başlıyor ve 2:37 ile bitiyor; QCF modunda basılı 1421H sayfasının görünümünün aynısı.
+- **Kelimeye dokunma:** "وَإِذۡ" → `2:30:1`; vurgulanıyor, tekrar dokununca kalkıyor (widget testiyle de korunuyor).
+- **Koyu tema:** metin alanı da koyu; QCF glifleri temaya göre renkleniyor.
+- **Bulunan ve düzeltilen hata:** QCF modunda ortalı satırlar taşıyordu (yazı boyutu satır tek parça metin gibi ölçülüyordu). Ölçüm, ekrandaki gibi parça parça yapılacak şekilde düzeltildi.
+
+### 8.3 Ölçümler
+**Uygulama boyutu (NF-PF06, hedef ≤ 60 MB):** prod release, arm64 **22,4 MB** (armeabi-v7a 19,8 MB). İçerik veritabanı dahil. QPC Hafs fontu ~1 MB ekleyecek. QCF paketi uygulamaya girmez (indirme ~130 MB, cihazda 208 MB).
+
+**Kaydırma (emülatör, profile derleme, 20 sayfa):**
+| Yöntem | build p90 | raster p90 | Kare p90 | 60 fps'yi aşan kare |
+|---|---|---|---|---|
+| Tek font | 0,8–1,6 ms | ~16 ms | ~17 ms | %7–%25 |
+| QCF (yeni sayfalar) | 23–26 ms | 55–64 ms | 55–74 ms | ~%70 |
+| QCF (fontu yüklü sayfalarda geri) | 1,3–1,6 ms | ~50 ms | ~51 ms | ~%72 |
+
+**Yorum:**
+- **Veritabanı darboğaz değil:** sayfa verisi 10 ms'nin altında yükleniyor.
+- **QCF'deki build yükü, her sayfanın yeni fontunun yüklenmesinden geliyor:** Flutter yeni font gelince metinleri yeniden düzenliyor; fontu yüklü sayfalarda bu yük kayboluyor. Çözüm: fontları kaydırma anında değil, boş anlarda önceden ve topluca yüklemek.
+- **QCF'deki raster yükü** karmaşık hat gliflerinin çizimi. Emülatörün grafik birimi **yazılımla taklit edildiği** (`ro.hardware.egl=emulation`) için bu sayılar gerçek cihazı temsil etmiyor. **Gerçek bir telefonda ölçülmesi gerekiyor.**
+- **Raster gerçek cihazda da yavaş çıkarsa** yedek çözüm: sayfayı bir kez resme çizip kaydırırken resmi göstermek. Bellek maliyeti sayfa başına ~9 MB; 5 sayfa tutulur.
+
+### 8.4 Font lisansı
+QPC Hafs ve QCF fontlarının ikisi de KFGQPC'nin malı; lisans metni yazılı izin olmadan çoğaltmayı yasaklıyor. Bu yüzden yayından önce **yazılı izin şart** (AK-11). Font, kodda tek bir yerden (`kQuranFontFamily`) değişiyor; izin çıkmazsa yedek, OFL lisanslı Amiri Quran.
+
+### 8.5 İkinci kısım: tek font, ayet görünümü, yatay mod
+| Parça | Açıklama |
+|---|---|
+| **Tek Kur'an fontu** | `assets/fonts/UthmanicHafs_V22.ttf` (KFGQPC HAFS Uthmanic Script v2.2, 298 KB, QUL kaynak 245). Font dosyasının içindeki lisans metni de "KFGQPC'nin malıdır, çoğaltılamaz" diyor → yayın için yazılı izin (AK-11). Varsayılan görünüm artık bu fontla; süslü ayet numaralarını font kendisi çiziyor. |
+| **Ayet görünümü (M2-01)** | `ayah_list_view.dart`: 6.236 ayet tek listede (`scrollable_positioned_list` paketi ile istenen ayete doğrudan atlanır). Sure başlarında başlık, her ayetin altında konumu. Yazı boyutu A−/A+ ile %50–%250 (M2-07). |
+| **Konum çapası (M2-15)** | `readerAnchorProvider`: okunan ayet. Sayfa görünümünde sayfanın ilk ayeti, ayet görünümünde ekranın en üstündeki ayet. Görünüm değişince yeni görünüm çapadan açılır. `AyahIndex`: 0–6235 sıra ↔ sure:ayet (6.236 ayetin hepsi testle doğrulandı). |
+| **Emülatör doğrulaması** | Ayet görünümünde 2:30'a kaydırıldı → sayfa görünümü **6. sayfa** (2:30 bu sayfanın ilk ayeti) → tekrar ayet görünümü **2:30**. |
+| **Çift sayfa (M2-03)** | Yatay tablette (en kısa kenar ≥ 600 dp) iki sayfa yan yana; basılı mushaf gibi tek sayfa sağda, çift sayfa solda (1–2, 3–4…). Tablet emülatörü olmadığı için (`cmdline-tools` eksik) ekran testleriyle doğrulandı. |
+| **Telefonda yatay** | İlk denemede kullanılamazdı (yazı küçük, satırlar ekran boyunca dağınık). Düzeltildi: sayfa ekran genişliğine sığar, mushaf oranında uzar ve dikey kaydırılır. |
+| **Döndürme (M2-10)** | Okunan sayfa döndürmede değişmiyor (emülatör + ekran testi: 5. sayfa → yatay tablette 5–6 açılımı → dikeyde yine 5). |
+| **Hata düzeltmesi** | Sayfa okunamadığında çapa ayarlayan kod yakalanmamış hata fırlatıyordu (Riverpod 3 otomatik yeniden deneme); hataya dayanıklı yapıldı. |
+
+### 8.6 Gözlemler
+- **Açıklanamayan sayfa sıçraması (tekrarlanamadı):** yeniden kurulumdan sonraki ilk açılışta otomatik dokunma/kaydırma komutları sonrası okuma ekranı 603. sayfada görüldü. Aynı zamanlamayla tekrar denendiğinde sayfalar 1–8 sırayla yüklendi. İlk açılışın yavaş olması ve komutların beklenmedik anda işlenmesi olası neden; gerçek cihaz testinde gözlenecek.
+- **Hızlı kaydırma:** ayet görünümünde çok hızlı otomatik kaydırma komutları ilk denemede listeyi kaydırmadı; normal hızda çalışıyor. Gerçek cihazda bakılacak.
+- **Tek font görünümü:** satırlar kelimeler arasına boşluk eklenerek yaslanıyor; basılı nüsha harf uzatmasıyla (keşide) yaslar. Satır ve sayfa sınırları aynı; görsel fark yalnızca kelime aralıklarında.
+
+### 8.7 Kalan işler
+- **Font paketi izin sorusu ve indirme akışı (TK-06):** paketin nereden indirileceği belirlenmeli (aşağıda).
+- ⏸ **Gerçek cihazda performans ölçümü:** ertelendi (kullanıcı kararı).
+- ⏸ **7 sayfanın basılı nüshayla karşılaştırılması:** ertelendi (kullanıcı kararı; düzen F0-04'te çapraz doğrulandı).
+- **Sonuç raporu:** bu bölüm; yöntem kararı F0-10'da `CLAUDE.md`'ye.
+
+---
+
+## 9. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 28.10.2026
 
 | İş paketi | Durum |
@@ -412,7 +479,7 @@ QUL'den indirilen dosyalar `C:\Users\HUAWEI\Desktop\GuvenBaris\Projects\qul_indi
 | F0-02 Mimari iskelet | ✅ |
 | F0-03 Kur'an veri hattı | ✅ |
 | F0-04 Metin bütünlüğü testleri (T-01, T-02) | ✅ (25 sayfa QUL ile doğrulandı; esas kelime KFGQPC) |
-| F0-05 Mushaf sayfası çizimi (en riskli) | ⬜ Sıradaki önerilen adım |
+| F0-05 Mushaf sayfası çizimi (en riskli) | 🔨 Neredeyse tamam (çizim, dokunma, temalar, boyut, ayet görünümü, çift sayfa); kalan: font paketi indirme (§8.7); gerçek cihaz ve basılı nüsha ertelendi |
 | F0-06 Kullanıcı veritabanı | ⬜ |
 | F0-07 Dil · F0-08 Tema · F0-10 `CLAUDE.md` · F0-11 Erişilebilirlik | ⬜ |
 | F0-09 Test ve CI | ✅ · ⏳ kırmızıya düşme denemesi |

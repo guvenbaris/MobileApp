@@ -11,6 +11,7 @@
 | Quran.com API v4 | Ayet metinleri (`text_uthmani`, `text_qpc_hafs`), cüz/hizb/rubu'/secde, sure bilgileri; Corpus kelime bölünmesi ve QCF V2 glif kodları (yalnızca eşleme köprüsü) | ✅ Kullanılıyor | ❓ **Belirsiz**: AK-11 |
 | **KFGQPC metni** (`text_qpc_hafs`, Quran.com üzerinden) | **Esas kelime bölünmesi** (77.430 kelime) | ✅ Kullanılıyor | Asıl hak sahibi KFGQPC: AK-11 |
 | QUL (Tarteel) | Medine 1421H düzeni: satırlar, ortalı satırlar, QCF V2 glif birimleri | ✅ Kullanılıyor (elle indirildi) | ❓ Kaynak sayfalarında "telif bilgisi yok" |
+| QPC Hafs fontu (tek Kur'an fontu, KFGQPC) | Varsayılan sayfa görünümü (TK-06) | ⏳ İndirilecek (QUL kaynak 245) | ❌ Lisans: "KFGQPC'nin malıdır; yazılı izin olmadan çoğaltılamaz" → **yazılı izin gerekli** (AK-11). Yedek: OFL lisanslı Amiri Quran |
 | QCF V2 sayfa fontları (QUL üzerinden) | Birebir mushaf görünümü (604 TTF, 208 MB); düzen doğrulaması | ⬜ Depoda değil; F0-05'te isteğe bağlı paket | Asıl hak sahibi KFGQPC: AK-11 |
 | Tanzil | **Dosyaları yalnızca test referansı** (T-01 metin, T-02 sayfa/cüz/rubu'/secde); uygulama paketine girmez. ⚠️ Ancak Quran.com'dan gelen `ayahs.text_uthmani` metni Tanzil metninin aynısıdır (Tanzil kökenli) ve veritabanıyla uygulamaya girer. | ✅ Testlerde kullanılıyor | ✅ CC BY 3.0 (değiştirmeden, atıfla). `text_uthmani` uygulamada kaldığı sürece "Hakkında" ekranında Tanzil atfı ve bağlantısı **zorunlu** |
 

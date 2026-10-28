@@ -2,7 +2,7 @@
 
 > **Amaç:** Sonraki tüm fazların üzerine inşa edileceği iskeleti kurmak ve projenin **en büyük teknik riskini** erkenden çözmek: mushaf sayfasının basılı nüshayla birebir aynı çizilmesi.
 > **Bağlı dokümanlar:** `Proje_Gereksinimleri.md` (özellikle 9.7 Mimari Kısıtlar, 8. İçerik, 12. Test), `Yol_Haritasi.md`, `Faz_0_Notlar.md` (her iş paketinde ne yapıldığı ve neden)
-> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
+> **Durum:** 🔨 Devam ediyor (F0-01 Android tarafı, F0-02, F0-03, F0-04 ve F0-09 tamam; F0-05 sürüyor; iOS doğrulaması ve CI kırmızı denemesi GitHub'da ilk çalıştırmayı bekliyor)
 
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
@@ -85,14 +85,17 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 
 ### F0-05 Mushaf Sayfası Çizim Denemesi (Spike) [Z] — M2-01, M2-02, TK-06
 > Projenin en riskli teknik konusu. Faz 1'e geçmeden çözülmelidir.
-- [ ] Tek Kur'an fontuyla (varsayılan) ve QCF V2 sayfa fontlarıyla (isteğe bağlı paket) tek bir sayfanın çizilmesi; satır düzeni ve ortalı satırlar birebir (TK-06)
-- [ ] Kelimeye dokununca kelime kimliğinin alınması (M3-03 ve M8-02'nin ön koşulu)
-- [ ] Açık / sepya / koyu temada çizim (M2-08)
-- [ ] Yazı boyutu ölçekleme ve tablette çift sayfa ön denemesi (M2-03, M2-07)
-- [ ] Performans ölçümü: sayfa geçişi ≤ 100 ms (NF-PF02), uygulama boyutu (NF-PF06); font paketi indirme akışı ve izin sorusu (TK-06)
-- [ ] **Düzen değiştirme denemesi (M2-14, M2-15):** en az iki düzen (ör. Medine + metin tabanlı ayet görünümü ya da ikinci bir sayfa düzeni) arasında geçişte aynı ayette kalındığının gösterilmesi
+- [x] Tek Kur'an fontuyla (varsayılan) ve QCF V2 sayfa fontlarıyla (isteğe bağlı paket) sayfa çizimi; satır düzeni ve ortalı satırlar birebir (TK-06). Tek font: KFGQPC HAFS Uthmanic Script v2.2.
+- [x] Kelimeye dokununca kelime kimliğinin alınması (M3-03 ve M8-02'nin ön koşulu); iki çizim yönteminde de
+- [x] Açık / sepya / koyu temada çizim (M2-08); koyu temada metin alanı da koyu, QCF glifleri temaya göre renkleniyor
+- [x] Yazı boyutu ölçekleme ve tablette çift sayfa ön denemesi (M2-03, M2-07): ayet görünümünde %50–%250; yatay tablette çift sayfa (açılım 1–2, 3–4…; widget testleriyle); telefonda yatayda sayfa genişliğe sığar ve dikey kaydırılır; döndürmede sayfa korunur (M2-10). Sayfa görünümünde yakınlaştırma Faz 1'de.
+- [x] Uygulama boyutu (NF-PF06): prod release arm64 **22,4 MB** (içerik veritabanı dahil)
+- [~] Performans (NF-PF02): emülatörde ölçüldü (tek font akıcı; QCF'de çizim yavaş, emülatörün yazılım GPU'su nedeniyle). ⏸ **Gerçek cihaz ölçümü ertelendi** (kullanıcı kararı 28.10.2026; geçişler çalışıyor).
+- [ ] Font paketi indirme akışı ve izin sorusu (TK-06)
+- [x] **Düzen değiştirme denemesi (M2-14, M2-15):** mushaf sayfası ↔ ayet görünümü geçişinde aynı ayette kalınıyor (emülatörde: ayet görünümünde 2:30 → sayfa 6 → tekrar 2:30). Konum düzenden bağımsız `sure:ayet` çapasıyla tutuluyor.
 - [ ] Sonuç raporu: seçilen yöntem, karşılaşılan sorunlar, Türkiye mushaf düzeni için uygulanabilirlik
 - **Bitti:** Seçilen 7 sayfa (Fatiha, Bakara 2, rastgele 5) basılı nüshayla yan yana karşılaştırıldı ve farksız; yöntem kararı `CLAUDE.md`'ye yazıldı.
+- ⏸ **Ertelendi (kullanıcı kararı 28.10.2026):** basılı nüsha karşılaştırması ileride yapılacak. Gerekçe: düzen kelime kelime üç kaynakla ve font genişliği ölçümüyle doğrulandı (F0-04). Yöntem kararı F0-10'da `CLAUDE.md` yazılırken eklenecek.
 
 ### F0-06 Kullanıcı Veritabanı Altyapısı [Z] — MK-02, MK-03, MK-04, MK-09
 - [ ] İçerik veritabanından **ayrı** kullanıcı veritabanı (MK-05)
@@ -159,4 +162,5 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | CI de her commit yerine haftalık + PR + elle çalışacak şekilde değiştirildi |
 | 28.10.2026 | F0-03 Kur'an veri hattı tamamlandı; ilk düzen Medine 1421H (QCF V2) |
 | 28.10.2026 | F0-04 metin bütünlüğü testleri tamamlandı; Tanzil test referansı |
+| 28.10.2026 | F0-05 başladı: sayfa çizimi (iki yöntem), kelimeye dokunma, temalar, boyut ve ilk performans ölçümleri |
 | 28.10.2026 | F0-04 ek: QUL düzen/glif kaynağı oldu; esas kelime bölünmesi KFGQPC (77.430); satır genişliği doğrulaması; TK-06 font kararı |

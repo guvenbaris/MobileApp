@@ -1,4 +1,5 @@
 import 'package:quran_app/core/result/result.dart';
+import 'package:quran_app/features/quran/domain/mushaf_page.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
 import 'package:quran_app/features/quran/domain/quran_repository.dart';
 
@@ -46,5 +47,9 @@ class FakeQuranRepository implements QuranRepository {
 
   @override
   Future<Result<AyahRef>> firstAyahOfPage(String layoutId, int page) async =>
+      Err(NotFoundFailure('$page'));
+
+  @override
+  Future<Result<MushafPage>> getMushafPage(String layoutId, int page) async =>
       Err(NotFoundFailure('$page'));
 }

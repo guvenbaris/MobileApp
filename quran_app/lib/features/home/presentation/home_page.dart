@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/routing/app_routes.dart';
 import '../../quran/application/quran_providers.dart';
+import '../../quran/domain/quran_models.dart';
 
 // Metinler F0-07'de ARB dosyalarına taşınır.
 class HomePage extends ConsumerWidget {
@@ -36,6 +37,8 @@ class HomePage extends ConsumerWidget {
           itemBuilder: (context, i) {
             final surah = value[i];
             return ListTile(
+              key: Key('home.surah.${surah.id}'),
+              onTap: () => _openSurah(context, ref, surah.id),
               leading: Text('${surah.id}'),
               title: Text(surah.nameTr),
               subtitle: Text('${surah.ayahCount} ayet'),
@@ -51,5 +54,17 @@ class HomePage extends ConsumerWidget {
         _ => const Center(child: CircularProgressIndicator()),
       },
     );
+  }
+
+  Future<void> _openSurah(
+    BuildContext context,
+    WidgetRef ref,
+    int surah,
+  ) async {
+    final page = await ref
+        .read(quranRepositoryProvider)
+        .pageOf(kDefaultLayoutId, AyahRef(surah, 1));
+    if (!context.mounted) return;
+    context.go(AppRoutes.readerAt(page.valueOrNull ?? 1));
   }
 }

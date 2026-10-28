@@ -1,4 +1,5 @@
 import '../../../core/result/result.dart';
+import 'mushaf_page.dart';
 import 'quran_models.dart';
 
 /// Kur'an içeriğine erişim (MK-07: arayüz katmanı veritabanına doğrudan
@@ -15,4 +16,7 @@ abstract interface class QuranRepository {
 
   /// Sayfanın ilk ayeti (sayfa → konum dönüşümü).
   Future<Result<AyahRef>> firstAyahOfPage(String layoutId, int page);
+
+  /// Bir mushaf sayfasının çizim için gereken tüm bilgisi (M2-01, M2-02).
+  Future<Result<MushafPage>> getMushafPage(String layoutId, int page);
 }

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/result/result.dart';
+import '../domain/mushaf_page.dart';
 import '../domain/quran_models.dart';
 import '../domain/quran_repository.dart';
 import 'content_database.dart';
@@ -86,6 +87,112 @@ class DriftQuranRepository implements QuranRepository {
         final ayah = row.readTable(_db.ayahs);
         return Ok(AyahRef(ayah.surah, ayah.ayah));
       });
+
+  @override
+  Future<Result<MushafPage>> getMushafPage(
+    String layoutId,
+    int page,
+  ) => _guard(() async {
+    final lines =
+        await (_db.select(_db.layoutLines)
+              ..where((l) => l.layoutId.equals(layoutId) & l.page.equals(page))
+              ..orderBy([(l) => OrderingTerm(expression: l.line)]))
+            .get();
+    final range =
+        await (_db.select(_db.layoutPages)
+              ..where((p) => p.layoutId.equals(layoutId) & p.page.equals(page)))
+            .getSingleOrNull();
+    if (lines.isEmpty || range == null) {
+      return Err(NotFoundFailure('Sayfa yok: $layoutId/$page'));
+    }
+
+    final ayahLines = lines.where((l) => l.firstGlyphId != null);
+    final firstGlyph = ayahLines.first.firstGlyphId!;
+    final lastGlyph = ayahLines.last.lastGlyphId!;
+    final glyphs =
+        await (_db.select(_db.layoutGlyphs)
+              ..where(
+                (g) =>
+                    g.layoutId.equals(layoutId) &
+                    g.id.isBetweenValues(firstGlyph, lastGlyph),
+              )
+              ..orderBy([(g) => OrderingTerm(expression: g.id)]))
+            .get();
+    final words = {
+      for (final w
+          in await (_db.select(_db.words)..where(
+                (w) => w.id.isBetweenValues(
+                  glyphs.first.firstWordId,
+                  glyphs.last.lastWordId,
+                ),
+              ))
+              .get())
+        w.id: w,
+    };
+    final firstAyah = await (_db.select(
+      _db.ayahs,
+    )..where((a) => a.id.equals(range.firstAyahId))).getSingle();
+
+    WordRef ref(WordRow w) => WordRef(w.surah, w.ayah, w.position);
+    final glyphById = {for (final g in glyphs) g.id: g};
+
+    return Ok(
+      MushafPage(
+        layoutId: layoutId,
+        number: page,
+        firstAyah: AyahRef(firstAyah.surah, firstAyah.ayah),
+        juz: firstAyah.juz,
+        hizb: firstAyah.hizb,
+        lines: [
+          for (final l in lines)
+            if (l.firstGlyphId == null)
+              MushafLine(
+                number: l.line,
+                type: l.type,
+                isCentered: l.isCentered,
+                surah: l.surah,
+                words: const [],
+                glyphs: const [],
+              )
+            else
+              _ayahLine(l, glyphById, words, ref),
+        ],
+      ),
+    );
+  });
+
+  /// Ayet satırı: glifler ve kapsadıkları kelimeler, okuma sırasıyla.
+  static MushafLine _ayahLine(
+    LayoutLineRow line,
+    Map<int, LayoutGlyphRow> glyphById,
+    Map<int, WordRow> words,
+    WordRef Function(WordRow) ref,
+  ) {
+    final glyphs = <PageGlyph>[];
+    final lineWords = <PageWord>[];
+    for (var id = line.firstGlyphId!; id <= line.lastGlyphId!; id++) {
+      final g = glyphById[id]!;
+      final covered = [
+        for (var w = g.firstWordId; w <= g.lastWordId; w++) words[w]!,
+      ];
+      glyphs.add(PageGlyph(glyph: g.glyph, words: covered.map(ref).toList()));
+      for (final w in covered) {
+        // Birden fazla glife bölünen kelime bir kez eklenir.
+        if (lineWords.isEmpty || lineWords.last.ref != ref(w)) {
+          lineWords.add(
+            PageWord(ref: ref(w), text: w.wordText, isAyahEnd: w.isAyahEnd),
+          );
+        }
+      }
+    }
+    return MushafLine(
+      number: line.line,
+      type: line.type,
+      isCentered: line.isCentered,
+      words: lineWords,
+      glyphs: glyphs,
+    );
+  }
 
   Future<Result<T>> _guard<T>(Future<Result<T>> Function() body) async {
     try {

@@ -16,7 +16,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: AppRoutes.reader.substring(1),
-            builder: (context, state) => const ReaderPage(),
+            builder: (context, state) => ReaderPage(
+              initialPage:
+                  int.tryParse(state.uri.queryParameters['page'] ?? '') ?? 1,
+            ),
           ),
           GoRoute(
             path: AppRoutes.settings.substring(1),
