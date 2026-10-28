@@ -90,6 +90,7 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 
 ### F1-05 Meal [Z] — M3-01, M3-02, M3-06, M3-07, M3-09, T-03
 - [ ] Meal verisi şeması ve hattı (paketli varsayılan meal + indirilebilir mealler, TK-13)
+- [ ] Kamu malı yedek meal (S2): kaynağın özgün metni verdiğinin doğrulanması, veriye alınması, okunabilirlik değerlendirmesi. Yayın meali kararı Faz 1 sonunda verilir (kullanıcı, 29.10.2026)
 - [ ] Ayet görünümünde meal; en fazla 3 meal yan yana/alt alta (M3-02) [Ö]
 - [ ] Sayfa görünümünde ayete uzun basınca meal paneli (E-08)
 - [ ] Meal seçimi kalıcı (M3-06); her mealin yazar/kaynak/sürüm bilgisi (M3-07)

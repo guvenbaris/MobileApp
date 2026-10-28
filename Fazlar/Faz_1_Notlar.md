@@ -67,7 +67,7 @@
 | F1-01 … F1-14 | ⬜ |
 
 **Bekleyen kararlar ve işler**
-- **Yayın meali (S1, S2):** Diyanet izin başvurusu ve kamu malı yedek meal.
+- **Yayın meali (S1, S2), karar Faz 1 sonunda (kullanıcı, 29.10.2026):** Kullanıcı, uygulama ticari olacağı için Diyanet'in izin vermeyeceğini düşünüyor. Bu yüzden **kamu malı yedek meal gerçek bir seçenek olarak hazırlanacak**: kaynak doğrulaması, metin hattı ve okunabilirlik değerlendirmesi F1-05 içinde yapılacak. Diyanet başvurusu yine de denenebilir. Geliştirme Diyanet mealiyle sürüyor.
 - **Faz 1 başlangıç kararları S1–S8 ve TK-11…TK-17:** öneri halinde; itiraz yoksa uygulanır.
 - **Ekran tasarımı açık soruları ET-1…ET-7** (`Ekran_Tasarimi.md` §10).
 - **Emülatör:** içerik sürümü 7'ye çıktı; uygulama güncel kodla ilk açılışta yeni veritabanını kendiliğinden kopyalar ve eskisini siler.
