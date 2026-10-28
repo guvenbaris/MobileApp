@@ -11,7 +11,8 @@
 4. [F0-09 Test ve CI Altyapısı](#4-f0-09-test-ve-ci-altyapısı)
 5. [F0-03 Kur'an Veri Hattı](#5-f0-03-kuran-veri-hattı)
 6. [F0-04 Metin Bütünlüğü Testleri](#6-f0-04-metin-bütünlüğü-testleri)
-7. [Genel durum ve bekleyen kararlar](#7-genel-durum-ve-bekleyen-kararlar)
+7. [F0-04 Ek: QUL Doğrulaması, Esas Kelime ve Font Kararı](#7-f0-04-ek-qul-doğrulaması-esas-kelime-ve-font-kararı)
+8. [Genel durum ve bekleyen kararlar](#8-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -324,7 +325,85 @@ Veritabanı kaynaktan yeniden üretildi; bütün testler tekrar geçti.
 
 ---
 
-## 7. Genel durum ve bekleyen kararlar
+## 7. F0-04 Ek: QUL Doğrulaması, Esas Kelime ve Font Kararı
+**Durum:** ✅ · **Gereksinimler:** İÇ-01, İÇ-02, T-01, T-02, M2-02, M2-14, M3-03, M8-02, NF-PF06, M16-01
+
+### 7.1 Neden yapıldı
+F0-04'te iki konu açık kalmıştı:
+- 1421H düzenine özgü 25 sayfanın bağımsız doğrulaması (Q-10).
+- Ortalı satır bilgisinin eksikliği (Q-6).
+
+Bunlar için QUL'den (qul.tarteel.ai) üç dosya indirildi: 1421H düzeni, QCF V2 glif listesi ve 604 sayfa fontu.
+
+### 7.2 Doğrulama bulguları
+| Konu | Sonuç |
+|---|---|
+| Glifler | Quran.com ile QUL glifleri birebir aynı |
+| Satırlar | 9.046 satırın 9.036'sı aynı; satır türleri ve sure başlıkları aynı |
+| 25 sayfa (Q-10) | QUL'de de aynı → **doğrulandı** |
+| Ortalı satırlar (Q-6) | QUL'den: 256 satır → **çözüldü** |
+| Farklı 10 satır (5 sayfa) | **Font genişliği ölçümüyle** çözüldü (aşağıda) |
+
+**Satır genişliği yöntemi:** QCF sayfa fontlarında iki yana yaslı her satır aynı genişliğe gelecek şekilde tasarlanmış. Yanlış satıra yazılmış bir kelime iki satırın genişliğini bozar. 8.790 satır ölçüldü:
+- Normal sapma: ortanca %0,37; satırların %99'u %1,6'nın altında.
+- **Quran.com:** 27, 177, 400 ve 443. sayfalarda ±%9–16 sapma → hatalı. QUL bu sayfalarda doğru.
+- **254. sayfa:** iki kaynak da hatalı. En iyi uyum "بَعۡدَ" 6. satırda, "مَا" 7. satırda (+%0,5 / −%0,9). Bu, gerekçeli tek bir düzeltme olarak eklendi.
+- **Sonuç düzende** 8.790 satırın tamamı %3 içinde; en büyük sapma %2,63.
+
+### 7.3 Kelime bölünmesi sorunu ve kararı
+Karşılaştırmada **beş kaynağın kelime bölünmesinin 7 yerde farklı olduğu** ortaya çıktı (tablo: `VERI_KAYNAKLARI.md` Q-12). Harfler her kaynakta aynı; fark yalnızca kelime sınırında:
+- **Corpus ve Quran.com dilbilgisi birimini sayıyor:** "baʿdamā" (bağlaç), "Il-yāsīn" (özel isim) tek kelime. Aynı ifadenin esreli hali "min baʿdi mā" 27 yerde her kaynakta 2 kelime.
+- **Kral Fahd'ın iki ürünü bile ayrışıyor:** Unicode metni ile mushaf fontu 4 yerde farklı bölüyor ("لَّوۡمَا", "مَالِيَ" ×2, "إِلۡ يَاسِينَ").
+- **Arap yazısındaki belirsizlik:** ا ve و sonraki harfe bağlanmadığı için "لوما" ile "لو ما" basılı sayfada yalnızca boşluk genişliğiyle ayrılıyor.
+
+**Karar (kullanıcı, 28.10.2026): esas kelime bölünmesi KFGQPC resmi metni, 77.430 kelime.** Konumlar (sure:ayet:kelime), hata işaretleri ve arama bu kelimelere bağlanır.
+
+**Eşlemeler elle yazılmaz, veriden çıkarılır:**
+- Betik üç kaynağı **harf iskeleti** üzerinden hizalar. İskelet = yalnızca temel harfler; hareke, işaret ve tatvîl atılır, elif/ye/vav aileleri tek harfe katlanır. Bu yalnızca hizalama içindir; saklanan metni etkilemez.
+- Toplam harf sayısı eşit olan en küçük kelime grupları bulunur. Grup içinde bire bir, birden-çoğa veya çoktan-bire eşleme otomatik belirlenir.
+- Sonuç:
+  - **Corpus eşlemesi:** 7 yerde bire bir değil.
+  - **Glif eşlemesi:** 4 yerde bire bir değil.
+  - **İmla farkı:** 1 tane (11:13, افتريه / افتراه).
+- Testler bu kümelerin dışına çıkılmadığını denetler.
+
+### 7.4 Veri hattındaki değişiklikler
+| Dosya | Değişiklik |
+|---|---|
+| `tool/content/sources/qul/` (yeni) | QUL düzen ve glif veritabanları, değiştirilmeden + `manifest.json` (kaynak, tarih, lisans notu). Fontlar depoda değil. |
+| `fetch_sources.dart` | Quran.com'dan sayfa/satır alınmıyor; kelimelere QCF V2 glif kodu eklendi (eşleme köprüsü). `layout_madani_1421.json` silindi. Yeniden indirmede metin ve meta veri birebir aynı çıktı. |
+| `build_content_db.dart` | Baştan yazıldı. Kelimeler KFGQPC metninden; Corpus ve glif eşlemeleri otomatik; düzen QUL'den; 254. sayfa düzeltmesi; besmele satırlarına sure numarası; doğrulamalar (9.046 satır, glif kapsaması, hiçbir kelime iki satıra bölünmüyor, 604 sayfa). |
+| Şema (`content_database.dart`) | `words.word_text` (KFGQPC yazılışı), `words.morph_first/last` (Corpus eşlemesi). `layout_word_glyphs` yerine `layout_glyphs` (glif birimi → ilk/son kelime). `layout_lines` artık glif aralığı ve `is_centered` taşıyor. `kContentVersion` 2 → 3. |
+| `check_line_widths.dart` (yeni) | Sayfa fontlarını kendisi okuyup (küçük TrueType okuyucu: `cmap`, `hmtx`) satır genişliklerini denetler; yerelde çalışır |
+| `content_checksums.dart` | Yeni alanlar sağlamaya dahil. Sağlamalar yeniden sabitlendi: yalnızca 114 surenin `words` ve düzen sağlaması değişti; **metin ve meta veri sağlamaları değişmedi.** |
+
+### 7.5 Testlerdeki değişiklikler
+- **T-01:**
+  - Kelime sayısı 77.430 oldu.
+  - Kelimeler ayetin KFGQPC metnini birebir oluşturuyor.
+  - Corpus farkı yalnızca 7 bilinen yerde, glif farkı yalnızca 4 bilinen yerde.
+  - Örnek eşleme kontrolleri: "بَعۡدَ" ve "مَا" aynı Corpus kelimesine bağlanıyor; "لَّوۡمَا" iki Corpus kelimesini kapsıyor.
+- **T-02:**
+  - Satırlar 83.668 glifin her birini sırayla ve bir kez kapsıyor.
+  - Hiçbir kelime iki satıra bölünmüyor.
+  - 256 ortalı satır var; ilk iki sayfanın tamamı ortalı.
+  - 254. sayfa düzeltmesi yerinde.
+- **Sonuç:** 44 test geçiyor, analiz temiz, emülatörde entegrasyon testi geçiyor.
+
+### 7.6 Font kararı (TK-06)
+- **Sorun:** QCF V2 sayfa fontları 604 dosya, toplam **208 MB**. Ağırlığın tamamına yakını harf çizimleri olduğu için küçültülemiyor. Hedefimiz uygulama ≤ 60 MB (NF-PF06) ve ilk açılışta internetsiz çalışma (M16-01).
+- **Karar (kullanıcı, 28.10.2026):**
+  - Uygulama **tek bir Kur'an fontuyla** gelir; 604 sayfanın hepsi aynı fontla, aynı satır düzeniyle görünür.
+  - **Birebir görünüm font paketi** kullanıcıya sorulur; onay verirse indirilir.
+  - Paket **tamamı indikten sonra** tüm sayfalarda birlikte devreye girer. Karışık görünüm olmaz.
+- **Uygulanması:** F0-05'te.
+
+### 7.7 Yerel geliştirme notu
+QUL'den indirilen dosyalar `C:\Users\HUAWEI\Desktop\GuvenBaris\Projects\qul_indirilenler` klasöründe. `check_line_widths.dart` çalıştırılırken font arşivinin açılmış hali (604 TTF) kullanılır.
+
+---
+
+## 8. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 28.10.2026
 
 | İş paketi | Durum |
@@ -332,7 +411,7 @@ Veritabanı kaynaktan yeniden üretildi; bütün testler tekrar geçti.
 | F0-01 Depo ve proje kurulumu | ✅ Android · ⏳ iOS ilk CI çalışması |
 | F0-02 Mimari iskelet | ✅ |
 | F0-03 Kur'an veri hattı | ✅ |
-| F0-04 Metin bütünlüğü testleri (T-01, T-02) | ✅ · ⏳ 25 sayfa 1421H basılı nüshayla doğrulanacak |
+| F0-04 Metin bütünlüğü testleri (T-01, T-02) | ✅ (25 sayfa QUL ile doğrulandı; esas kelime KFGQPC) |
 | F0-05 Mushaf sayfası çizimi (en riskli) | ⬜ Sıradaki önerilen adım |
 | F0-06 Kullanıcı veritabanı | ⬜ |
 | F0-07 Dil · F0-08 Tema · F0-10 `CLAUDE.md` · F0-11 Erişilebilirlik | ⬜ |
@@ -341,7 +420,8 @@ Veritabanı kaynaktan yeniden üretildi; bütün testler tekrar geçti.
 **Bekleyen kararlar ve işler**
 - **Uygulama adı:** aday "Kur'anla Yaşamak"; karar sonraya bırakıldı (AK-04).
 - **Veri ve font lisansı (AK-11):** Quran.com / KFGQPC; yayından önce yazılı izin gerekecek.
-- **Secde listesi (Q-8):** uygulamada 14 (Hanefi) mi, 15 (22:77 dahil) secde mi gösterilecek? Fıkhi tercih; içerik kurulu (AK-06).
-- **25 sayfanın doğrulanması (Q-10):** 1421H basılı Medine mushafı veya QUL'ün 1421H düzen verisi (ücretsiz hesapla indirilebilir) ile.
+- ~~**Secde listesi (Q-8)**~~: ✅ Karar (28.10.2026): **14 secde** (Hanefi). 22:77'deki ۩ işareti basılı metnin parçası olarak sayfada görünür, ama uygulama onu secde ayeti olarak işaretlemez.
+- **Arama metni (Faz 1):** `ayahs.text_uthmani` Tanzil kökenli (Tanzil metniyle aynı); uygulamada kaldığı sürece "Hakkında" ekranında Tanzil atfı zorunlu. Arama KFGQPC metniyle yapılabilirse alan kaldırılır (~1,3 MB, atıf yükümlülüğü kalkar). Tanzil dosyalarının APK'ya girmediği doğrulandı.
+- **Yayın öncesi kelime bölünmesi teyidi:** lisans görüşmelerinde (AK-11) Diyanet'in dijital mushafındaki bölünmeye de bakılması önerilir (Q-12).
 - **Android `cmdline-tools` kurulumu:** lisans onayı için.
 - **GitHub'da yapılacaklar:** iOS iş akışını elle çalıştırmak; bilerek bozulmuş bir PR ile CI'ın kırmızıya düştüğünü görmek.

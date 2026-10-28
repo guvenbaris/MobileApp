@@ -1398,15 +1398,37 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordRow> {
       'CHECK ("is_ayah_end" IN (0, 1))',
     ),
   );
-  static const VerificationMeta _textUthmaniMeta = const VerificationMeta(
-    'textUthmani',
+  static const VerificationMeta _wordTextMeta = const VerificationMeta(
+    'wordText',
   );
   @override
-  late final GeneratedColumn<String> textUthmani = GeneratedColumn<String>(
-    'text_uthmani',
+  late final GeneratedColumn<String> wordText = GeneratedColumn<String>(
+    'word_text',
     aliasedName,
     false,
     type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _morphFirstMeta = const VerificationMeta(
+    'morphFirst',
+  );
+  @override
+  late final GeneratedColumn<int> morphFirst = GeneratedColumn<int>(
+    'morph_first',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _morphLastMeta = const VerificationMeta(
+    'morphLast',
+  );
+  @override
+  late final GeneratedColumn<int> morphLast = GeneratedColumn<int>(
+    'morph_last',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
   @override
@@ -1417,7 +1439,9 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordRow> {
     ayah,
     position,
     isAyahEnd,
-    textUthmani,
+    wordText,
+    morphFirst,
+    morphLast,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1474,16 +1498,29 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordRow> {
     } else if (isInserting) {
       context.missing(_isAyahEndMeta);
     }
-    if (data.containsKey('text_uthmani')) {
+    if (data.containsKey('word_text')) {
       context.handle(
-        _textUthmaniMeta,
-        textUthmani.isAcceptableOrUnknown(
-          data['text_uthmani']!,
-          _textUthmaniMeta,
-        ),
+        _wordTextMeta,
+        wordText.isAcceptableOrUnknown(data['word_text']!, _wordTextMeta),
       );
     } else if (isInserting) {
-      context.missing(_textUthmaniMeta);
+      context.missing(_wordTextMeta);
+    }
+    if (data.containsKey('morph_first')) {
+      context.handle(
+        _morphFirstMeta,
+        morphFirst.isAcceptableOrUnknown(data['morph_first']!, _morphFirstMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_morphFirstMeta);
+    }
+    if (data.containsKey('morph_last')) {
+      context.handle(
+        _morphLastMeta,
+        morphLast.isAcceptableOrUnknown(data['morph_last']!, _morphLastMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_morphLastMeta);
     }
     return context;
   }
@@ -1522,9 +1559,17 @@ class $WordsTable extends Words with TableInfo<$WordsTable, WordRow> {
         DriftSqlType.bool,
         data['${effectivePrefix}is_ayah_end'],
       )!,
-      textUthmani: attachedDatabase.typeMapping.read(
+      wordText: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}text_uthmani'],
+        data['${effectivePrefix}word_text'],
+      )!,
+      morphFirst: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}morph_first'],
+      )!,
+      morphLast: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}morph_last'],
       )!,
     );
   }
@@ -1546,7 +1591,14 @@ class WordRow extends DataClass implements Insertable<WordRow> {
 
   /// Ayet sonu (numara) işareti mi.
   final bool isAyahEnd;
-  final String textUthmani;
+
+  /// KFGQPC metnindeki yazılışı.
+  final String wordText;
+
+  /// Quran.com/Corpus kelime bölünmesinde karşılık gelen sıra aralığı
+  /// (kelime meali ve ses verileri için). 7 yer dışında ikisi eşittir.
+  final int morphFirst;
+  final int morphLast;
   const WordRow({
     required this.id,
     required this.ayahId,
@@ -1554,7 +1606,9 @@ class WordRow extends DataClass implements Insertable<WordRow> {
     required this.ayah,
     required this.position,
     required this.isAyahEnd,
-    required this.textUthmani,
+    required this.wordText,
+    required this.morphFirst,
+    required this.morphLast,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1565,7 +1619,9 @@ class WordRow extends DataClass implements Insertable<WordRow> {
     map['ayah'] = Variable<int>(ayah);
     map['position'] = Variable<int>(position);
     map['is_ayah_end'] = Variable<bool>(isAyahEnd);
-    map['text_uthmani'] = Variable<String>(textUthmani);
+    map['word_text'] = Variable<String>(wordText);
+    map['morph_first'] = Variable<int>(morphFirst);
+    map['morph_last'] = Variable<int>(morphLast);
     return map;
   }
 
@@ -1577,7 +1633,9 @@ class WordRow extends DataClass implements Insertable<WordRow> {
       ayah: Value(ayah),
       position: Value(position),
       isAyahEnd: Value(isAyahEnd),
-      textUthmani: Value(textUthmani),
+      wordText: Value(wordText),
+      morphFirst: Value(morphFirst),
+      morphLast: Value(morphLast),
     );
   }
 
@@ -1593,7 +1651,9 @@ class WordRow extends DataClass implements Insertable<WordRow> {
       ayah: serializer.fromJson<int>(json['ayah']),
       position: serializer.fromJson<int>(json['position']),
       isAyahEnd: serializer.fromJson<bool>(json['isAyahEnd']),
-      textUthmani: serializer.fromJson<String>(json['textUthmani']),
+      wordText: serializer.fromJson<String>(json['wordText']),
+      morphFirst: serializer.fromJson<int>(json['morphFirst']),
+      morphLast: serializer.fromJson<int>(json['morphLast']),
     );
   }
   @override
@@ -1606,7 +1666,9 @@ class WordRow extends DataClass implements Insertable<WordRow> {
       'ayah': serializer.toJson<int>(ayah),
       'position': serializer.toJson<int>(position),
       'isAyahEnd': serializer.toJson<bool>(isAyahEnd),
-      'textUthmani': serializer.toJson<String>(textUthmani),
+      'wordText': serializer.toJson<String>(wordText),
+      'morphFirst': serializer.toJson<int>(morphFirst),
+      'morphLast': serializer.toJson<int>(morphLast),
     };
   }
 
@@ -1617,7 +1679,9 @@ class WordRow extends DataClass implements Insertable<WordRow> {
     int? ayah,
     int? position,
     bool? isAyahEnd,
-    String? textUthmani,
+    String? wordText,
+    int? morphFirst,
+    int? morphLast,
   }) => WordRow(
     id: id ?? this.id,
     ayahId: ayahId ?? this.ayahId,
@@ -1625,7 +1689,9 @@ class WordRow extends DataClass implements Insertable<WordRow> {
     ayah: ayah ?? this.ayah,
     position: position ?? this.position,
     isAyahEnd: isAyahEnd ?? this.isAyahEnd,
-    textUthmani: textUthmani ?? this.textUthmani,
+    wordText: wordText ?? this.wordText,
+    morphFirst: morphFirst ?? this.morphFirst,
+    morphLast: morphLast ?? this.morphLast,
   );
   WordRow copyWithCompanion(WordsCompanion data) {
     return WordRow(
@@ -1635,9 +1701,11 @@ class WordRow extends DataClass implements Insertable<WordRow> {
       ayah: data.ayah.present ? data.ayah.value : this.ayah,
       position: data.position.present ? data.position.value : this.position,
       isAyahEnd: data.isAyahEnd.present ? data.isAyahEnd.value : this.isAyahEnd,
-      textUthmani: data.textUthmani.present
-          ? data.textUthmani.value
-          : this.textUthmani,
+      wordText: data.wordText.present ? data.wordText.value : this.wordText,
+      morphFirst: data.morphFirst.present
+          ? data.morphFirst.value
+          : this.morphFirst,
+      morphLast: data.morphLast.present ? data.morphLast.value : this.morphLast,
     );
   }
 
@@ -1650,14 +1718,25 @@ class WordRow extends DataClass implements Insertable<WordRow> {
           ..write('ayah: $ayah, ')
           ..write('position: $position, ')
           ..write('isAyahEnd: $isAyahEnd, ')
-          ..write('textUthmani: $textUthmani')
+          ..write('wordText: $wordText, ')
+          ..write('morphFirst: $morphFirst, ')
+          ..write('morphLast: $morphLast')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, ayahId, surah, ayah, position, isAyahEnd, textUthmani);
+  int get hashCode => Object.hash(
+    id,
+    ayahId,
+    surah,
+    ayah,
+    position,
+    isAyahEnd,
+    wordText,
+    morphFirst,
+    morphLast,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1668,7 +1747,9 @@ class WordRow extends DataClass implements Insertable<WordRow> {
           other.ayah == this.ayah &&
           other.position == this.position &&
           other.isAyahEnd == this.isAyahEnd &&
-          other.textUthmani == this.textUthmani);
+          other.wordText == this.wordText &&
+          other.morphFirst == this.morphFirst &&
+          other.morphLast == this.morphLast);
 }
 
 class WordsCompanion extends UpdateCompanion<WordRow> {
@@ -1678,7 +1759,9 @@ class WordsCompanion extends UpdateCompanion<WordRow> {
   final Value<int> ayah;
   final Value<int> position;
   final Value<bool> isAyahEnd;
-  final Value<String> textUthmani;
+  final Value<String> wordText;
+  final Value<int> morphFirst;
+  final Value<int> morphLast;
   const WordsCompanion({
     this.id = const Value.absent(),
     this.ayahId = const Value.absent(),
@@ -1686,7 +1769,9 @@ class WordsCompanion extends UpdateCompanion<WordRow> {
     this.ayah = const Value.absent(),
     this.position = const Value.absent(),
     this.isAyahEnd = const Value.absent(),
-    this.textUthmani = const Value.absent(),
+    this.wordText = const Value.absent(),
+    this.morphFirst = const Value.absent(),
+    this.morphLast = const Value.absent(),
   });
   WordsCompanion.insert({
     this.id = const Value.absent(),
@@ -1695,13 +1780,17 @@ class WordsCompanion extends UpdateCompanion<WordRow> {
     required int ayah,
     required int position,
     required bool isAyahEnd,
-    required String textUthmani,
+    required String wordText,
+    required int morphFirst,
+    required int morphLast,
   }) : ayahId = Value(ayahId),
        surah = Value(surah),
        ayah = Value(ayah),
        position = Value(position),
        isAyahEnd = Value(isAyahEnd),
-       textUthmani = Value(textUthmani);
+       wordText = Value(wordText),
+       morphFirst = Value(morphFirst),
+       morphLast = Value(morphLast);
   static Insertable<WordRow> custom({
     Expression<int>? id,
     Expression<int>? ayahId,
@@ -1709,7 +1798,9 @@ class WordsCompanion extends UpdateCompanion<WordRow> {
     Expression<int>? ayah,
     Expression<int>? position,
     Expression<bool>? isAyahEnd,
-    Expression<String>? textUthmani,
+    Expression<String>? wordText,
+    Expression<int>? morphFirst,
+    Expression<int>? morphLast,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1718,7 +1809,9 @@ class WordsCompanion extends UpdateCompanion<WordRow> {
       if (ayah != null) 'ayah': ayah,
       if (position != null) 'position': position,
       if (isAyahEnd != null) 'is_ayah_end': isAyahEnd,
-      if (textUthmani != null) 'text_uthmani': textUthmani,
+      if (wordText != null) 'word_text': wordText,
+      if (morphFirst != null) 'morph_first': morphFirst,
+      if (morphLast != null) 'morph_last': morphLast,
     });
   }
 
@@ -1729,7 +1822,9 @@ class WordsCompanion extends UpdateCompanion<WordRow> {
     Value<int>? ayah,
     Value<int>? position,
     Value<bool>? isAyahEnd,
-    Value<String>? textUthmani,
+    Value<String>? wordText,
+    Value<int>? morphFirst,
+    Value<int>? morphLast,
   }) {
     return WordsCompanion(
       id: id ?? this.id,
@@ -1738,7 +1833,9 @@ class WordsCompanion extends UpdateCompanion<WordRow> {
       ayah: ayah ?? this.ayah,
       position: position ?? this.position,
       isAyahEnd: isAyahEnd ?? this.isAyahEnd,
-      textUthmani: textUthmani ?? this.textUthmani,
+      wordText: wordText ?? this.wordText,
+      morphFirst: morphFirst ?? this.morphFirst,
+      morphLast: morphLast ?? this.morphLast,
     );
   }
 
@@ -1763,8 +1860,14 @@ class WordsCompanion extends UpdateCompanion<WordRow> {
     if (isAyahEnd.present) {
       map['is_ayah_end'] = Variable<bool>(isAyahEnd.value);
     }
-    if (textUthmani.present) {
-      map['text_uthmani'] = Variable<String>(textUthmani.value);
+    if (wordText.present) {
+      map['word_text'] = Variable<String>(wordText.value);
+    }
+    if (morphFirst.present) {
+      map['morph_first'] = Variable<int>(morphFirst.value);
+    }
+    if (morphLast.present) {
+      map['morph_last'] = Variable<int>(morphLast.value);
     }
     return map;
   }
@@ -1778,7 +1881,9 @@ class WordsCompanion extends UpdateCompanion<WordRow> {
           ..write('ayah: $ayah, ')
           ..write('position: $position, ')
           ..write('isAyahEnd: $isAyahEnd, ')
-          ..write('textUthmani: $textUthmani')
+          ..write('wordText: $wordText, ')
+          ..write('morphFirst: $morphFirst, ')
+          ..write('morphLast: $morphLast')
           ..write(')'))
         .toString();
   }
@@ -2255,23 +2360,37 @@ class $LayoutLinesTable extends LayoutLines
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _firstWordIdMeta = const VerificationMeta(
-    'firstWordId',
+  static const VerificationMeta _isCenteredMeta = const VerificationMeta(
+    'isCentered',
   );
   @override
-  late final GeneratedColumn<int> firstWordId = GeneratedColumn<int>(
-    'first_word_id',
+  late final GeneratedColumn<bool> isCentered = GeneratedColumn<bool>(
+    'is_centered',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_centered" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _firstGlyphIdMeta = const VerificationMeta(
+    'firstGlyphId',
+  );
+  @override
+  late final GeneratedColumn<int> firstGlyphId = GeneratedColumn<int>(
+    'first_glyph_id',
     aliasedName,
     true,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _lastWordIdMeta = const VerificationMeta(
-    'lastWordId',
+  static const VerificationMeta _lastGlyphIdMeta = const VerificationMeta(
+    'lastGlyphId',
   );
   @override
-  late final GeneratedColumn<int> lastWordId = GeneratedColumn<int>(
-    'last_word_id',
+  late final GeneratedColumn<int> lastGlyphId = GeneratedColumn<int>(
+    'last_glyph_id',
     aliasedName,
     true,
     type: DriftSqlType.int,
@@ -2284,8 +2403,9 @@ class $LayoutLinesTable extends LayoutLines
     line,
     type,
     surah,
-    firstWordId,
-    lastWordId,
+    isCentered,
+    firstGlyphId,
+    lastGlyphId,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2329,21 +2449,29 @@ class $LayoutLinesTable extends LayoutLines
         surah.isAcceptableOrUnknown(data['surah']!, _surahMeta),
       );
     }
-    if (data.containsKey('first_word_id')) {
+    if (data.containsKey('is_centered')) {
       context.handle(
-        _firstWordIdMeta,
-        firstWordId.isAcceptableOrUnknown(
-          data['first_word_id']!,
-          _firstWordIdMeta,
+        _isCenteredMeta,
+        isCentered.isAcceptableOrUnknown(data['is_centered']!, _isCenteredMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_isCenteredMeta);
+    }
+    if (data.containsKey('first_glyph_id')) {
+      context.handle(
+        _firstGlyphIdMeta,
+        firstGlyphId.isAcceptableOrUnknown(
+          data['first_glyph_id']!,
+          _firstGlyphIdMeta,
         ),
       );
     }
-    if (data.containsKey('last_word_id')) {
+    if (data.containsKey('last_glyph_id')) {
       context.handle(
-        _lastWordIdMeta,
-        lastWordId.isAcceptableOrUnknown(
-          data['last_word_id']!,
-          _lastWordIdMeta,
+        _lastGlyphIdMeta,
+        lastGlyphId.isAcceptableOrUnknown(
+          data['last_glyph_id']!,
+          _lastGlyphIdMeta,
         ),
       );
     }
@@ -2378,13 +2506,17 @@ class $LayoutLinesTable extends LayoutLines
         DriftSqlType.int,
         data['${effectivePrefix}surah'],
       ),
-      firstWordId: attachedDatabase.typeMapping.read(
+      isCentered: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_centered'],
+      )!,
+      firstGlyphId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}first_word_id'],
+        data['${effectivePrefix}first_glyph_id'],
       ),
-      lastWordId: attachedDatabase.typeMapping.read(
+      lastGlyphId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}last_word_id'],
+        data['${effectivePrefix}last_glyph_id'],
       ),
     );
   }
@@ -2407,17 +2539,21 @@ class LayoutLineRow extends DataClass implements Insertable<LayoutLineRow> {
   /// Sure başlığı ve besmele satırlarında hangi sureye ait olduğu.
   final int? surah;
 
-  /// Ayet satırlarında satırdaki ilk ve son kelime (`Words.id`).
-  final int? firstWordId;
-  final int? lastWordId;
+  /// Satır ortalı mı (değilse iki yana yaslı).
+  final bool isCentered;
+
+  /// Ayet satırlarında satırdaki ilk ve son glif (`LayoutGlyphs.id`).
+  final int? firstGlyphId;
+  final int? lastGlyphId;
   const LayoutLineRow({
     required this.layoutId,
     required this.page,
     required this.line,
     required this.type,
     this.surah,
-    this.firstWordId,
-    this.lastWordId,
+    required this.isCentered,
+    this.firstGlyphId,
+    this.lastGlyphId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2433,11 +2569,12 @@ class LayoutLineRow extends DataClass implements Insertable<LayoutLineRow> {
     if (!nullToAbsent || surah != null) {
       map['surah'] = Variable<int>(surah);
     }
-    if (!nullToAbsent || firstWordId != null) {
-      map['first_word_id'] = Variable<int>(firstWordId);
+    map['is_centered'] = Variable<bool>(isCentered);
+    if (!nullToAbsent || firstGlyphId != null) {
+      map['first_glyph_id'] = Variable<int>(firstGlyphId);
     }
-    if (!nullToAbsent || lastWordId != null) {
-      map['last_word_id'] = Variable<int>(lastWordId);
+    if (!nullToAbsent || lastGlyphId != null) {
+      map['last_glyph_id'] = Variable<int>(lastGlyphId);
     }
     return map;
   }
@@ -2451,12 +2588,13 @@ class LayoutLineRow extends DataClass implements Insertable<LayoutLineRow> {
       surah: surah == null && nullToAbsent
           ? const Value.absent()
           : Value(surah),
-      firstWordId: firstWordId == null && nullToAbsent
+      isCentered: Value(isCentered),
+      firstGlyphId: firstGlyphId == null && nullToAbsent
           ? const Value.absent()
-          : Value(firstWordId),
-      lastWordId: lastWordId == null && nullToAbsent
+          : Value(firstGlyphId),
+      lastGlyphId: lastGlyphId == null && nullToAbsent
           ? const Value.absent()
-          : Value(lastWordId),
+          : Value(lastGlyphId),
     );
   }
 
@@ -2473,8 +2611,9 @@ class LayoutLineRow extends DataClass implements Insertable<LayoutLineRow> {
         serializer.fromJson<String>(json['type']),
       ),
       surah: serializer.fromJson<int?>(json['surah']),
-      firstWordId: serializer.fromJson<int?>(json['firstWordId']),
-      lastWordId: serializer.fromJson<int?>(json['lastWordId']),
+      isCentered: serializer.fromJson<bool>(json['isCentered']),
+      firstGlyphId: serializer.fromJson<int?>(json['firstGlyphId']),
+      lastGlyphId: serializer.fromJson<int?>(json['lastGlyphId']),
     );
   }
   @override
@@ -2488,8 +2627,9 @@ class LayoutLineRow extends DataClass implements Insertable<LayoutLineRow> {
         $LayoutLinesTable.$convertertype.toJson(type),
       ),
       'surah': serializer.toJson<int?>(surah),
-      'firstWordId': serializer.toJson<int?>(firstWordId),
-      'lastWordId': serializer.toJson<int?>(lastWordId),
+      'isCentered': serializer.toJson<bool>(isCentered),
+      'firstGlyphId': serializer.toJson<int?>(firstGlyphId),
+      'lastGlyphId': serializer.toJson<int?>(lastGlyphId),
     };
   }
 
@@ -2499,16 +2639,18 @@ class LayoutLineRow extends DataClass implements Insertable<LayoutLineRow> {
     int? line,
     LayoutLineType? type,
     Value<int?> surah = const Value.absent(),
-    Value<int?> firstWordId = const Value.absent(),
-    Value<int?> lastWordId = const Value.absent(),
+    bool? isCentered,
+    Value<int?> firstGlyphId = const Value.absent(),
+    Value<int?> lastGlyphId = const Value.absent(),
   }) => LayoutLineRow(
     layoutId: layoutId ?? this.layoutId,
     page: page ?? this.page,
     line: line ?? this.line,
     type: type ?? this.type,
     surah: surah.present ? surah.value : this.surah,
-    firstWordId: firstWordId.present ? firstWordId.value : this.firstWordId,
-    lastWordId: lastWordId.present ? lastWordId.value : this.lastWordId,
+    isCentered: isCentered ?? this.isCentered,
+    firstGlyphId: firstGlyphId.present ? firstGlyphId.value : this.firstGlyphId,
+    lastGlyphId: lastGlyphId.present ? lastGlyphId.value : this.lastGlyphId,
   );
   LayoutLineRow copyWithCompanion(LayoutLinesCompanion data) {
     return LayoutLineRow(
@@ -2517,12 +2659,15 @@ class LayoutLineRow extends DataClass implements Insertable<LayoutLineRow> {
       line: data.line.present ? data.line.value : this.line,
       type: data.type.present ? data.type.value : this.type,
       surah: data.surah.present ? data.surah.value : this.surah,
-      firstWordId: data.firstWordId.present
-          ? data.firstWordId.value
-          : this.firstWordId,
-      lastWordId: data.lastWordId.present
-          ? data.lastWordId.value
-          : this.lastWordId,
+      isCentered: data.isCentered.present
+          ? data.isCentered.value
+          : this.isCentered,
+      firstGlyphId: data.firstGlyphId.present
+          ? data.firstGlyphId.value
+          : this.firstGlyphId,
+      lastGlyphId: data.lastGlyphId.present
+          ? data.lastGlyphId.value
+          : this.lastGlyphId,
     );
   }
 
@@ -2534,15 +2679,24 @@ class LayoutLineRow extends DataClass implements Insertable<LayoutLineRow> {
           ..write('line: $line, ')
           ..write('type: $type, ')
           ..write('surah: $surah, ')
-          ..write('firstWordId: $firstWordId, ')
-          ..write('lastWordId: $lastWordId')
+          ..write('isCentered: $isCentered, ')
+          ..write('firstGlyphId: $firstGlyphId, ')
+          ..write('lastGlyphId: $lastGlyphId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(layoutId, page, line, type, surah, firstWordId, lastWordId);
+  int get hashCode => Object.hash(
+    layoutId,
+    page,
+    line,
+    type,
+    surah,
+    isCentered,
+    firstGlyphId,
+    lastGlyphId,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2552,8 +2706,9 @@ class LayoutLineRow extends DataClass implements Insertable<LayoutLineRow> {
           other.line == this.line &&
           other.type == this.type &&
           other.surah == this.surah &&
-          other.firstWordId == this.firstWordId &&
-          other.lastWordId == this.lastWordId);
+          other.isCentered == this.isCentered &&
+          other.firstGlyphId == this.firstGlyphId &&
+          other.lastGlyphId == this.lastGlyphId);
 }
 
 class LayoutLinesCompanion extends UpdateCompanion<LayoutLineRow> {
@@ -2562,8 +2717,9 @@ class LayoutLinesCompanion extends UpdateCompanion<LayoutLineRow> {
   final Value<int> line;
   final Value<LayoutLineType> type;
   final Value<int?> surah;
-  final Value<int?> firstWordId;
-  final Value<int?> lastWordId;
+  final Value<bool> isCentered;
+  final Value<int?> firstGlyphId;
+  final Value<int?> lastGlyphId;
   final Value<int> rowid;
   const LayoutLinesCompanion({
     this.layoutId = const Value.absent(),
@@ -2571,8 +2727,9 @@ class LayoutLinesCompanion extends UpdateCompanion<LayoutLineRow> {
     this.line = const Value.absent(),
     this.type = const Value.absent(),
     this.surah = const Value.absent(),
-    this.firstWordId = const Value.absent(),
-    this.lastWordId = const Value.absent(),
+    this.isCentered = const Value.absent(),
+    this.firstGlyphId = const Value.absent(),
+    this.lastGlyphId = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   LayoutLinesCompanion.insert({
@@ -2581,21 +2738,24 @@ class LayoutLinesCompanion extends UpdateCompanion<LayoutLineRow> {
     required int line,
     required LayoutLineType type,
     this.surah = const Value.absent(),
-    this.firstWordId = const Value.absent(),
-    this.lastWordId = const Value.absent(),
+    required bool isCentered,
+    this.firstGlyphId = const Value.absent(),
+    this.lastGlyphId = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : layoutId = Value(layoutId),
        page = Value(page),
        line = Value(line),
-       type = Value(type);
+       type = Value(type),
+       isCentered = Value(isCentered);
   static Insertable<LayoutLineRow> custom({
     Expression<String>? layoutId,
     Expression<int>? page,
     Expression<int>? line,
     Expression<String>? type,
     Expression<int>? surah,
-    Expression<int>? firstWordId,
-    Expression<int>? lastWordId,
+    Expression<bool>? isCentered,
+    Expression<int>? firstGlyphId,
+    Expression<int>? lastGlyphId,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2604,8 +2764,9 @@ class LayoutLinesCompanion extends UpdateCompanion<LayoutLineRow> {
       if (line != null) 'line': line,
       if (type != null) 'type': type,
       if (surah != null) 'surah': surah,
-      if (firstWordId != null) 'first_word_id': firstWordId,
-      if (lastWordId != null) 'last_word_id': lastWordId,
+      if (isCentered != null) 'is_centered': isCentered,
+      if (firstGlyphId != null) 'first_glyph_id': firstGlyphId,
+      if (lastGlyphId != null) 'last_glyph_id': lastGlyphId,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2616,8 +2777,9 @@ class LayoutLinesCompanion extends UpdateCompanion<LayoutLineRow> {
     Value<int>? line,
     Value<LayoutLineType>? type,
     Value<int?>? surah,
-    Value<int?>? firstWordId,
-    Value<int?>? lastWordId,
+    Value<bool>? isCentered,
+    Value<int?>? firstGlyphId,
+    Value<int?>? lastGlyphId,
     Value<int>? rowid,
   }) {
     return LayoutLinesCompanion(
@@ -2626,8 +2788,9 @@ class LayoutLinesCompanion extends UpdateCompanion<LayoutLineRow> {
       line: line ?? this.line,
       type: type ?? this.type,
       surah: surah ?? this.surah,
-      firstWordId: firstWordId ?? this.firstWordId,
-      lastWordId: lastWordId ?? this.lastWordId,
+      isCentered: isCentered ?? this.isCentered,
+      firstGlyphId: firstGlyphId ?? this.firstGlyphId,
+      lastGlyphId: lastGlyphId ?? this.lastGlyphId,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2652,11 +2815,14 @@ class LayoutLinesCompanion extends UpdateCompanion<LayoutLineRow> {
     if (surah.present) {
       map['surah'] = Variable<int>(surah.value);
     }
-    if (firstWordId.present) {
-      map['first_word_id'] = Variable<int>(firstWordId.value);
+    if (isCentered.present) {
+      map['is_centered'] = Variable<bool>(isCentered.value);
     }
-    if (lastWordId.present) {
-      map['last_word_id'] = Variable<int>(lastWordId.value);
+    if (firstGlyphId.present) {
+      map['first_glyph_id'] = Variable<int>(firstGlyphId.value);
+    }
+    if (lastGlyphId.present) {
+      map['last_glyph_id'] = Variable<int>(lastGlyphId.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -2672,8 +2838,9 @@ class LayoutLinesCompanion extends UpdateCompanion<LayoutLineRow> {
           ..write('line: $line, ')
           ..write('type: $type, ')
           ..write('surah: $surah, ')
-          ..write('firstWordId: $firstWordId, ')
-          ..write('lastWordId: $lastWordId, ')
+          ..write('isCentered: $isCentered, ')
+          ..write('firstGlyphId: $firstGlyphId, ')
+          ..write('lastGlyphId: $lastGlyphId, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3011,12 +3178,12 @@ class LayoutPagesCompanion extends UpdateCompanion<LayoutPageRow> {
   }
 }
 
-class $LayoutWordGlyphsTable extends LayoutWordGlyphs
-    with TableInfo<$LayoutWordGlyphsTable, LayoutWordGlyphRow> {
+class $LayoutGlyphsTable extends LayoutGlyphs
+    with TableInfo<$LayoutGlyphsTable, LayoutGlyphRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $LayoutWordGlyphsTable(this.attachedDatabase, [this._alias]);
+  $LayoutGlyphsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _layoutIdMeta = const VerificationMeta(
     'layoutId',
   );
@@ -3031,10 +3198,35 @@ class $LayoutWordGlyphsTable extends LayoutWordGlyphs
       'REFERENCES mushaf_layouts (id)',
     ),
   );
-  static const VerificationMeta _wordIdMeta = const VerificationMeta('wordId');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> wordId = GeneratedColumn<int>(
-    'word_id',
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _firstWordIdMeta = const VerificationMeta(
+    'firstWordId',
+  );
+  @override
+  late final GeneratedColumn<int> firstWordId = GeneratedColumn<int>(
+    'first_word_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES words (id)',
+    ),
+  );
+  static const VerificationMeta _lastWordIdMeta = const VerificationMeta(
+    'lastWordId',
+  );
+  @override
+  late final GeneratedColumn<int> lastWordId = GeneratedColumn<int>(
+    'last_word_id',
     aliasedName,
     false,
     type: DriftSqlType.int,
@@ -3053,15 +3245,21 @@ class $LayoutWordGlyphsTable extends LayoutWordGlyphs
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [layoutId, wordId, glyph];
+  List<GeneratedColumn> get $columns => [
+    layoutId,
+    id,
+    firstWordId,
+    lastWordId,
+    glyph,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'layout_word_glyphs';
+  static const String $name = 'layout_glyphs';
   @override
   VerificationContext validateIntegrity(
-    Insertable<LayoutWordGlyphRow> instance, {
+    Insertable<LayoutGlyphRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -3074,13 +3272,32 @@ class $LayoutWordGlyphsTable extends LayoutWordGlyphs
     } else if (isInserting) {
       context.missing(_layoutIdMeta);
     }
-    if (data.containsKey('word_id')) {
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('first_word_id')) {
       context.handle(
-        _wordIdMeta,
-        wordId.isAcceptableOrUnknown(data['word_id']!, _wordIdMeta),
+        _firstWordIdMeta,
+        firstWordId.isAcceptableOrUnknown(
+          data['first_word_id']!,
+          _firstWordIdMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_wordIdMeta);
+      context.missing(_firstWordIdMeta);
+    }
+    if (data.containsKey('last_word_id')) {
+      context.handle(
+        _lastWordIdMeta,
+        lastWordId.isAcceptableOrUnknown(
+          data['last_word_id']!,
+          _lastWordIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_lastWordIdMeta);
     }
     if (data.containsKey('glyph')) {
       context.handle(
@@ -3094,18 +3311,26 @@ class $LayoutWordGlyphsTable extends LayoutWordGlyphs
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {layoutId, wordId};
+  Set<GeneratedColumn> get $primaryKey => {layoutId, id};
   @override
-  LayoutWordGlyphRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+  LayoutGlyphRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return LayoutWordGlyphRow(
+    return LayoutGlyphRow(
       layoutId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}layout_id'],
       )!,
-      wordId: attachedDatabase.typeMapping.read(
+      id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}word_id'],
+        data['${effectivePrefix}id'],
+      )!,
+      firstWordId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}first_word_id'],
+      )!,
+      lastWordId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}last_word_id'],
       )!,
       glyph: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -3115,46 +3340,55 @@ class $LayoutWordGlyphsTable extends LayoutWordGlyphs
   }
 
   @override
-  $LayoutWordGlyphsTable createAlias(String alias) {
-    return $LayoutWordGlyphsTable(attachedDatabase, alias);
+  $LayoutGlyphsTable createAlias(String alias) {
+    return $LayoutGlyphsTable(attachedDatabase, alias);
   }
 }
 
-class LayoutWordGlyphRow extends DataClass
-    implements Insertable<LayoutWordGlyphRow> {
+class LayoutGlyphRow extends DataClass implements Insertable<LayoutGlyphRow> {
   final String layoutId;
-  final int wordId;
+  final int id;
+  final int firstWordId;
+  final int lastWordId;
   final String glyph;
-  const LayoutWordGlyphRow({
+  const LayoutGlyphRow({
     required this.layoutId,
-    required this.wordId,
+    required this.id,
+    required this.firstWordId,
+    required this.lastWordId,
     required this.glyph,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['layout_id'] = Variable<String>(layoutId);
-    map['word_id'] = Variable<int>(wordId);
+    map['id'] = Variable<int>(id);
+    map['first_word_id'] = Variable<int>(firstWordId);
+    map['last_word_id'] = Variable<int>(lastWordId);
     map['glyph'] = Variable<String>(glyph);
     return map;
   }
 
-  LayoutWordGlyphsCompanion toCompanion(bool nullToAbsent) {
-    return LayoutWordGlyphsCompanion(
+  LayoutGlyphsCompanion toCompanion(bool nullToAbsent) {
+    return LayoutGlyphsCompanion(
       layoutId: Value(layoutId),
-      wordId: Value(wordId),
+      id: Value(id),
+      firstWordId: Value(firstWordId),
+      lastWordId: Value(lastWordId),
       glyph: Value(glyph),
     );
   }
 
-  factory LayoutWordGlyphRow.fromJson(
+  factory LayoutGlyphRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return LayoutWordGlyphRow(
+    return LayoutGlyphRow(
       layoutId: serializer.fromJson<String>(json['layoutId']),
-      wordId: serializer.fromJson<int>(json['wordId']),
+      id: serializer.fromJson<int>(json['id']),
+      firstWordId: serializer.fromJson<int>(json['firstWordId']),
+      lastWordId: serializer.fromJson<int>(json['lastWordId']),
       glyph: serializer.fromJson<String>(json['glyph']),
     );
   }
@@ -3163,88 +3397,123 @@ class LayoutWordGlyphRow extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'layoutId': serializer.toJson<String>(layoutId),
-      'wordId': serializer.toJson<int>(wordId),
+      'id': serializer.toJson<int>(id),
+      'firstWordId': serializer.toJson<int>(firstWordId),
+      'lastWordId': serializer.toJson<int>(lastWordId),
       'glyph': serializer.toJson<String>(glyph),
     };
   }
 
-  LayoutWordGlyphRow copyWith({String? layoutId, int? wordId, String? glyph}) =>
-      LayoutWordGlyphRow(
-        layoutId: layoutId ?? this.layoutId,
-        wordId: wordId ?? this.wordId,
-        glyph: glyph ?? this.glyph,
-      );
-  LayoutWordGlyphRow copyWithCompanion(LayoutWordGlyphsCompanion data) {
-    return LayoutWordGlyphRow(
+  LayoutGlyphRow copyWith({
+    String? layoutId,
+    int? id,
+    int? firstWordId,
+    int? lastWordId,
+    String? glyph,
+  }) => LayoutGlyphRow(
+    layoutId: layoutId ?? this.layoutId,
+    id: id ?? this.id,
+    firstWordId: firstWordId ?? this.firstWordId,
+    lastWordId: lastWordId ?? this.lastWordId,
+    glyph: glyph ?? this.glyph,
+  );
+  LayoutGlyphRow copyWithCompanion(LayoutGlyphsCompanion data) {
+    return LayoutGlyphRow(
       layoutId: data.layoutId.present ? data.layoutId.value : this.layoutId,
-      wordId: data.wordId.present ? data.wordId.value : this.wordId,
+      id: data.id.present ? data.id.value : this.id,
+      firstWordId: data.firstWordId.present
+          ? data.firstWordId.value
+          : this.firstWordId,
+      lastWordId: data.lastWordId.present
+          ? data.lastWordId.value
+          : this.lastWordId,
       glyph: data.glyph.present ? data.glyph.value : this.glyph,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('LayoutWordGlyphRow(')
+    return (StringBuffer('LayoutGlyphRow(')
           ..write('layoutId: $layoutId, ')
-          ..write('wordId: $wordId, ')
+          ..write('id: $id, ')
+          ..write('firstWordId: $firstWordId, ')
+          ..write('lastWordId: $lastWordId, ')
           ..write('glyph: $glyph')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(layoutId, wordId, glyph);
+  int get hashCode => Object.hash(layoutId, id, firstWordId, lastWordId, glyph);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is LayoutWordGlyphRow &&
+      (other is LayoutGlyphRow &&
           other.layoutId == this.layoutId &&
-          other.wordId == this.wordId &&
+          other.id == this.id &&
+          other.firstWordId == this.firstWordId &&
+          other.lastWordId == this.lastWordId &&
           other.glyph == this.glyph);
 }
 
-class LayoutWordGlyphsCompanion extends UpdateCompanion<LayoutWordGlyphRow> {
+class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
   final Value<String> layoutId;
-  final Value<int> wordId;
+  final Value<int> id;
+  final Value<int> firstWordId;
+  final Value<int> lastWordId;
   final Value<String> glyph;
   final Value<int> rowid;
-  const LayoutWordGlyphsCompanion({
+  const LayoutGlyphsCompanion({
     this.layoutId = const Value.absent(),
-    this.wordId = const Value.absent(),
+    this.id = const Value.absent(),
+    this.firstWordId = const Value.absent(),
+    this.lastWordId = const Value.absent(),
     this.glyph = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  LayoutWordGlyphsCompanion.insert({
+  LayoutGlyphsCompanion.insert({
     required String layoutId,
-    required int wordId,
+    required int id,
+    required int firstWordId,
+    required int lastWordId,
     required String glyph,
     this.rowid = const Value.absent(),
   }) : layoutId = Value(layoutId),
-       wordId = Value(wordId),
+       id = Value(id),
+       firstWordId = Value(firstWordId),
+       lastWordId = Value(lastWordId),
        glyph = Value(glyph);
-  static Insertable<LayoutWordGlyphRow> custom({
+  static Insertable<LayoutGlyphRow> custom({
     Expression<String>? layoutId,
-    Expression<int>? wordId,
+    Expression<int>? id,
+    Expression<int>? firstWordId,
+    Expression<int>? lastWordId,
     Expression<String>? glyph,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (layoutId != null) 'layout_id': layoutId,
-      if (wordId != null) 'word_id': wordId,
+      if (id != null) 'id': id,
+      if (firstWordId != null) 'first_word_id': firstWordId,
+      if (lastWordId != null) 'last_word_id': lastWordId,
       if (glyph != null) 'glyph': glyph,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
-  LayoutWordGlyphsCompanion copyWith({
+  LayoutGlyphsCompanion copyWith({
     Value<String>? layoutId,
-    Value<int>? wordId,
+    Value<int>? id,
+    Value<int>? firstWordId,
+    Value<int>? lastWordId,
     Value<String>? glyph,
     Value<int>? rowid,
   }) {
-    return LayoutWordGlyphsCompanion(
+    return LayoutGlyphsCompanion(
       layoutId: layoutId ?? this.layoutId,
-      wordId: wordId ?? this.wordId,
+      id: id ?? this.id,
+      firstWordId: firstWordId ?? this.firstWordId,
+      lastWordId: lastWordId ?? this.lastWordId,
       glyph: glyph ?? this.glyph,
       rowid: rowid ?? this.rowid,
     );
@@ -3256,8 +3525,14 @@ class LayoutWordGlyphsCompanion extends UpdateCompanion<LayoutWordGlyphRow> {
     if (layoutId.present) {
       map['layout_id'] = Variable<String>(layoutId.value);
     }
-    if (wordId.present) {
-      map['word_id'] = Variable<int>(wordId.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (firstWordId.present) {
+      map['first_word_id'] = Variable<int>(firstWordId.value);
+    }
+    if (lastWordId.present) {
+      map['last_word_id'] = Variable<int>(lastWordId.value);
     }
     if (glyph.present) {
       map['glyph'] = Variable<String>(glyph.value);
@@ -3270,9 +3545,11 @@ class LayoutWordGlyphsCompanion extends UpdateCompanion<LayoutWordGlyphRow> {
 
   @override
   String toString() {
-    return (StringBuffer('LayoutWordGlyphsCompanion(')
+    return (StringBuffer('LayoutGlyphsCompanion(')
           ..write('layoutId: $layoutId, ')
-          ..write('wordId: $wordId, ')
+          ..write('id: $id, ')
+          ..write('firstWordId: $firstWordId, ')
+          ..write('lastWordId: $lastWordId, ')
           ..write('glyph: $glyph, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -3290,9 +3567,7 @@ abstract class _$ContentDatabase extends GeneratedDatabase {
   late final $MushafLayoutsTable mushafLayouts = $MushafLayoutsTable(this);
   late final $LayoutLinesTable layoutLines = $LayoutLinesTable(this);
   late final $LayoutPagesTable layoutPages = $LayoutPagesTable(this);
-  late final $LayoutWordGlyphsTable layoutWordGlyphs = $LayoutWordGlyphsTable(
-    this,
-  );
+  late final $LayoutGlyphsTable layoutGlyphs = $LayoutGlyphsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3305,7 +3580,7 @@ abstract class _$ContentDatabase extends GeneratedDatabase {
     mushafLayouts,
     layoutLines,
     layoutPages,
-    layoutWordGlyphs,
+    layoutGlyphs,
   ];
 }
 
@@ -4320,7 +4595,9 @@ typedef $$WordsTableCreateCompanionBuilder = WordsCompanion Function({
   required int ayah,
   required int position,
   required bool isAyahEnd,
-  required String textUthmani,
+  required String wordText,
+  required int morphFirst,
+  required int morphLast,
 });
 typedef $$WordsTableUpdateCompanionBuilder = WordsCompanion Function({
   Value<int> id,
@@ -4329,7 +4606,9 @@ typedef $$WordsTableUpdateCompanionBuilder = WordsCompanion Function({
   Value<int> ayah,
   Value<int> position,
   Value<bool> isAyahEnd,
-  Value<String> textUthmani,
+  Value<String> wordText,
+  Value<int> morphFirst,
+  Value<int> morphLast,
 });
 
 final class $$WordsTableReferences
@@ -4350,27 +4629,6 @@ final class $$WordsTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
-  static MultiTypedResultKey<$LayoutWordGlyphsTable, List<LayoutWordGlyphRow>>
-  _layoutWordGlyphsRefsTable(_$ContentDatabase db) =>
-      MultiTypedResultKey.fromTable(
-        db.layoutWordGlyphs,
-        aliasName: 'words__id__layout_word_glyphs__word_id',
-      );
-
-  $$LayoutWordGlyphsTableProcessedTableManager get layoutWordGlyphsRefs {
-    final manager = $$LayoutWordGlyphsTableTableManager(
-      $_db,
-      $_db.layoutWordGlyphs,
-    ).filter((f) => f.wordId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(
-      _layoutWordGlyphsRefsTable($_db),
-    );
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
     );
   }
 }
@@ -4409,8 +4667,18 @@ class $$WordsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get textUthmani => $composableBuilder(
-    column: $table.textUthmani,
+  ColumnFilters<String> get wordText => $composableBuilder(
+    column: $table.wordText,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get morphFirst => $composableBuilder(
+    column: $table.morphFirst,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get morphLast => $composableBuilder(
+    column: $table.morphLast,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4435,31 +4703,6 @@ class $$WordsTableFilterComposer
           ),
     );
     return composer;
-  }
-
-  Expression<bool> layoutWordGlyphsRefs(
-    Expression<bool> Function($$LayoutWordGlyphsTableFilterComposer f) f,
-  ) {
-    final $$LayoutWordGlyphsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.layoutWordGlyphs,
-      getReferencedColumn: (t) => t.wordId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$LayoutWordGlyphsTableFilterComposer(
-            $db: $db,
-            $table: $db.layoutWordGlyphs,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
   }
 }
 
@@ -4497,8 +4740,18 @@ class $$WordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get textUthmani => $composableBuilder(
-    column: $table.textUthmani,
+  ColumnOrderings<String> get wordText => $composableBuilder(
+    column: $table.wordText,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get morphFirst => $composableBuilder(
+    column: $table.morphFirst,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get morphLast => $composableBuilder(
+    column: $table.morphLast,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4550,10 +4803,16 @@ class $$WordsTableAnnotationComposer
   GeneratedColumn<bool> get isAyahEnd =>
       $composableBuilder(column: $table.isAyahEnd, builder: (column) => column);
 
-  GeneratedColumn<String> get textUthmani => $composableBuilder(
-    column: $table.textUthmani,
+  GeneratedColumn<String> get wordText =>
+      $composableBuilder(column: $table.wordText, builder: (column) => column);
+
+  GeneratedColumn<int> get morphFirst => $composableBuilder(
+    column: $table.morphFirst,
     builder: (column) => column,
   );
+
+  GeneratedColumn<int> get morphLast =>
+      $composableBuilder(column: $table.morphLast, builder: (column) => column);
 
   $$AyahsTableAnnotationComposer get ayahId {
     final $$AyahsTableAnnotationComposer composer = $composerBuilder(
@@ -4577,31 +4836,6 @@ class $$WordsTableAnnotationComposer
     );
     return composer;
   }
-
-  Expression<T> layoutWordGlyphsRefs<T extends Object>(
-    Expression<T> Function($$LayoutWordGlyphsTableAnnotationComposer a) f,
-  ) {
-    final $$LayoutWordGlyphsTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.layoutWordGlyphs,
-      getReferencedColumn: (t) => t.wordId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$LayoutWordGlyphsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.layoutWordGlyphs,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$WordsTableTableManager
@@ -4617,7 +4851,7 @@ class $$WordsTableTableManager
           $$WordsTableUpdateCompanionBuilder,
           (WordRow, $$WordsTableReferences),
           WordRow,
-          PrefetchHooks Function({bool ayahId, bool layoutWordGlyphsRefs})
+          PrefetchHooks Function({bool ayahId})
         > {
   $$WordsTableTableManager(_$ContentDatabase db, $WordsTable table)
     : super(
@@ -4638,7 +4872,9 @@ class $$WordsTableTableManager
                 Value<int> ayah = const Value.absent(),
                 Value<int> position = const Value.absent(),
                 Value<bool> isAyahEnd = const Value.absent(),
-                Value<String> textUthmani = const Value.absent(),
+                Value<String> wordText = const Value.absent(),
+                Value<int> morphFirst = const Value.absent(),
+                Value<int> morphLast = const Value.absent(),
               }) => WordsCompanion(
                 id: id,
                 ayahId: ayahId,
@@ -4646,7 +4882,9 @@ class $$WordsTableTableManager
                 ayah: ayah,
                 position: position,
                 isAyahEnd: isAyahEnd,
-                textUthmani: textUthmani,
+                wordText: wordText,
+                morphFirst: morphFirst,
+                morphLast: morphLast,
               ),
           createCompanionCallback:
               ({
@@ -4656,7 +4894,9 @@ class $$WordsTableTableManager
                 required int ayah,
                 required int position,
                 required bool isAyahEnd,
-                required String textUthmani,
+                required String wordText,
+                required int morphFirst,
+                required int morphLast,
               }) => WordsCompanion.insert(
                 id: id,
                 ayahId: ayahId,
@@ -4664,7 +4904,9 @@ class $$WordsTableTableManager
                 ayah: ayah,
                 position: position,
                 isAyahEnd: isAyahEnd,
-                textUthmani: textUthmani,
+                wordText: wordText,
+                morphFirst: morphFirst,
+                morphLast: morphLast,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -4674,69 +4916,46 @@ class $$WordsTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback:
-              ({ayahId = false, layoutWordGlyphsRefs = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (layoutWordGlyphsRefs) db.layoutWordGlyphs,
-                  ],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (ayahId) {
-                          state = state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.ayahId,
-                            referencedTable: $$WordsTableReferences
-                                ._ayahIdTable(db),
-                            referencedColumn: $$WordsTableReferences
-                                ._ayahIdTable(db)
-                                .id,
-                          ) as T;
-                        }
-
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (layoutWordGlyphsRefs)
-                        await $_getPrefetchedDataByColumns<
-                          WordRow,
-                          $WordsTable,
-                          LayoutWordGlyphRow,
-                          $LayoutWordGlyphsTable
-                        >(
-                          currentTable: table,
-                          referencedTable: $$WordsTableReferences
-                              ._layoutWordGlyphsRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$WordsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).layoutWordGlyphsRefs,
-                          currentColumn: 'id',
-                          referencedColumn: 'word_id',
-                          typedResults: items,
+          prefetchHooksCallback: ({ayahId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (ayahId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.ayahId,
+                        referencedTable: $$WordsTableReferences._ayahIdTable(
+                          db,
                         ),
-                    ];
+                        referencedColumn: $$WordsTableReferences
+                            ._ayahIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
                   },
-                );
+              getPrefetchedDataCallback: (items) async {
+                return [];
               },
+            );
+          },
         ),
       );
 }
@@ -4753,7 +4972,7 @@ typedef $$WordsTableProcessedTableManager =
       $$WordsTableUpdateCompanionBuilder,
       (WordRow, $$WordsTableReferences),
       WordRow,
-      PrefetchHooks Function({bool ayahId, bool layoutWordGlyphsRefs})
+      PrefetchHooks Function({bool ayahId})
     >;
 typedef $$MushafLayoutsTableCreateCompanionBuilder =
     MushafLayoutsCompanion Function({
@@ -4825,22 +5044,19 @@ final class $$MushafLayoutsTableReferences
     );
   }
 
-  static MultiTypedResultKey<$LayoutWordGlyphsTable, List<LayoutWordGlyphRow>>
-  _layoutWordGlyphsRefsTable(_$ContentDatabase db) =>
-      MultiTypedResultKey.fromTable(
-        db.layoutWordGlyphs,
-        aliasName: 'mushaf_layouts__id__layout_word_glyphs__layout_id',
-      );
+  static MultiTypedResultKey<$LayoutGlyphsTable, List<LayoutGlyphRow>>
+  _layoutGlyphsRefsTable(_$ContentDatabase db) => MultiTypedResultKey.fromTable(
+    db.layoutGlyphs,
+    aliasName: 'mushaf_layouts__id__layout_glyphs__layout_id',
+  );
 
-  $$LayoutWordGlyphsTableProcessedTableManager get layoutWordGlyphsRefs {
-    final manager = $$LayoutWordGlyphsTableTableManager(
+  $$LayoutGlyphsTableProcessedTableManager get layoutGlyphsRefs {
+    final manager = $$LayoutGlyphsTableTableManager(
       $_db,
-      $_db.layoutWordGlyphs,
+      $_db.layoutGlyphs,
     ).filter((f) => f.layoutId.id.sqlEquals($_itemColumn<String>('id')!));
 
-    final cache = $_typedResult.readTableOrNull(
-      _layoutWordGlyphsRefsTable($_db),
-    );
+    final cache = $_typedResult.readTableOrNull(_layoutGlyphsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -4936,22 +5152,22 @@ class $$MushafLayoutsTableFilterComposer
     return f(composer);
   }
 
-  Expression<bool> layoutWordGlyphsRefs(
-    Expression<bool> Function($$LayoutWordGlyphsTableFilterComposer f) f,
+  Expression<bool> layoutGlyphsRefs(
+    Expression<bool> Function($$LayoutGlyphsTableFilterComposer f) f,
   ) {
-    final $$LayoutWordGlyphsTableFilterComposer composer = $composerBuilder(
+    final $$LayoutGlyphsTableFilterComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.layoutWordGlyphs,
+      referencedTable: $db.layoutGlyphs,
       getReferencedColumn: (t) => t.layoutId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$LayoutWordGlyphsTableFilterComposer(
+          }) => $$LayoutGlyphsTableFilterComposer(
             $db: $db,
-            $table: $db.layoutWordGlyphs,
+            $table: $db.layoutGlyphs,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5081,22 +5297,22 @@ class $$MushafLayoutsTableAnnotationComposer
     return f(composer);
   }
 
-  Expression<T> layoutWordGlyphsRefs<T extends Object>(
-    Expression<T> Function($$LayoutWordGlyphsTableAnnotationComposer a) f,
+  Expression<T> layoutGlyphsRefs<T extends Object>(
+    Expression<T> Function($$LayoutGlyphsTableAnnotationComposer a) f,
   ) {
-    final $$LayoutWordGlyphsTableAnnotationComposer composer = $composerBuilder(
+    final $$LayoutGlyphsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
-      referencedTable: $db.layoutWordGlyphs,
+      referencedTable: $db.layoutGlyphs,
       getReferencedColumn: (t) => t.layoutId,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$LayoutWordGlyphsTableAnnotationComposer(
+          }) => $$LayoutGlyphsTableAnnotationComposer(
             $db: $db,
-            $table: $db.layoutWordGlyphs,
+            $table: $db.layoutGlyphs,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5123,7 +5339,7 @@ class $$MushafLayoutsTableTableManager
           PrefetchHooks Function({
             bool layoutLinesRefs,
             bool layoutPagesRefs,
-            bool layoutWordGlyphsRefs,
+            bool layoutGlyphsRefs,
           })
         > {
   $$MushafLayoutsTableTableManager(
@@ -5187,14 +5403,14 @@ class $$MushafLayoutsTableTableManager
               ({
                 layoutLinesRefs = false,
                 layoutPagesRefs = false,
-                layoutWordGlyphsRefs = false,
+                layoutGlyphsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (layoutLinesRefs) db.layoutLines,
                     if (layoutPagesRefs) db.layoutPages,
-                    if (layoutWordGlyphsRefs) db.layoutWordGlyphs,
+                    if (layoutGlyphsRefs) db.layoutGlyphs,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -5239,22 +5455,22 @@ class $$MushafLayoutsTableTableManager
                           referencedColumn: 'layout_id',
                           typedResults: items,
                         ),
-                      if (layoutWordGlyphsRefs)
+                      if (layoutGlyphsRefs)
                         await $_getPrefetchedDataByColumns<
                           MushafLayoutRow,
                           $MushafLayoutsTable,
-                          LayoutWordGlyphRow,
-                          $LayoutWordGlyphsTable
+                          LayoutGlyphRow,
+                          $LayoutGlyphsTable
                         >(
                           currentTable: table,
                           referencedTable: $$MushafLayoutsTableReferences
-                              ._layoutWordGlyphsRefsTable(db),
+                              ._layoutGlyphsRefsTable(db),
                           managerFromTypedResult: (p0) =>
                               $$MushafLayoutsTableReferences(
                                 db,
                                 table,
                                 p0,
-                              ).layoutWordGlyphsRefs,
+                              ).layoutGlyphsRefs,
                           currentColumn: 'id',
                           referencedColumn: 'layout_id',
                           typedResults: items,
@@ -5282,7 +5498,7 @@ typedef $$MushafLayoutsTableProcessedTableManager =
       PrefetchHooks Function({
         bool layoutLinesRefs,
         bool layoutPagesRefs,
-        bool layoutWordGlyphsRefs,
+        bool layoutGlyphsRefs,
       })
     >;
 typedef $$LayoutLinesTableCreateCompanionBuilder =
@@ -5292,8 +5508,9 @@ typedef $$LayoutLinesTableCreateCompanionBuilder =
       required int line,
       required LayoutLineType type,
       Value<int?> surah,
-      Value<int?> firstWordId,
-      Value<int?> lastWordId,
+      required bool isCentered,
+      Value<int?> firstGlyphId,
+      Value<int?> lastGlyphId,
       Value<int> rowid,
     });
 typedef $$LayoutLinesTableUpdateCompanionBuilder =
@@ -5303,8 +5520,9 @@ typedef $$LayoutLinesTableUpdateCompanionBuilder =
       Value<int> line,
       Value<LayoutLineType> type,
       Value<int?> surah,
-      Value<int?> firstWordId,
-      Value<int?> lastWordId,
+      Value<bool> isCentered,
+      Value<int?> firstGlyphId,
+      Value<int?> lastGlyphId,
       Value<int> rowid,
     });
 
@@ -5362,13 +5580,18 @@ class $$LayoutLinesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get firstWordId => $composableBuilder(
-    column: $table.firstWordId,
+  ColumnFilters<bool> get isCentered => $composableBuilder(
+    column: $table.isCentered,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get lastWordId => $composableBuilder(
-    column: $table.lastWordId,
+  ColumnFilters<int> get firstGlyphId => $composableBuilder(
+    column: $table.firstGlyphId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get lastGlyphId => $composableBuilder(
+    column: $table.lastGlyphId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5425,13 +5648,18 @@ class $$LayoutLinesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get firstWordId => $composableBuilder(
-    column: $table.firstWordId,
+  ColumnOrderings<bool> get isCentered => $composableBuilder(
+    column: $table.isCentered,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get lastWordId => $composableBuilder(
-    column: $table.lastWordId,
+  ColumnOrderings<int> get firstGlyphId => $composableBuilder(
+    column: $table.firstGlyphId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get lastGlyphId => $composableBuilder(
+    column: $table.lastGlyphId,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -5480,13 +5708,18 @@ class $$LayoutLinesTableAnnotationComposer
   GeneratedColumn<int> get surah =>
       $composableBuilder(column: $table.surah, builder: (column) => column);
 
-  GeneratedColumn<int> get firstWordId => $composableBuilder(
-    column: $table.firstWordId,
+  GeneratedColumn<bool> get isCentered => $composableBuilder(
+    column: $table.isCentered,
     builder: (column) => column,
   );
 
-  GeneratedColumn<int> get lastWordId => $composableBuilder(
-    column: $table.lastWordId,
+  GeneratedColumn<int> get firstGlyphId => $composableBuilder(
+    column: $table.firstGlyphId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get lastGlyphId => $composableBuilder(
+    column: $table.lastGlyphId,
     builder: (column) => column,
   );
 
@@ -5547,8 +5780,9 @@ class $$LayoutLinesTableTableManager
                 Value<int> line = const Value.absent(),
                 Value<LayoutLineType> type = const Value.absent(),
                 Value<int?> surah = const Value.absent(),
-                Value<int?> firstWordId = const Value.absent(),
-                Value<int?> lastWordId = const Value.absent(),
+                Value<bool> isCentered = const Value.absent(),
+                Value<int?> firstGlyphId = const Value.absent(),
+                Value<int?> lastGlyphId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LayoutLinesCompanion(
                 layoutId: layoutId,
@@ -5556,8 +5790,9 @@ class $$LayoutLinesTableTableManager
                 line: line,
                 type: type,
                 surah: surah,
-                firstWordId: firstWordId,
-                lastWordId: lastWordId,
+                isCentered: isCentered,
+                firstGlyphId: firstGlyphId,
+                lastGlyphId: lastGlyphId,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -5567,8 +5802,9 @@ class $$LayoutLinesTableTableManager
                 required int line,
                 required LayoutLineType type,
                 Value<int?> surah = const Value.absent(),
-                Value<int?> firstWordId = const Value.absent(),
-                Value<int?> lastWordId = const Value.absent(),
+                required bool isCentered,
+                Value<int?> firstGlyphId = const Value.absent(),
+                Value<int?> lastGlyphId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => LayoutLinesCompanion.insert(
                 layoutId: layoutId,
@@ -5576,8 +5812,9 @@ class $$LayoutLinesTableTableManager
                 line: line,
                 type: type,
                 surah: surah,
-                firstWordId: firstWordId,
-                lastWordId: lastWordId,
+                isCentered: isCentered,
+                firstGlyphId: firstGlyphId,
+                lastGlyphId: lastGlyphId,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -5947,37 +6184,33 @@ typedef $$LayoutPagesTableProcessedTableManager =
       LayoutPageRow,
       PrefetchHooks Function({bool layoutId})
     >;
-typedef $$LayoutWordGlyphsTableCreateCompanionBuilder =
-    LayoutWordGlyphsCompanion Function({
+typedef $$LayoutGlyphsTableCreateCompanionBuilder =
+    LayoutGlyphsCompanion Function({
       required String layoutId,
-      required int wordId,
+      required int id,
+      required int firstWordId,
+      required int lastWordId,
       required String glyph,
       Value<int> rowid,
     });
-typedef $$LayoutWordGlyphsTableUpdateCompanionBuilder =
-    LayoutWordGlyphsCompanion Function({
+typedef $$LayoutGlyphsTableUpdateCompanionBuilder =
+    LayoutGlyphsCompanion Function({
       Value<String> layoutId,
-      Value<int> wordId,
+      Value<int> id,
+      Value<int> firstWordId,
+      Value<int> lastWordId,
       Value<String> glyph,
       Value<int> rowid,
     });
 
-final class $$LayoutWordGlyphsTableReferences
+final class $$LayoutGlyphsTableReferences
     extends
-        BaseReferences<
-          _$ContentDatabase,
-          $LayoutWordGlyphsTable,
-          LayoutWordGlyphRow
-        > {
-  $$LayoutWordGlyphsTableReferences(
-    super.$_db,
-    super.$_table,
-    super.$_typedResult,
-  );
+        BaseReferences<_$ContentDatabase, $LayoutGlyphsTable, LayoutGlyphRow> {
+  $$LayoutGlyphsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static $MushafLayoutsTable _layoutIdTable(_$ContentDatabase db) => db
       .mushafLayouts
-      .createAlias('layout_word_glyphs__layout_id__mushaf_layouts__id');
+      .createAlias('layout_glyphs__layout_id__mushaf_layouts__id');
 
   $$MushafLayoutsTableProcessedTableManager get layoutId {
     final $_column = $_itemColumn<String>('layout_id')!;
@@ -5993,17 +6226,34 @@ final class $$LayoutWordGlyphsTableReferences
     );
   }
 
-  static $WordsTable _wordIdTable(_$ContentDatabase db) =>
-      db.words.createAlias('layout_word_glyphs__word_id__words__id');
+  static $WordsTable _firstWordIdTable(_$ContentDatabase db) =>
+      db.words.createAlias('layout_glyphs__first_word_id__words__id');
 
-  $$WordsTableProcessedTableManager get wordId {
-    final $_column = $_itemColumn<int>('word_id')!;
+  $$WordsTableProcessedTableManager get firstWordId {
+    final $_column = $_itemColumn<int>('first_word_id')!;
 
     final manager = $$WordsTableTableManager(
       $_db,
       $_db.words,
     ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_wordIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_firstWordIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $WordsTable _lastWordIdTable(_$ContentDatabase db) =>
+      db.words.createAlias('layout_glyphs__last_word_id__words__id');
+
+  $$WordsTableProcessedTableManager get lastWordId {
+    final $_column = $_itemColumn<int>('last_word_id')!;
+
+    final manager = $$WordsTableTableManager(
+      $_db,
+      $_db.words,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_lastWordIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -6011,15 +6261,20 @@ final class $$LayoutWordGlyphsTableReferences
   }
 }
 
-class $$LayoutWordGlyphsTableFilterComposer
-    extends Composer<_$ContentDatabase, $LayoutWordGlyphsTable> {
-  $$LayoutWordGlyphsTableFilterComposer({
+class $$LayoutGlyphsTableFilterComposer
+    extends Composer<_$ContentDatabase, $LayoutGlyphsTable> {
+  $$LayoutGlyphsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get glyph => $composableBuilder(
     column: $table.glyph,
     builder: (column) => ColumnFilters(column),
@@ -6048,10 +6303,33 @@ class $$LayoutWordGlyphsTableFilterComposer
     return composer;
   }
 
-  $$WordsTableFilterComposer get wordId {
+  $$WordsTableFilterComposer get firstWordId {
     final $$WordsTableFilterComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.wordId,
+      getCurrentColumn: (t) => t.firstWordId,
+      referencedTable: $db.words,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordsTableFilterComposer(
+            $db: $db,
+            $table: $db.words,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$WordsTableFilterComposer get lastWordId {
+    final $$WordsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.lastWordId,
       referencedTable: $db.words,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -6072,15 +6350,20 @@ class $$LayoutWordGlyphsTableFilterComposer
   }
 }
 
-class $$LayoutWordGlyphsTableOrderingComposer
-    extends Composer<_$ContentDatabase, $LayoutWordGlyphsTable> {
-  $$LayoutWordGlyphsTableOrderingComposer({
+class $$LayoutGlyphsTableOrderingComposer
+    extends Composer<_$ContentDatabase, $LayoutGlyphsTable> {
+  $$LayoutGlyphsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get glyph => $composableBuilder(
     column: $table.glyph,
     builder: (column) => ColumnOrderings(column),
@@ -6109,10 +6392,33 @@ class $$LayoutWordGlyphsTableOrderingComposer
     return composer;
   }
 
-  $$WordsTableOrderingComposer get wordId {
+  $$WordsTableOrderingComposer get firstWordId {
     final $$WordsTableOrderingComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.wordId,
+      getCurrentColumn: (t) => t.firstWordId,
+      referencedTable: $db.words,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordsTableOrderingComposer(
+            $db: $db,
+            $table: $db.words,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$WordsTableOrderingComposer get lastWordId {
+    final $$WordsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.lastWordId,
       referencedTable: $db.words,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -6133,15 +6439,18 @@ class $$LayoutWordGlyphsTableOrderingComposer
   }
 }
 
-class $$LayoutWordGlyphsTableAnnotationComposer
-    extends Composer<_$ContentDatabase, $LayoutWordGlyphsTable> {
-  $$LayoutWordGlyphsTableAnnotationComposer({
+class $$LayoutGlyphsTableAnnotationComposer
+    extends Composer<_$ContentDatabase, $LayoutGlyphsTable> {
+  $$LayoutGlyphsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
   GeneratedColumn<String> get glyph =>
       $composableBuilder(column: $table.glyph, builder: (column) => column);
 
@@ -6168,10 +6477,33 @@ class $$LayoutWordGlyphsTableAnnotationComposer
     return composer;
   }
 
-  $$WordsTableAnnotationComposer get wordId {
+  $$WordsTableAnnotationComposer get firstWordId {
     final $$WordsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.wordId,
+      getCurrentColumn: (t) => t.firstWordId,
+      referencedTable: $db.words,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$WordsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.words,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$WordsTableAnnotationComposer get lastWordId {
+    final $$WordsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.lastWordId,
       referencedTable: $db.words,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -6192,135 +6524,157 @@ class $$LayoutWordGlyphsTableAnnotationComposer
   }
 }
 
-class $$LayoutWordGlyphsTableTableManager
+class $$LayoutGlyphsTableTableManager
     extends
         RootTableManager<
           _$ContentDatabase,
-          $LayoutWordGlyphsTable,
-          LayoutWordGlyphRow,
-          $$LayoutWordGlyphsTableFilterComposer,
-          $$LayoutWordGlyphsTableOrderingComposer,
-          $$LayoutWordGlyphsTableAnnotationComposer,
-          $$LayoutWordGlyphsTableCreateCompanionBuilder,
-          $$LayoutWordGlyphsTableUpdateCompanionBuilder,
-          (LayoutWordGlyphRow, $$LayoutWordGlyphsTableReferences),
-          LayoutWordGlyphRow,
-          PrefetchHooks Function({bool layoutId, bool wordId})
+          $LayoutGlyphsTable,
+          LayoutGlyphRow,
+          $$LayoutGlyphsTableFilterComposer,
+          $$LayoutGlyphsTableOrderingComposer,
+          $$LayoutGlyphsTableAnnotationComposer,
+          $$LayoutGlyphsTableCreateCompanionBuilder,
+          $$LayoutGlyphsTableUpdateCompanionBuilder,
+          (LayoutGlyphRow, $$LayoutGlyphsTableReferences),
+          LayoutGlyphRow,
+          PrefetchHooks Function({
+            bool layoutId,
+            bool firstWordId,
+            bool lastWordId,
+          })
         > {
-  $$LayoutWordGlyphsTableTableManager(
+  $$LayoutGlyphsTableTableManager(
     _$ContentDatabase db,
-    $LayoutWordGlyphsTable table,
+    $LayoutGlyphsTable table,
   ) : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$LayoutWordGlyphsTableFilterComposer($db: db, $table: table),
+              $$LayoutGlyphsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$LayoutWordGlyphsTableOrderingComposer($db: db, $table: table),
+              $$LayoutGlyphsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$LayoutWordGlyphsTableAnnotationComposer($db: db, $table: table),
+              $$LayoutGlyphsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String> layoutId = const Value.absent(),
-                Value<int> wordId = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<int> firstWordId = const Value.absent(),
+                Value<int> lastWordId = const Value.absent(),
                 Value<String> glyph = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
-              }) => LayoutWordGlyphsCompanion(
+              }) => LayoutGlyphsCompanion(
                 layoutId: layoutId,
-                wordId: wordId,
+                id: id,
+                firstWordId: firstWordId,
+                lastWordId: lastWordId,
                 glyph: glyph,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
                 required String layoutId,
-                required int wordId,
+                required int id,
+                required int firstWordId,
+                required int lastWordId,
                 required String glyph,
                 Value<int> rowid = const Value.absent(),
-              }) => LayoutWordGlyphsCompanion.insert(
+              }) => LayoutGlyphsCompanion.insert(
                 layoutId: layoutId,
-                wordId: wordId,
+                id: id,
+                firstWordId: firstWordId,
+                lastWordId: lastWordId,
                 glyph: glyph,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable<$LayoutWordGlyphsTable, LayoutWordGlyphRow>(
-                    table,
-                  ),
-                  $$LayoutWordGlyphsTableReferences(db, table, e),
+                  e.readTable<$LayoutGlyphsTable, LayoutGlyphRow>(table),
+                  $$LayoutGlyphsTableReferences(db, table, e),
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({layoutId = false, wordId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (layoutId) {
-                      state = state.withJoin(
-                        currentTable: table,
-                        currentColumn: table.layoutId,
-                        referencedTable: $$LayoutWordGlyphsTableReferences
-                            ._layoutIdTable(db),
-                        referencedColumn: $$LayoutWordGlyphsTableReferences
-                            ._layoutIdTable(db)
-                            .id,
-                      ) as T;
-                    }
-                    if (wordId) {
-                      state = state.withJoin(
-                        currentTable: table,
-                        currentColumn: table.wordId,
-                        referencedTable: $$LayoutWordGlyphsTableReferences
-                            ._wordIdTable(db),
-                        referencedColumn: $$LayoutWordGlyphsTableReferences
-                            ._wordIdTable(db)
-                            .id,
-                      ) as T;
-                    }
+          prefetchHooksCallback:
+              ({layoutId = false, firstWordId = false, lastWordId = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (layoutId) {
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.layoutId,
+                            referencedTable: $$LayoutGlyphsTableReferences
+                                ._layoutIdTable(db),
+                            referencedColumn: $$LayoutGlyphsTableReferences
+                                ._layoutIdTable(db)
+                                .id,
+                          ) as T;
+                        }
+                        if (firstWordId) {
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.firstWordId,
+                            referencedTable: $$LayoutGlyphsTableReferences
+                                ._firstWordIdTable(db),
+                            referencedColumn: $$LayoutGlyphsTableReferences
+                                ._firstWordIdTable(db)
+                                .id,
+                          ) as T;
+                        }
+                        if (lastWordId) {
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.lastWordId,
+                            referencedTable: $$LayoutGlyphsTableReferences
+                                ._lastWordIdTable(db),
+                            referencedColumn: $$LayoutGlyphsTableReferences
+                                ._lastWordIdTable(db)
+                                .id,
+                          ) as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
 
-typedef $$LayoutWordGlyphsTableProcessedTableManager =
+typedef $$LayoutGlyphsTableProcessedTableManager =
     ProcessedTableManager<
       _$ContentDatabase,
-      $LayoutWordGlyphsTable,
-      LayoutWordGlyphRow,
-      $$LayoutWordGlyphsTableFilterComposer,
-      $$LayoutWordGlyphsTableOrderingComposer,
-      $$LayoutWordGlyphsTableAnnotationComposer,
-      $$LayoutWordGlyphsTableCreateCompanionBuilder,
-      $$LayoutWordGlyphsTableUpdateCompanionBuilder,
-      (LayoutWordGlyphRow, $$LayoutWordGlyphsTableReferences),
-      LayoutWordGlyphRow,
-      PrefetchHooks Function({bool layoutId, bool wordId})
+      $LayoutGlyphsTable,
+      LayoutGlyphRow,
+      $$LayoutGlyphsTableFilterComposer,
+      $$LayoutGlyphsTableOrderingComposer,
+      $$LayoutGlyphsTableAnnotationComposer,
+      $$LayoutGlyphsTableCreateCompanionBuilder,
+      $$LayoutGlyphsTableUpdateCompanionBuilder,
+      (LayoutGlyphRow, $$LayoutGlyphsTableReferences),
+      LayoutGlyphRow,
+      PrefetchHooks Function({bool layoutId, bool firstWordId, bool lastWordId})
     >;
 
 class $ContentDatabaseManager {
@@ -6340,6 +6694,6 @@ class $ContentDatabaseManager {
       $$LayoutLinesTableTableManager(_db, _db.layoutLines);
   $$LayoutPagesTableTableManager get layoutPages =>
       $$LayoutPagesTableTableManager(_db, _db.layoutPages);
-  $$LayoutWordGlyphsTableTableManager get layoutWordGlyphs =>
-      $$LayoutWordGlyphsTableTableManager(_db, _db.layoutWordGlyphs);
+  $$LayoutGlyphsTableTableManager get layoutGlyphs =>
+      $$LayoutGlyphsTableTableManager(_db, _db.layoutGlyphs);
 }

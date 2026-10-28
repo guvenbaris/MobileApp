@@ -7,7 +7,7 @@
 ## Faz Sonu Çıktısı (Definition of Done)
 - [ ] Flutter projesi Android (API 24+) ve iOS (15+) üzerinde açılıyor.
 - [ ] Kur'an verisi veritabanından okunuyor ve **seçilen bir mushaf sayfası basılı nüshayla birebir çiziliyor** (Fatiha, Bakara 1. sayfa ve rastgele 5 sayfa elle kontrol edildi).
-- [x] Kur'an metin bütünlüğü (T-01) ve sayfa düzeni (T-02) testleri otomatik çalışıyor ve geçiyor. (T-02'de 25 sayfa 1421H basılı nüshayla doğrulanmayı bekliyor, F0-05)
+- [x] Kur'an metin bütünlüğü (T-01) ve sayfa düzeni (T-02) testleri otomatik çalışıyor ve geçiyor. (25 baskı farkı QUL'ün 1421H düzeniyle doğrulandı; satırlar fontla ölçüldü)
 - [ ] Katmanlı mimari, kullanıcı veritabanı (UUID, zaman damgaları, migration altyapısı) ve sahte servis arayüzleri hazır.
 - [ ] TR/AR/EN dil altyapısı ve tema altyapısı çalışıyor (AR'de RTL).
 - [ ] CI analiz + test çalıştırıyor (haftalık, PR'da ve elle; her commit'te değil, karar 28.10.2026).
@@ -35,7 +35,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | TK-03 | Yönlendirme | **go_router** | Derin bağlantı (ayet paylaşımı) desteği |
 | TK-04 | Klasör yapısı | **Özellik bazlı (feature-first)** + katmanlar: `presentation / application / domain / data` | Modüller (M2, M8…) birbirinden bağımsız büyüyebilir |
 | TK-05 | Dil dosyaları | Flutter `gen_l10n` + ARB dosyaları | Resmi yöntem; NF-Y01 |
-| TK-06 | **Mushaf çizim yöntemi** | **Sayfa bazlı Kur'an fontları (QPC tipi glif fontları) + satır/kelime düzen verisi.** Yedek plan: görsel sayfalar. | Font yöntemi basılı nüshayla birebir düzen, keskin görüntü, küçük boyut, **kelimeye dokunabilme** (M3-03, M8-02 için şart) ve koyu tema sağlar. Görsel yöntemde kelimeye dokunma ve tema zorlaşır. F0-05'te denenerek kesinleşir. |
+| TK-06 | **Mushaf çizim yöntemi** | ✅ **Karar (28.10.2026):** Uygulama **tek bir Kur'an fontuyla** (ör. KFGQPC Uthmanic Hafs, ~1 MB) ve QUL'ün satır düzeniyle gelir; 604 sayfanın hepsi aynı fontla, satır ve sayfa sınırları basılı nüshayla aynı. **QCF V2 sayfa fontları (birebir görünüm, 604 dosya, 208 MB) isteğe bağlı pakettir:** kullanıcıya sorulur, onay verirse indirilir ve **tamamı indikten sonra** tüm sayfalar birlikte geçer; karışık görünüm olmaz. | 208 MB, uygulama boyutu hedefini (NF-PF06 ≤ 60 MB) aşıyor ve ilk açılış internetsiz olmalı (M16-01). Glif fontlarının ağırlığı harf çizimleri; küçültme payı yok. Kelimeye dokunma iki yöntemde de düzen verisiyle çalışır. F0-05'te iki yöntem ekranda denenir. |
 | TK-07 | Ortamlar (flavor) | `dev` ve `prod` | Sahte ve gerçek servislerin ayrılması |
 | TK-08 | Kod kalitesi | `flutter_lints` + ek katı kurallar, `dart format` | |
 | TK-09 | CI | GitHub Actions (analiz, test, Android derleme) | Repo GitHub'da olacaksa; değilse eşdeğeri |
@@ -85,11 +85,11 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 
 ### F0-05 Mushaf Sayfası Çizim Denemesi (Spike) [Z] — M2-01, M2-02, TK-06
 > Projenin en riskli teknik konusu. Faz 1'e geçmeden çözülmelidir.
-- [ ] Sayfa fontlarıyla tek bir sayfanın çizilmesi (satır düzeni birebir)
+- [ ] Tek Kur'an fontuyla (varsayılan) ve QCF V2 sayfa fontlarıyla (isteğe bağlı paket) tek bir sayfanın çizilmesi; satır düzeni ve ortalı satırlar birebir (TK-06)
 - [ ] Kelimeye dokununca kelime kimliğinin alınması (M3-03 ve M8-02'nin ön koşulu)
 - [ ] Açık / sepya / koyu temada çizim (M2-08)
 - [ ] Yazı boyutu ölçekleme ve tablette çift sayfa ön denemesi (M2-03, M2-07)
-- [ ] Performans ölçümü: sayfa geçişi ≤ 100 ms (NF-PF02), 604 sayfa font boyutunun uygulama boyutuna etkisi (NF-PF06)
+- [ ] Performans ölçümü: sayfa geçişi ≤ 100 ms (NF-PF02), uygulama boyutu (NF-PF06); font paketi indirme akışı ve izin sorusu (TK-06)
 - [ ] **Düzen değiştirme denemesi (M2-14, M2-15):** en az iki düzen (ör. Medine + metin tabanlı ayet görünümü ya da ikinci bir sayfa düzeni) arasında geçişte aynı ayette kalındığının gösterilmesi
 - [ ] Sonuç raporu: seçilen yöntem, karşılaşılan sorunlar, Türkiye mushaf düzeni için uygulanabilirlik
 - **Bitti:** Seçilen 7 sayfa (Fatiha, Bakara 2, rastgele 5) basılı nüshayla yan yana karşılaştırıldı ve farksız; yöntem kararı `CLAUDE.md`'ye yazıldı.
@@ -159,3 +159,4 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | CI de her commit yerine haftalık + PR + elle çalışacak şekilde değiştirildi |
 | 28.10.2026 | F0-03 Kur'an veri hattı tamamlandı; ilk düzen Medine 1421H (QCF V2) |
 | 28.10.2026 | F0-04 metin bütünlüğü testleri tamamlandı; Tanzil test referansı |
+| 28.10.2026 | F0-04 ek: QUL düzen/glif kaynağı oldu; esas kelime bölünmesi KFGQPC (77.430); satır genişliği doğrulaması; TK-06 font kararı |

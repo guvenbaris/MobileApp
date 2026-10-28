@@ -44,11 +44,97 @@ void main() {
       }
     });
 
-    test('77.429 kelime ve her ayette bir ayet sonu işareti', () async {
+    test('77.430 kelime ve her ayette bir ayet sonu işareti', () async {
       final words = await db.select(db.words).get();
-      expect(words.where((w) => !w.isAyahEnd), hasLength(77429));
+      expect(words.where((w) => !w.isAyahEnd), hasLength(77430));
       expect(words.where((w) => w.isAyahEnd), hasLength(6236));
     });
+  });
+
+  group('kelime bölünmesi (esas: KFGQPC metni)', () {
+    late List<WordRow> words;
+
+    setUp(() async {
+      words = await (db.select(
+        db.words,
+      )..orderBy([(w) => OrderingTerm(expression: w.id)])).get();
+    });
+
+    test('kelimeler ayetin KFGQPC metnini birebir oluşturur', () {
+      final byAyah = <int, List<WordRow>>{};
+      for (final w in words) {
+        byAyah.putIfAbsent(w.ayahId, () => []).add(w);
+      }
+      final mismatches = <String>[];
+      for (final a in ayahs) {
+        // ۞ işareti kelime sayılmaz. Parçalar normal veya bölünmez boşlukla
+        // ayrılır (ayet numarası genelde bölünmez boşlukla; 2:72'de normal).
+        final expected = a.textQpcHafs
+            .split(RegExp('[  ]'))
+            .where((t) => t.isNotEmpty && t != '۞')
+            .toList();
+        final ws = byAyah[a.id]!;
+        final actual = ws.map((w) => w.wordText).toList();
+        if (actual.join('|') != expected.join('|') || !ws.last.isAyahEnd) {
+          mismatches.add('${a.surah}:${a.ayah}');
+        }
+        final positions = ws.map((w) => w.position).toList();
+        if (positions.join(',') !=
+            List.generate(ws.length, (i) => i + 1).join(',')) {
+          mismatches.add('${a.surah}:${a.ayah} sıra');
+        }
+      }
+      expect(mismatches, isEmpty, reason: mismatches.take(10).join('\n'));
+    });
+
+    test(
+      'Corpus (Quran.com) bölünmesinden yalnızca bilinen 7 yerde ayrışır',
+      () {
+        // VERI_KAYNAKLARI.md Q-12. Eşleme veriden otomatik çıkarılır; burada
+        // yalnızca sonucun beklenen yerlerle sınırlı olduğu denetlenir.
+        final differing = <String>{
+          for (final w in words.where((w) => !w.isAyahEnd))
+            if (w.morphFirst != w.morphLast || w.morphFirst != w.position)
+              '${w.surah}:${w.ayah}',
+        };
+        expect(differing, {
+          '2:181', '8:6', '13:37', // بَعۡدَ مَا: KFGQPC 2, Corpus 1
+          '15:7', '27:20', '36:22', // لَّوۡمَا, مَالِيَ: KFGQPC 1, Corpus 2
+          '37:130', // إِلۡ يَاسِينَ: KFGQPC 2, Corpus 1
+        });
+
+        WordRow at(int s, int a, int p) => words.firstWhere(
+          (w) => w.surah == s && w.ayah == a && w.position == p,
+        );
+        // "بَعۡدَ" ve "مَا" aynı Corpus kelimesine ("baʿdamā") bağlanır.
+        expect((at(2, 181, 3).morphFirst, at(2, 181, 4).morphFirst), (3, 3));
+        // "لَّوۡمَا" iki Corpus kelimesini ("law", "mā") kapsar.
+        expect((at(15, 7, 1).morphFirst, at(15, 7, 1).morphLast), (1, 2));
+      },
+    );
+
+    test(
+      'mushaf glifleriyle yalnızca bilinen 4 yerde bire bir değil',
+      () async {
+        final glyphs = await db.select(db.layoutGlyphs).get();
+        final glyphsPerWord = <int, int>{};
+        for (final g in glyphs) {
+          for (var w = g.firstWordId; w <= g.lastWordId; w++) {
+            glyphsPerWord[w] = (glyphsPerWord[w] ?? 0) + 1;
+          }
+        }
+        final byId = {for (final w in words) w.id: w};
+        final differing = <String>{
+          for (final g in glyphs)
+            if (g.firstWordId != g.lastWordId)
+              '${byId[g.firstWordId]!.surah}:${byId[g.firstWordId]!.ayah}',
+          for (final MapEntry(:key, :value) in glyphsPerWord.entries)
+            if (value != 1) '${byId[key]!.surah}:${byId[key]!.ayah}',
+        };
+        expect(differing, {'15:7', '27:20', '36:22', '37:130'});
+        expect(glyphsPerWord.length, words.length, reason: 'glifsiz kelime');
+      },
+    );
   });
 
   test('her ayetin metni Tanzil ile karakteri karakterine aynı', () {

@@ -36,7 +36,11 @@ Future<Map<String, dynamic>> computeChecksums(ContentDatabase db) async {
         a.map((r) => '${r.ayah}|${r.juz}|${r.hizb}|${r.rub}|${r.sajdah}'),
       ),
       'words': hash(
-        w.map((r) => '${r.ayah}|${r.position}|${r.isAyahEnd}|${r.textUthmani}'),
+        w.map(
+          (r) =>
+              '${r.ayah}|${r.position}|${r.isAyahEnd}|${r.wordText}|'
+              '${r.morphFirst}|${r.morphLast}',
+        ),
       ),
     };
   }
@@ -52,17 +56,19 @@ Future<Map<String, dynamic>> computeChecksums(ContentDatabase db) async {
               ]))
             .get();
     final glyphs =
-        await (db.select(db.layoutWordGlyphs)
+        await (db.select(db.layoutGlyphs)
               ..where((g) => g.layoutId.equals(layout.id))
-              ..orderBy([(g) => OrderingTerm(expression: g.wordId)]))
+              ..orderBy([(g) => OrderingTerm(expression: g.id)]))
             .get();
     layouts[layout.id] = hash([
       ...lines.map(
         (l) =>
-            '${l.page}|${l.line}|${l.type.name}|${l.surah}|'
-            '${l.firstWordId}|${l.lastWordId}',
+            '${l.page}|${l.line}|${l.type.name}|${l.isCentered}|${l.surah}|'
+            '${l.firstGlyphId}|${l.lastGlyphId}',
       ),
-      ...glyphs.map((g) => '${g.wordId}|${g.glyph}'),
+      ...glyphs.map(
+        (g) => '${g.id}|${g.firstWordId}|${g.lastWordId}|${g.glyph}',
+      ),
     ]);
   }
 

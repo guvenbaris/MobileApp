@@ -3,7 +3,9 @@
 // Referans: Tanzil meta verisi ve Tanzil metnindeki işaretler. Tanzil'in
 // sayfa verisi 1405H baskısına aittir; bizim düzenimiz 1421H baskısıdır.
 // İki baskı arasındaki bilinen farklar aşağıda tek tek listelenir
-// (VERI_KAYNAKLARI.md Q-10). Liste dışındaki her fark testi kırar.
+// (VERI_KAYNAKLARI.md Q-10). Liste dışındaki her fark testi kırar. Düzenin
+// kendisi (satırlar, glifler) QUL'den gelir ve yerelde font genişliği
+// ölçümüyle doğrulanır (tool/content/check_line_widths.dart).
 import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quran_app/features/quran/application/quran_providers.dart';
@@ -14,7 +16,7 @@ import '../helpers/content_db.dart';
 import '../helpers/tanzil_reference.dart';
 
 /// 1421H düzeninde ilk ayeti Tanzil'den (1405H) farklı olan sayfalar:
-/// sayfa → (Tanzil, 1421H). Basılı nüshayla doğrulanması bekleniyor (F0-05).
+/// sayfa → (Tanzil, 1421H). QUL'ün 1421H düzeniyle doğrulandı (Q-10).
 const _known1421PageDifferences = {
   121: (AyahRef(5, 77), AyahRef(5, 78)),
   122: (AyahRef(5, 83), AyahRef(5, 84)),
@@ -131,7 +133,7 @@ void main() {
       expect(refOf(pages.last.lastAyahId), const AyahRef(114, 6));
     });
 
-    test('satırlar tüm kelimeleri sırayla ve bir kez kapsar', () async {
+    test('satırlar tüm glifleri sırayla ve bir kez kapsar', () async {
       final lines =
           await (db.select(db.layoutLines)
                 ..where(
@@ -144,17 +146,65 @@ void main() {
                   (l) => OrderingTerm(expression: l.line),
                 ]))
               .get();
+      expect(lines, hasLength(8820));
       var expectedNext = 1;
       for (final l in lines) {
         expect(
-          l.firstWordId,
+          l.firstGlyphId,
           expectedNext,
           reason: 's.${l.page} satır ${l.line}',
         );
-        expectedNext = l.lastWordId! + 1;
+        expectedNext = l.lastGlyphId! + 1;
       }
-      expect(expectedNext - 1, await db.words.count().getSingle());
+      expect(expectedNext - 1, await db.layoutGlyphs.count().getSingle());
     });
+
+    test('hiçbir kelime iki satıra bölünmez', () async {
+      final lines = await (db.select(
+        db.layoutLines,
+      )..where((l) => l.type.equalsValue(LayoutLineType.ayah))).get();
+      final glyphs = {
+        for (final g in await db.select(db.layoutGlyphs).get()) g.id: g,
+      };
+      final lineOfWord = <int, String>{};
+      for (final l in lines) {
+        for (var id = l.firstGlyphId!; id <= l.lastGlyphId!; id++) {
+          final g = glyphs[id]!;
+          for (var w = g.firstWordId; w <= g.lastWordId; w++) {
+            final here = '${l.page}/${l.line}';
+            expect(lineOfWord.putIfAbsent(w, () => here), here, reason: '$w');
+          }
+        }
+      }
+      expect(lineOfWord.length, await db.words.count().getSingle());
+    });
+
+    test('256 ortalı satır; ilk iki sayfanın tamamı ortalı', () async {
+      final lines = await db.select(db.layoutLines).get();
+      expect(lines.where((l) => l.isCentered), hasLength(256));
+      expect(
+        lines.where((l) => l.page <= 2).every((l) => l.isCentered),
+        isTrue,
+      );
+    });
+
+    test(
+      '254. sayfa düzeltmesi: "بَعۡدَ" 6. satırda, "مَا" 7. satırda',
+      () async {
+        // VERI_KAYNAKLARI.md Q-13.
+        final line7 = await (db.select(
+          db.layoutLines,
+        )..where((l) => l.page.equals(254) & l.line.equals(7))).getSingle();
+        final first = await (db.select(
+          db.layoutGlyphs,
+        )..where((g) => g.id.equals(line7.firstGlyphId!))).getSingle();
+        final word = await (db.select(
+          db.words,
+        )..where((w) => w.id.equals(first.firstWordId))).getSingle();
+        expect((word.surah, word.ayah, word.position), (13, 37, 9));
+        expect(word.wordText, 'مَا');
+      },
+    );
 
     test('her sure başlığıyla, besmeleli sureler besmeleyle başlar', () async {
       final lines = await (db.select(
@@ -203,20 +253,18 @@ void main() {
       expect(starts.difference(marks).every((r) => r.ayah == 1), isTrue);
     });
 
-    test(
-      'secdeler: meta verideki 14 secde metindeki ۩ işaretleriyle uyumlu',
-      () {
-        final sajdahs = {
-          for (final a in ayahs)
-            if (a.sajdah != null) AyahRef(a.surah, a.ayah),
-        };
-        final marks = tanzil.ayahsWithMark('۩');
-        expect(sajdahs, hasLength(14));
-        expect(marks, hasLength(15));
-        // 22:77 metinde işaretli ama meta veride secde değil (Q-8).
-        expect(marks.difference(sajdahs), {const AyahRef(22, 77)});
-        expect(sajdahs.difference(marks), isEmpty);
-      },
-    );
+    test('secdeler: uygulamada 14 secde (Hanefi, Q-8 kararı), metindeki ۩ ile uyumlu', () {
+      final sajdahs = {
+        for (final a in ayahs)
+          if (a.sajdah != null) AyahRef(a.surah, a.ayah),
+      };
+      final marks = tanzil.ayahsWithMark('۩');
+      expect(sajdahs, hasLength(14));
+      expect(marks, hasLength(15));
+      // Karar (28.10.2026): 14 secde. 22:77 metinde ۩ ile işaretli (basılı
+      // metnin parçası) ama uygulamada secde ayeti sayılmaz (Q-8).
+      expect(marks.difference(sajdahs), {const AyahRef(22, 77)});
+      expect(sajdahs.difference(marks), isEmpty);
+    });
   });
 }

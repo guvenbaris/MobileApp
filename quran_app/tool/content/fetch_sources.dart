@@ -29,11 +29,11 @@ const _tanzilFiles = {
   'quran-data.xml': 'https://tanzil.net/res/text/metadata/quran-data.xml',
 };
 
-/// API'deki `mushaf` parametresi → bizim düzen kimliğimiz ve glif alanı.
-///
-/// 1405H baskısı (`mushaf: 2`, `code_v1`) bilerek dışarıda: API'deki satır
-/// verisinde 8 sayfada açıklanamayan boş satırlar var (bkz. VERI_KAYNAKLARI.md).
-const _layouts = {'madani_1421': (mushaf: 1, glyphField: 'code_v2')};
+/// Ayetler, KFGQPC 1421H düzeninin (`mushaf=1`) sayfaları üzerinden
+/// indirilir. Düzenin kendisi (satırlar) Quran.com'dan alınmaz: satır
+/// verisinde hatalar bulundu; düzen kaynağı QUL'dür (VERI_KAYNAKLARI.md Q-13).
+/// Kelime glifleri (`code_v2`) yalnızca QUL glifleriyle eşleme için köprüdür.
+const _mushafParam = 1;
 
 final _client = HttpClient()..connectionTimeout = const Duration(seconds: 30);
 
@@ -66,18 +66,13 @@ Future<void> _fetchQuranCom() async {
   await Directory(_outDir).create(recursive: true);
 
   await _fetchChapters();
-  for (final MapEntry(key: id, value: layout) in _layouts.entries) {
-    await _fetchLayout(id, layout.mushaf, layout.glyphField);
-  }
+  await _fetchVerses();
 
   await _writeJson('manifest.json', {
     'source': 'Quran.com API v4',
     'url': _api,
     'fetchedAt': DateTime.now().toUtc().toIso8601String(),
-    'layouts': {
-      for (final MapEntry(key: id, value: l) in _layouts.entries)
-        id: {'mushafParam': l.mushaf, 'glyphField': l.glyphField},
-    },
+    'mushafParam': _mushafParam,
   });
   stdout.writeln('Tamamlandı: $_outDir');
 }
@@ -104,16 +99,15 @@ Future<void> _fetchChapters() async {
   stdout.writeln('Sureler: ${chapters.length}');
 }
 
-/// Bir düzenin 604 sayfasını indirir. Ayet metinleri ilk düzenden
-/// `verses.json`'a, kelime konumları her düzen için ayrı dosyaya yazılır.
-Future<void> _fetchLayout(String id, int mushaf, String glyphField) async {
+/// 604 sayfayı indirip ayetleri `verses.json`'a yazar.
+Future<void> _fetchVerses() async {
   final pages = List<List<Map<String, dynamic>>?>.filled(_pageCount, null);
   var next = 1;
   Future<void> worker() async {
     while (next <= _pageCount) {
       final page = next++;
-      pages[page - 1] = await _fetchPage(page, mushaf, glyphField);
-      if (page % 50 == 0) stdout.writeln('$id: sayfa $page/$_pageCount');
+      pages[page - 1] = await _fetchPage(page);
+      if (page % 100 == 0) stdout.writeln('Sayfa $page/$_pageCount');
     }
   }
 
@@ -125,53 +119,15 @@ Future<void> _fetchLayout(String id, int mushaf, String glyphField) async {
         ? (a['surah'] as int) - (b['surah'] as int)
         : (a['ayah'] as int) - (b['ayah'] as int),
   );
-
-  // Kelime konumu: [sure, ayet, sıra, sayfa, satır, glif]
-  await _writeJson('layout_$id.json', [
-    for (final v in verses)
-      for (final w in (v['words'] as List).cast<Map<String, dynamic>>())
-        [
-          v['surah'],
-          v['ayah'],
-          w['position'],
-          w['page'],
-          w['line'],
-          w['glyph'],
-        ],
-  ]);
-
-  if (!File('$_outDir/verses.json').existsSync()) {
-    await _writeJson('verses.json', [
-      for (final v in verses)
-        {
-          'surah': v['surah'],
-          'ayah': v['ayah'],
-          'juz': v['juz'],
-          'hizb': v['hizb'],
-          'rub': v['rub'],
-          'sajdah': v['sajdah'],
-          'textUthmani': v['textUthmani'],
-          'textQpcHafs': v['textQpcHafs'],
-          // Kelime: [sıra, tür (word/end), metin]
-          'words': [
-            for (final w in (v['words'] as List).cast<Map<String, dynamic>>())
-              [w['position'], w['type'], w['text']],
-          ],
-        },
-    ]);
-  }
-  stdout.writeln('$id: ${verses.length} ayet');
+  await _writeJson('verses.json', verses);
+  stdout.writeln('Ayetler: ${verses.length}');
 }
 
-Future<List<Map<String, dynamic>>> _fetchPage(
-  int page,
-  int mushaf,
-  String glyphField,
-) async {
+Future<List<Map<String, dynamic>>> _fetchPage(int page) async {
   final json = await _getJson(
-    '$_api/verses/by_page/$page?mushaf=$mushaf&per_page=50&words=true'
+    '$_api/verses/by_page/$page?mushaf=$_mushafParam&per_page=50&words=true'
     '&fields=text_uthmani,text_qpc_hafs'
-    '&word_fields=text_uthmani,$glyphField,line_number,page_number,position',
+    '&word_fields=text_uthmani,code_v2,position',
   );
   final pagination = json['pagination'] as Map;
   if (pagination['next_page'] != null) {
@@ -188,16 +144,15 @@ Future<List<Map<String, dynamic>>> _fetchPage(
         'sajdah': v['sajdah_number'],
         'textUthmani': v['text_uthmani'],
         'textQpcHafs': v['text_qpc_hafs'],
+        // Quran.com/Corpus kelimesi: [sıra, tür (word/end), metin, QCF V2 glifi]
         'words': [
           for (final w in (v['words'] as List).cast<Map<String, dynamic>>())
-            {
-              'position': w['position'],
-              'type': w['char_type_name'],
-              'text': w['text_uthmani'],
-              'page': w['page_number'],
-              'line': w['line_number'],
-              'glyph': w[glyphField],
-            },
+            [
+              w['position'],
+              w['char_type_name'],
+              w['text_uthmani'],
+              w['code_v2'],
+            ],
         ],
       },
   ];

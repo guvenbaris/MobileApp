@@ -1,11 +1,6 @@
 {
   "source": "Quran.com API v4",
   "url": "https://api.quran.com/api/v4",
-  "fetchedAt": "2026-10-28T09:43:50.926284Z",
-  "layouts": {
-    "madani_1421": {
-      "mushafParam": 1,
-      "glyphField": "code_v2"
-    }
-  }
+  "fetchedAt": "2026-10-28T11:42:08.535915Z",
+  "mushafParam": 1
 }

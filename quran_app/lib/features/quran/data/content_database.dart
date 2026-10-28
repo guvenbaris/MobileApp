@@ -9,7 +9,7 @@ part 'content_database.g.dart';
 /// Kaynak veri veya şema değiştiğinde artırılır; uygulama yeni sürümü
 /// görünce paketteki veritabanını yeniden kopyalar. Kullanıcı verisi ayrı
 /// veritabanındadır (MK-05) ve bundan etkilenmez.
-const int kContentVersion = 2;
+const int kContentVersion = 3;
 
 /// Paketteki veritabanının yolu (pubspec `assets` ile aynı olmalı).
 const String kContentAssetPath = 'assets/db/content.sqlite';
@@ -62,6 +62,10 @@ class Ayahs extends Table {
 }
 
 /// Kelimeler ve ayet sonu işaretleri. `id` Kur'an sırasıdır.
+///
+/// Esas kelime bölünmesi KFGQPC resmi metnidir (77.430 kelime): kelimeler
+/// `Ayahs.textQpcHafs` boşluklardan bölünerek elde edilir (۞ işareti kelime
+/// sayılmaz). Konumlar (sure:ayet:kelime) bu bölünmeye bağlıdır.
 @DataClassName('WordRow')
 class Words extends Table {
   IntColumn get id => integer()();
@@ -74,7 +78,14 @@ class Words extends Table {
 
   /// Ayet sonu (numara) işareti mi.
   BoolColumn get isAyahEnd => boolean()();
-  TextColumn get textUthmani => text()();
+
+  /// KFGQPC metnindeki yazılışı.
+  TextColumn get wordText => text()();
+
+  /// Quran.com/Corpus kelime bölünmesinde karşılık gelen sıra aralığı
+  /// (kelime meali ve ses verileri için). 7 yer dışında ikisi eşittir.
+  IntColumn get morphFirst => integer()();
+  IntColumn get morphLast => integer()();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -101,7 +112,7 @@ class MushafLayouts extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-/// Sayfa → satır → kelime aralığı eşlemesi.
+/// Sayfa → satır → glif aralığı eşlemesi.
 @DataClassName('LayoutLineRow')
 class LayoutLines extends Table {
   TextColumn get layoutId => text().references(MushafLayouts, #id)();
@@ -112,9 +123,12 @@ class LayoutLines extends Table {
   /// Sure başlığı ve besmele satırlarında hangi sureye ait olduğu.
   IntColumn get surah => integer().nullable()();
 
-  /// Ayet satırlarında satırdaki ilk ve son kelime (`Words.id`).
-  IntColumn get firstWordId => integer().nullable()();
-  IntColumn get lastWordId => integer().nullable()();
+  /// Satır ortalı mı (değilse iki yana yaslı).
+  BoolColumn get isCentered => boolean()();
+
+  /// Ayet satırlarında satırdaki ilk ve son glif (`LayoutGlyphs.id`).
+  IntColumn get firstGlyphId => integer().nullable()();
+  IntColumn get lastGlyphId => integer().nullable()();
 
   @override
   Set<Column> get primaryKey => {layoutId, page, line};
@@ -132,15 +146,22 @@ class LayoutPages extends Table {
   Set<Column> get primaryKey => {layoutId, page};
 }
 
-/// Kelimenin o düzenin sayfa fontundaki glifi.
-@DataClassName('LayoutWordGlyphRow')
-class LayoutWordGlyphs extends Table {
+/// Düzenin sayfa fontundaki glif birimleri, okuma sırasıyla.
+///
+/// Bir glif genellikle bir kelimedir; düzenin kelime bölünmesi esas
+/// bölünmeden farklıysa bir glif birden fazla kelimeyi kapsayabilir veya bir
+/// kelime birden fazla glife bölünebilir. Kelimeye dokunma bu eşlemeyle
+/// çözülür.
+@DataClassName('LayoutGlyphRow')
+class LayoutGlyphs extends Table {
   TextColumn get layoutId => text().references(MushafLayouts, #id)();
-  IntColumn get wordId => integer().references(Words, #id)();
+  IntColumn get id => integer()();
+  IntColumn get firstWordId => integer().references(Words, #id)();
+  IntColumn get lastWordId => integer().references(Words, #id)();
   TextColumn get glyph => text()();
 
   @override
-  Set<Column> get primaryKey => {layoutId, wordId};
+  Set<Column> get primaryKey => {layoutId, id};
 }
 
 /// Salt okunur Kur'an içerik veritabanı (MK-05).
@@ -156,7 +177,7 @@ class LayoutWordGlyphs extends Table {
     MushafLayouts,
     LayoutLines,
     LayoutPages,
-    LayoutWordGlyphs,
+    LayoutGlyphs,
   ],
 )
 class ContentDatabase extends _$ContentDatabase {
