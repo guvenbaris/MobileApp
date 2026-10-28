@@ -1,11 +1,12 @@
-# F0-09: Her push ve PR'da analiz, test ve Android derlemesi.
+# F0-09: Analiz, test ve Android derlemesi.
+# Her commit'te değil; haftalık, elle ve PR açıldığında çalışır.
 name: CI
 
 on:
-  push:
-    branches: [main]
-  pull_request:
+  schedule:
+    - cron: '0 3 * * 1' # Her pazartesi 03:00 UTC (TR 06:00)
   workflow_dispatch:
+  pull_request:
 
 concurrency:
   group: ci-${{ github.ref }}

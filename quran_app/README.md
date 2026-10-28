@@ -42,5 +42,5 @@ flutter test --coverage
 ```
 
 ## CI (GitHub Actions)
-- `.github/workflows/ci.yml`: her `main` push'unda ve PR'da biçim, analiz, test (kapsam özeti ve `lcov.info` çıktısı) ve iki flavor için Android derlemesi.
-- `.github/workflows/ios.yml`: iOS derlemesi ve simülatörde açılış testi. macOS dakikaları pahalı olduğundan haftalık ve elle (Actions → iOS → Run workflow) çalışır.
+- `.github/workflows/ci.yml`: biçim, analiz, test (kapsam özeti ve `lcov.info` çıktısı) ve iki flavor için Android derlemesi. **Her commit'te çalışmaz**: haftalık (pazartesi), PR açıldığında ve elle (Actions → CI → Run workflow). Push öncesi yukarıdaki kontrolleri yerelde çalıştırın.
+- `.github/workflows/ios.yml`: iOS derlemesi ve simülatörde açılış testi. Haftalık (pazartesi) ve elle (Actions → iOS → Run workflow) çalışır.

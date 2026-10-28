@@ -1,12 +1,12 @@
 # F0-09 / F0-01: iOS derlemesi ve simülatörde açılış testi.
-# macOS dakikaları özel repolarda 10 kat sayıldığı için her commit'te değil,
-# haftalık ve elle tetiklenerek çalışır.
+# CI ile aynı düzende haftalık ve elle çalışır (macOS dakikaları özel
+# repolarda 10 kat sayılır). PR'da çalışmaz.
 name: iOS
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * 1' # Her pazartesi 03:00 UTC
+    - cron: '0 3 * * 1' # Her pazartesi 03:00 UTC (TR 06:00)
 
 env:
   FLUTTER_VERSION: 3.47.8

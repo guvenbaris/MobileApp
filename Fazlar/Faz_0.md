@@ -10,7 +10,7 @@
 - [ ] Kur'an metin bütünlüğü (T-01) ve sayfa düzeni (T-02) testleri otomatik çalışıyor ve geçiyor.
 - [ ] Katmanlı mimari, kullanıcı veritabanı (UUID, zaman damgaları, migration altyapısı) ve sahte servis arayüzleri hazır.
 - [ ] TR/AR/EN dil altyapısı ve tema altyapısı çalışıyor (AR'de RTL).
-- [ ] CI her commit'te analiz + test çalıştırıyor.
+- [ ] CI analiz + test çalıştırıyor (haftalık, PR'da ve elle; her commit'te değil, karar 28.10.2026).
 - [ ] `CLAUDE.md` mimari ve kod kurallarıyla yazıldı.
 
 ## Faz 0 Başlangıç Kararları
@@ -78,7 +78,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 - [ ] T-01: 114 sure, 6.236 ayet; her ayetin metni referans kaynakla hash karşılaştırması
 - [ ] T-02: 604 sayfanın ilk ve son ayeti/kelimesi referansla eşleşiyor
 - [ ] Kelime sayısı ve cüz/hizb sınırları kontrolü
-- [ ] Testler CI'da her commit'te çalışır
+- [ ] Testler CI'da çalışır (haftalık, PR'da ve elle) ve yerelde `flutter test` ile push öncesi çalıştırılır
 - **Bitti:** Veride tek bir karakter değiştirildiğinde test başarısız oluyor (bilerek bozularak denenir).
 
 ### F0-05 Mushaf Sayfası Çizim Denemesi (Spike) [Z] — M2-01, M2-02, TK-06
@@ -117,7 +117,7 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 
 ### F0-09 Test ve CI Altyapısı [Z] — 12. bölüm
 - [x] Birim, widget ve entegrasyon testi klasör yapısı (`test/` lib yapısını izler, `integration_test/` cihaz testleri, `test/helpers/` ortak yardımcılar)
-- [x] GitHub Actions: `analyze` + `test` + Android derleme (`ci.yml`, her push/PR). iOS derleme + simülatörde açılış testi `ios.yml` ile haftalık/elle (macOS dakika maliyeti nedeniyle).
+- [x] GitHub Actions: `analyze` + `test` + Android derleme (`ci.yml`: haftalık, PR'da ve elle; her commit'te değil). iOS derleme + simülatörde açılış testi `ios.yml` ile haftalık/elle.
 - [x] Test kapsamı raporu (iş özeti + `lcov.info` çıktısı)
 - [ ] Doğrulama: bilerek bozulan bir commit/PR'ın CI'da kırmızıya düştüğü görülecek
 - **Bitti:** Hatalı bir commit CI'da kırmızıya düşüyor.
@@ -154,3 +154,4 @@ Aşağıdakiler varsayılan önerilerdir; itiraz yoksa bu şekilde uygulanır. K
 | 28.10.2026 | S4 güncellendi, S5 (depo yapısı) eklendi; F0-01 Android tarafı tamamlandı |
 | 28.10.2026 | F0-02 Mimari İskelet tamamlandı; editör VS Code (paylaşılan `.vscode/launch.json` ile dev/prod profilleri) |
 | 28.10.2026 | F0-09 Test ve CI altyapısı yazıldı; iOS iş akışı maliyet nedeniyle haftalık/elle |
+| 28.10.2026 | CI de her commit yerine haftalık + PR + elle çalışacak şekilde değiştirildi |
