@@ -1,0 +1,16 @@
+# Rakip yorum analizi ham verileri ve çıktıları (büyük, yeniden üretilebilir)
+reviews/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# İşletim sistemi / editör
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
+
+# Claude Code yerel ayarları
+.claude/settings.local.json
