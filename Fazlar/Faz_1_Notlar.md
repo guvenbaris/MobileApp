@@ -10,7 +10,8 @@
 3. [F1-01 Uygulama Kabuğu ve Gezinme](#3-f1-01-uygulama-kabuğu-ve-gezinme)
 4. [F1-02 Okuma Ekranı](#4-f1-02-okuma-ekranı)
 5. [F1-03 Türkiye Mushaf Düzeni Araştırması](#5-f1-03-türkiye-mushaf-düzeni-araştırması-sonuç-raporu)
-6. [Genel durum ve bekleyen kararlar](#6-genel-durum-ve-bekleyen-kararlar)
+6. [F1-04 Renkli Tecvid](#6-f1-04-renkli-tecvid)
+7. [Genel durum ve bekleyen kararlar](#7-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -395,7 +396,80 @@ Hepsi geri alınınca geçti.
 
 ---
 
-## 6. Genel durum ve bekleyen kararlar
+## 6. F1-04 Renkli Tecvid
+**Tarih:** 29.10.2026 · **Durum:** ✅ (açıklama metinleri içerik kurulu gözden geçirmesini bekliyor, AK-06) · **Gereksinim:** M2-06 [Ö] · **Ekran:** E-04, E-05, E-10
+
+### 6.1 Spike: veri, lisans, çizim
+| Soru | Bulgu |
+|---|---|
+| Veri kaynağı ve lisans | QUL'deki tecvidli metinlerin (ör. "Madinah Mushaf 1441H with Tajweed colors") lisansı belirtilmemiş, asıl hak sahibi KFGQPC; kullanılmadı. **cpfair/quran-tajweed** veri dosyası **CC BY 4.0**: ticari kullanım serbest, atıf ve değişiklik notu gerekir. 60.057 açıklama, 18 kural, yalnız Hafs. |
+| Açıklamalar hangi metne bağlı? | Tanzil Osmanlı metninin 2017 kopyasındaki karakter konumlarına. Bu kopya yalnızca **eşleme köprüsü** olarak kullanıldı; uygulamaya girmiyor (S9 ile uyumlu). |
+| DigitalKhatt metnine taşınabilir mi? | Evet. Harf iskeletleri 6.236 ayetin 6.234'ünde aynı. **60.057 açıklamanın 60.055'i eşlendi.** Kalan 2, 12:39 ve 12:41'de 2017 Tanzil kopyasındaki fazladan bir harfe denk geliyor. |
+| Kelime içinde renk değişimi harf bağlantısını bozar mı? | **Hayır.** Gerçek DigitalKhatt fontuyla görüntü testi yapıldı: renkli ve renksiz kelime birebir aynı şekilde çiziliyor. Harekeler ve küçük işaretler (küçük mim, medde) ayrı renklendirilebiliyor. |
+
+### 6.2 Eşleme (`tool/content/tajweed_alignment.dart`)
+1. Her iki metinde karakterler **harf kümelerine** ayrılır: temel harf ve ardından gelen işaretler. Temel harf tanımı T-01'deki `letterSkeleton` ile aynıdır.
+2. Kümeler harf iskeleti üzerinden eşlenir. İskelet farklıysa (yalnızca 2 ayet) en uzun ortak altdizi kullanılır.
+3. Her karakter karşılığına eşlenir:
+   - Temel harf → temel harf.
+   - İşaret → karşı kümede aynı kod noktalı işaret.
+   - O yoksa **aynı sesin karşılığı**: DigitalKhatt tenvini açık tenvin (U+08F0–2) veya iklâbda hareke + küçük mim olarak yazar.
+   - O da yoksa kümenin temel harfi.
+4. Aynı karaktere düşen kurallardan **öncelikli** olan kalır. Sıra: med (uzunluğa göre) > iklâb > ihfâ > idğam > gunne > kalkale > lâm-ı şemsiyye > hemze-i vasl > okunmaz.
+5. Kuralı olan harfin kuralsız harekeleri harfle aynı kuralı alır (basılı tecvidli mushaflardaki gibi).
+6. Ardışık aynı kurallı karakterler, glif başına `[başlangıç, bitiş)` aralığı olur.
+
+Sonuç: 71.352 aralık; çakışan karakter 46.
+
+Hemzeyi (ء) harf saymak da denendi. 273 ayette iskelet uyuşmadığı için (iki metin hemzeyi farklı kodluyor) bu yoldan vazgeçildi; 3. adımdaki eşdeğer işaret kuralı aynı sorunu doğru çözdü.
+
+**Elle doğrulanan örnekler (testte sabit):**
+- 2:3 "ٱلصَّلَوٰةَ": ٱ hemze-i vasl, ل lâm-ı şemsiyye, و okunmaz, küçük elif medd-i tabîî.
+- 2:18 "صُمٌّۢ": mim ve şedde gunne; tenvin (ötre + küçük mim) iklâb.
+- 2:22 "بِنَآءً": elif ve medde medd-i muttasıl; tenvin gunneli idğam; hemze renksiz.
+
+### 6.3 Uygulama
+| Parça | Dosya | Açıklama |
+|---|---|---|
+| Veri | `content_database.dart` (`TajweedSpans`), içerik sürümü **8 → 9** | Glif metninde aralık ve kural. Kural sayı olarak saklanır (`TajweedRule` sırası, değişmemeli); satır kimliği ayrıca tutulmaz. Veritabanı 13,9 → **15,6 MB** (sıkıştırılmış APK'da içerik toplamı ≈ 5 MB). Sağlama değeriyle kilitli (`checksums.json` → `tajweed`). **Metin ve düzen sağlama değerleri değişmedi.** |
+| Alan modeli | `quran/domain/tajweed.dart` | 18 kural (`TajweedRule`), 7 renk grubu (`TajweedGroup`), öncelik. `PageGlyph.tajweed`, `Ayah.tajweed` (ayet görünümü için ayet metnindeki konumlarla). |
+| Depo | `drift_quran_repository.dart` | Sayfa gliflerine aralıklar düzenin veritabanından (paket kendi kopyasını taşır); ayet görünümü için glif aralıkları ayet metnine kaydırılır. Ayet metni, glif metinlerinin boşlukla birleşimidir; 6.236 ayette doğrulandı. |
+| Renkler | `core/theme/app_palette.dart` (`TajweedColors`) | Üç temada 7 renk: okunmaz (gri), tabii med, caiz med, vacip/lâzım med (kırmızı), gunne grubu (yeşil), gunnesiz idğam (mor), kalkale (mavi). Hepsi mushaf zeminine ve seçili kelime zeminine karşı **≥ 3:1** (Kur'an metni büyük yazı; çoğu ≥ 4,5:1). Birbirinden ve metin renginden farklı. |
+| Çizim | `reader/presentation/tajweed_text.dart`, `mushaf_page_view.dart`, `ayah_list_view.dart` | Ayar açıkken glif ve ayet metni renkli parçalara bölünür; yalnızca renk değişir. |
+| Kural açıklaması | `reader_page.dart` (seçili kelime çubuğu), `tajweed_text.dart` | Tecvid açıkken kelimeye dokununca, kelimedeki kurallar çip olarak görünür (renk + ad). Çipe dokununca kuralın adı ve kısa açıklaması açılır; "Tüm renkler" ile renk açıklamalarına geçilir. Ayet görünümünde kelime seçimi olmadığı için açıklamalar renk panelinden okunur. |
+| Okuma ayarları (E-10) | `reader_settings_sheet.dart` | "Renkli tecvid" anahtarı (varsayılan **kapalı**, kalıcı: `reader.tajweed`) ve "Tecvid renkleri" paneli: 7 grup, 18 kural, açıklamalar ve kaynak notu. |
+| Atıf (CC BY 4.0) | `content_licenses.dart`, `aboutLegalese` (3 dil) | Lisans sayfasında "cpfair/quran-tajweed": eser sahibi, lisans bağlantısı, değişiklik notu. Üst metinde ve renk panelinde kaynak. |
+| Metinler | `app_tr/ar/en.arb` (+48 anahtar) | Kural adları ve kısa açıklamaları üç dilde. **Bu açıklamalar dini eğitim içeriğidir; geliştirme ekibince yazıldı, yayından önce içerik kurulunca (AK-06) gözden geçirilmeli** (ör. munfasıl için "miktarı okuma usulüne göre değişir" ifadesi bilinçli olarak genel tutuldu). |
+
+### 6.4 Testler
+| Test | Kontrol |
+|---|---|
+| `test/content/tajweed_test.dart` (8, gerçek veri) | Tüm aralıklar glif metninin içinde, sıralı, örtüşmesiz. 18 kuralın hepsi veride. **83.668 glifin hepsinde renkli parçalar birleşince aynı metin** (renklendirme Kur'an metnini değiştirmez). Üç elle doğrulanmış kelime. Ayet görünümünde aralıklar aynı harfleri gösteriyor. Kaynak notu içerik kaydında. Ayet metni = glif metinlerinin birleşimi varsayımı. |
+| `test/content/t01_quran_text_test.dart` | Sağlama değerlerine `tajweed` eklendi; **metin ve düzen değerleri değişmedi** (T-01 geçiyor). |
+| `test/core/theme/contrast_test.dart` | 3 tema × 7 renk × (sayfa, seçili kelime) ≥ 3:1; renkler birbirinden ve metinden farklı. |
+| `test/features/reader/reader_screen_test.dart` (+5) | Varsayılan kapalı; panelden açılınca harf renkleniyor, kapanınca renksiz. Kelimeye dokununca kural çipi, çipten açıklama, oradan tüm renkler. Kapalıyken çip yok. Ayet görünümünde de renkli. Renk paneli: 18 kural ve CC BY notu, erişilebilirlik kuralları. |
+| `test/content/license_notices_test.dart` (+1) | Lisans sayfasında tecvid girdisi (eser sahibi, lisans bağlantısı, değişiklik notu); üç dilde atıf. |
+| Kalıcılık | `reader.tajweed` varsayılanı ve yeniden açılışta korunması. |
+
+**Bilerek bozma:**
+- Eşdeğer işaret kuralı kapatılıp içerik yeniden üretildi → 2:18 ve 2:22 örnek testleri kırıldı. Çakışan karakter 46 → 177.
+- Renkli parçalayıcıya karakter kaybettiren hata konuldu → "metin değişmez" ve ayet görünümü testleri kırıldı.
+
+Geri alınınca geçti; yeniden üretilen içerik sağlama değerleriyle aynı.
+
+**Gerçek veriyle görsel kontrol** (geçici test, DigitalKhatt + gerçek veritabanı, silindi): açık temada Bakara başı, koyu temada Âl-i İmrân başı, sepya temada 3. sayfa, ayet görünümü. Renkler doğru harflerde, harf bağlantıları bozulmamış.
+
+**Toplam:** 291 test geçiyor (1 elle çalıştırılan atlanıyor); analiz ve biçim temiz; Android debug derlemesi başarılı ve emülatöre kuruldu (içerik 9; 1405H paketi tecvidle yeniden üretilip gelen kutusuna bırakıldı).
+
+### 6.5 Bilmeniz gerekenler
+- **Besmele satırları renklendirilmiyor** (sayfadaki besmele ayrı çizilir). Fatiha'nın 1. ayeti renkli.
+- **Renk karmaşasını azaltmak için** 18 kural 7 renkte toplandı; kuralın tam adı dokununca görünür. Basılı tecvidli mushaflarda (Dâru'l-Ma'rife) daha fazla renk kullanılır. Grup sayısı ve renkler içerik kuruluyla birlikte gözden geçirilebilir.
+- **Diyanet yönetmeliği md. 5/3-m** ("renk karmaşasına yol açan renklendirme yapılmaz"): tecvid renkleri doğru okumaya katkı amaçlı ve varsayılan kapalı. Kurul başvurusu ertelendiği için (AK-14) bu madde de o zaman sorulmalı.
+- **Doğruluk:** veri seti doğruluk ölçüsü yayınlamıyor. Yayından önce birkaç sayfanın basılı bir tecvidli mushafla karşılaştırılması önerilir (hangi harfin hangi renkte olduğu).
+
+---
+
+## 7. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 29.10.2026
 
 | İş paketi | Durum |
@@ -405,9 +479,11 @@ Hepsi geri alınınca geçti.
 | F1-01 Uygulama kabuğu ve gezinme | ✅ |
 | F1-02 Okuma ekranı | ✅ (dokunma kuralı ET-8 onay bekliyor) |
 | F1-03 Mushaf düzenleri | ✅ Araştırma (§5), düzen seçimi ve paket altyapısı (§5.6), Medine 1405H geliştirme paketi (§5.7). Açık: düzen değiştirmenin v1.0'da görünür olup olmayacağı (kullanıcı sonra karar verecek); Türkiye düzeni v1.0 sonrası (AK-14) |
-| F1-04 … F1-14 | ⬜ |
+| F1-04 Renkli tecvid | ✅ (açıklamalar AK-06 gözden geçirmesini bekliyor) |
+| F1-05 … F1-14 | ⬜ |
 
 **Bekleyen kararlar ve işler**
+- **Tecvid açıklamaları (F1-04):** TR/AR/EN kural açıklamaları içerik kurulunca (AK-06) gözden geçirilmeli; birkaç sayfa basılı tecvidli mushafla karşılaştırılmalı (§6.5).
 - **AK-14 Diyanet Kurul onayı: ⏸ ertelendi (kullanıcı kararı, 29.10.2026).** "Diyanet yönetmeliği olmadan ilerleyelim; daha sonra eklemek istediğimizde font için başvuru yapıp ekleriz; ilk sürümümüze engel olmasın." Risk kayıtlı (§5.1, md. 11). Türkiye düzeni verisi Diyanet'ten geleceği için **Türkiye düzeni de v1.0 sonrasına kayar** (M2-02 [Z] önceliğinin güncellenmesi kullanıcı onayına sunuldu).
 - **Yayın meali (S1, S2), karar Faz 1 sonunda (kullanıcı, 29.10.2026):** Kullanıcı, uygulama ticari olacağı için Diyanet'in izin vermeyeceğini düşünüyor. Bu yüzden **kamu malı yedek meal gerçek bir seçenek olarak hazırlanacak**: kaynak doğrulaması, metin hattı ve okunabilirlik değerlendirmesi F1-05 içinde yapılacak. Diyanet başvurusu yine de denenebilir. Geliştirme Diyanet mealiyle sürüyor.
 - **Faz 1 başlangıç kararları S1–S8 ve TK-11…TK-17:** öneri halinde; itiraz yoksa uygulanır.

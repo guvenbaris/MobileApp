@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../domain/quran_models.dart';
+import '../domain/tajweed.dart';
 
 part 'content_database.g.dart';
 
@@ -9,7 +10,7 @@ part 'content_database.g.dart';
 /// Kaynak veri veya şema değiştiğinde artırılır; uygulama yeni sürümü
 /// görünce paketteki veritabanını yeniden kopyalar. Kullanıcı verisi ayrı
 /// veritabanındadır (MK-05) ve bundan etkilenmez.
-const int kContentVersion = 8;
+const int kContentVersion = 9;
 
 /// Paketteki veritabanının yolu (pubspec `assets` ile aynı olmalı).
 const String kContentAssetPath = 'assets/db/content.sqlite';
@@ -195,6 +196,32 @@ class LayoutGlyphs extends Table {
   Set<Column> get primaryKey => {layoutId, id};
 }
 
+/// Renkli tecvid aralıkları (M2-06): bir düzenin glif metninde kural
+/// aralıkları. Kaynak cpfair/quran-tajweed (CC BY 4.0) açıklamalarının
+/// DigitalKhatt metnine eşlenmiş halidir; aynı harfe düşen kurallardan
+/// öncelikli olan kalır, aralıklar örtüşmez.
+@DataClassName('TajweedSpanRow')
+class TajweedSpans extends Table {
+  TextColumn get layoutId => text().references(MushafLayouts, #id)();
+  IntColumn get glyphId => integer()();
+
+  /// [start, end) UTF-16 konumları, `layout_glyphs.digital_khatt_text`
+  /// içinde.
+  IntColumn get start => integer()();
+  IntColumn get end => integer()();
+
+  /// Kural, [TajweedRule] sırasıyla (yer için sayı; sıra değişirse
+  /// `kContentVersion` artırılır ve veritabanı yeniden üretilir).
+  IntColumn get rule => intEnum<TajweedRule>()();
+
+  @override
+  Set<Column> get primaryKey => {layoutId, glyphId, start};
+
+  // 72 bin satır: ayrı rowid tutulmaz, kayıt birincil anahtarda durur.
+  @override
+  bool get withoutRowId => true;
+}
+
 /// Salt okunur Kur'an içerik veritabanı (MK-05).
 ///
 /// Şema değişikliği migration ile değil, `kContentVersion` artırılıp
@@ -209,6 +236,7 @@ class LayoutGlyphs extends Table {
     LayoutLines,
     LayoutPages,
     LayoutGlyphs,
+    TajweedSpans,
   ],
 )
 class ContentDatabase extends _$ContentDatabase {

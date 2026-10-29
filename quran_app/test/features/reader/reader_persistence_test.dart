@@ -38,6 +38,7 @@ void main() {
     expect(settings.pageArrows, isFalse);
     expect(settings.textScaleLocked, isFalse);
     expect(settings.autoScrollSpeed, 3);
+    expect(settings.tajweed, isFalse);
     expect(session.read(readerAnchorProvider), const AyahRef(1, 1));
     expect(session.read(userDataSnapshotProvider).localUserId, isNotNull);
   });
@@ -51,7 +52,8 @@ void main() {
       ..setTextScaleLocked(true)
       ..setKeepScreenOn(false)
       ..setPageArrows(true)
-      ..setAutoScrollSpeed(7);
+      ..setAutoScrollSpeed(7)
+      ..setTajweed(true);
     first.read(readerAnchorProvider.notifier).set(const AyahRef(18, 45));
     // Sağlayıcıların kapanması bekleyen kaydı tamamlar (uygulama kapanışı).
     first.dispose();
@@ -66,6 +68,7 @@ void main() {
     expect(settings.keepScreenOn, isFalse);
     expect(settings.pageArrows, isTrue);
     expect(settings.autoScrollSpeed, 7);
+    expect(settings.tajweed, isTrue);
     expect(second.read(readerAnchorProvider), const AyahRef(18, 45));
     expect(second.read(userDataSnapshotProvider).localUserId, localUserId);
   });

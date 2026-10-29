@@ -14,7 +14,8 @@ import 'package:quran_app/features/quran/data/content_database.dart';
 
 const checksumsPath = 'tool/content/reference/checksums.json';
 
-/// `{"text": {"1": {...}}, "layouts": {"madani_1421": "..."}}`
+/// `{"text": {"1": {...}}, "layouts": {"madani_1421": "..."},
+/// "tajweed": {"madani_1421": "..."}}`
 Future<Map<String, dynamic>> computeChecksums(ContentDatabase db) async {
   final ayahs = await (db.select(
     db.ayahs,
@@ -47,7 +48,19 @@ Future<Map<String, dynamic>> computeChecksums(ContentDatabase db) async {
   }
 
   final layouts = <String, String>{};
+  final tajweed = <String, String>{};
   for (final layout in await db.select(db.mushafLayouts).get()) {
+    final spans =
+        await (db.select(db.tajweedSpans)
+              ..where((t) => t.layoutId.equals(layout.id))
+              ..orderBy([
+                (t) => OrderingTerm(expression: t.glyphId),
+                (t) => OrderingTerm(expression: t.start),
+              ]))
+            .get();
+    tajweed[layout.id] = hash(
+      spans.map((t) => '${t.glyphId}|${t.start}|${t.end}|${t.rule.name}'),
+    );
     final lines =
         await (db.select(db.layoutLines)
               ..where((l) => l.layoutId.equals(layout.id))
@@ -75,5 +88,5 @@ Future<Map<String, dynamic>> computeChecksums(ContentDatabase db) async {
     ]);
   }
 
-  return {'text': text, 'layouts': layouts};
+  return {'text': text, 'layouts': layouts, 'tajweed': tajweed};
 }

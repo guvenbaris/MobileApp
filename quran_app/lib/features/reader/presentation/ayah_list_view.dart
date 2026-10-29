@@ -8,7 +8,9 @@ import '../../quran/domain/quran_models.dart';
 import '../../quran/presentation/quarter_l10n.dart';
 import '../../quran/presentation/surah_l10n.dart';
 import '../application/reader_providers.dart';
+import '../application/reader_settings.dart';
 import 'mushaf_mark.dart';
+import 'tajweed_text.dart';
 
 /// Ayet ayet görünüm (M2-01). Tüm Kur'an tek listededir; açılışta okunan
 /// konumdaki ayete gider, kaydırıldıkça en üstteki ayeti konum olarak
@@ -195,6 +197,7 @@ class _AyahTile extends ConsumerWidget {
     }
     final ayah = ayahs[ayahRef.ayah - 1];
     final quarter = ref.watch(quarterStartByAyahProvider).value?[ayahRef];
+    final tajweed = ref.watch(readerSettingsProvider.select((s) => s.tajweed));
     final l10n = context.l10n;
     final markStyle = TextStyle(fontSize: 12, color: colors.ornament);
     // Sure başlığı mushaftaki gibi Arapçadır; arayüz dilindeki ad eklenir.
@@ -230,8 +233,14 @@ class _AyahTile extends ConsumerWidget {
                 style: markStyle,
               ),
             ),
-          Text(
-            ayah.textDigitalKhatt,
+          Text.rich(
+            tajweed
+                ? tajweedTextSpan(
+                    ayah.textDigitalKhatt,
+                    ayah.tajweed,
+                    colors.tajweed,
+                  )
+                : TextSpan(text: ayah.textDigitalKhatt),
             textDirection: TextDirection.rtl,
             textAlign: TextAlign.justify,
             style: AppTypography.quran(

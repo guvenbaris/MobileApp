@@ -3632,6 +3632,368 @@ class LayoutGlyphsCompanion extends UpdateCompanion<LayoutGlyphRow> {
   }
 }
 
+class $TajweedSpansTable extends TajweedSpans
+    with TableInfo<$TajweedSpansTable, TajweedSpanRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TajweedSpansTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _layoutIdMeta = const VerificationMeta(
+    'layoutId',
+  );
+  @override
+  late final GeneratedColumn<String> layoutId = GeneratedColumn<String>(
+    'layout_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES mushaf_layouts (id)',
+    ),
+  );
+  static const VerificationMeta _glyphIdMeta = const VerificationMeta(
+    'glyphId',
+  );
+  @override
+  late final GeneratedColumn<int> glyphId = GeneratedColumn<int>(
+    'glyph_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startMeta = const VerificationMeta('start');
+  @override
+  late final GeneratedColumn<int> start = GeneratedColumn<int>(
+    'start',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endMeta = const VerificationMeta('end');
+  @override
+  late final GeneratedColumn<int> end = GeneratedColumn<int>(
+    'end',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<TajweedRule, int> rule =
+      GeneratedColumn<int>(
+        'rule',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<TajweedRule>($TajweedSpansTable.$converterrule);
+  @override
+  List<GeneratedColumn> get $columns => [layoutId, glyphId, start, end, rule];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'tajweed_spans';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TajweedSpanRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('layout_id')) {
+      context.handle(
+        _layoutIdMeta,
+        layoutId.isAcceptableOrUnknown(data['layout_id']!, _layoutIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_layoutIdMeta);
+    }
+    if (data.containsKey('glyph_id')) {
+      context.handle(
+        _glyphIdMeta,
+        glyphId.isAcceptableOrUnknown(data['glyph_id']!, _glyphIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_glyphIdMeta);
+    }
+    if (data.containsKey('start')) {
+      context.handle(
+        _startMeta,
+        start.isAcceptableOrUnknown(data['start']!, _startMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startMeta);
+    }
+    if (data.containsKey('end')) {
+      context.handle(
+        _endMeta,
+        end.isAcceptableOrUnknown(data['end']!, _endMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_endMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {layoutId, glyphId, start};
+  @override
+  TajweedSpanRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TajweedSpanRow(
+      layoutId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}layout_id'],
+      )!,
+      glyphId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}glyph_id'],
+      )!,
+      start: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}start'],
+      )!,
+      end: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}end'],
+      )!,
+      rule: $TajweedSpansTable.$converterrule.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}rule'],
+        )!,
+      ),
+    );
+  }
+
+  @override
+  $TajweedSpansTable createAlias(String alias) {
+    return $TajweedSpansTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<TajweedRule, int, int> $converterrule =
+      const EnumIndexConverter<TajweedRule>(TajweedRule.values);
+  @override
+  bool get withoutRowId => true;
+}
+
+class TajweedSpanRow extends DataClass implements Insertable<TajweedSpanRow> {
+  final String layoutId;
+  final int glyphId;
+
+  /// [start, end) UTF-16 konumları, `layout_glyphs.digital_khatt_text`
+  /// içinde.
+  final int start;
+  final int end;
+
+  /// Kural, [TajweedRule] sırasıyla (yer için sayı; sıra değişirse
+  /// `kContentVersion` artırılır ve veritabanı yeniden üretilir).
+  final TajweedRule rule;
+  const TajweedSpanRow({
+    required this.layoutId,
+    required this.glyphId,
+    required this.start,
+    required this.end,
+    required this.rule,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['layout_id'] = Variable<String>(layoutId);
+    map['glyph_id'] = Variable<int>(glyphId);
+    map['start'] = Variable<int>(start);
+    map['end'] = Variable<int>(end);
+    {
+      map['rule'] = Variable<int>(
+        $TajweedSpansTable.$converterrule.toSql(rule),
+      );
+    }
+    return map;
+  }
+
+  TajweedSpansCompanion toCompanion(bool nullToAbsent) {
+    return TajweedSpansCompanion(
+      layoutId: Value(layoutId),
+      glyphId: Value(glyphId),
+      start: Value(start),
+      end: Value(end),
+      rule: Value(rule),
+    );
+  }
+
+  factory TajweedSpanRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TajweedSpanRow(
+      layoutId: serializer.fromJson<String>(json['layoutId']),
+      glyphId: serializer.fromJson<int>(json['glyphId']),
+      start: serializer.fromJson<int>(json['start']),
+      end: serializer.fromJson<int>(json['end']),
+      rule: $TajweedSpansTable.$converterrule.fromJson(
+        serializer.fromJson<int>(json['rule']),
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'layoutId': serializer.toJson<String>(layoutId),
+      'glyphId': serializer.toJson<int>(glyphId),
+      'start': serializer.toJson<int>(start),
+      'end': serializer.toJson<int>(end),
+      'rule': serializer.toJson<int>(
+        $TajweedSpansTable.$converterrule.toJson(rule),
+      ),
+    };
+  }
+
+  TajweedSpanRow copyWith({
+    String? layoutId,
+    int? glyphId,
+    int? start,
+    int? end,
+    TajweedRule? rule,
+  }) => TajweedSpanRow(
+    layoutId: layoutId ?? this.layoutId,
+    glyphId: glyphId ?? this.glyphId,
+    start: start ?? this.start,
+    end: end ?? this.end,
+    rule: rule ?? this.rule,
+  );
+  TajweedSpanRow copyWithCompanion(TajweedSpansCompanion data) {
+    return TajweedSpanRow(
+      layoutId: data.layoutId.present ? data.layoutId.value : this.layoutId,
+      glyphId: data.glyphId.present ? data.glyphId.value : this.glyphId,
+      start: data.start.present ? data.start.value : this.start,
+      end: data.end.present ? data.end.value : this.end,
+      rule: data.rule.present ? data.rule.value : this.rule,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TajweedSpanRow(')
+          ..write('layoutId: $layoutId, ')
+          ..write('glyphId: $glyphId, ')
+          ..write('start: $start, ')
+          ..write('end: $end, ')
+          ..write('rule: $rule')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(layoutId, glyphId, start, end, rule);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TajweedSpanRow &&
+          other.layoutId == this.layoutId &&
+          other.glyphId == this.glyphId &&
+          other.start == this.start &&
+          other.end == this.end &&
+          other.rule == this.rule);
+}
+
+class TajweedSpansCompanion extends UpdateCompanion<TajweedSpanRow> {
+  final Value<String> layoutId;
+  final Value<int> glyphId;
+  final Value<int> start;
+  final Value<int> end;
+  final Value<TajweedRule> rule;
+  const TajweedSpansCompanion({
+    this.layoutId = const Value.absent(),
+    this.glyphId = const Value.absent(),
+    this.start = const Value.absent(),
+    this.end = const Value.absent(),
+    this.rule = const Value.absent(),
+  });
+  TajweedSpansCompanion.insert({
+    required String layoutId,
+    required int glyphId,
+    required int start,
+    required int end,
+    required TajweedRule rule,
+  }) : layoutId = Value(layoutId),
+       glyphId = Value(glyphId),
+       start = Value(start),
+       end = Value(end),
+       rule = Value(rule);
+  static Insertable<TajweedSpanRow> custom({
+    Expression<String>? layoutId,
+    Expression<int>? glyphId,
+    Expression<int>? start,
+    Expression<int>? end,
+    Expression<int>? rule,
+  }) {
+    return RawValuesInsertable({
+      if (layoutId != null) 'layout_id': layoutId,
+      if (glyphId != null) 'glyph_id': glyphId,
+      if (start != null) 'start': start,
+      if (end != null) 'end': end,
+      if (rule != null) 'rule': rule,
+    });
+  }
+
+  TajweedSpansCompanion copyWith({
+    Value<String>? layoutId,
+    Value<int>? glyphId,
+    Value<int>? start,
+    Value<int>? end,
+    Value<TajweedRule>? rule,
+  }) {
+    return TajweedSpansCompanion(
+      layoutId: layoutId ?? this.layoutId,
+      glyphId: glyphId ?? this.glyphId,
+      start: start ?? this.start,
+      end: end ?? this.end,
+      rule: rule ?? this.rule,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (layoutId.present) {
+      map['layout_id'] = Variable<String>(layoutId.value);
+    }
+    if (glyphId.present) {
+      map['glyph_id'] = Variable<int>(glyphId.value);
+    }
+    if (start.present) {
+      map['start'] = Variable<int>(start.value);
+    }
+    if (end.present) {
+      map['end'] = Variable<int>(end.value);
+    }
+    if (rule.present) {
+      map['rule'] = Variable<int>(
+        $TajweedSpansTable.$converterrule.toSql(rule.value),
+      );
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TajweedSpansCompanion(')
+          ..write('layoutId: $layoutId, ')
+          ..write('glyphId: $glyphId, ')
+          ..write('start: $start, ')
+          ..write('end: $end, ')
+          ..write('rule: $rule')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$ContentDatabase extends GeneratedDatabase {
   _$ContentDatabase(QueryExecutor e) : super(e);
   $ContentDatabaseManager get managers => $ContentDatabaseManager(this);
@@ -3643,6 +4005,7 @@ abstract class _$ContentDatabase extends GeneratedDatabase {
   late final $LayoutLinesTable layoutLines = $LayoutLinesTable(this);
   late final $LayoutPagesTable layoutPages = $LayoutPagesTable(this);
   late final $LayoutGlyphsTable layoutGlyphs = $LayoutGlyphsTable(this);
+  late final $TajweedSpansTable tajweedSpans = $TajweedSpansTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3656,6 +4019,7 @@ abstract class _$ContentDatabase extends GeneratedDatabase {
     layoutLines,
     layoutPages,
     layoutGlyphs,
+    tajweedSpans,
   ];
   @override
   DriftDatabaseOptions get options =>
@@ -5139,6 +5503,24 @@ final class $$MushafLayoutsTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<$TajweedSpansTable, List<TajweedSpanRow>>
+  _tajweedSpansRefsTable(_$ContentDatabase db) => MultiTypedResultKey.fromTable(
+    db.tajweedSpans,
+    aliasName: 'mushaf_layouts__id__tajweed_spans__layout_id',
+  );
+
+  $$TajweedSpansTableProcessedTableManager get tajweedSpansRefs {
+    final manager = $$TajweedSpansTableTableManager(
+      $_db,
+      $_db.tajweedSpans,
+    ).filter((f) => f.layoutId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_tajweedSpansRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$MushafLayoutsTableFilterComposer
@@ -5246,6 +5628,31 @@ class $$MushafLayoutsTableFilterComposer
           }) => $$LayoutGlyphsTableFilterComposer(
             $db: $db,
             $table: $db.layoutGlyphs,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> tajweedSpansRefs(
+    Expression<bool> Function($$TajweedSpansTableFilterComposer f) f,
+  ) {
+    final $$TajweedSpansTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.tajweedSpans,
+      getReferencedColumn: (t) => t.layoutId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TajweedSpansTableFilterComposer(
+            $db: $db,
+            $table: $db.tajweedSpans,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5399,6 +5806,31 @@ class $$MushafLayoutsTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> tajweedSpansRefs<T extends Object>(
+    Expression<T> Function($$TajweedSpansTableAnnotationComposer a) f,
+  ) {
+    final $$TajweedSpansTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.tajweedSpans,
+      getReferencedColumn: (t) => t.layoutId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TajweedSpansTableAnnotationComposer(
+            $db: $db,
+            $table: $db.tajweedSpans,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$MushafLayoutsTableTableManager
@@ -5418,6 +5850,7 @@ class $$MushafLayoutsTableTableManager
             bool layoutLinesRefs,
             bool layoutPagesRefs,
             bool layoutGlyphsRefs,
+            bool tajweedSpansRefs,
           })
         > {
   $$MushafLayoutsTableTableManager(
@@ -5482,6 +5915,7 @@ class $$MushafLayoutsTableTableManager
                 layoutLinesRefs = false,
                 layoutPagesRefs = false,
                 layoutGlyphsRefs = false,
+                tajweedSpansRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -5489,6 +5923,7 @@ class $$MushafLayoutsTableTableManager
                     if (layoutLinesRefs) db.layoutLines,
                     if (layoutPagesRefs) db.layoutPages,
                     if (layoutGlyphsRefs) db.layoutGlyphs,
+                    if (tajweedSpansRefs) db.tajweedSpans,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -5553,6 +5988,26 @@ class $$MushafLayoutsTableTableManager
                           referencedColumn: 'layout_id',
                           typedResults: items,
                         ),
+                      if (tajweedSpansRefs)
+                        await $_getPrefetchedDataByColumns<
+                          MushafLayoutRow,
+                          $MushafLayoutsTable,
+                          TajweedSpanRow,
+                          $TajweedSpansTable
+                        >(
+                          currentTable: table,
+                          referencedTable: $$MushafLayoutsTableReferences
+                              ._tajweedSpansRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$MushafLayoutsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).tajweedSpansRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'layout_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -5577,6 +6032,7 @@ typedef $$MushafLayoutsTableProcessedTableManager =
         bool layoutLinesRefs,
         bool layoutPagesRefs,
         bool layoutGlyphsRefs,
+        bool tajweedSpansRefs,
       })
     >;
 typedef $$LayoutLinesTableCreateCompanionBuilder =
@@ -6775,6 +7231,320 @@ typedef $$LayoutGlyphsTableProcessedTableManager =
       LayoutGlyphRow,
       PrefetchHooks Function({bool layoutId, bool firstWordId, bool lastWordId})
     >;
+typedef $$TajweedSpansTableCreateCompanionBuilder =
+    TajweedSpansCompanion Function({
+      required String layoutId,
+      required int glyphId,
+      required int start,
+      required int end,
+      required TajweedRule rule,
+    });
+typedef $$TajweedSpansTableUpdateCompanionBuilder =
+    TajweedSpansCompanion Function({
+      Value<String> layoutId,
+      Value<int> glyphId,
+      Value<int> start,
+      Value<int> end,
+      Value<TajweedRule> rule,
+    });
+
+final class $$TajweedSpansTableReferences
+    extends
+        BaseReferences<_$ContentDatabase, $TajweedSpansTable, TajweedSpanRow> {
+  $$TajweedSpansTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $MushafLayoutsTable _layoutIdTable(_$ContentDatabase db) => db
+      .mushafLayouts
+      .createAlias('tajweed_spans__layout_id__mushaf_layouts__id');
+
+  $$MushafLayoutsTableProcessedTableManager get layoutId {
+    final $_column = $_itemColumn<String>('layout_id')!;
+
+    final manager = $$MushafLayoutsTableTableManager(
+      $_db,
+      $_db.mushafLayouts,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_layoutIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$TajweedSpansTableFilterComposer
+    extends Composer<_$ContentDatabase, $TajweedSpansTable> {
+  $$TajweedSpansTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get glyphId => $composableBuilder(
+    column: $table.glyphId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get start => $composableBuilder(
+    column: $table.start,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get end => $composableBuilder(
+    column: $table.end,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<TajweedRule, TajweedRule, int> get rule =>
+      $composableBuilder(
+        column: $table.rule,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  $$MushafLayoutsTableFilterComposer get layoutId {
+    final $$MushafLayoutsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.layoutId,
+      referencedTable: $db.mushafLayouts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MushafLayoutsTableFilterComposer(
+            $db: $db,
+            $table: $db.mushafLayouts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TajweedSpansTableOrderingComposer
+    extends Composer<_$ContentDatabase, $TajweedSpansTable> {
+  $$TajweedSpansTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get glyphId => $composableBuilder(
+    column: $table.glyphId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get start => $composableBuilder(
+    column: $table.start,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get end => $composableBuilder(
+    column: $table.end,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get rule => $composableBuilder(
+    column: $table.rule,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$MushafLayoutsTableOrderingComposer get layoutId {
+    final $$MushafLayoutsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.layoutId,
+      referencedTable: $db.mushafLayouts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MushafLayoutsTableOrderingComposer(
+            $db: $db,
+            $table: $db.mushafLayouts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TajweedSpansTableAnnotationComposer
+    extends Composer<_$ContentDatabase, $TajweedSpansTable> {
+  $$TajweedSpansTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get glyphId =>
+      $composableBuilder(column: $table.glyphId, builder: (column) => column);
+
+  GeneratedColumn<int> get start =>
+      $composableBuilder(column: $table.start, builder: (column) => column);
+
+  GeneratedColumn<int> get end =>
+      $composableBuilder(column: $table.end, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<TajweedRule, int> get rule =>
+      $composableBuilder(column: $table.rule, builder: (column) => column);
+
+  $$MushafLayoutsTableAnnotationComposer get layoutId {
+    final $$MushafLayoutsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.layoutId,
+      referencedTable: $db.mushafLayouts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MushafLayoutsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.mushafLayouts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TajweedSpansTableTableManager
+    extends
+        RootTableManager<
+          _$ContentDatabase,
+          $TajweedSpansTable,
+          TajweedSpanRow,
+          $$TajweedSpansTableFilterComposer,
+          $$TajweedSpansTableOrderingComposer,
+          $$TajweedSpansTableAnnotationComposer,
+          $$TajweedSpansTableCreateCompanionBuilder,
+          $$TajweedSpansTableUpdateCompanionBuilder,
+          (TajweedSpanRow, $$TajweedSpansTableReferences),
+          TajweedSpanRow,
+          PrefetchHooks Function({bool layoutId})
+        > {
+  $$TajweedSpansTableTableManager(
+    _$ContentDatabase db,
+    $TajweedSpansTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TajweedSpansTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TajweedSpansTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TajweedSpansTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> layoutId = const Value.absent(),
+                Value<int> glyphId = const Value.absent(),
+                Value<int> start = const Value.absent(),
+                Value<int> end = const Value.absent(),
+                Value<TajweedRule> rule = const Value.absent(),
+              }) => TajweedSpansCompanion(
+                layoutId: layoutId,
+                glyphId: glyphId,
+                start: start,
+                end: end,
+                rule: rule,
+              ),
+          createCompanionCallback:
+              ({
+                required String layoutId,
+                required int glyphId,
+                required int start,
+                required int end,
+                required TajweedRule rule,
+              }) => TajweedSpansCompanion.insert(
+                layoutId: layoutId,
+                glyphId: glyphId,
+                start: start,
+                end: end,
+                rule: rule,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$TajweedSpansTable, TajweedSpanRow>(table),
+                  $$TajweedSpansTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({layoutId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (layoutId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.layoutId,
+                        referencedTable: $$TajweedSpansTableReferences
+                            ._layoutIdTable(db),
+                        referencedColumn: $$TajweedSpansTableReferences
+                            ._layoutIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$TajweedSpansTableProcessedTableManager =
+    ProcessedTableManager<
+      _$ContentDatabase,
+      $TajweedSpansTable,
+      TajweedSpanRow,
+      $$TajweedSpansTableFilterComposer,
+      $$TajweedSpansTableOrderingComposer,
+      $$TajweedSpansTableAnnotationComposer,
+      $$TajweedSpansTableCreateCompanionBuilder,
+      $$TajweedSpansTableUpdateCompanionBuilder,
+      (TajweedSpanRow, $$TajweedSpansTableReferences),
+      TajweedSpanRow,
+      PrefetchHooks Function({bool layoutId})
+    >;
 
 class $ContentDatabaseManager {
   final _$ContentDatabase _db;
@@ -6795,4 +7565,6 @@ class $ContentDatabaseManager {
       $$LayoutPagesTableTableManager(_db, _db.layoutPages);
   $$LayoutGlyphsTableTableManager get layoutGlyphs =>
       $$LayoutGlyphsTableTableManager(_db, _db.layoutGlyphs);
+  $$TajweedSpansTableTableManager get tajweedSpans =>
+      $$TajweedSpansTableTableManager(_db, _db.tajweedSpans);
 }

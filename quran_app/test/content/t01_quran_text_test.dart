@@ -211,6 +211,15 @@ void main() {
       for (final id in {...expectedLayouts.keys, ...actualLayouts.keys}) {
         if (expectedLayouts[id] != actualLayouts[id]) changed.add('Düzen $id');
       }
+      final expectedTajweed =
+          (expected['tajweed'] ?? const <String, dynamic>{})
+              as Map<String, dynamic>;
+      final actualTajweed = actual['tajweed'] as Map<String, String>;
+      for (final id in {...expectedTajweed.keys, ...actualTajweed.keys}) {
+        if (expectedTajweed[id] != actualTajweed[id]) {
+          changed.add('Tecvid $id');
+        }
+      }
 
       expect(
         changed,

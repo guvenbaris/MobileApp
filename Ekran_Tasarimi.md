@@ -390,7 +390,7 @@ Okuma ekranındaki ⚙︎ ile alttan açılır; değişiklik anında sayfaya uyg
 │ Tema        [Cihaz] [Açık] [Sepya] [Koyu] │
 │ Yazı        A− ━━━━○━━━ A+   🔒 Kilitle │
 │ Mushaf      Medine 1421H ▾           │  (M2-14) düzen seçimi
-│ Tecvid      [ ○ ] renkli tecvid      │  (M2-06)
+│ Tecvid      [ ○ ] renkli tecvid      │  (M2-06; varsayılan kapalı) + "Tecvid renkleri" paneli
 │ Kelime meali[ ● ]                    │
 │ Ekran açık  [ ● ] okurken kapanmasın │  (M2-12)
 │ Sayfa okları[ ○ ]                    │  (M2-09)
@@ -680,7 +680,7 @@ Bölümler (her biri bir alt sayfa ya da liste bölümü):
 |---|---|---|
 | Tek dokunuş, çubuklar açıkken | Çubukları kapat (kelimede de) | ET-8: sayfada boş alan çok az |
 | Tek dokunuş (boş alan, şerit), çubuklar kapalıyken | Çubukları aç | |
-| Tek dokunuş (kelime), çubuklar kapalıyken | Kelime kartı (E-07) | Hafızlık modunda: sonraki kelimeyi aç / hata işaretle |
+| Tek dokunuş (kelime), çubuklar kapalıyken | Kelime kartı (E-07) | Hafızlık modunda: sonraki kelimeyi aç / hata işaretle. Tecvid açıkken kelimedeki kurallar çip olarak görünür; çipe dokununca kural açıklaması (M2-06) |
 | Herhangi bir dokunuş, otomatik kaydırmada | Kaydırmayı durdur, çubukları aç | M2-11 |
 | Uzun basış (ayet) | Ayet eylem paneli (E-06) | Sürükleyince çoklu seçim |
 | Yatay kaydırma | Sayfa çevir (sağdan sola mushaf) | **Ekranın sol/sağ kenarındaki 24 dp şerit sistemin geri hareketine bırakılır** (M2-09; Al Quran şikâyeti) |
@@ -750,5 +750,6 @@ Yeni bileşenler `lib/core/widgets/`'a ya da yalnız bir özelliğe aitse o öze
 ## Değişiklik Geçmişi
 | Tarih | Değişiklik |
 |---|---|
+| 29.10.2026 | F1-04: renkli tecvid (E-10 anahtar + renk paneli; kelimeye dokununca kural çipleri ve açıklama) |
 | 29.10.2026 | F1-02: E-04/E-05/E-10 ve §7 uygulanan hâle göre güncellendi (çubuk düzeni, sayfa üst/alt şeridi, oklar, dokunma kuralı); ET-5 uygulandı; ET-8 eklendi; bileşen kataloğu |
 | 29.10.2026 | İlk taslak (v0.1): rakip dersleri, ilkeler, bilgi mimarisi, E-01…E-29, tablet düzenleri, etkileşim kuralları, bileşen kataloğu |

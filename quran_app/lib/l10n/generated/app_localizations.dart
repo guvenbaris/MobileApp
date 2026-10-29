@@ -307,7 +307,7 @@ abstract class AppLocalizations {
   /// Lisans sayfasının üstündeki kaynak ve atıf metni (İÇ-01). Uygulamayla dağıtılan içeriğin kaynakları; yalnızca testte kullanılan kaynaklar (Tanzil) yazılmaz.
   ///
   /// In tr, this message translates to:
-  /// **'Kur\'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur\'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur\'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).'**
+  /// **'Kur\'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur\'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur\'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).\nRenkli tecvid verisi: cpfair/quran-tajweed (Colin Pfair), Creative Commons Attribution 4.0 (https://creativecommons.org/licenses/by/4.0/). Bu uygulamada DigitalKhatt metnine uyarlanmış ve kurallar 7 renk grubunda toplanmıştır.'**
   String get aboutLegalese;
 
   /// Ekran okuyucu için yükleniyor göstergesinin adı (M13-03).
@@ -699,6 +699,294 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'İndirilen paket'**
   String get readerLayoutDownloaded;
+
+  /// Okuma ayarı (M2-06).
+  ///
+  /// In tr, this message translates to:
+  /// **'Renkli tecvid'**
+  String get readerTajweed;
+
+  /// No description provided for @readerTajweedHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kurallar renkle gösterilir; kelimeye dokununca adı ve açıklaması'**
+  String get readerTajweedHint;
+
+  /// Renk açıklamaları paneli.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tecvid renkleri'**
+  String get tajweedLegend;
+
+  /// Kaynak ve lisans atfı (İÇ-01, CC BY 4.0).
+  ///
+  /// In tr, this message translates to:
+  /// **'Kural verisi: cpfair/quran-tajweed (CC BY 4.0), DigitalKhatt metnine uyarlandı. Açıklamalar kısa bir özettir; ayrıntı için bir hocaya danışın.'**
+  String get tajweedSource;
+
+  /// No description provided for @tajweedAllColors.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tüm renkler'**
+  String get tajweedAllColors;
+
+  /// No description provided for @tajweedGroupSilent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Okunmayan harfler'**
+  String get tajweedGroupSilent;
+
+  /// No description provided for @tajweedGroupMaddNatural.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tabii med'**
+  String get tajweedGroupMaddNatural;
+
+  /// No description provided for @tajweedGroupMaddPermissible.
+  ///
+  /// In tr, this message translates to:
+  /// **'Caiz medler'**
+  String get tajweedGroupMaddPermissible;
+
+  /// No description provided for @tajweedGroupMaddObligatory.
+  ///
+  /// In tr, this message translates to:
+  /// **'Vacip ve lâzım medler'**
+  String get tajweedGroupMaddObligatory;
+
+  /// No description provided for @tajweedGroupGhunnah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gunne ve ihfâ'**
+  String get tajweedGroupGhunnah;
+
+  /// No description provided for @tajweedGroupIdghaam.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gunnesiz idğam'**
+  String get tajweedGroupIdghaam;
+
+  /// No description provided for @tajweedGroupQalqalah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalkale'**
+  String get tajweedGroupQalqalah;
+
+  /// No description provided for @tajweedHamzatWasl.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hemze-i vasl'**
+  String get tajweedHamzatWasl;
+
+  /// No description provided for @tajweedHamzatWaslInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kelime başındaki bu elif, önceki kelimeye bağlanarak okunurken okunmaz; okumaya bu kelimeden başlanırsa okunur.'**
+  String get tajweedHamzatWaslInfo;
+
+  /// No description provided for @tajweedLamShamsiyyah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lâm-ı şemsiyye'**
+  String get tajweedLamShamsiyyah;
+
+  /// No description provided for @tajweedLamShamsiyyahInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Harf-i tarifin lâmı şemsî harflerden önce okunmaz; sonraki harf şeddeli okunur.'**
+  String get tajweedLamShamsiyyahInfo;
+
+  /// No description provided for @tajweedSilent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Okunmayan harf'**
+  String get tajweedSilent;
+
+  /// No description provided for @tajweedSilentInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yazıda bulunan ama okunmayan harf.'**
+  String get tajweedSilentInfo;
+
+  /// No description provided for @tajweedMadd2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Medd-i tabîî'**
+  String get tajweedMadd2;
+
+  /// No description provided for @tajweedMadd2Info.
+  ///
+  /// In tr, this message translates to:
+  /// **'Med harfi, ardından hemze veya sükûn gelmediğinde 2 hareke uzatılır.'**
+  String get tajweedMadd2Info;
+
+  /// No description provided for @tajweedMadd246.
+  ///
+  /// In tr, this message translates to:
+  /// **'Medd-i ârız / lîn'**
+  String get tajweedMadd246;
+
+  /// No description provided for @tajweedMadd246Info.
+  ///
+  /// In tr, this message translates to:
+  /// **'Durulan kelimede med veya lîn harfinden sonra gelen harf geçici olarak sakin olur; 2, 4 veya 6 hareke uzatılabilir.'**
+  String get tajweedMadd246Info;
+
+  /// No description provided for @tajweedMaddMunfasil.
+  ///
+  /// In tr, this message translates to:
+  /// **'Medd-i munfasıl'**
+  String get tajweedMaddMunfasil;
+
+  /// No description provided for @tajweedMaddMunfasilInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Med harfi bir kelimenin sonunda, hemze sonraki kelimenin başındadır; uzatılması caizdir, miktarı okuma usulüne göre değişir.'**
+  String get tajweedMaddMunfasilInfo;
+
+  /// No description provided for @tajweedMaddMuttasil.
+  ///
+  /// In tr, this message translates to:
+  /// **'Medd-i muttasıl'**
+  String get tajweedMaddMuttasil;
+
+  /// No description provided for @tajweedMaddMuttasilInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Med harfi ile hemze aynı kelimededir; uzatılması vaciptir (4–5 hareke).'**
+  String get tajweedMaddMuttasilInfo;
+
+  /// No description provided for @tajweedMadd6.
+  ///
+  /// In tr, this message translates to:
+  /// **'Medd-i lâzım'**
+  String get tajweedMadd6;
+
+  /// No description provided for @tajweedMadd6Info.
+  ///
+  /// In tr, this message translates to:
+  /// **'Med harfinden sonra aslen sakin veya şeddeli harf gelir; 6 hareke uzatılır.'**
+  String get tajweedMadd6Info;
+
+  /// No description provided for @tajweedGhunnah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gunne'**
+  String get tajweedGhunnah;
+
+  /// No description provided for @tajweedGhunnahInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şeddeli mim veya nun, 2 hareke miktarı genizden okunur.'**
+  String get tajweedGhunnahInfo;
+
+  /// No description provided for @tajweedIkhfa.
+  ///
+  /// In tr, this message translates to:
+  /// **'İhfâ'**
+  String get tajweedIkhfa;
+
+  /// No description provided for @tajweedIkhfaInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sakin nun veya tenvinden sonra ihfâ harflerinden biri gelince nun gizlenerek genizden okunur.'**
+  String get tajweedIkhfaInfo;
+
+  /// No description provided for @tajweedIkhfaShafawi.
+  ///
+  /// In tr, this message translates to:
+  /// **'İhfâ-i şefevî'**
+  String get tajweedIkhfaShafawi;
+
+  /// No description provided for @tajweedIkhfaShafawiInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sakin mimden sonra be gelince mim, dudaklar hafifçe kapatılarak genizden okunur.'**
+  String get tajweedIkhfaShafawiInfo;
+
+  /// No description provided for @tajweedIdghaamGhunnah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gunneli idğam'**
+  String get tajweedIdghaamGhunnah;
+
+  /// No description provided for @tajweedIdghaamGhunnahInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sakin nun veya tenvinden sonra ي ن م و harflerinden biri gelince nun sonraki harfe katılır ve genizden okunur.'**
+  String get tajweedIdghaamGhunnahInfo;
+
+  /// No description provided for @tajweedIdghaamShafawi.
+  ///
+  /// In tr, this message translates to:
+  /// **'İdğâm-ı şefevî'**
+  String get tajweedIdghaamShafawi;
+
+  /// No description provided for @tajweedIdghaamShafawiInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sakin mimden sonra mim gelince ikisi birleşir ve gunneyle okunur.'**
+  String get tajweedIdghaamShafawiInfo;
+
+  /// No description provided for @tajweedIqlab.
+  ///
+  /// In tr, this message translates to:
+  /// **'İklâb'**
+  String get tajweedIqlab;
+
+  /// No description provided for @tajweedIqlabInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sakin nun veya tenvinden sonra be gelince nun, mime çevrilerek genizden okunur.'**
+  String get tajweedIqlabInfo;
+
+  /// No description provided for @tajweedIdghaamNoGhunnah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gunnesiz idğam'**
+  String get tajweedIdghaamNoGhunnah;
+
+  /// No description provided for @tajweedIdghaamNoGhunnahInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sakin nun veya tenvinden sonra lâm veya râ gelince nun, gunnesiz olarak sonraki harfe katılır.'**
+  String get tajweedIdghaamNoGhunnahInfo;
+
+  /// No description provided for @tajweedIdghaamMutajanisayn.
+  ///
+  /// In tr, this message translates to:
+  /// **'İdğâm-ı mütecâniseyn'**
+  String get tajweedIdghaamMutajanisayn;
+
+  /// No description provided for @tajweedIdghaamMutajanisaynInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mahreci aynı, sıfatları farklı iki harften ilki sakin olunca ikinciye katılır.'**
+  String get tajweedIdghaamMutajanisaynInfo;
+
+  /// No description provided for @tajweedIdghaamMutaqaribayn.
+  ///
+  /// In tr, this message translates to:
+  /// **'İdğâm-ı mütekâribeyn'**
+  String get tajweedIdghaamMutaqaribayn;
+
+  /// No description provided for @tajweedIdghaamMutaqaribaynInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mahreci ve sıfatları yakın iki harften ilki sakin olunca ikinciye katılır.'**
+  String get tajweedIdghaamMutaqaribaynInfo;
+
+  /// No description provided for @tajweedQalqalah.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalkale'**
+  String get tajweedQalqalah;
+
+  /// No description provided for @tajweedQalqalahInfo.
+  ///
+  /// In tr, this message translates to:
+  /// **'ق ط ب ج د harfleri sakin olunca ses hafifçe titretilerek okunur.'**
+  String get tajweedQalqalahInfo;
 }
 
 class _AppLocalizationsDelegate

@@ -6,6 +6,7 @@ import '../domain/mushaf_page.dart';
 import '../domain/quran_models.dart';
 import '../domain/quran_navigation.dart';
 import '../domain/quran_repository.dart';
+import '../domain/tajweed.dart';
 import 'content_database.dart';
 
 /// İçerik veritabanından okuyan depo. Uygulamayla gelen düzen içerik
@@ -65,9 +66,11 @@ class DriftQuranRepository implements QuranRepository {
               ..where((a) => a.surah.equals(surah))
               ..orderBy([(a) => OrderingTerm(expression: a.ayah)]))
             .get();
-    return rows.isEmpty
-        ? Err(NotFoundFailure('Sure yok: $surah'))
-        : Ok(rows.map(_toAyah).toList());
+    if (rows.isEmpty) return Err(NotFoundFailure('Sure yok: $surah'));
+    final tajweed = await _ayahTajweed(surah);
+    return Ok([
+      for (final r in rows) _toAyah(r, tajweed: tajweed[r.ayah] ?? const []),
+    ]);
   });
 
   @override
@@ -164,6 +167,21 @@ class DriftQuranRepository implements QuranRepository {
 
     WordRef ref(WordRow w) => WordRef(w.surah, w.ayah, w.position);
     final glyphById = {for (final g in glyphs) g.id: g};
+    final tajweed = <int, List<TajweedSpan>>{};
+    for (final t
+        in await (ldb.select(ldb.tajweedSpans)
+              ..where(
+                (t) =>
+                    t.layoutId.equals(layoutId) &
+                    t.glyphId.isBetweenValues(firstGlyph, lastGlyph),
+              )
+              ..orderBy([
+                (t) => OrderingTerm(expression: t.glyphId),
+                (t) => OrderingTerm(expression: t.start),
+              ]))
+            .get()) {
+      (tajweed[t.glyphId] ??= []).add(TajweedSpan(t.start, t.end, t.rule));
+    }
     // Sayfada başlayan ayetler: ilk kelimesi bu sayfada olanlar. Önceki
     // sayfadan taşan ayet başladığı sayfaya aittir (pageOf ile aynı kural).
     final startIds = {
@@ -217,7 +235,7 @@ class DriftQuranRepository implements QuranRepository {
                 glyphs: const [],
               )
             else
-              _ayahLine(l, glyphById, words, ref),
+              _ayahLine(l, glyphById, words, ref, tajweed),
         ],
       ),
     );
@@ -229,6 +247,7 @@ class DriftQuranRepository implements QuranRepository {
     Map<int, LayoutGlyphRow> glyphById,
     Map<int, WordRow> words,
     WordRef Function(WordRow) ref,
+    Map<int, List<TajweedSpan>> tajweed,
   ) {
     final glyphs = <PageGlyph>[];
     final lineWords = <PageWord>[];
@@ -242,6 +261,7 @@ class DriftQuranRepository implements QuranRepository {
           glyph: g.glyph,
           words: covered.map(ref).toList(),
           digitalKhattText: g.digitalKhattText,
+          tajweed: tajweed[g.id] ?? const [],
         ),
       );
       for (final w in covered) {
@@ -332,13 +352,68 @@ class DriftQuranRepository implements QuranRepository {
         isBuiltIn: isBuiltIn,
       );
 
-  static Ayah _toAyah(AyahRow r) => Ayah(
-    ref: AyahRef(r.surah, r.ayah),
-    juz: r.juz,
-    hizb: r.hizb,
-    rub: r.rub,
-    sajdah: r.sajdah,
-    textQpcHafs: r.textQpcHafs,
-    textDigitalKhatt: r.textDigitalKhatt,
-  );
+  /// Ayet görünümü için bir surenin tecvid aralıkları, ayet metnindeki
+  /// konumlarıyla: ayet metni, yerleşik düzenin glif metinlerinin boşlukla
+  /// birleşimidir (içerik üreticisi böyle kurar).
+  Future<Map<int, List<TajweedSpan>>> _ayahTajweed(int surah) async {
+    final layoutId = kDefaultLayout.id;
+    final glyphs = await _db
+        .customSelect(
+          'SELECT g.id, g.digital_khatt_text, w.ayah FROM layout_glyphs g '
+          'JOIN words w ON w.id = g.first_word_id '
+          'WHERE g.layout_id = ?1 AND w.surah = ?2 ORDER BY g.id',
+          variables: [Variable.withString(layoutId), Variable.withInt(surah)],
+          readsFrom: {_db.layoutGlyphs, _db.words},
+        )
+        .get();
+    if (glyphs.isEmpty) return const {};
+    final spans =
+        await (_db.select(_db.tajweedSpans)
+              ..where(
+                (t) =>
+                    t.layoutId.equals(layoutId) &
+                    t.glyphId.isBetweenValues(
+                      glyphs.first.read<int>('id'),
+                      glyphs.last.read<int>('id'),
+                    ),
+              )
+              ..orderBy([
+                (t) => OrderingTerm(expression: t.glyphId),
+                (t) => OrderingTerm(expression: t.start),
+              ]))
+            .get();
+    final byGlyph = <int, List<TajweedSpanRow>>{};
+    for (final t in spans) {
+      (byGlyph[t.glyphId] ??= []).add(t);
+    }
+    final result = <int, List<TajweedSpan>>{};
+    int? ayah;
+    var offset = 0;
+    for (final g in glyphs) {
+      final a = g.read<int>('ayah');
+      if (a != ayah) {
+        ayah = a;
+        offset = 0;
+      }
+      for (final t in byGlyph[g.read<int>('id')] ?? const <TajweedSpanRow>[]) {
+        (result[a] ??= []).add(
+          TajweedSpan(offset + t.start, offset + t.end, t.rule),
+        );
+      }
+      offset += g.read<String>('digital_khatt_text').length + 1;
+    }
+    return result;
+  }
+
+  static Ayah _toAyah(AyahRow r, {List<TajweedSpan> tajweed = const []}) =>
+      Ayah(
+        ref: AyahRef(r.surah, r.ayah),
+        juz: r.juz,
+        hizb: r.hizb,
+        rub: r.rub,
+        sajdah: r.sajdah,
+        textQpcHafs: r.textQpcHafs,
+        textDigitalKhatt: r.textDigitalKhatt,
+        tajweed: tajweed,
+      );
 }

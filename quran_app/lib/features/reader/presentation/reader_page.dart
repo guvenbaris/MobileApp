@@ -14,6 +14,8 @@ import '../../quran/domain/mushaf_layout.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
 import '../../quran/domain/quran_navigation.dart';
+import '../../quran/domain/tajweed.dart';
+import '../../quran/presentation/tajweed_l10n.dart';
 import '../application/reader_providers.dart';
 import '../application/reader_settings.dart';
 import 'ayah_list_view.dart';
@@ -21,6 +23,7 @@ import 'go_to_sheet.dart';
 import 'mushaf_page_frame.dart';
 import 'mushaf_page_view.dart';
 import 'reader_settings_sheet.dart';
+import 'tajweed_text.dart';
 
 /// Okuma ekranı (E-04, E-05). Üst ve alt çubuk metnin üstünde durur ve
 /// boş alana dokununca gizlenir/görünür; kendiliğinden kapanmaz (M2-13).
@@ -653,14 +656,19 @@ class _ChromeSlot extends StatelessWidget {
   );
 }
 
-class _SelectedWordBar extends StatelessWidget {
+/// Seçili kelime; renkli tecvid açıksa kelimedeki kurallar dokunulabilir
+/// olarak (M2-06: renge dokununca kural açıklaması).
+class _SelectedWordBar extends ConsumerWidget {
   const _SelectedWordBar({required this.word});
 
   final WordRef word;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.palette.mushaf;
+    final rules = ref.watch(readerSettingsProvider.select((s) => s.tajweed))
+        ? ref.read(selectedWordProvider.notifier).rules
+        : const <TajweedRule>[];
     // Seçim değişince ekran okuyucu yeni kelimeyi duyurur.
     return Semantics(
       liveRegion: true,
@@ -670,11 +678,36 @@ class _SelectedWordBar extends StatelessWidget {
           top: false,
           child: Padding(
             padding: const EdgeInsets.all(12),
-            child: Text(
-              context.l10n.readerSelectedWord(context.formatDigits(word)),
-              key: const Key('reader.selectedWord'),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: colors.text),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  context.l10n.readerSelectedWord(context.formatDigits(word)),
+                  key: const Key('reader.selectedWord'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: colors.text),
+                ),
+                if (rules.isNotEmpty)
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: AppSpacing.sm,
+                    children: [
+                      for (final rule in rules)
+                        ActionChip(
+                          key: Key('reader.tajweedRule.${rule.name}'),
+                          avatar: ExcludeSemantics(
+                            child: Icon(
+                              Icons.circle,
+                              size: 14,
+                              color: rule.group.color(colors.tajweed),
+                            ),
+                          ),
+                          label: Text(rule.localizedName(context)),
+                          onPressed: () => showTajweedRuleSheet(context, rule),
+                        ),
+                    ],
+                  ),
+              ],
             ),
           ),
         ),

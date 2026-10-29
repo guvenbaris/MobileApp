@@ -85,10 +85,10 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 - **Bitti:** İkinci bir düzen eklenip seçilebiliyor ve tüm kayıtlar aynı ayette kalıyor; ya da Türkiye düzeni için yol ve tarih belli. ✅ (1405H paketiyle; Türkiye düzeni: Diyanet başvurusu, v1.0 sonrası)
 
 ### F1-04 Renkli Tecvid [Ö] — M2-06
-- [ ] Spike: DigitalKhatt ile tecvid renklendirme verisi (QUL tecvid verisi) ve lisansı
-- [ ] Aç/kapat; renge dokununca kural açıklaması (TR/AR/EN)
-- [ ] Renkler üç temada kontrast testinden geçer
-- **Bitti:** Tecvid açıkken renkler metni bozmadan gösteriliyor (T-01 yine geçiyor).
+- [x] Spike: DigitalKhatt ile tecvid renklendirme verisi ve lisansı. QUL'ün tecvid verisinin lisansı belirsiz; **cpfair/quran-tajweed (CC BY 4.0)** seçildi, 60.057 açıklamanın 60.055'i DigitalKhatt metnine eşlendi, kelime içinde renk değişimi harf bağlantısını bozmuyor
+- [x] Aç/kapat; renge dokununca kural açıklaması (TR/AR/EN); renk açıklamaları paneli
+- [x] Renkler üç temada kontrast testinden geçer (≥ 3:1, Kur'an metni büyük yazı)
+- **Bitti:** Tecvid açıkken renkler metni bozmadan gösteriliyor (T-01 yine geçiyor). ✅ (`Faz_1_Notlar.md` §6; açıklamaların içerik kurulu gözden geçirmesi AK-06)
 
 ### F1-05 Meal [Z] — M3-01, M3-02, M3-06, M3-07, M3-09, T-03
 - [ ] Meal verisi şeması ve hattı (paketli varsayılan meal + indirilebilir mealler, TK-13)
@@ -195,6 +195,7 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 ## Değişiklik Geçmişi
 | Tarih | Değişiklik |
 |---|---|
+| 29.10.2026 | F1-04 tamamlandı: renkli tecvid (cpfair/quran-tajweed, CC BY 4.0), içerik sürümü 9 |
 | 29.10.2026 | F1-03: Medine 1405H geliştirme paketi ve paket üretim aracı; emülatörde kurulup seçildi |
 | 29.10.2026 | F1-03: düzen seçimi, düzen paketi altyapısı (doğrulama, kurulum, kayıt, kullanıcı DB v3), T-02 her düzen için; içerik sürümü 8 (`wordsHash`) |
 | 29.10.2026 | F1-03: Türkiye mushaf düzeni araştırması tamamlandı (açık veri yok; Diyanet yönetmeliği dijital yayınları kapsıyor → AK-14, risk eklendi) |

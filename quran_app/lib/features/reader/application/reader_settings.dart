@@ -13,6 +13,7 @@ class ReaderSettings {
     this.keepScreenOn = true,
     this.pageArrows = false,
     this.autoScrollSpeed = 3,
+    this.tajweed = false,
   });
 
   /// Yazı boyutu çarpanının sınırları (M2-07: en az %50–%250).
@@ -43,6 +44,10 @@ class ReaderSettings {
   /// Otomatik kaydırma hızı, 1 (en yavaş) – 10.
   final int autoScrollSpeed;
 
+  /// Renkli tecvid (M2-06). Varsayılan kapalı: mushafın asıl görünümü
+  /// renksizdir.
+  final bool tajweed;
+
   /// Ayet görünümünde otomatik kaydırma hızı (mantıksal piksel/saniye).
   double get autoScrollPixelsPerSecond => 5.0 + 10 * autoScrollSpeed;
 
@@ -58,6 +63,7 @@ class ReaderSettings {
     bool? keepScreenOn,
     bool? pageArrows,
     int? autoScrollSpeed,
+    bool? tajweed,
   }) => ReaderSettings(
     viewMode: viewMode ?? this.viewMode,
     textScale: textScale ?? this.textScale,
@@ -65,6 +71,7 @@ class ReaderSettings {
     keepScreenOn: keepScreenOn ?? this.keepScreenOn,
     pageArrows: pageArrows ?? this.pageArrows,
     autoScrollSpeed: autoScrollSpeed ?? this.autoScrollSpeed,
+    tajweed: tajweed ?? this.tajweed,
   );
 }
 
@@ -77,6 +84,7 @@ class ReaderSettingsNotifier extends Notifier<ReaderSettings> {
   static const _keepScreenOnKey = 'reader.keepScreenOn';
   static const _pageArrowsKey = 'reader.pageArrows';
   static const _autoScrollSpeedKey = 'reader.autoScrollSpeed';
+  static const _tajweedKey = 'reader.tajweed';
 
   @override
   ReaderSettings build() {
@@ -109,6 +117,7 @@ class ReaderSettingsNotifier extends Notifier<ReaderSettings> {
         ),
         _ => defaults.autoScrollSpeed,
       },
+      tajweed: flag(_tajweedKey, defaults.tajweed),
     );
   }
 
@@ -142,6 +151,11 @@ class ReaderSettingsNotifier extends Notifier<ReaderSettings> {
   void setPageArrows(bool on) {
     state = state.copyWith(pageArrows: on);
     persistSetting(ref, _pageArrowsKey, on);
+  }
+
+  void setTajweed(bool on) {
+    state = state.copyWith(tajweed: on);
+    persistSetting(ref, _tajweedKey, on);
   }
 
   void setAutoScrollSpeed(int speed) {

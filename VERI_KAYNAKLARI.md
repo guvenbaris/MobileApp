@@ -17,6 +17,7 @@
 | ~~QPC Hafs fontu (KFGQPC)~~ | ~~Varsayılan görünüm~~ | ❌ **Kaldırıldı** (28.10.2026): DigitalKhatt seçildi | Yazılı izin gerektiriyordu |
 | QCF V2 sayfa fontları (QUL üzerinden) | Yalnızca düzen doğrulaması (`check_line_widths.dart`) | 🟡 Depoda değil; uygulamada **kullanılmıyor**. Glif kodları veritabanında duruyor; izin alınırsa birebir görünüm yeniden değerlendirilebilir | ❓ Asıl hak sahibi KFGQPC (AK-11) |
 | Tanzil | **Yalnızca test referansı**, tek dış referans (T-01 harf iskeleti, T-02 sayfa/cüz/rubu'/secde). Tanzil metninin hiçbir kısmı uygulamaya girmez (içerik sürümü 7, Faz 1 S9). | ✅ Testlerde kullanılıyor | Dağıtılmadığı için uygulamada yükümlülük yok. Depodaki kopya telif bloğuyla birlikte, aynen saklanıyor (§4). |
+| **cpfair/quran-tajweed** | Renkli tecvid (M2-06): 18 kural, 60.057 açıklama | ✅ Kullanılıyor (F1-04) | ✅ **CC BY 4.0** (atıf + değişiklik notu karşılanıyor, §8) |
 | Yazılım bağımlılıkları (Dart/Flutter paketleri, SQLite) | Uygulamanın kodu | ✅ | ✅ MIT / BSD-3-Clause; SQLite kamu malı (§7) |
 
 **Kur'an metninin harfleri ve işaretleri hiçbir kaynakta değiştirilmedi.** Uygulamadaki ayet metinleri (KFGQPC ve DigitalKhatt) kaynaklarındaki haliyle saklanır. Diğer işlemler (Q-1…Q-15) metne değil, düzene ve eşlemelere aittir ve gerekçeleriyle listelenmiştir.
@@ -30,7 +31,7 @@
 
 | Dosya | Boyut | İçerik | Lisans yükümlülüğü nasıl karşılanıyor |
 |---|---|---|---|
-| `assets/db/content.sqlite` | 13,9 MB | Sure bilgileri, iki ayet metni (KFGQPC, DigitalKhatt), kelimeler, düzen, glif birimleri | Kaynak listesi: `content_meta.source`. Tanzil metni içermez (testle denetlenir). Kaynakların lisans durumu ❓ (AK-11). |
+| `assets/db/content.sqlite` | 15,6 MB (içerik sürümü 9; F1-04'ten önce 13,9 MB) | Sure bilgileri, iki ayet metni (KFGQPC, DigitalKhatt), kelimeler, düzen, glif birimleri, renkli tecvid aralıkları | Kaynak listesi: `content_meta.source`. Tanzil metni içermez (testle denetlenir). Kaynakların lisans durumu ❓ (AK-11). |
 | `assets/fonts/DigitalKhattV2.otf` | 510 KB (521.832 bayt) | Kur'an fontu | OFL: telif notu ve lisans fontun `name` tablosunda (ID 0 ve 13). |
 | `assets/fonts/DigitalKhatt-OFL.txt` | 4 KB | OFL 1.1 lisans metni | Lisans sayfasında gösterilir (`registerContentLicenses`). |
 | `NOTICES.Z` (Flutter üretir) | | Tüm Dart/Flutter paketlerinin lisansları | Lisans sayfasında gösterilir (Flutter kendiliğinden). |
@@ -58,6 +59,8 @@ Tanzil dosyaları, QUL veritabanları, Quran.com JSON dosyaları ve QCF fontlar�
 | QCF V2 sayfa fontları, 604 TTF, 208 MB (**depoda değil**; `Projects/qul_indirilenler/QPC V2 Font.ttf`) | QUL, "QPC V2 Font – Page by Page", https://qul.tarteel.ai/resources/font/249; ücretsiz hesapla elle | Her mushaf sayfası için ayrı font dosyası | 🟡 Yalnızca düzen doğrulaması: `check_line_widths.dart` ile satır genişliklerinin ölçülmesi (Q-13). Uygulamaya girmez. KFGQPC'den izin alınırsa birebir görünüm paketi yeniden değerlendirilebilir; şu an plan yok (TK-06). |
 | `quran_app/tool/content/sources/tanzil/quran-uthmani.txt` | Tanzil, https://tanzil.net/download (Osmanlı yazımı, tüm işaretler; indirme adresinde kullanım koşulları kabulü `agree=true`); `fetch_sources.dart tanzil` ile | 6.236 ayetin metni; telif ve kullanım koşulları bloğu dosya sonunda ("Tanzil Quran Text (Uthmani, Version 1.1), Copyright (C) 2007-2026 Tanzil Project") | 🟡 Test: Quran.com'dan gelen ayet metninin bağımsız bir kaynakla karakter karakter karşılaştırılması (T-01). Metindeki ۞ ve ۩ işaretleri rubu' ve secde kontrollerinde kullanılır (T-02). |
 | `quran_app/tool/content/sources/tanzil/quran-data.xml` | Tanzil, https://tanzil.net/res/text/metadata/quran-data.xml; `fetch_sources.dart tanzil` ile | Sure ayet sayıları, cüz, rubu', sayfa (1405H) ve secde başlangıçları; dosya başlığında `copyright="(C) 2008-2009 Tanzil.info" license="cc-by"` | 🟡 Yalnızca test: ayet sayıları, cüz/rubu' başlangıçları ve sayfa başlarının bağımsız kontrolü (T-01, T-02) |
+| `quran_app/tool/content/sources/tajweed/tajweed.hafs.uthmani-pause-sajdah.json` | GitHub cpfair/quran-tajweed (commit 496f71c), ham dosya; 29.10.2026 | 60.057 tecvid açıklaması (kural, başlangıç, bitiş) | 🟢 Renkli tecvid (M2-06, F1-04) → `tajweed_spans`. CC BY 4.0 (§8). |
+| `quran_app/tool/content/sources/tajweed/quran-uthmani-2017.txt` | GitHub cpfair/quran-tajweed README'sindeki bağlantı (Tanzil Uthmani 1.0.2, 2017 kopyası); 29.10.2026 | Açıklamaların konumlarının bağlı olduğu Tanzil metni, telif bloğuyla aynen | 🔵 **Yalnızca eşleme köprüsü:** açıklama konumlarını DigitalKhatt metnine taşımak için. Uygulamaya girmez (S9). Güncel Tanzil kopyası (`sources/tanzil/`) kodlama değiştiği için kullanılamazdı. |
 | `quran_app/tool/content/sources/tanzil/manifest.json` | `fetch_sources.dart` üretir | Kaynak, lisans, indirme zamanı | Kayıt |
 
 ### İndirilip kullanılmayan veya kaldırılan veriler
@@ -91,6 +94,7 @@ Tanzil dosyaları, QUL veritabanları, Quran.com JSON dosyaları ve QCF fontlar�
 | `layout_glyphs.digital_khatt_text` | QUL `digital-khatt-v2.db` (birim numaraları QPC V2 ile aynı; betik doğrular) | 🟢 Mushaf sayfasında gösterilen metin |
 | `layout_glyphs.first_word_id`, `last_word_id` | Otomatik hizalama (QUL glifi ↔ Quran.com glifi ↔ KFGQPC kelimesi) | 🟢 Glife dokununca hangi kelimenin seçileceği |
 | `content_meta.contentVersion`, `builtAt` | Betik | Kayıt: içerik sürümü (8), üretim zamanı |
+| `tajweed_spans.*` | cpfair/quran-tajweed (CC BY 4.0), `tajweed_alignment.dart` ile DigitalKhatt glif metnine eşlenmiş | 🟢 Renkli tecvid (M2-06): glif metninde [başlangıç, bitiş) ve kural (sayı olarak, `TajweedRule` sırası). Düzen paketleri kendi kopyasını taşır. Sağlama değeriyle kilitli (`checksums.json` → `tajweed`). |
 | `content_meta.wordsHash` | Betik (`tool/content/words_hash.dart`) | Kelime tablosunun parmak izi; indirilebilir düzen paketleri yalnızca aynı parmak izli içerikle kabul edilir (TK-13, F1-03) |
 | `content_meta.source` | Betik | Kayıt: Quran.com indirme zamanı ve kullanılan QUL dosyaları (`qpc-v2-15-lines.db`, `qpc-v2.db`, `digital-khatt-v2.db`) |
 
@@ -266,6 +270,35 @@ Uygulamaya giren Dart/Flutter paketlerinin lisansları; pub önbelleğindeki LIC
 
 Yalnızca geliştirmede kullanılan paketler (`drift_dev`, `build_runner`, `analyzer`, `crypto`, `flutter_lints`, test paketleri) uygulamaya girmez. Yeni paket eklenince bu tabloya eklenir; GPL gibi uygulamanın kaynak kodunu açmayı gerektiren lisanslı paketler kullanılmaz.
 
+## 8. Renkli tecvid verisi (cpfair/quran-tajweed)
+
+| Alan | Değer |
+|---|---|
+| Kaynak | https://github.com/cpfair/quran-tajweed (Colin Pfair), commit `496f71cd191da00fa2a37ded79dbbddb033bb0ad` (depo 2021'den beri güncellenmiyor) |
+| Dosyalar | `tool/content/sources/tajweed/tajweed.hafs.uthmani-pause-sajdah.json` (veri), `tool/content/sources/tajweed/quran-uthmani-2017.txt` (açıklamaların bağlı olduğu Tanzil Osmanlı metni, sürüm 1.0.2; veri setinin README'sinin bağladığı 2017 kopyası, telif bloğuyla aynen) |
+| İndirme | 29.10.2026, `curl` ile ham dosyalar (GitHub) |
+| İçerik | 6.236 ayet için 60.057 açıklama, 18 kural (hemze-i vasl, lâm-ı şemsiyye, okunmaz harf, 5 med, gunne, ihfâ, ihfâ-i şefevî, gunneli/gunnesiz/şefevî/mütecâniseyn/mütekâribeyn idğam, iklâb, kalkale). Yalnızca Hafs rivayeti. Konumlar Tanzil metnindeki kod noktası konumlarıdır. |
+| Lisans | Veri dosyası: **Creative Commons Attribution 4.0** (ticari kullanım serbest; atıf ve değişiklik notu gerekir). Tanzil metni: Tanzil kullanım koşulları (CC BY 3.0 + değiştirmeme). |
+| Kullanım | 🟢 Veri: içerik veritabanında `tajweed_spans` (glif metnindeki aralıklar). 🔵 Tanzil 2017 metni: yalnızca **eşleme köprüsü**; uygulamaya girmez (S9). |
+| Eşleme | `tool/content/tajweed_alignment.dart`: harf kümeleri harf iskeletiyle eşlenir; işaretler aynı kod noktasına, yoksa eşdeğer işarete (DigitalKhatt tenvini U+08F0–2), o da yoksa harfe. Aynı harfe düşen kurallardan öncelikli olan kalır; renkli harfin kuralsız harekeleri harfle aynı kuralı alır. **60.057 açıklamanın 60.055'i eşlendi.** Eşlenemeyen 2'si 12:39 ve 12:41'de; 2017 Tanzil metninde bu ayetlerde fazladan bir harf var (iskelet farkı; yeni Tanzil ve KFGQPC ile uyumlu olan bizim metnimiz). |
+| Değişiklik (CC BY 4.0 gereği belirtilir) | Konumlar DigitalKhatt metnine taşındı; çakışmalar öncelikle çözüldü; 18 kural 7 renk grubunda gösterilir. Kur'an metninin hiçbir karakteri değişmez (test: tüm gliflerde renkli parçalar birleşince aynı metin). |
+| Atıf (karşılanıyor) | Lisans sayfasında "cpfair/quran-tajweed" girdisi (eser sahibi, lisans bağlantısı, değişiklik notu: `kTajweedLicenseNotice`); lisans sayfası üst metni (`aboutLegalese`, 3 dil); renk açıklamaları panelinin altında kaynak notu. `license_notices_test.dart` denetler. |
+| Bilinen sınırlar | Veri seti doğruluk ölçüsü yayınlamıyor ("aktif bakımda değil"). Besmele satırları renklendirilmez. Kural açıklamaları (TR/AR/EN) geliştirme ekibince yazıldı; **yayından önce içerik kurulunca (AK-06) gözden geçirilmeli.** |
+
+**Lisans kontrol listesi (İÇ-10):**
+
+| Madde | cpfair/quran-tajweed |
+|---|---|
+| Hak sahibi belli mi? | ✅ Colin Pfair |
+| Lisans metni var mı? | ✅ CC BY 4.0 (README) |
+| Ticari kullanıma izin var mı? | ✅ |
+| Uygulamaya gömülerek dağıtılabilir mi? | ✅ (atıfla) |
+| Değişiklik | Var: DigitalKhatt metnine uyarlama, çakışma çözümü, renk grupları; belirtiliyor |
+| Atıf zorunluluğu ve metni | ✅ Karşılanıyor (lisans sayfası + üst metin + panel notu) |
+| Uygulamada gösteriliyor mu? | ✅ |
+| Yayın için uygun mu? | ✅ Lisans açısından; içerik doğruluğu gözden geçirmesi AK-06 |
+| Kontrol tarihi / kontrol eden | 29.10.2026 / geliştirme (README ve lisans okundu) |
+
 ---
 
 ## Değişiklik Geçmişi
@@ -278,6 +311,7 @@ Yalnızca geliştirmede kullanılan paketler (`drift_dev`, `build_runner`, `anal
 | 28.10.2026 | Tanzil kökenli `ayahs.text_uthmani` alanı ve atıf yükümlülüğü açıkça yazıldı; Faz 1'de arama metni kararıyla birlikte değerlendirilecek |
 | 28.10.2026 | Q-8 kararı: 14 secde. Dosya düzeyinde "İndirilen dosyalar ve indirme amaçları", "İndirilip kullanılmayan veriler" ve "Veritabanı alanlarının kaynağı ve kullanımı" bölümleri eklendi |
 | 29.10.2026 | **Genel gözden geçirme (F0-10).** Düzeltmeler: (1) Tanzil koşullarının tamamı yazıldı: telif notunun metni içeren dosyada bulunması koşulu eksikti; not artık `content.sqlite` içinde (`content_meta.notice.tanzil`, içerik sürümü 6). Besmele ayrımı açık soru olarak eklendi. "Hiçbir karakter değiştirilmedi" ifadesi Q-9'daki boşluk kırpmayı da anlatacak şekilde düzeltildi. (2) DigitalKhatt kelime metni ayrı kaynak olarak ayrıldı (fontun OFL lisansı metni kapsamaz; lisansı ❓). (3) Font meta verisi okundu: sürüm 0.1, telif 2020-2024 / 2024, OFL, ayrılmış ad yok; OFL dosyasındaki yıl farkı belgelendi. (4) OFL metni ve Tanzil notu uygulama içi lisans sayfasına eklendi; OFL dosyası pakete alındı. (5) "Uygulama paketine giren içerik" bölümü eklendi (APK ile doğrulandı). (6) `qpc-v2.db` satırı düzeltildi: QCF glif kodları kullanılmıyor, glif birimleri kullanılıyor. QCF fontları için "kullanıcı onayıyla indirilecek paket" ifadesi kaldırıldı. (7) §2'ye `digital-khatt-v2.db` ve font 247 eklendi. (8) `words` tablosunun 83.666 satırı (77.430 kelime + 6.236 ayet sonu) ve `mushaf_layouts.font_pack` (`qcf_v2` → `digital_khatt`) düzeltildi; `content_meta.source` artık DigitalKhatt dosyasını da yazıyor. (9) Q-14/Q-15 sırası düzeltildi. (10) Lisans kontrol listesine font ve kelime metni sütunları ile "yayın öncesi kapatılacaklar" eklendi. (11) §7 yazılım bağımlılıkları eklendi. |
+| 29.10.2026 | F1-04: renkli tecvid kaynağı cpfair/quran-tajweed (CC BY 4.0) ve eşleme köprüsü Tanzil 2017 kopyası eklendi (§8); içerik sürümü 9 (`tajweed_spans`); lisans sayfasına atıf |
 | 29.10.2026 | F1-03: QUL 1405H düzeni (kaynak 15) ve V1 glifleri (kaynak 57) indirildi; `madani_1405` geliştirme paketi. Bulgu: V1 ve V2 glif birimleri birebir aynı numarada; 1405H ile 1421H arasında ilk ayeti farklı 25 sayfa, Q-10'daki elle listelenmiş 25 farkla birebir aynı (iki kaynak birbirini doğruluyor); 1405H sayfa başları Tanzil'in sayfa verisiyle 604/604 aynı |
 | 29.10.2026 | F1-03: içerik sürümü 8 (`content_meta.wordsHash`); düzen paketleri ayrı dosyadır, uygulamaya gömülmez. Medine 1405H düzeni (QUL kaynak 15, 57) aday: lisans ❓ (AK-11), yalnızca geliştirmede |
 | 29.10.2026 | §7: `wakelock_plus` ve alt bağımlılıkları eklendi (F1-02); `dbus` MPL-2.0 notu |

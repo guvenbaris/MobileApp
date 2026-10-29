@@ -6,8 +6,10 @@ import 'package:quran_app/core/config/flavor.dart';
 import 'package:quran_app/core/config/flavor_provider.dart';
 import 'package:quran_app/core/platform/wake_lock.dart';
 import 'package:quran_app/core/routing/app_router.dart';
+import 'package:quran_app/core/theme/app_theme.dart';
 import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
+import 'package:quran_app/features/quran/domain/tajweed.dart';
 import 'package:quran_app/features/reader/application/reader_providers.dart';
 import 'package:quran_app/features/reader/application/reader_settings.dart';
 import 'package:quran_app/features/reader/presentation/mushaf_mark.dart';
@@ -392,6 +394,117 @@ void main() {
       }
       expect(_anchor(tester), stopped);
       expect(_topBar, findsOneWidget);
+    });
+  });
+
+  group('renkli tecvid (M2-06)', () {
+    // Sahte depoda her glifin ilk harfi gunne.
+    final ghunnah = AppPalette.light.mushaf.tajweed.ghunnah;
+
+    /// Kelimenin çizildiği metindeki renkler.
+    Set<Color?> colorsOf(WidgetTester tester, String word) {
+      final rich = tester.widget<RichText>(
+        find.text(word, findRichText: true).first,
+      );
+      final colors = <Color?>{};
+      rich.text.visitChildren((span) {
+        if (span is TextSpan && span.text != null) {
+          colors.add(span.style?.color);
+        }
+        return true;
+      });
+      return colors;
+    }
+
+    testWidgets('varsayılan kapalı; panelden açılınca harf renklenir, '
+        'kapanınca renksiz', (tester) async {
+      await _openReader(tester, '/read?page=5');
+      expect(_settings(tester).tajweed, isFalse);
+      expect(colorsOf(tester, 'آية 2:33'), isNot(contains(ghunnah)));
+
+      await _openSettings(tester);
+      await _tapInSheet(tester, 'readerSettings.tajweed');
+      expect(_settings(tester).tajweed, isTrue);
+      expect(colorsOf(tester, 'آية 2:33'), contains(ghunnah));
+
+      await _tapInSheet(tester, 'readerSettings.tajweed');
+      expect(colorsOf(tester, 'آية 2:33'), isNot(contains(ghunnah)));
+    });
+
+    testWidgets('kelimeye dokununca kural adı; dokununca açıklama, oradan '
+        'tüm renkler', (tester) async {
+      await _openReader(
+        tester,
+        '/read?page=5',
+        settings: {'reader.tajweed': true},
+      );
+      await _tapEmpty(tester); // çubukları kapat
+      await tester.tap(find.text('آية 2:33', findRichText: true).first);
+      await tester.pumpAndSettle();
+      final chip = find.byKey(const Key('reader.tajweedRule.ghunnah'));
+      expect(chip, findsOneWidget);
+      expect(find.text('Gunne'), findsOneWidget);
+
+      await tester.tap(chip);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('tajweed.rule.ghunnah')), findsOneWidget);
+      expect(find.textContaining('genizden okunur'), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('tajweed.allColors')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('tajweed.legend')), findsOneWidget);
+      expect(find.text('Okunmayan harfler'), findsOneWidget);
+    });
+
+    testWidgets('tecvid kapalıyken kelime seçiminde kural gösterilmez', (
+      tester,
+    ) async {
+      await _openReader(tester, '/read?page=5');
+      await _tapEmpty(tester);
+      await tester.tap(find.text('آية 2:33', findRichText: true).first);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('reader.selectedWord')), findsOneWidget);
+      expect(find.byKey(const Key('reader.tajweedRule.ghunnah')), findsNothing);
+    });
+
+    testWidgets('ayet görünümünde de renkli', (tester) async {
+      await _openReader(
+        tester,
+        '/read?ayah=2:10',
+        settings: {'reader.viewMode': 'ayah', 'reader.tajweed': true},
+      );
+      expect(colorsOf(tester, 'آية 2:10'), contains(ghunnah));
+    });
+
+    testWidgets('renk açıklamaları: 18 kural ve kaynak; erişilebilirlik', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await _openReader(tester, '/read?page=5');
+      await _openSettings(tester);
+      await _tapInSheet(tester, 'readerSettings.tajweedLegend');
+      final legend = find.byKey(const Key('tajweed.legend'));
+      expect(legend, findsOneWidget);
+      for (final rule in TajweedRule.values) {
+        final item = find.byKey(Key('tajweed.rule.${rule.name}'));
+        await tester.scrollUntilVisible(
+          item,
+          120,
+          scrollable: find
+              .descendant(of: legend, matching: find.byType(Scrollable))
+              .first,
+        );
+        expect(item, findsOneWidget, reason: rule.name);
+      }
+      expect(find.textContaining('CC BY 4.0'), findsOneWidget);
+      for (final guideline in [
+        labeledTapTargetGuideline,
+        androidTapTargetGuideline,
+        textContrastGuideline,
+      ]) {
+        await expectLater(tester, meetsGuideline(guideline));
+      }
+      handle.dispose();
     });
   });
 

@@ -1,6 +1,8 @@
 /// Kur'an içeriğinin alan modelleri (salt okunur).
 library;
 
+import 'tajweed.dart';
+
 enum RevelationPlace { makkah, madinah }
 
 /// Mushaf sayfasındaki bir satırın türü.
@@ -67,6 +69,7 @@ class Ayah {
     required this.textQpcHafs,
     required this.textDigitalKhatt,
     this.sajdah,
+    this.tajweed = const [],
   });
 
   final AyahRef ref;
@@ -84,4 +87,8 @@ class Ayah {
 
   /// Ekranda gösterilen metin (DigitalKhatt fontuyla, ayet numarası dahil).
   final String textDigitalKhatt;
+
+  /// Renkli tecvid aralıkları, [textDigitalKhatt] içinde (M2-06). Yalnızca
+  /// sure ayetleri birlikte okunurken (ayet görünümü) dolar.
+  final List<TajweedSpan> tajweed;
 }

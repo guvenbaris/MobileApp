@@ -130,7 +130,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutLegalese =>
-      'Quran font: DigitalKhatt New Madina (SIL Open Font License 1.1).\nQuran text and page layout sources: King Fahd Glorious Quran Printing Complex (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).';
+      'Quran font: DigitalKhatt New Madina (SIL Open Font License 1.1).\nQuran text and page layout sources: King Fahd Glorious Quran Printing Complex (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).\nColour-coded tajweed data: cpfair/quran-tajweed (Colin Pfair), Creative Commons Attribution 4.0 (https://creativecommons.org/licenses/by/4.0/). Adapted in this app to the DigitalKhatt text, with rules grouped into 7 colours.';
 
   @override
   String get loading => 'Loading';
@@ -353,4 +353,168 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get readerLayoutDownloaded => 'Downloaded package';
+
+  @override
+  String get readerTajweed => 'Colour-coded tajweed';
+
+  @override
+  String get readerTajweedHint =>
+      'Rules are shown in colour; tap a word for the rule name and explanation';
+
+  @override
+  String get tajweedLegend => 'Tajweed colours';
+
+  @override
+  String get tajweedSource =>
+      'Rule data: cpfair/quran-tajweed (CC BY 4.0), adapted to the DigitalKhatt text. Explanations are brief; consult a teacher for details.';
+
+  @override
+  String get tajweedAllColors => 'All colours';
+
+  @override
+  String get tajweedGroupSilent => 'Silent letters';
+
+  @override
+  String get tajweedGroupMaddNatural => 'Natural madd';
+
+  @override
+  String get tajweedGroupMaddPermissible => 'Permissible madd';
+
+  @override
+  String get tajweedGroupMaddObligatory => 'Obligatory and necessary madd';
+
+  @override
+  String get tajweedGroupGhunnah => 'Ghunnah and ikhfa';
+
+  @override
+  String get tajweedGroupIdghaam => 'Idgham without ghunnah';
+
+  @override
+  String get tajweedGroupQalqalah => 'Qalqalah';
+
+  @override
+  String get tajweedHamzatWasl => 'Hamzat al-wasl';
+
+  @override
+  String get tajweedHamzatWaslInfo =>
+      'This alif at the start of a word is dropped when joined to the previous word and pronounced only when starting from this word.';
+
+  @override
+  String get tajweedLamShamsiyyah => 'Lam shamsiyyah';
+
+  @override
+  String get tajweedLamShamsiyyahInfo =>
+      'The lam of the definite article is not pronounced before a sun letter; the following letter is doubled.';
+
+  @override
+  String get tajweedSilent => 'Silent letter';
+
+  @override
+  String get tajweedSilentInfo =>
+      'A letter that is written but not pronounced.';
+
+  @override
+  String get tajweedMadd2 => 'Natural madd';
+
+  @override
+  String get tajweedMadd2Info =>
+      'A madd letter not followed by a hamza or sukun is lengthened for 2 counts.';
+
+  @override
+  String get tajweedMadd246 => 'Madd ʿarid / leen';
+
+  @override
+  String get tajweedMadd246Info =>
+      'When stopping, the letter after a madd or leen letter becomes silent; it may be lengthened for 2, 4 or 6 counts.';
+
+  @override
+  String get tajweedMaddMunfasil => 'Madd munfasil';
+
+  @override
+  String get tajweedMaddMunfasilInfo =>
+      'A madd letter ends one word and a hamza begins the next; lengthening is permitted and its amount depends on the recitation method.';
+
+  @override
+  String get tajweedMaddMuttasil => 'Madd muttasil';
+
+  @override
+  String get tajweedMaddMuttasilInfo =>
+      'A madd letter and a hamza in the same word; lengthening is obligatory (4–5 counts).';
+
+  @override
+  String get tajweedMadd6 => 'Madd lazim';
+
+  @override
+  String get tajweedMadd6Info =>
+      'A madd letter followed by an original sukun or a doubled letter; lengthened for 6 counts.';
+
+  @override
+  String get tajweedGhunnah => 'Ghunnah';
+
+  @override
+  String get tajweedGhunnahInfo =>
+      'A doubled meem or noon is nasalised for 2 counts.';
+
+  @override
+  String get tajweedIkhfa => 'Ikhfa';
+
+  @override
+  String get tajweedIkhfaInfo =>
+      'When a silent noon or tanween is followed by an ikhfa letter, the noon is concealed and nasalised.';
+
+  @override
+  String get tajweedIkhfaShafawi => 'Ikhfa shafawi';
+
+  @override
+  String get tajweedIkhfaShafawiInfo =>
+      'When a silent meem is followed by baa, the meem is concealed with nasalisation.';
+
+  @override
+  String get tajweedIdghaamGhunnah => 'Idgham with ghunnah';
+
+  @override
+  String get tajweedIdghaamGhunnahInfo =>
+      'When a silent noon or tanween is followed by ي ن م و, the noon merges into it with nasalisation.';
+
+  @override
+  String get tajweedIdghaamShafawi => 'Idgham shafawi';
+
+  @override
+  String get tajweedIdghaamShafawiInfo =>
+      'A silent meem followed by a meem merges into it with nasalisation.';
+
+  @override
+  String get tajweedIqlab => 'Iqlab';
+
+  @override
+  String get tajweedIqlabInfo =>
+      'When a silent noon or tanween is followed by baa, the noon turns into a meem with nasalisation.';
+
+  @override
+  String get tajweedIdghaamNoGhunnah => 'Idgham without ghunnah';
+
+  @override
+  String get tajweedIdghaamNoGhunnahInfo =>
+      'When a silent noon or tanween is followed by lam or raa, the noon merges into it without nasalisation.';
+
+  @override
+  String get tajweedIdghaamMutajanisayn => 'Idgham mutajanisayn';
+
+  @override
+  String get tajweedIdghaamMutajanisaynInfo =>
+      'Of two letters sharing a point of articulation but differing in qualities, the first (silent) merges into the second.';
+
+  @override
+  String get tajweedIdghaamMutaqaribayn => 'Idgham mutaqaribayn';
+
+  @override
+  String get tajweedIdghaamMutaqaribaynInfo =>
+      'Of two letters close in articulation and qualities, the first (silent) merges into the second.';
+
+  @override
+  String get tajweedQalqalah => 'Qalqalah';
+
+  @override
+  String get tajweedQalqalahInfo =>
+      'The letters ق ط ب ج د, when silent, are pronounced with a slight echoing bounce.';
 }

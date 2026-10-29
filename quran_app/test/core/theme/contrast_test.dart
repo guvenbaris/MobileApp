@@ -16,6 +16,8 @@ double contrast(Color a, Color b) {
 void main() {
   const text = 4.5;
   const nonText = 3.0;
+  // Kur'an metni büyük yazıdır (≥ 24 px): WCAG AA büyük metin sınırı.
+  const largeText = 3.0;
 
   for (final id in AppThemeId.values) {
     final p = AppPalette.of(id);
@@ -38,6 +40,11 @@ void main() {
       'mushaf metni / sayfa': (m.text, m.background, text),
       'mushaf süsü / sayfa': (m.ornament, m.background, text),
       'seçili kelime / vurgu': (m.text, selected, text),
+      // M2-06: tecvid renkleri sayfada ve seçili kelime zemininde.
+      for (final (i, c) in m.tajweed.all.indexed) ...{
+        'tecvid ${i + 1} / sayfa': (c, m.background, largeText),
+        'tecvid ${i + 1} / seçili kelime': (c, selected, largeText),
+      },
     };
 
     group('${id.name} teması', () {
@@ -54,6 +61,14 @@ void main() {
       });
     });
   }
+
+  test('tecvid renkleri her temada birbirinden ve metinden farklı', () {
+    for (final id in AppThemeId.values) {
+      final m = AppPalette.of(id).mushaf;
+      final colors = [...m.tajweed.all, m.text];
+      expect(colors.toSet(), hasLength(colors.length), reason: id.name);
+    }
+  });
 
   test('koyu temada mushaf sayfası da koyudur (M2-08)', () {
     expect(

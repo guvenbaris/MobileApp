@@ -4,6 +4,7 @@ import 'package:quran_app/features/quran/domain/mushaf_page.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
 import 'package:quran_app/features/quran/domain/quran_navigation.dart';
 import 'package:quran_app/features/quran/domain/quran_repository.dart';
+import 'package:quran_app/features/quran/domain/tajweed.dart';
 
 /// Widget testleri için iki sureli küçük sahte içerik.
 ///
@@ -98,7 +99,11 @@ class FakeQuranRepository implements QuranRepository {
     sajdah: sajdahs.contains(ref) ? 1 : null,
     textQpcHafs: 'آية $ref',
     textDigitalKhatt: 'آية $ref',
+    tajweed: fakeTajweed,
   );
+
+  /// Her glifin ve ayetin ilk harfi gunne (renkli tecvid testleri, M2-06).
+  static const fakeTajweed = [TajweedSpan(0, 1, TajweedRule.ghunnah)];
 
   @override
   Future<Result<List<Surah>>> getSurahs() async => const Ok(surahs);
@@ -172,6 +177,7 @@ class FakeQuranRepository implements QuranRepository {
                   glyph: '',
                   digitalKhattText: 'آية $ref',
                   words: [WordRef(ref.surah, ref.ayah, 1)],
+                  tajweed: fakeTajweed,
                 ),
               ],
             ),

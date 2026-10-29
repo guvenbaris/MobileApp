@@ -83,5 +83,27 @@ void main() {
       font.paragraphs.map((p) => p.text).join(' '),
       contains('SIL OPEN FONT LICENSE'),
     );
+
+    // CC BY 4.0: eser sahibi, lisans bağlantısı ve değişiklik notu.
+    final tajweed = entries
+        .firstWhere((e) => e.packages.contains('cpfair/quran-tajweed'))
+        .paragraphs
+        .map((p) => p.text)
+        .join(' ');
+    expect(tajweed, contains('Colin Pfair'));
+    expect(tajweed, contains('creativecommons.org/licenses/by/4.0'));
+    expect(tajweed, contains('Changes:'));
+  });
+
+  test('uygulama içi atıfta tecvid kaynağı ve lisansı (3 dil)', () {
+    for (final lang in ['tr', 'ar', 'en']) {
+      final arb = File('lib/l10n/app_$lang.arb').readAsStringSync();
+      expect(arb, contains('cpfair/quran-tajweed'), reason: lang);
+      expect(
+        arb,
+        contains('creativecommons.org/licenses/by/4.0'),
+        reason: lang,
+      );
+    }
   });
 }

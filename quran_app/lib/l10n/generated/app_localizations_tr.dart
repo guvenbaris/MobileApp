@@ -129,7 +129,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get aboutLegalese =>
-      'Kur\'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur\'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur\'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).';
+      'Kur\'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur\'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur\'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).\nRenkli tecvid verisi: cpfair/quran-tajweed (Colin Pfair), Creative Commons Attribution 4.0 (https://creativecommons.org/licenses/by/4.0/). Bu uygulamada DigitalKhatt metnine uyarlanmış ve kurallar 7 renk grubunda toplanmıştır.';
 
   @override
   String get loading => 'Yükleniyor';
@@ -353,4 +353,167 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get readerLayoutDownloaded => 'İndirilen paket';
+
+  @override
+  String get readerTajweed => 'Renkli tecvid';
+
+  @override
+  String get readerTajweedHint =>
+      'Kurallar renkle gösterilir; kelimeye dokununca adı ve açıklaması';
+
+  @override
+  String get tajweedLegend => 'Tecvid renkleri';
+
+  @override
+  String get tajweedSource =>
+      'Kural verisi: cpfair/quran-tajweed (CC BY 4.0), DigitalKhatt metnine uyarlandı. Açıklamalar kısa bir özettir; ayrıntı için bir hocaya danışın.';
+
+  @override
+  String get tajweedAllColors => 'Tüm renkler';
+
+  @override
+  String get tajweedGroupSilent => 'Okunmayan harfler';
+
+  @override
+  String get tajweedGroupMaddNatural => 'Tabii med';
+
+  @override
+  String get tajweedGroupMaddPermissible => 'Caiz medler';
+
+  @override
+  String get tajweedGroupMaddObligatory => 'Vacip ve lâzım medler';
+
+  @override
+  String get tajweedGroupGhunnah => 'Gunne ve ihfâ';
+
+  @override
+  String get tajweedGroupIdghaam => 'Gunnesiz idğam';
+
+  @override
+  String get tajweedGroupQalqalah => 'Kalkale';
+
+  @override
+  String get tajweedHamzatWasl => 'Hemze-i vasl';
+
+  @override
+  String get tajweedHamzatWaslInfo =>
+      'Kelime başındaki bu elif, önceki kelimeye bağlanarak okunurken okunmaz; okumaya bu kelimeden başlanırsa okunur.';
+
+  @override
+  String get tajweedLamShamsiyyah => 'Lâm-ı şemsiyye';
+
+  @override
+  String get tajweedLamShamsiyyahInfo =>
+      'Harf-i tarifin lâmı şemsî harflerden önce okunmaz; sonraki harf şeddeli okunur.';
+
+  @override
+  String get tajweedSilent => 'Okunmayan harf';
+
+  @override
+  String get tajweedSilentInfo => 'Yazıda bulunan ama okunmayan harf.';
+
+  @override
+  String get tajweedMadd2 => 'Medd-i tabîî';
+
+  @override
+  String get tajweedMadd2Info =>
+      'Med harfi, ardından hemze veya sükûn gelmediğinde 2 hareke uzatılır.';
+
+  @override
+  String get tajweedMadd246 => 'Medd-i ârız / lîn';
+
+  @override
+  String get tajweedMadd246Info =>
+      'Durulan kelimede med veya lîn harfinden sonra gelen harf geçici olarak sakin olur; 2, 4 veya 6 hareke uzatılabilir.';
+
+  @override
+  String get tajweedMaddMunfasil => 'Medd-i munfasıl';
+
+  @override
+  String get tajweedMaddMunfasilInfo =>
+      'Med harfi bir kelimenin sonunda, hemze sonraki kelimenin başındadır; uzatılması caizdir, miktarı okuma usulüne göre değişir.';
+
+  @override
+  String get tajweedMaddMuttasil => 'Medd-i muttasıl';
+
+  @override
+  String get tajweedMaddMuttasilInfo =>
+      'Med harfi ile hemze aynı kelimededir; uzatılması vaciptir (4–5 hareke).';
+
+  @override
+  String get tajweedMadd6 => 'Medd-i lâzım';
+
+  @override
+  String get tajweedMadd6Info =>
+      'Med harfinden sonra aslen sakin veya şeddeli harf gelir; 6 hareke uzatılır.';
+
+  @override
+  String get tajweedGhunnah => 'Gunne';
+
+  @override
+  String get tajweedGhunnahInfo =>
+      'Şeddeli mim veya nun, 2 hareke miktarı genizden okunur.';
+
+  @override
+  String get tajweedIkhfa => 'İhfâ';
+
+  @override
+  String get tajweedIkhfaInfo =>
+      'Sakin nun veya tenvinden sonra ihfâ harflerinden biri gelince nun gizlenerek genizden okunur.';
+
+  @override
+  String get tajweedIkhfaShafawi => 'İhfâ-i şefevî';
+
+  @override
+  String get tajweedIkhfaShafawiInfo =>
+      'Sakin mimden sonra be gelince mim, dudaklar hafifçe kapatılarak genizden okunur.';
+
+  @override
+  String get tajweedIdghaamGhunnah => 'Gunneli idğam';
+
+  @override
+  String get tajweedIdghaamGhunnahInfo =>
+      'Sakin nun veya tenvinden sonra ي ن م و harflerinden biri gelince nun sonraki harfe katılır ve genizden okunur.';
+
+  @override
+  String get tajweedIdghaamShafawi => 'İdğâm-ı şefevî';
+
+  @override
+  String get tajweedIdghaamShafawiInfo =>
+      'Sakin mimden sonra mim gelince ikisi birleşir ve gunneyle okunur.';
+
+  @override
+  String get tajweedIqlab => 'İklâb';
+
+  @override
+  String get tajweedIqlabInfo =>
+      'Sakin nun veya tenvinden sonra be gelince nun, mime çevrilerek genizden okunur.';
+
+  @override
+  String get tajweedIdghaamNoGhunnah => 'Gunnesiz idğam';
+
+  @override
+  String get tajweedIdghaamNoGhunnahInfo =>
+      'Sakin nun veya tenvinden sonra lâm veya râ gelince nun, gunnesiz olarak sonraki harfe katılır.';
+
+  @override
+  String get tajweedIdghaamMutajanisayn => 'İdğâm-ı mütecâniseyn';
+
+  @override
+  String get tajweedIdghaamMutajanisaynInfo =>
+      'Mahreci aynı, sıfatları farklı iki harften ilki sakin olunca ikinciye katılır.';
+
+  @override
+  String get tajweedIdghaamMutaqaribayn => 'İdğâm-ı mütekâribeyn';
+
+  @override
+  String get tajweedIdghaamMutaqaribaynInfo =>
+      'Mahreci ve sıfatları yakın iki harften ilki sakin olunca ikinciye katılır.';
+
+  @override
+  String get tajweedQalqalah => 'Kalkale';
+
+  @override
+  String get tajweedQalqalahInfo =>
+      'ق ط ب ج د harfleri sakin olunca ses hafifçe titretilerek okunur.';
 }

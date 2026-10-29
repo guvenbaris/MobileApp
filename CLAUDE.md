@@ -84,7 +84,7 @@ quran_app/
   - Şema değişikliği: `currentSchemaVersion` artır → `dart run build_runner build` → `dart run drift_dev make-migrations` → `stepByStep` adımı → veri koruma testi (`test/drift/`). Ayrıntı: Faz_0_Notlar §9.3.
   - Migration öncesi otomatik yedek alınır (son 3).
 - **Konum kuralı (M2-15):** kullanıcı verisinde konum her zaman `sure:ayet(:kelime)` olarak saklanır; **sayfa numarası asla saklanmaz**.
-- **Ayarlar:** `settings` tablosunda anahtar → JSON; `persistSetting()` ile yazılır. Anahtarlar: `app.language`, `app.numerals`, `app.theme`, `reader.viewMode`, `reader.textScale`, `reader.textScaleLocked`, `reader.keepScreenOn`, `reader.pageArrows`, `reader.autoScrollSpeed`, `mushaf.layoutId`.
+- **Ayarlar:** `settings` tablosunda anahtar → JSON; `persistSetting()` ile yazılır. Anahtarlar: `app.language`, `app.numerals`, `app.theme`, `reader.viewMode`, `reader.textScale`, `reader.textScaleLocked`, `reader.keepScreenOn`, `reader.pageArrows`, `reader.autoScrollSpeed`, `reader.tajweed`, `mushaf.layoutId`.
 
 ## Kur'an metni ve mushaf (en hassas kısım)
 - **Kur'an metninde hiçbir harf veya işaret değiştirilmez.** Kaynakta tutarsızlık varsa veri elle düzeltilmez. Durum `VERI_KAYNAKLARI.md`'ye Q-n olarak yazılır; gerekirse gerekçeli, tek tek listelenmiş ve testle denetlenen bir düzen düzeltmesi yapılır (ör. Q-13, 254. sayfa).
@@ -97,6 +97,7 @@ quran_app/
   - İleride: keşideyle yaslama; Türkiye mushaf düzeni (M2-02) için ayrı düzen verisi.
 - **Sayfa ve konum:** mushaf sağdan soladır (sonraki sayfa soldan gelir); tablette yatayda çift sayfa (M2-03). Görünüm değişince okunan ayet korunur.
 - **Secde:** 14 (Hanefi). 22:77'deki ۩ sayfada görünür ama secde sayılmaz.
+- **Renkli tecvid (M2-06):** veri cpfair/quran-tajweed (CC BY 4.0, atıf ve değişiklik notu zorunlu), içerik üretiminde DigitalKhatt glif metnine eşlenir (`tool/content/tajweed_alignment.dart`); `tajweed_spans` yalnızca renk aralığıdır, metne dokunmaz. `TajweedRule` sırası veritabanında saklanır: yeni kural sona eklenir.
 - **Yeni veri kaynağı veya dosya indirildiğinde:** `VERI_KAYNAKLARI.md` dosya tablosuna kaynak, **indirme amacı** ve kullanım yeri (🟢 uygulama / 🔵 eşleme / 🟡 test) yazılır. Lisans kontrol listesi doldurulur (İÇ-10).
 - **Lisans yükümlülükleri korunur:**
   - DigitalKhatt OFL metni pakette durur ve Ayarlar → Lisanslar'da gösterilir.

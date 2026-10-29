@@ -123,7 +123,7 @@
     "description": "Flutter'ın lisans sayfasını açar (Kur'an fontu ve paket lisansları)."
   },
   "settingsLicensesSubtitle": "Kur'an fontu, metin kaynakları ve yazılım lisansları",
-  "aboutLegalese": "Kur'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).",
+  "aboutLegalese": "Kur'an fontu: DigitalKhatt New Madina (SIL Open Font License 1.1).\nKur'an metni ve sayfa düzeni kaynakları: Kral Fahd Kur'an Basım Kompleksi (KFGQPC), Quran.com, Quranic Universal Library (Tarteel).\nRenkli tecvid verisi: cpfair/quran-tajweed (Colin Pfair), Creative Commons Attribution 4.0 (https://creativecommons.org/licenses/by/4.0/). Bu uygulamada DigitalKhatt metnine uyarlanmış ve kurallar 7 renk grubunda toplanmıştır.",
   "@aboutLegalese": {
     "description": "Lisans sayfasının üstündeki kaynak ve atıf metni (İÇ-01). Uygulamayla dağıtılan içeriğin kaynakları; yalnızca testte kullanılan kaynaklar (Tanzil) yazılmaz."
   },
@@ -363,5 +363,62 @@
       }
     }
   },
-  "readerLayoutDownloaded": "İndirilen paket"
+  "readerLayoutDownloaded": "İndirilen paket",
+  "readerTajweed": "Renkli tecvid",
+  "@readerTajweed": {
+    "description": "Okuma ayarı (M2-06)."
+  },
+  "readerTajweedHint": "Kurallar renkle gösterilir; kelimeye dokununca adı ve açıklaması",
+  "tajweedLegend": "Tecvid renkleri",
+  "@tajweedLegend": {
+    "description": "Renk açıklamaları paneli."
+  },
+  "tajweedSource": "Kural verisi: cpfair/quran-tajweed (CC BY 4.0), DigitalKhatt metnine uyarlandı. Açıklamalar kısa bir özettir; ayrıntı için bir hocaya danışın.",
+  "@tajweedSource": {
+    "description": "Kaynak ve lisans atfı (İÇ-01, CC BY 4.0)."
+  },
+  "tajweedAllColors": "Tüm renkler",
+  "tajweedGroupSilent": "Okunmayan harfler",
+  "tajweedGroupMaddNatural": "Tabii med",
+  "tajweedGroupMaddPermissible": "Caiz medler",
+  "tajweedGroupMaddObligatory": "Vacip ve lâzım medler",
+  "tajweedGroupGhunnah": "Gunne ve ihfâ",
+  "tajweedGroupIdghaam": "Gunnesiz idğam",
+  "tajweedGroupQalqalah": "Kalkale",
+  "tajweedHamzatWasl": "Hemze-i vasl",
+  "tajweedHamzatWaslInfo": "Kelime başındaki bu elif, önceki kelimeye bağlanarak okunurken okunmaz; okumaya bu kelimeden başlanırsa okunur.",
+  "tajweedLamShamsiyyah": "Lâm-ı şemsiyye",
+  "tajweedLamShamsiyyahInfo": "Harf-i tarifin lâmı şemsî harflerden önce okunmaz; sonraki harf şeddeli okunur.",
+  "tajweedSilent": "Okunmayan harf",
+  "tajweedSilentInfo": "Yazıda bulunan ama okunmayan harf.",
+  "tajweedMadd2": "Medd-i tabîî",
+  "tajweedMadd2Info": "Med harfi, ardından hemze veya sükûn gelmediğinde 2 hareke uzatılır.",
+  "tajweedMadd246": "Medd-i ârız / lîn",
+  "tajweedMadd246Info": "Durulan kelimede med veya lîn harfinden sonra gelen harf geçici olarak sakin olur; 2, 4 veya 6 hareke uzatılabilir.",
+  "tajweedMaddMunfasil": "Medd-i munfasıl",
+  "tajweedMaddMunfasilInfo": "Med harfi bir kelimenin sonunda, hemze sonraki kelimenin başındadır; uzatılması caizdir, miktarı okuma usulüne göre değişir.",
+  "tajweedMaddMuttasil": "Medd-i muttasıl",
+  "tajweedMaddMuttasilInfo": "Med harfi ile hemze aynı kelimededir; uzatılması vaciptir (4–5 hareke).",
+  "tajweedMadd6": "Medd-i lâzım",
+  "tajweedMadd6Info": "Med harfinden sonra aslen sakin veya şeddeli harf gelir; 6 hareke uzatılır.",
+  "tajweedGhunnah": "Gunne",
+  "tajweedGhunnahInfo": "Şeddeli mim veya nun, 2 hareke miktarı genizden okunur.",
+  "tajweedIkhfa": "İhfâ",
+  "tajweedIkhfaInfo": "Sakin nun veya tenvinden sonra ihfâ harflerinden biri gelince nun gizlenerek genizden okunur.",
+  "tajweedIkhfaShafawi": "İhfâ-i şefevî",
+  "tajweedIkhfaShafawiInfo": "Sakin mimden sonra be gelince mim, dudaklar hafifçe kapatılarak genizden okunur.",
+  "tajweedIdghaamGhunnah": "Gunneli idğam",
+  "tajweedIdghaamGhunnahInfo": "Sakin nun veya tenvinden sonra ي ن م و harflerinden biri gelince nun sonraki harfe katılır ve genizden okunur.",
+  "tajweedIdghaamShafawi": "İdğâm-ı şefevî",
+  "tajweedIdghaamShafawiInfo": "Sakin mimden sonra mim gelince ikisi birleşir ve gunneyle okunur.",
+  "tajweedIqlab": "İklâb",
+  "tajweedIqlabInfo": "Sakin nun veya tenvinden sonra be gelince nun, mime çevrilerek genizden okunur.",
+  "tajweedIdghaamNoGhunnah": "Gunnesiz idğam",
+  "tajweedIdghaamNoGhunnahInfo": "Sakin nun veya tenvinden sonra lâm veya râ gelince nun, gunnesiz olarak sonraki harfe katılır.",
+  "tajweedIdghaamMutajanisayn": "İdğâm-ı mütecâniseyn",
+  "tajweedIdghaamMutajanisaynInfo": "Mahreci aynı, sıfatları farklı iki harften ilki sakin olunca ikinciye katılır.",
+  "tajweedIdghaamMutaqaribayn": "İdğâm-ı mütekâribeyn",
+  "tajweedIdghaamMutaqaribaynInfo": "Mahreci ve sıfatları yakın iki harften ilki sakin olunca ikinciye katılır.",
+  "tajweedQalqalah": "Kalkale",
+  "tajweedQalqalahInfo": "ق ط ب ج د harfleri sakin olunca ses hafifçe titretilerek okunur."
 }

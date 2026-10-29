@@ -8,12 +8,13 @@ import '../../quran/application/layout_providers.dart';
 import '../../quran/presentation/layout_l10n.dart';
 import '../../settings/application/theme_settings.dart';
 import '../application/reader_settings.dart';
+import 'tajweed_text.dart';
 
 /// Okuma ayarları paneli (E-10). Her değişiklik anında sayfaya uygulanır ve
 /// kalıcıdır (M13-02). Görünüm değişikliği okuma ekranından geçer: okunan
 /// ayet korunarak sayfa hesaplanır (M2-01).
 ///
-/// Tecvid (F1-04) ve kelime meali (F1-06) o iş paketlerinde eklenir.
+/// Kelime meali (F1-06) o iş paketinde eklenir.
 Future<void> showReaderSettingsSheet(
   BuildContext context, {
   required ValueChanged<ReaderViewMode> onViewMode,
@@ -190,6 +191,22 @@ class _ReaderSettingsSheet extends ConsumerWidget {
                       ),
                   ],
                 ),
+              ),
+              const Divider(),
+              // M2-06: renkli tecvid ve renk açıklamaları.
+              SwitchListTile(
+                key: const Key('readerSettings.tajweed'),
+                secondary: const Icon(Icons.palette_outlined),
+                title: Text(l10n.readerTajweed),
+                subtitle: Text(l10n.readerTajweedHint),
+                value: settings.tajweed,
+                onChanged: notifier.setTajweed,
+              ),
+              AppListItem(
+                key: const Key('readerSettings.tajweedLegend'),
+                leading: const Icon(Icons.info_outline),
+                title: l10n.tajweedLegend,
+                onTap: () => showTajweedLegendSheet(context),
               ),
               const Divider(),
               SwitchListTile(

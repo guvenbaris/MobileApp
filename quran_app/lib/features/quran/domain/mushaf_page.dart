@@ -1,5 +1,6 @@
 import 'quran_models.dart';
 import 'quran_navigation.dart';
+import 'tajweed.dart';
 
 /// Düzenden bağımsız kelime konumu: sure:ayet:kelime (M2-15).
 ///
@@ -50,6 +51,7 @@ class PageGlyph {
     required this.glyph,
     required this.words,
     this.digitalKhattText,
+    this.tajweed = const [],
   });
 
   /// QCF V2 sayfa fontundaki karakter kodu.
@@ -60,6 +62,9 @@ class PageGlyph {
 
   /// Genellikle tek kelime; düzenin bölünmesi farklıysa birden fazla.
   final List<WordRef> words;
+
+  /// Renkli tecvid aralıkları, [digitalKhattText] içinde (M2-06).
+  final List<TajweedSpan> tajweed;
 }
 
 class MushafLine {

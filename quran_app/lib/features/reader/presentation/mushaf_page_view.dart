@@ -6,6 +6,8 @@ import '../../../core/theme/app_theme.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
 import '../application/reader_providers.dart';
+import '../application/reader_settings.dart';
+import 'tajweed_text.dart';
 
 /// Bir mushaf sayfasını basılı nüshadaki satır düzeniyle çizer (M2-01, M2-02).
 ///
@@ -41,6 +43,7 @@ class MushafPageView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selected = ref.watch(selectedWordProvider);
+    final tajweed = ref.watch(readerSettingsProvider.select((s) => s.tajweed));
     // Ekran okuyucu sayfayı adıyla duyurur, ardından kelimeleri okur
     // (M13-03).
     return Semantics(
@@ -84,7 +87,13 @@ class MushafPageView extends ConsumerWidget {
                           SizedBox(
                             height: lineHeight,
                             width: width,
-                            child: _buildLine(ref, line, fontSize, selected),
+                            child: _buildLine(
+                              ref,
+                              line,
+                              fontSize,
+                              selected,
+                              tajweed,
+                            ),
                           ),
                       ],
                     ),
@@ -106,6 +115,7 @@ class MushafPageView extends ConsumerWidget {
     MushafLine line,
     double fontSize,
     WordRef? selected,
+    bool tajweed,
   ) {
     final style = _style(fontSize);
     switch (line.type) {
@@ -130,6 +140,7 @@ class MushafPageView extends ConsumerWidget {
               _GlyphUnit(
                 glyph: g,
                 style: style,
+                tajweed: tajweed ? colors.tajweed : null,
                 selected: g.words.contains(selected),
                 highlight: colors.highlight,
                 padding: line.isCentered
@@ -139,7 +150,10 @@ class MushafPageView extends ConsumerWidget {
                     : null,
                 onTap: (selectedNow) => ref
                     .read(selectedWordProvider.notifier)
-                    .select(selectedNow ? null : g.words.first),
+                    .select(
+                      selectedNow ? null : g.words.first,
+                      rules: {for (final t in g.tajweed) t.rule}.toList(),
+                    ),
               ),
           ],
         );
@@ -211,10 +225,14 @@ class _GlyphUnit extends StatelessWidget {
     required this.highlight,
     required this.onTap,
     this.padding,
+    this.tajweed,
   });
 
   final PageGlyph glyph;
   final TextStyle style;
+
+  /// Renkli tecvid açıksa renkler (M2-06).
+  final TajweedColors? tajweed;
   final bool selected;
   final Color highlight;
   final EdgeInsets? padding;
@@ -234,8 +252,14 @@ class _GlyphUnit extends StatelessWidget {
           color: selected ? highlight : null,
           alignment: Alignment.center,
           padding: padding,
-          child: Text(
-            glyph.digitalKhattText ?? '',
+          child: Text.rich(
+            tajweed == null
+                ? TextSpan(text: glyph.digitalKhattText ?? '')
+                : tajweedTextSpan(
+                    glyph.digitalKhattText ?? '',
+                    glyph.tajweed,
+                    tajweed!,
+                  ),
             style: style,
             softWrap: false,
             textDirection: TextDirection.rtl,

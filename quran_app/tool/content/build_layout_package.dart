@@ -8,8 +8,8 @@
 //
 // Medine 1405H (KFGQPC V1, QUL kaynak 15 ve 57): V1 glif birimlerinin
 // numaraları ve konumları V2 ile birebir aynıdır (betik doğrular). Bu
-// yüzden gliflerin kelime eşlemesi ve DigitalKhatt metni yerleşik 1421H
-// düzeninden alınır; yalnızca satır ve sayfa bölünmesi V1'den gelir.
+// yüzden gliflerin kelime eşlemesi, DigitalKhatt metni ve tecvid aralıkları
+// yerleşik 1421H düzeninden alınır; yalnızca satır ve sayfa bölünmesi V1'den gelir.
 // Hiçbir yer elle düzeltilmez.
 //
 // Lisans: QUL "telif bilgisi yok"; asıl hak sahibi KFGQPC (AK-11). Paket
@@ -102,6 +102,10 @@ Future<void> main() async {
       content.layoutGlyphs,
     )..where((g) => g.layoutId.equals(kDefaultLayout.id))).get();
     checkData(baseGlyphs.length == v1Locations.length, 'Glif sayısı');
+    // Tecvid aralıkları glif metnine bağlıdır; metin aynı olduğu için aynen.
+    final tajweed = await (content.select(
+      content.tajweedSpans,
+    )..where((t) => t.layoutId.equals(kDefaultLayout.id))).get();
     final glyphToWords = {
       for (final g in baseGlyphs) g.id: (g.firstWordId, g.lastWordId),
     };
@@ -159,6 +163,16 @@ Future<void> main() async {
               lastWordId: g.lastWordId,
               glyph: v1Codes[g.id]!,
               digitalKhattText: Value(g.digitalKhattText),
+            ),
+        ]);
+        b.insertAll(pkg.tajweedSpans, [
+          for (final t in tajweed)
+            TajweedSpansCompanion.insert(
+              layoutId: _layout.id,
+              glyphId: t.glyphId,
+              start: t.start,
+              end: t.end,
+              rule: t.rule,
             ),
         ]);
         b.insertAll(pkg.layoutLines, [

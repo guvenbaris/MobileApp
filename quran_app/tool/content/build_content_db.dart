@@ -24,11 +24,13 @@ import 'package:quran_app/features/quran/domain/quran_models.dart';
 import 'package:sqlite3/sqlite3.dart' as sqlite;
 
 import 'qul_layout.dart';
+import 'tajweed_alignment.dart';
 import 'text_rules.dart';
 import 'words_hash.dart';
 
 const _quranComDir = 'tool/content/sources/quran_com';
 const _qulDir = 'tool/content/sources/qul';
+const _tajweedDir = 'tool/content/sources/tajweed';
 
 const _surahCount = 114;
 const _ayahCount = 6236;
@@ -88,6 +90,7 @@ Future<void> main() async {
     );
     final glyphToWords = _alignGlyphs(verses, text, qulGlyphs);
     await _insertLayout(db, text, glyphToWords, qulGlyphs, qulLayout);
+    await _insertTajweed(db);
     final wordsHash = await computeWordsHash(db);
     await db.batch((b) {
       b.insertAll(db.contentMeta, [
@@ -98,7 +101,8 @@ Future<void> main() async {
             ContentMetaKeys.source,
             '${manifest['source']} (${manifest['fetchedAt']}); '
                 'QUL ${_layout.qulLayoutFile}, ${_layout.qulGlyphFile}, '
-                '${_layout.digitalKhattFile}',
+                '${_layout.digitalKhattFile}; tecvid: cpfair/quran-tajweed '
+                '(CC BY 4.0)',
           ),
           (ContentMetaKeys.builtAt, DateTime.now().toUtc().toIso8601String()),
         ])
@@ -326,6 +330,82 @@ void _alignBySkeleton(
 
 int _arabicIndicToInt(String s) =>
     int.parse(String.fromCharCodes(s.runes.map((r) => r - 0x0660 + 0x30)));
+
+// ---------------------------------------------------------------------------
+// Renkli tecvid (F1-04, M2-06)
+// ---------------------------------------------------------------------------
+
+/// cpfair/quran-tajweed açıklamalarını yerleşik düzenin gliflerine eşler.
+/// Eşlenemeyen açıklama oranı binde 1'i geçerse durur.
+Future<void> _insertTajweed(ContentDatabase db) async {
+  final tanzil = <String, String>{};
+  for (final line in File(
+    '$_tajweedDir/quran-uthmani-2017.txt',
+  ).readAsLinesSync()) {
+    if (line.isEmpty || line.startsWith('#')) continue;
+    final parts = line.split('|');
+    tanzil['${parts[0]}:${parts[1]}'] = parts.sublist(2).join('|');
+  }
+  _check(tanzil.length == _ayahCount, 'Tecvid metni ayet sayısı');
+  final annotations = <String, List<(int, int, String)>>{
+    for (final a in (jsonDecode(
+      File('$_tajweedDir/tajweed.hafs.uthmani-pause-sajdah.json')
+          .readAsStringSync(),
+    ) as List<dynamic>).cast<Map<String, dynamic>>())
+      '${a['surah']}:${a['ayah']}': [
+        for (final x
+            in (a['annotations'] as List<dynamic>).cast<Map<String, dynamic>>())
+          (x['start'] as int, x['end'] as int, x['rule'] as String),
+      ],
+  };
+
+  final rows = await db
+      .customSelect(
+        'SELECT g.id, g.digital_khatt_text, w.surah, w.ayah, w.is_ayah_end '
+        'FROM layout_glyphs g JOIN words w ON w.id = g.first_word_id '
+        'WHERE g.layout_id = ?1 ORDER BY g.id',
+        variables: [Variable.withString(_layout.id)],
+      )
+      .get();
+  final glyphs = <String, List<(int, String)>>{};
+  for (final r in rows) {
+    if (r.read<bool>('is_ayah_end')) continue;
+    glyphs
+        .putIfAbsent('${r.read<int>('surah')}:${r.read<int>('ayah')}', () => [])
+        .add((r.read<int>('id'), r.read<String>('digital_khatt_text')));
+  }
+
+  final stats = TajweedAlignmentStats();
+  final spans = alignTajweed(
+    tanzil: tanzil,
+    annotations: annotations,
+    glyphs: glyphs,
+    stats: stats,
+  );
+  _check(stats.unknownRule == 0, 'Bilinmeyen tecvid kuralı');
+  _check(
+    stats.unmapped * 1000 <= stats.annotations,
+    'Eşlenemeyen tecvid açıklaması çok: ${stats.unmapped}',
+  );
+  await db.batch((b) {
+    b.insertAll(db.tajweedSpans, [
+      for (final s in spans)
+        TajweedSpansCompanion.insert(
+          layoutId: _layout.id,
+          glyphId: s.glyphId,
+          start: s.start,
+          end: s.end,
+          rule: s.rule,
+        ),
+    ]);
+  });
+  stdout.writeln(
+    'Tecvid: ${stats.annotations} açıklama, ${stats.mapped} eşlendi, '
+    '${stats.unmapped} eşlenemedi, ${stats.inBasmala} besmelede; '
+    'iskeleti farklı ayet: ${stats.skeletonMismatch.join(', ')}; '
+    'çakışan karakter ${stats.overlappingChars}; ${spans.length} aralık',
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Glifler

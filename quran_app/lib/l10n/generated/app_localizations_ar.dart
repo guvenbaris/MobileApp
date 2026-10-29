@@ -132,7 +132,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get aboutLegalese =>
-      'خط المصحف: DigitalKhatt New Madina (رخصة SIL Open Font License 1.1).\nمصادر نص القرآن وتخطيط الصفحات: مجمع الملك فهد لطباعة المصحف الشريف، Quran.com، Quranic Universal Library (Tarteel).';
+      'خط المصحف: DigitalKhatt New Madina (رخصة SIL Open Font License 1.1).\nمصادر نص القرآن وتخطيط الصفحات: مجمع الملك فهد لطباعة المصحف الشريف، Quran.com، Quranic Universal Library (Tarteel).\nبيانات التجويد الملوّن: cpfair/quran-tajweed (Colin Pfair)، رخصة المشاع الإبداعي نسب المصنف 4.0 (https://creativecommons.org/licenses/by/4.0/). عُدِّلت في هذا التطبيق لتطابق نص DigitalKhatt وجُمعت الأحكام في 7 مجموعات لونية.';
 
   @override
   String get loading => 'جارٍ التحميل';
@@ -353,4 +353,167 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get readerLayoutDownloaded => 'حزمة منزّلة';
+
+  @override
+  String get readerTajweed => 'التجويد الملوّن';
+
+  @override
+  String get readerTajweedHint =>
+      'تُعرض الأحكام بالألوان؛ المس الكلمة لترى اسم الحكم وشرحه';
+
+  @override
+  String get tajweedLegend => 'ألوان التجويد';
+
+  @override
+  String get tajweedSource =>
+      'بيانات الأحكام: cpfair/quran-tajweed (CC BY 4.0)، مُعدَّلة لتطابق نص DigitalKhatt. الشروح موجزة؛ للتفصيل راجع معلّمًا.';
+
+  @override
+  String get tajweedAllColors => 'كل الألوان';
+
+  @override
+  String get tajweedGroupSilent => 'حروف لا تُنطق';
+
+  @override
+  String get tajweedGroupMaddNatural => 'المد الطبيعي';
+
+  @override
+  String get tajweedGroupMaddPermissible => 'المدود الجائزة';
+
+  @override
+  String get tajweedGroupMaddObligatory => 'المد الواجب واللازم';
+
+  @override
+  String get tajweedGroupGhunnah => 'الغنة والإخفاء';
+
+  @override
+  String get tajweedGroupIdghaam => 'الإدغام بلا غنة';
+
+  @override
+  String get tajweedGroupQalqalah => 'القلقلة';
+
+  @override
+  String get tajweedHamzatWasl => 'همزة الوصل';
+
+  @override
+  String get tajweedHamzatWaslInfo =>
+      'همزة في أول الكلمة تسقط في الوصل وتُنطق عند الابتداء بالكلمة.';
+
+  @override
+  String get tajweedLamShamsiyyah => 'اللام الشمسية';
+
+  @override
+  String get tajweedLamShamsiyyahInfo =>
+      'لام التعريف لا تُنطق قبل الحروف الشمسية، ويُشدَّد الحرف الذي بعدها.';
+
+  @override
+  String get tajweedSilent => 'حرف لا يُنطق';
+
+  @override
+  String get tajweedSilentInfo => 'حرف مكتوب لا يُنطق.';
+
+  @override
+  String get tajweedMadd2 => 'المد الطبيعي';
+
+  @override
+  String get tajweedMadd2Info =>
+      'يُمدّ حرف المد حركتين إذا لم يأتِ بعده همز ولا سكون.';
+
+  @override
+  String get tajweedMadd246 => 'المد العارض واللين';
+
+  @override
+  String get tajweedMadd246Info =>
+      'يُسكَّن ما بعد حرف المد أو اللين للوقف، فيجوز مدّه حركتين أو أربعًا أو ستًّا.';
+
+  @override
+  String get tajweedMaddMunfasil => 'المد المنفصل';
+
+  @override
+  String get tajweedMaddMunfasilInfo =>
+      'حرف المد في آخر كلمة والهمز في أول التي تليها؛ مدّه جائز ويختلف مقداره بحسب الطريق.';
+
+  @override
+  String get tajweedMaddMuttasil => 'المد المتصل';
+
+  @override
+  String get tajweedMaddMuttasilInfo =>
+      'حرف المد والهمز في كلمة واحدة؛ مدّه واجب (أربع أو خمس حركات).';
+
+  @override
+  String get tajweedMadd6 => 'المد اللازم';
+
+  @override
+  String get tajweedMadd6Info =>
+      'يأتي بعد حرف المد سكون أصلي أو حرف مشدد؛ يُمدّ ست حركات.';
+
+  @override
+  String get tajweedGhunnah => 'الغنة';
+
+  @override
+  String get tajweedGhunnahInfo =>
+      'الميم والنون المشددتان تُنطقان بغنة من الخيشوم مقدار حركتين.';
+
+  @override
+  String get tajweedIkhfa => 'الإخفاء';
+
+  @override
+  String get tajweedIkhfaInfo =>
+      'إذا جاء بعد النون الساكنة أو التنوين أحد حروف الإخفاء أُخفيت النون مع الغنة.';
+
+  @override
+  String get tajweedIkhfaShafawi => 'الإخفاء الشفوي';
+
+  @override
+  String get tajweedIkhfaShafawiInfo =>
+      'إذا جاء بعد الميم الساكنة باء أُخفيت الميم مع الغنة.';
+
+  @override
+  String get tajweedIdghaamGhunnah => 'الإدغام بغنة';
+
+  @override
+  String get tajweedIdghaamGhunnahInfo =>
+      'إذا جاء بعد النون الساكنة أو التنوين أحد حروف «ينمو» أُدغمت النون فيه بغنة.';
+
+  @override
+  String get tajweedIdghaamShafawi => 'الإدغام الشفوي';
+
+  @override
+  String get tajweedIdghaamShafawiInfo =>
+      'إذا جاء بعد الميم الساكنة ميم أُدغمتا بغنة.';
+
+  @override
+  String get tajweedIqlab => 'الإقلاب';
+
+  @override
+  String get tajweedIqlabInfo =>
+      'إذا جاء بعد النون الساكنة أو التنوين باء قُلبت النون ميمًا مع الغنة.';
+
+  @override
+  String get tajweedIdghaamNoGhunnah => 'الإدغام بلا غنة';
+
+  @override
+  String get tajweedIdghaamNoGhunnahInfo =>
+      'إذا جاء بعد النون الساكنة أو التنوين لام أو راء أُدغمت النون فيهما بلا غنة.';
+
+  @override
+  String get tajweedIdghaamMutajanisayn => 'إدغام المتجانسين';
+
+  @override
+  String get tajweedIdghaamMutajanisaynInfo =>
+      'حرفان اتحدا مخرجًا واختلفا صفةً، سكن أولهما فأُدغم في الثاني.';
+
+  @override
+  String get tajweedIdghaamMutaqaribayn => 'إدغام المتقاربين';
+
+  @override
+  String get tajweedIdghaamMutaqaribaynInfo =>
+      'حرفان تقاربا مخرجًا وصفةً، سكن أولهما فأُدغم في الثاني.';
+
+  @override
+  String get tajweedQalqalah => 'القلقلة';
+
+  @override
+  String get tajweedQalqalahInfo =>
+      'حروف «قطب جد» إذا سكنت نُطقت بنبرة مهتزّة خفيفة.';
 }

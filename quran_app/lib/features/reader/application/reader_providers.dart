@@ -10,6 +10,7 @@ import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
 import '../../quran/domain/quran_navigation.dart';
+import '../../quran/domain/tajweed.dart';
 import '../../user_data/application/user_data_providers.dart';
 import '../../user_data/domain/user_data_repositories.dart';
 
@@ -49,10 +50,17 @@ final basmalaTextProvider = FutureProvider<String>((ref) async {
 
 /// Kullanıcının dokunduğu kelime (M3-03, M8-02 ön koşulu).
 class SelectedWordNotifier extends Notifier<WordRef?> {
+  /// Seçili kelimenin glifindeki tecvid kuralları (M2-06: renge dokununca
+  /// kural açıklaması). Seçimle birlikte değişir.
+  List<TajweedRule> rules = const [];
+
   @override
   WordRef? build() => null;
 
-  void select(WordRef? word) => state = word;
+  void select(WordRef? word, {List<TajweedRule> rules = const []}) {
+    this.rules = word == null ? const [] : rules;
+    state = word;
+  }
 }
 
 final selectedWordProvider = NotifierProvider<SelectedWordNotifier, WordRef?>(
