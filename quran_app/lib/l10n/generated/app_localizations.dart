@@ -681,6 +681,24 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'%{value}'**
   String readerPercent(String value);
+
+  /// KFGQPC'nin 1405H baskısının düzeni (indirilebilir paket, F1-03).
+  ///
+  /// In tr, this message translates to:
+  /// **'Medine Mushafı (1405 H)'**
+  String get layoutMadani1405;
+
+  /// Düzen seçiminde düzenin yapısı (M2-14).
+  ///
+  /// In tr, this message translates to:
+  /// **'{pages} sayfa · {lines} satır'**
+  String readerLayoutInfo(String pages, String lines);
+
+  /// No description provided for @readerLayoutDownloaded.
+  ///
+  /// In tr, this message translates to:
+  /// **'İndirilen paket'**
+  String get readerLayoutDownloaded;
 }
 
 class _AppLocalizationsDelegate

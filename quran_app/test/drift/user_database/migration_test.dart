@@ -9,6 +9,7 @@ import 'generated/schema.dart';
 
 import 'generated/schema_v1.dart' as v1;
 import 'generated/schema_v2.dart' as v2;
+import 'generated/schema_v3.dart' as v3;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -121,4 +122,99 @@ void main() {
       },
     );
   });
+
+  test(
+    'v2 → v3: profiller, ayarlar ve okuma konumları eksiksiz korunur',
+    () async {
+      const created = '2026-10-29T09:00:00.000Z';
+      const updated = '2026-10-29T10:30:00.000Z';
+      final oldProfiles = <v2.UserProfilesData>[
+        const v2.UserProfilesData(
+          id: '6f1c2a3e-0000-4000-8000-000000000001',
+          createdAt: created,
+          updatedAt: updated,
+          accountId: 'account-42',
+        ),
+      ];
+      final oldSettings = <v2.SettingsData>[
+        const v2.SettingsData(
+          id: '6f1c2a3e-0000-4000-8000-000000000101',
+          createdAt: created,
+          updatedAt: updated,
+          key: 'reader.keepScreenOn',
+          value: 'false',
+        ),
+        const v2.SettingsData(
+          id: '6f1c2a3e-0000-4000-8000-000000000102',
+          createdAt: created,
+          updatedAt: created,
+          deletedAt: updated,
+          key: 'app.theme',
+          value: '"sepia"',
+        ),
+      ];
+      final oldPositions = <v2.ReadingPositionsData>[
+        // KK M2-15: Kehf 45 (sayfa numarası saklanmaz).
+        const v2.ReadingPositionsData(
+          id: '6f1c2a3e-0000-4000-8000-000000000201',
+          createdAt: created,
+          updatedAt: updated,
+          kind: 'lastRead',
+          surah: 18,
+          ayah: 45,
+        ),
+      ];
+
+      await verifier.testWithDataIntegrity(
+        oldVersion: 2,
+        newVersion: 3,
+        createOld: v2.DatabaseAtV2.new,
+        createNew: v3.DatabaseAtV3.new,
+        openTestedDatabase: UserDatabase.new,
+        createItems: (batch, oldDb) {
+          batch.insertAll(oldDb.userProfiles, oldProfiles);
+          batch.insertAll(oldDb.settings, oldSettings);
+          batch.insertAll(oldDb.readingPositions, oldPositions);
+        },
+        validateItems: (newDb) async {
+          expect(await newDb.select(newDb.userProfiles).get(), [
+            for (final p in oldProfiles)
+              v3.UserProfilesData(
+                id: p.id,
+                createdAt: p.createdAt,
+                updatedAt: p.updatedAt,
+                deletedAt: p.deletedAt,
+                accountId: p.accountId,
+              ),
+          ]);
+          expect(await newDb.select(newDb.settings).get(), [
+            for (final s in oldSettings)
+              v3.SettingsData(
+                id: s.id,
+                createdAt: s.createdAt,
+                updatedAt: s.updatedAt,
+                deletedAt: s.deletedAt,
+                key: s.key,
+                value: s.value,
+              ),
+          ]);
+          expect(await newDb.select(newDb.readingPositions).get(), [
+            for (final r in oldPositions)
+              v3.ReadingPositionsData(
+                id: r.id,
+                createdAt: r.createdAt,
+                updatedAt: r.updatedAt,
+                deletedAt: r.deletedAt,
+                kind: r.kind,
+                surah: r.surah,
+                ayah: r.ayah,
+                word: r.word,
+              ),
+          ]);
+          // Yeni tablo boş başlar.
+          expect(await newDb.select(newDb.installedPackages).get(), isEmpty);
+        },
+      );
+    },
+  );
 }

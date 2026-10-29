@@ -9,6 +9,7 @@ import 'package:quran_app/core/database/user_database_opener.dart';
 import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/quran/data/content_database_opener.dart';
 import 'package:quran_app/features/quran/data/drift_quran_repository.dart';
+import 'package:quran_app/features/quran/domain/mushaf_layout.dart';
 import 'package:quran_app/features/reader/presentation/mushaf_page_view.dart';
 import 'package:quran_app/features/user_data/application/user_data_providers.dart';
 
@@ -63,7 +64,7 @@ void main() {
     final loads = <int>[];
     for (var page = 300; page < 350; page++) {
       final watch = Stopwatch()..start();
-      await repo.getMushafPage(kDefaultLayoutId, page);
+      await repo.getMushafPage(kDefaultLayout.id, page);
       loads.add(watch.elapsedMilliseconds);
     }
     loads.sort();

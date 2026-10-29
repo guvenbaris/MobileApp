@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_list_item.dart';
+import '../../quran/application/layout_providers.dart';
+import '../../quran/presentation/layout_l10n.dart';
 import '../../settings/application/theme_settings.dart';
 import '../application/reader_settings.dart';
 
@@ -11,8 +13,7 @@ import '../application/reader_settings.dart';
 /// kalıcıdır (M13-02). Görünüm değişikliği okuma ekranından geçer: okunan
 /// ayet korunarak sayfa hesaplanır (M2-01).
 ///
-/// Tecvid (F1-04), kelime meali (F1-06) ve düzen seçimi (F1-03) o iş
-/// paketlerinde eklenir.
+/// Tecvid (F1-04) ve kelime meali (F1-06) o iş paketlerinde eklenir.
 Future<void> showReaderSettingsSheet(
   BuildContext context, {
   required ValueChanged<ReaderViewMode> onViewMode,
@@ -35,6 +36,8 @@ class _ReaderSettingsSheet extends ConsumerWidget {
     final notifier = ref.read(readerSettingsProvider.notifier);
     final theme = ref.watch(themeSettingsProvider);
     final locked = settings.textScaleLocked;
+    final layouts = ref.watch(layoutCatalogProvider).layouts;
+    final currentLayout = ref.watch(currentLayoutProvider);
     final percent = l10n.readerPercent(
       context.formatInt((settings.textScale * 100).round()),
     );
@@ -160,12 +163,35 @@ class _ReaderSettingsSheet extends ConsumerWidget {
                 onChanged: notifier.setTextScaleLocked,
               ),
               const Divider(),
-              // M2-14: düzen seçimi F1-03'te; şimdilik geçerli düzen.
-              AppListItem(
-                leading: const Icon(Icons.auto_stories_outlined),
-                title: l10n.readerMushafLayout,
-                subtitle: l10n.layoutMadani1421,
+              // M2-14: cihazdaki düzenler; seçim anında uygulanır, okunan
+              // ayet korunur (M2-15).
+              AppSectionHeader(l10n.readerMushafLayout),
+              RadioGroup<String>(
+                groupValue: currentLayout.id,
+                onChanged: (id) => id == null
+                    ? null
+                    : ref.read(layoutSelectionProvider.notifier).select(id),
+                child: Column(
+                  children: [
+                    for (final layout in layouts)
+                      RadioListTile<String>(
+                        key: Key('readerSettings.layout.${layout.id}'),
+                        value: layout.id,
+                        title: Text(layout.localizedName(context)),
+                        subtitle: Text(
+                          [
+                            l10n.readerLayoutInfo(
+                              context.formatInt(layout.pageCount),
+                              context.formatInt(layout.linesPerPage),
+                            ),
+                            if (!layout.isBuiltIn) l10n.readerLayoutDownloaded,
+                          ].join(' · '),
+                        ),
+                      ),
+                  ],
+                ),
               ),
+              const Divider(),
               SwitchListTile(
                 key: const Key('readerSettings.keepScreenOn'),
                 secondary: const Icon(Icons.light_mode_outlined),

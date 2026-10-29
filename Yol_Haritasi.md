@@ -32,6 +32,7 @@ Bu işler geliştirmeyle aynı anda yürür ve aşağıdaki fazları bloklar.
 
 | İş | İlgili karar | Bloklayacağı faz | Durum |
 |---|---|---|---|
+| **Diyanet Kurul onayı (dijital Kur'an yayını)** | AK-14 | v1.0'ı bloklamaz (kullanıcı kararı 29.10.2026); Türkiye düzeni/font için sonra başvurulur. | ⏸ |
 | Mushaf düzeni kaynağı ve lisansı | AK-11 | Faz 1 sonu (yayın lisansı); geliştirme açık veriyle başlar. **Türkiye düzeni (M2-02 [Z]) için veri araştırması Faz 1'in ilk işi (F1-03).** | ⬜ |
 | Meal, tefsir ve kari lisansları | AK-05 | Faz 1 sonu (paketlenecek varsayılan meal, M16-01), Faz 3 (diğerleri) | ⬜ |
 | Uygulama adı ve marka | AK-04 | Faz 0 (paket adı), Faz 3 (mağaza) | ⬜ |

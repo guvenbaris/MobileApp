@@ -3,7 +3,7 @@
 | Alan | Değer |
 |---|---|
 | Proje | `[Uygulama Adı]` (çalışma adı). Kur'an okuma, hafızlık ve günlük İslami eğitim uygulaması |
-| Doküman sürümü | 1.4 (taslak) |
+| Doküman sürümü | 1.5 (taslak) |
 | Teknoloji | Flutter (Android 7.0+ / iOS 15+); sunucu v1.0 betasından önce hazır olacak (AK-03) |
 | Tarih | 28.10.2026 |
 | Dayanak | `Kuran_Uygulamasi_Yorum_Analizi.md` (4 rakip uygulama, ~232 bin kullanıcı yorumu) |
@@ -580,6 +580,7 @@ Proje iskeletine başlamadan önce kapatılması gereken kararlar:
 | AK-11 | Türkiye mushaf düzeni için kaynak/lisans | M2-02 | | |
 | AK-12 | İlk ders yolları ve müfredat | M9-01 | | |
 | AK-13 | Yapay zekâ değerlendirme kriterleri (v2.0) | KD-01 | | |
+| AK-14 | **Diyanet Mushafları İnceleme ve Kıraat Kurulu onayı.** "Kur'an-ı Kerim Basım ve Yayım Kriterleri Hakkında Yönetmelik" (RG 2/11/2022-32001) elektronik ortamdaki Kur'an yayınlarını da kapsar; onaysız eser yayımlanamaz (md. 9), font Kurulca uygun görülmeli (md. 5/3-n), mealli eserler için Din İşleri Yüksek Kurulu görüşü (md. 8/3). | ⏸ **Ertelendi (kullanıcı kararı, 29.10.2026):** ilk sürüm yönetmelik başvurusu beklenmeden hazırlanır; ileride (ör. Türkiye düzeni veya font için) Kurula başvurulur. Risk kayıtlı: onaysız yayına md. 11 yaptırımları uygulanabilir. Ayrıntı: `Fazlar/Faz_1_Notlar.md` §5 | Kullanıcı | v1.0 sonrası (gözden geçirme: yayın öncesi) |
 
 ---
 
@@ -599,6 +600,7 @@ Proje iskeletine başlamadan önce kapatılması gereken kararlar:
 | 1.2 | 28.10.2026 | Sunucu v1.0 betasından önce hazır olacak; hesap ve senkron (M1) yeniden v1.0 kapsamına alındı |
 | 1.3 | 28.10.2026 | Sunucu, veri modeli dondurulduktan sonra (test sürecinin başında) yazılacak; "Veri Modeli Dondurma" kilometre taşı eklendi |
 | 1.4 | 28.10.2026 | M2-14 mushaf düzeni değiştirme, M2-15 düzenden bağımsız konum eklendi; ezber durumu ayet aralığı bazlı yapıldı |
+| 1.5 | 29.10.2026 | AK-14 eklendi: Diyanet Kurul onayı (yönetmelik dijital Kur'an yayınlarını kapsıyor; F1-03 araştırması) |
 
 ---
 

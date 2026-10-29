@@ -96,5 +96,8 @@
   "readerKeepScreenOnHint": "لا تنطفئ الشاشة أثناء القراءة",
   "readerPageArrows": "أسهم الصفحات",
   "readerPageArrowsHint": "أزرار لتقليب الصفحات إلى جانب السحب",
-  "readerPercent": "{value}٪"
+  "readerPercent": "{value}٪",
+  "layoutMadani1405": "مصحف المدينة النبوية (1405 هـ)",
+  "readerLayoutInfo": "{pages} صفحة · {lines} سطرًا",
+  "readerLayoutDownloaded": "حزمة منزّلة"
 }

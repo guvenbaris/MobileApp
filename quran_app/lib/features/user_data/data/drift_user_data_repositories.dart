@@ -99,3 +99,68 @@ class DriftReadingPositionRepository implements ReadingPositionRepository {
         );
   }
 }
+
+class DriftInstalledPackageRepository implements InstalledPackageRepository {
+  const DriftInstalledPackageRepository(this._db);
+
+  final UserDatabase _db;
+
+  @override
+  Future<List<InstalledPackage>> list({String? kind}) async {
+    final rows =
+        await (_db.select(_db.installedPackages)
+              ..where(
+                (p) =>
+                    p.deletedAt.isNull() &
+                    (kind == null ? const Constant(true) : p.kind.equals(kind)),
+              )
+              ..orderBy([(p) => OrderingTerm(expression: p.packageId)]))
+            .get();
+    return [
+      for (final r in rows)
+        InstalledPackage(
+          packageId: r.packageId,
+          kind: r.kind,
+          version: r.version,
+          fileName: r.fileName,
+          sizeBytes: r.sizeBytes,
+        ),
+    ];
+  }
+
+  @override
+  Future<void> save(InstalledPackage package) async {
+    await _db
+        .into(_db.installedPackages)
+        .insert(
+          InstalledPackagesCompanion.insert(
+            packageId: package.packageId,
+            kind: package.kind,
+            version: package.version,
+            fileName: package.fileName,
+            sizeBytes: package.sizeBytes,
+          ),
+          onConflict: DoUpdate(
+            (_) => InstalledPackagesCompanion(
+              kind: Value(package.kind),
+              version: Value(package.version),
+              fileName: Value(package.fileName),
+              sizeBytes: Value(package.sizeBytes),
+              updatedAt: Value(_nowUtc()),
+              deletedAt: const Value(null),
+            ),
+            target: [_db.installedPackages.packageId],
+          ),
+        );
+  }
+
+  @override
+  Future<void> remove(String packageId) async {
+    final now = _nowUtc();
+    await (_db.update(
+      _db.installedPackages,
+    )..where((p) => p.packageId.equals(packageId))).write(
+      InstalledPackagesCompanion(deletedAt: Value(now), updatedAt: Value(now)),
+    );
+  }
+}

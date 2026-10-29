@@ -8,8 +8,8 @@
 // ölçümüyle doğrulanır (tool/content/check_line_widths.dart).
 import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/quran/data/content_database.dart';
+import 'package:quran_app/features/quran/domain/mushaf_layout.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
 
 import '../helpers/content_db.dart';
@@ -71,13 +71,13 @@ void main() {
     return starts;
   }
 
-  group('sayfa düzeni ($kDefaultLayoutId)', () {
+  group('sayfa düzeni (${kDefaultLayout.id})', () {
     late List<LayoutPageRow> pages;
 
     setUp(() async {
       pages =
           await (db.select(db.layoutPages)
-                ..where((p) => p.layoutId.equals(kDefaultLayoutId))
+                ..where((p) => p.layoutId.equals(kDefaultLayout.id))
                 ..orderBy([(p) => OrderingTerm(expression: p.page)]))
               .get();
     });
@@ -138,7 +138,7 @@ void main() {
           await (db.select(db.layoutLines)
                 ..where(
                   (l) =>
-                      l.layoutId.equals(kDefaultLayoutId) &
+                      l.layoutId.equals(kDefaultLayout.id) &
                       l.type.equalsValue(LayoutLineType.ayah),
                 )
                 ..orderBy([
@@ -209,7 +209,7 @@ void main() {
     test('her sure başlığıyla, besmeleli sureler besmeleyle başlar', () async {
       final lines = await (db.select(
         db.layoutLines,
-      )..where((l) => l.layoutId.equals(kDefaultLayoutId))).get();
+      )..where((l) => l.layoutId.equals(kDefaultLayout.id))).get();
       final headers = lines.where((l) => l.type == LayoutLineType.surahName);
       final basmalas = lines.where((l) => l.type == LayoutLineType.basmala);
       expect(headers.map((l) => l.surah).toSet(), hasLength(114));

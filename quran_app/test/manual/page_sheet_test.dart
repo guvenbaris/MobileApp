@@ -17,8 +17,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quran_app/core/result/result.dart';
 import 'package:quran_app/core/theme/app_theme.dart';
-import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/quran/data/drift_quran_repository.dart';
+import 'package:quran_app/features/quran/domain/mushaf_layout.dart';
 import 'package:quran_app/features/quran/domain/mushaf_page.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
 import 'package:quran_app/features/reader/presentation/mushaf_page_view.dart';
@@ -54,7 +54,7 @@ void main() {
 
       final surahs = _value(await repo.getSurahs());
       Future<int> pageOf(int s, int a) async =>
-          _value(await repo.pageOf(kDefaultLayoutId, AyahRef(s, a)));
+          _value(await repo.pageOf(kDefaultLayout.id, AyahRef(s, a)));
 
       // Seçim: ilk iki sayfa ve düzenin özel durumlarını kapsayan 5 sayfa.
       final pages = <int, String>{
@@ -68,7 +68,7 @@ void main() {
       };
       final loaded = <int, MushafPage>{
         for (final p in pages.keys)
-          p: _value(await repo.getMushafPage(kDefaultLayoutId, p)),
+          p: _value(await repo.getMushafPage(kDefaultLayout.id, p)),
       };
       final first = loaded[1]!.lines.expand((l) => l.glyphs).take(4);
       final basmala = first.map((g) => g.digitalKhattText ?? '').join(' ');

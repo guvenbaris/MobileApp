@@ -40,6 +40,19 @@ Kaynaklar, lisanslar ve bilinen veri durumları: `../VERI_KAYNAKLARI.md`.
 **Kur'an fontu:** `assets/fonts/DigitalKhattV2.otf` (DigitalKhatt New Madina, SIL OFL 1.1; lisans metni `assets/fonts/DigitalKhatt-OFL.txt`, fontla birlikte dağıtılmalı). Ekranda gösterilen metin DigitalKhatt kelime metnidir; harfleri ve durak işaretleri T-01'de KFGQPC metniyle denetlenir.
 Drift şeması değişince: `dart run build_runner build`.
 
+## Mushaf düzeni paketleri (F1-03, TK-13)
+Uygulamayla yalnız Medine 1421H düzeni gelir. Diğer düzenler **düzen paketi** olarak eklenir: içerik veritabanıyla aynı şemada, tek bir düzenin `mushaf_layouts` ve `layout_*` satırlarını taşıyan bir SQLite dosyası (`content_meta`: `packageId`, `packageKind = layout`, `packageVersion`, `wordsHash`).
+- Paket, glifleri kelimelere `words.id` ile bağlar. Bu yüzden yalnızca aynı **kelime parmak izini** (`wordsHash`) taşıyan içerik veritabanıyla kabul edilir. Kelimeler değişirse paket yeniden üretilir.
+- Kurulu paketler `<uygulama destek klasörü>/packages/layout/` altındadır ve kullanıcı veritabanındaki `installed_packages` tablosunda kayıtlıdır. Açılışta açılamayan paket atlanır; uygulama yerleşik düzenle devam eder.
+- İndirme altyapısı F1-11'de gelecek. O zamana kadar **yalnızca `dev` sürümünde** paketi cihaza bırakarak deneyebilirsiniz. Paket bir sonraki açılışta kurulur ve klasörden silinir:
+  ```sh
+  adb shell mkdir -p /sdcard/Android/data/com.example.quranapp.dev/files/packages_inbox
+  adb push build/packages/madani_1405_v1.sqlite /sdcard/Android/data/com.example.quranapp.dev/files/packages_inbox/
+  ```
+  Ardından uygulamayı kapatıp açın ve okuma ekranında ⚙ → Mushaf düzeni'nden seçin. (Git Bash'te komutların önüne `MSYS_NO_PATHCONV=1` yazın; yoksa `/sdcard` yolu Windows yoluna çevrilir. PowerShell'de gerekmez.)
+- Medine 1405H paketi (yalnızca geliştirme; lisans AK-11): QUL dosyaları `tool/content/sources/qul/` altındayken `dart run tool/content/build_layout_package.dart` → `build/packages/madani_1405_v1.sqlite`.
+- Paket yapısını T-02 denetler: `build/packages/*.sqlite` altındaki her paket için `flutter test test/content/t02_layout_packages_test.dart`.
+
 ## Kurallar
 Mimari, kod ve test kuralları depo kökündeki `CLAUDE.md`'dedir; veri ve lisans envanteri `VERI_KAYNAKLARI.md`'de. Uygulama içi lisans sayfası: Ayarlar → Lisanslar (DigitalKhatt OFL, Tanzil telif notu, paket lisansları).
 

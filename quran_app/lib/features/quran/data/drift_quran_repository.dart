@@ -1,16 +1,42 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/result/result.dart';
+import '../domain/mushaf_layout.dart';
 import '../domain/mushaf_page.dart';
 import '../domain/quran_models.dart';
 import '../domain/quran_navigation.dart';
 import '../domain/quran_repository.dart';
 import 'content_database.dart';
 
+/// İçerik veritabanından okuyan depo. Uygulamayla gelen düzen içerik
+/// veritabanındadır; kurulu düzen paketleri (TK-13) ayrı veritabanlarıdır ve
+/// [layoutDatabases] ile verilir. Paketler yalnızca düzen tablolarını taşır;
+/// metin, kelime ve ayetler her zaman içerik veritabanından okunur.
 class DriftQuranRepository implements QuranRepository {
-  const DriftQuranRepository(this._db);
+  const DriftQuranRepository(
+    this._db, {
+    Map<String, ContentDatabase> layoutDatabases = const {},
+  }) : _layoutDbs = layoutDatabases;
 
   final ContentDatabase _db;
+  final Map<String, ContentDatabase> _layoutDbs;
+
+  /// Düzen tablolarının bulunduğu veritabanı.
+  ContentDatabase _layoutDb(String layoutId) => _layoutDbs[layoutId] ?? _db;
+
+  @override
+  Future<Result<List<MushafLayout>>> getLayouts() => _guard(() async {
+    final layouts = [
+      for (final row in await _db.select(_db.mushafLayouts).get())
+        _toLayout(row, isBuiltIn: true),
+      for (final MapEntry(key: id, value: db) in _layoutDbs.entries)
+        for (final row in await (db.select(
+          db.mushafLayouts,
+        )..where((l) => l.id.equals(id))).get())
+          _toLayout(row, isBuiltIn: false),
+    ];
+    return Ok(layouts);
+  });
 
   @override
   Future<Result<List<Surah>>> getSurahs() => _guard(() async {
@@ -54,8 +80,9 @@ class DriftQuranRepository implements QuranRepository {
     if (ayah == null) return Err(NotFoundFailure('Ayet yok: $ref'));
 
     // Birden fazla sayfaya yayılan ayet, başladığı sayfaya aittir.
+    final ldb = _layoutDb(layoutId);
     final page =
-        await (_db.select(_db.layoutPages)
+        await (ldb.select(ldb.layoutPages)
               ..where(
                 (p) =>
                     p.layoutId.equals(layoutId) &
@@ -73,19 +100,16 @@ class DriftQuranRepository implements QuranRepository {
   @override
   Future<Result<AyahRef>> firstAyahOfPage(String layoutId, int page) =>
       _guard(() async {
-        final query =
-            _db.select(_db.layoutPages).join([
-              innerJoin(
-                _db.ayahs,
-                _db.ayahs.id.equalsExp(_db.layoutPages.firstAyahId),
-              ),
-            ])..where(
-              _db.layoutPages.layoutId.equals(layoutId) &
-                  _db.layoutPages.page.equals(page),
-            );
-        final row = await query.getSingleOrNull();
-        if (row == null) return Err(NotFoundFailure('Sayfa yok: $page'));
-        final ayah = row.readTable(_db.ayahs);
+        final ldb = _layoutDb(layoutId);
+        final range =
+            await (ldb.select(ldb.layoutPages)..where(
+                  (p) => p.layoutId.equals(layoutId) & p.page.equals(page),
+                ))
+                .getSingleOrNull();
+        if (range == null) return Err(NotFoundFailure('Sayfa yok: $page'));
+        final ayah = await (_db.select(
+          _db.ayahs,
+        )..where((a) => a.id.equals(range.firstAyahId))).getSingle();
         return Ok(AyahRef(ayah.surah, ayah.ayah));
       });
 
@@ -94,13 +118,14 @@ class DriftQuranRepository implements QuranRepository {
     String layoutId,
     int page,
   ) => _guard(() async {
+    final ldb = _layoutDb(layoutId);
     final lines =
-        await (_db.select(_db.layoutLines)
+        await (ldb.select(ldb.layoutLines)
               ..where((l) => l.layoutId.equals(layoutId) & l.page.equals(page))
               ..orderBy([(l) => OrderingTerm(expression: l.line)]))
             .get();
     final range =
-        await (_db.select(_db.layoutPages)
+        await (ldb.select(ldb.layoutPages)
               ..where((p) => p.layoutId.equals(layoutId) & p.page.equals(page)))
             .getSingleOrNull();
     if (lines.isEmpty || range == null) {
@@ -111,7 +136,7 @@ class DriftQuranRepository implements QuranRepository {
     final firstGlyph = ayahLines.first.firstGlyphId!;
     final lastGlyph = ayahLines.last.lastGlyphId!;
     final glyphs =
-        await (_db.select(_db.layoutGlyphs)
+        await (ldb.select(ldb.layoutGlyphs)
               ..where(
                 (g) =>
                     g.layoutId.equals(layoutId) &
@@ -130,6 +155,9 @@ class DriftQuranRepository implements QuranRepository {
               .get())
         w.id: w,
     };
+    final layout = await (ldb.select(
+      ldb.mushafLayouts,
+    )..where((l) => l.id.equals(layoutId))).getSingle();
     final firstAyah = await (_db.select(
       _db.ayahs,
     )..where((a) => a.id.equals(range.firstAyahId))).getSingle();
@@ -161,6 +189,7 @@ class DriftQuranRepository implements QuranRepository {
         firstAyah: AyahRef(firstAyah.surah, firstAyah.ayah),
         juz: firstAyah.juz,
         hizb: firstAyah.hizb,
+        linesPerPage: layout.linesPerPage,
         sajdahAyahs: [
           for (final a in starts)
             if (a.sajdah != null) AyahRef(a.surah, a.ayah),
@@ -234,33 +263,41 @@ class DriftQuranRepository implements QuranRepository {
   }
 
   @override
-  Future<Result<List<QuarterStart>>> quarterStarts(String layoutId) =>
-      _guard(() async {
-        // Her rubu'un ilk ayeti ve o ayetin başladığı sayfa, tek sorguda.
-        final rows = await _db
-            .customSelect(
-              'SELECT a.juz, a.hizb, a.rub, a.surah, a.ayah, '
-              '(SELECT p.page FROM layout_pages p '
-              'WHERE p.layout_id = ?1 AND p.first_ayah_id <= a.id '
-              'AND p.last_ayah_id >= a.id ORDER BY p.page LIMIT 1) AS page '
-              'FROM ayahs a '
-              'WHERE a.id IN (SELECT MIN(id) FROM ayahs GROUP BY rub) '
-              'ORDER BY a.rub',
-              variables: [Variable.withString(layoutId)],
-              readsFrom: {_db.ayahs, _db.layoutPages},
-            )
-            .get();
-        return Ok([
-          for (final r in rows)
-            QuarterStart(
-              juz: r.read<int>('juz'),
-              hizb: r.read<int>('hizb'),
-              rub: r.read<int>('rub'),
-              start: AyahRef(r.read<int>('surah'), r.read<int>('ayah')),
-              page: r.read<int>('page'),
-            ),
-        ]);
-      });
+  Future<Result<List<QuarterStart>>> quarterStarts(String layoutId) => _guard(
+    () async {
+      // Her rubu'un ilk ayeti (içerik) ve o ayetin başladığı sayfa
+      // (düzen; paketteyse ayrı veritabanı).
+      final rows = await _db
+          .customSelect(
+            'SELECT id, juz, hizb, rub, surah, ayah FROM ayahs '
+            'WHERE id IN (SELECT MIN(id) FROM ayahs GROUP BY rub) '
+            'ORDER BY rub',
+            readsFrom: {_db.ayahs},
+          )
+          .get();
+      final ldb = _layoutDb(layoutId);
+      final pages =
+          await (ldb.select(ldb.layoutPages)
+                ..where((p) => p.layoutId.equals(layoutId))
+                ..orderBy([(p) => OrderingTerm(expression: p.page)]))
+              .get();
+      if (pages.isEmpty) return Err(NotFoundFailure('Düzen yok: $layoutId'));
+      // Ayet, aralığına giren ilk sayfaya aittir (pageOf ile aynı kural).
+      int pageOf(int ayahId) => pages
+          .firstWhere((p) => p.firstAyahId <= ayahId && p.lastAyahId >= ayahId)
+          .page;
+      return Ok([
+        for (final r in rows)
+          QuarterStart(
+            juz: r.read<int>('juz'),
+            hizb: r.read<int>('hizb'),
+            rub: r.read<int>('rub'),
+            start: AyahRef(r.read<int>('surah'), r.read<int>('ayah')),
+            page: pageOf(r.read<int>('id')),
+          ),
+      ]);
+    },
+  );
 
   Future<Result<T>> _guard<T>(Future<Result<T>> Function() body) async {
     try {
@@ -283,6 +320,17 @@ class DriftQuranRepository implements QuranRepository {
     bismillahPre: r.bismillahPre,
     ayahCount: r.ayahCount,
   );
+
+  static MushafLayout _toLayout(MushafLayoutRow r, {required bool isBuiltIn}) =>
+      MushafLayout(
+        id: r.id,
+        name: r.name,
+        pageCount: r.pageCount,
+        linesPerPage: r.linesPerPage,
+        fontPack: r.fontPack,
+        version: r.version,
+        isBuiltIn: isBuiltIn,
+      );
 
   static Ayah _toAyah(AyahRow r) => Ayah(
     ref: AyahRef(r.surah, r.ayah),

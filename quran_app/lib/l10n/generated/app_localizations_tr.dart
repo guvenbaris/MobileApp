@@ -342,4 +342,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String readerPercent(String value) {
     return '%$value';
   }
+
+  @override
+  String get layoutMadani1405 => 'Medine Mushafı (1405 H)';
+
+  @override
+  String readerLayoutInfo(String pages, String lines) {
+    return '$pages sayfa · $lines satır';
+  }
+
+  @override
+  String get readerLayoutDownloaded => 'İndirilen paket';
 }

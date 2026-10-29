@@ -342,4 +342,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String readerPercent(String value) {
     return '$value٪';
   }
+
+  @override
+  String get layoutMadani1405 => 'مصحف المدينة النبوية (1405 هـ)';
+
+  @override
+  String readerLayoutInfo(String pages, String lines) {
+    return '$pages صفحة · $lines سطرًا';
+  }
+
+  @override
+  String get readerLayoutDownloaded => 'حزمة منزّلة';
 }

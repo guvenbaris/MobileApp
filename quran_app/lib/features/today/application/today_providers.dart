@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/result/result.dart';
+import '../../quran/application/layout_providers.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/quran_models.dart';
 import '../../reader/application/reader_providers.dart';
@@ -33,7 +34,7 @@ final lastReadSummaryProvider = FutureProvider<LastReadSummary?>((ref) async {
 
   final repo = ref.watch(quranRepositoryProvider);
   final surahs = await ref.watch(surahsProvider.future);
-  final page = await repo.pageOf(kDefaultLayoutId, anchor);
+  final page = await repo.pageOf(ref.watch(currentLayoutProvider).id, anchor);
   final ayah = await repo.getAyah(anchor);
   return LastReadSummary(
     ayah: anchor,

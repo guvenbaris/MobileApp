@@ -8,7 +8,9 @@ import '../../../core/l10n/l10n.dart';
 import '../../../core/platform/wake_lock.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/state_views.dart';
+import '../../quran/application/layout_providers.dart';
 import '../../quran/application/quran_providers.dart';
+import '../../quran/domain/mushaf_layout.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
 import '../../quran/domain/quran_navigation.dart';
@@ -26,8 +28,7 @@ import 'reader_settings_sheet.dart';
 class ReaderPage extends ConsumerStatefulWidget {
   const ReaderPage({this.initialPage = 1, super.key});
 
-  static const pageCount = 604;
-
+  /// Okunan düzende açılacak sayfa.
   final int initialPage;
 
   @override
@@ -77,8 +78,10 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
   /// [page] sayfasını gösteren kaydırma öğesinin sırası.
   int _itemOf(int page) => _twoPage ? (page - 1) ~/ 2 : page - 1;
 
-  int get _itemCount =>
-      _twoPage ? (ReaderPage.pageCount + 1) ~/ 2 : ReaderPage.pageCount;
+  /// Okunan düzenin sayfa sayısı (M2-14: düzene göre değişebilir).
+  int get _pageCount => ref.read(currentLayoutProvider).pageCount;
+
+  int get _itemCount => _twoPage ? (_pageCount + 1) ~/ 2 : _pageCount;
 
   /// Yeni bir denetleyiciyle [page] sayfasına gider. Eski denetleyici,
   /// eski sayfa görünümü ağaçtan çıktıktan sonra (bir kare sonra) kapatılır.
@@ -99,6 +102,11 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
       if (previous?.autoScrollSpeed != next.autoScrollSpeed) {
         _restartPageTimer();
       }
+    });
+    // M2-14, M2-15: düzen değişince aynı ayet yeni düzendeki sayfasında
+    // açılır; okunan ayet ve kayıtlar değişmez.
+    ref.listenManual(currentLayoutProvider, (previous, next) {
+      if (previous?.id != next.id) _onLayoutChanged(next);
     });
     _syncWakeLock();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -149,7 +157,7 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
       final anchor = ref.read(readerAnchorProvider);
       final page = await ref
           .read(quranRepositoryProvider)
-          .pageOf(kDefaultLayoutId, anchor);
+          .pageOf(ref.read(currentLayoutProvider).id, anchor);
       if (!mounted) return;
       final target = page.valueOrNull ?? _page;
       setState(() {
@@ -166,19 +174,37 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
     _restartPageTimer();
   }
 
+  Future<void> _onLayoutChanged(MushafLayout layout) async {
+    final anchor = ref.read(readerAnchorProvider);
+    final result = await ref
+        .read(quranRepositoryProvider)
+        .pageOf(layout.id, anchor);
+    if (!mounted) return;
+    final page = (result.valueOrNull ?? 1).clamp(1, layout.pageCount);
+    _resetZoom();
+    ref.read(selectedWordProvider.notifier).select(null);
+    setState(() {
+      _page = page;
+      _resetController(page);
+      _jumpGeneration++;
+    });
+    _prefetchAround(page);
+  }
+
   /// Git panelinden seçilen yere gider (M4-07). Konum hem sayfa hem ayet
   /// görünümünde aynı çapadan açılır (M2-15).
   Future<void> _goTo(JumpTarget target) async {
     final repo = ref.read(quranRepositoryProvider);
+    final layoutId = ref.read(currentLayoutProvider).id;
     final AyahRef anchor;
     final int page;
     switch (target) {
       case AyahJump(:final ayah):
-        final result = await repo.pageOf(kDefaultLayoutId, ayah);
+        final result = await repo.pageOf(layoutId, ayah);
         if (result.valueOrNull == null) return;
         (anchor, page) = (ayah, result.valueOrNull!);
       case PageJump(page: final p):
-        final result = await repo.firstAyahOfPage(kDefaultLayoutId, p);
+        final result = await repo.firstAyahOfPage(layoutId, p);
         if (result.valueOrNull == null) return;
         (anchor, page) = (result.valueOrNull!, p);
     }
@@ -205,7 +231,7 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
   /// Önceki ve sonraki iki sayfanın verisini arka planda yükler.
   void _prefetchAround(int page) {
     for (final p in [page + 1, page - 1, page + 2, page - 2]) {
-      if (p < 1 || p > ReaderPage.pageCount) continue;
+      if (p < 1 || p > _pageCount) continue;
       ref.read(mushafPageProvider(p).future).ignore();
     }
   }
@@ -290,6 +316,8 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(readerSettingsProvider);
+    // Sayfa sayısı düzene bağlı; düzen değişince yeniden çizilir.
+    ref.watch(currentLayoutProvider);
     final colors = context.palette.mushaf;
     final twoPage = _useTwoPages(MediaQuery.sizeOf(context));
     if (twoPage != _twoPage) {
@@ -431,7 +459,7 @@ class _ReaderPageState extends ConsumerState<ReaderPage> {
               children: [
                 for (final page in [index * 2 + 1, index * 2 + 2])
                   Expanded(
-                    child: page > ReaderPage.pageCount
+                    child: page > _pageCount
                         ? ColoredBox(color: colors.background)
                         : _PageSlot(
                             page: page,

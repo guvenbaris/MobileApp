@@ -346,5 +346,22 @@
         "type": "String"
       }
     }
-  }
+  },
+  "layoutMadani1405": "Medine Mushafı (1405 H)",
+  "@layoutMadani1405": {
+    "description": "KFGQPC'nin 1405H baskısının düzeni (indirilebilir paket, F1-03)."
+  },
+  "readerLayoutInfo": "{pages} sayfa · {lines} satır",
+  "@readerLayoutInfo": {
+    "description": "Düzen seçiminde düzenin yapısı (M2-14).",
+    "placeholders": {
+      "pages": {
+        "type": "String"
+      },
+      "lines": {
+        "type": "String"
+      }
+    }
+  },
+  "readerLayoutDownloaded": "İndirilen paket"
 }

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quran_app/core/result/result.dart';
-import 'package:quran_app/features/quran/application/quran_providers.dart';
 import 'package:quran_app/features/quran/data/content_database.dart';
 import 'package:quran_app/features/quran/data/drift_quran_repository.dart';
+import 'package:quran_app/features/quran/domain/mushaf_layout.dart';
 import 'package:quran_app/features/quran/domain/mushaf_page.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
 
@@ -52,21 +52,21 @@ void main() {
   group('konum ↔ sayfa (M2-15)', () {
     test('ayetin sayfası', () async {
       Future<int?> page(int s, int a) async =>
-          (await repo.pageOf(kDefaultLayoutId, AyahRef(s, a))).valueOrNull;
+          (await repo.pageOf(kDefaultLayout.id, AyahRef(s, a))).valueOrNull;
       expect(await page(1, 1), 1);
       expect(await page(2, 1), 2);
       expect(await page(114, 6), 604);
     });
 
     test('sayfanın ilk ayeti', () async {
-      final ref = await repo.firstAyahOfPage(kDefaultLayoutId, 604);
+      final ref = await repo.firstAyahOfPage(kDefaultLayout.id, 604);
       expect(ref.valueOrNull, const AyahRef(112, 1));
     });
   });
 
   group('mushaf sayfası', () {
     Future<MushafPage> page(int n) async =>
-        (await repo.getMushafPage(kDefaultLayoutId, n)).valueOrNull!;
+        (await repo.getMushafPage(kDefaultLayout.id, n)).valueOrNull!;
 
     test('1. sayfa: sure başlığı + 7 ayet satırı, hepsi ortalı', () async {
       final p = await page(1);
@@ -139,13 +139,13 @@ void main() {
       expect(sajdahs, hasLength(14));
       expect(sajdahs, expectedSajdahs);
       // Cüz dizinindeki sorgu (her rubu'un ilk ayeti ve sayfası).
-      final index = (await repo.quarterStarts(kDefaultLayoutId)).valueOrNull!;
+      final index = (await repo.quarterStarts(kDefaultLayout.id)).valueOrNull!;
       expect(quarters, [for (final q in index) (q.rub, q.start, q.page)]);
     });
 
     test('olmayan sayfa NotFoundFailure döndürür', () async {
       expect(
-        await repo.getMushafPage(kDefaultLayoutId, 605),
+        await repo.getMushafPage(kDefaultLayout.id, 605),
         isA<Err<MushafPage>>(),
       );
     });
@@ -155,7 +155,7 @@ void main() {
     expect(await repo.getAyah(const AyahRef(1, 8)), isA<Err<Ayah>>());
     expect(await repo.getAyahsOfSurah(115), isA<Err<List<Ayah>>>());
     expect(
-      await repo.firstAyahOfPage(kDefaultLayoutId, 605),
+      await repo.firstAyahOfPage(kDefaultLayout.id, 605),
       isA<Err<AyahRef>>(),
     );
     expect(

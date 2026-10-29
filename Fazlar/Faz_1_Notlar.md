@@ -9,7 +9,8 @@
 2. [F1-00 Faz 0'dan Devredilenler](#2-f1-00-faz-0dan-devredilenler)
 3. [F1-01 Uygulama Kabuğu ve Gezinme](#3-f1-01-uygulama-kabuğu-ve-gezinme)
 4. [F1-02 Okuma Ekranı](#4-f1-02-okuma-ekranı)
-5. [Genel durum ve bekleyen kararlar](#5-genel-durum-ve-bekleyen-kararlar)
+5. [F1-03 Türkiye Mushaf Düzeni Araştırması](#5-f1-03-türkiye-mushaf-düzeni-araştırması-sonuç-raporu)
+6. [Genel durum ve bekleyen kararlar](#6-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -266,7 +267,135 @@ Diğer seçenek: her dokunuş çubukları açıp kapatır, kelime kartı uzun ba
 
 ---
 
-## 5. Genel durum ve bekleyen kararlar
+## 5. F1-03 Türkiye Mushaf Düzeni Araştırması (sonuç raporu)
+**Tarih:** 29.10.2026 · **Durum:** ✅ Araştırma, altyapı ve 1405H geliştirme paketi; Türkiye düzeni v1.0 sonrası · **Gereksinimler:** M2-02, M2-14, AK-11 · **Bağlı:** F0-05 sonuç raporu (§2.5)
+
+> Bu bölüm geliştirme ekibinin değerlendirmesidir, hukuki görüş değildir. Yönetmelikle ilgili sonuçlar hukuk danışmanına (AK-09) doğrulatılmalıdır.
+
+### 5.1 En önemli bulgu: Diyanet yönetmeliği dijital Kur'an yayınlarını da kapsıyor
+**Kur'an-ı Kerim Basım ve Yayım Kriterleri Hakkında Yönetmelik** (Resmî Gazete 2/11/2022, sayı 32001; değişiklik 28/6/2024, sayı 32586; dayanağı 633 sayılı Kanun md. 6). Metin: mevzuat.gov.tr (yönetmelik 7.5.39802).
+
+| Madde | Hüküm (özet) | Bu uygulama için anlamı |
+|---|---|---|
+| 1, 2, 4(d) | Kapsam: basılı mushaflar **ve "sesli, görüntülü ve elektronik ortamda" mealli/mealsiz Kur'an-ı Kerim** yayımlamak için hazırlanan eserler ("dijital eser"). | Uygulamamız büyük olasılıkla "dijital eser" sayılır. |
+| 9(1) | **Kurulun (Mushafları İnceleme ve Kıraat Kurulu) mührü/onayı bulunmayan eserler basılamaz ve yayımlanamaz.** | Türkiye'de yayın için Kurul onayı gerekir. |
+| 7, 8, 9(2)b | Başvuru Kurula form ve "ikişer adet ilgili materyal" ile yapılır. Dijital eserde süreç: ilk inceleme (hatalar giderilir) → **yayım** → Kurulun son incelemesi → onay. Son incelemede hata çıkarsa eser yayımdan kaldırılır, düzeltilip yeniden yayımlanır. | Başvuru yayından önce yapılmalı; onay yayından sonra gelir. Süre belirsiz. |
+| 8(3) | **Meal içeren eserler önce Din İşleri Yüksek Kurulunun uygun görüşünü alır.** | Meal (F1-05) eklenince ek bir aşama. |
+| 9(3) | Onaylanan esere **hiçbir ekleme, çıkarma veya değiştirme yapılamaz.** | Mushaf/metin kısmında güncellemeler yeniden incelemeyi gerektirebilir. Uygulamanın diğer özellikleri (hafızlık, ayarlar) bu kapsama girer mi, belirsiz. |
+| 5(3)a | Sayfalar **ayet berkenar, sayfa tutar ve on beş satırlı** olur. | Medine 1421 düzenimiz bunu karşılıyor (15 satır; 604 sayfanın hiçbiri ayet ortasında başlamıyor, F1-02'de doğrulandı). |
+| 5(3)c | **Cüz sonları 20 ve katları**, son sayfa **604**; İhlas, Felak, Nas ile biter. | 604 tutuyor. "Cüz sonları 20 ve katları" ifadesinin sayfa numaralamasına nasıl uygulandığı basılı bir Diyanet mushafıyla doğrulanmalı (Medine'de 2. cüz 22. sayfada başlar). |
+| 5(3)b | Resm-i Osmani **veya Aliyyü'l-Kari** imlası; geleneksel harekeleme **aynen korunur**. | Türkiye mushafları yazım ve işaret (dabt) bakımından Medine'den farklıdır; DigitalKhatt metni Medine dabtıdır. |
+| 5(3)e–g, j | Secavend işaretleri kelime sonuna küçük ve satır üstüne; **cüz, hizb ve secde gülleri çerçevenin dışında**; sure ismi, cüz ve sayfa numarası çerçeve dışında. | F1-02'deki sayfa üst/alt şeritleri bu düzene uygun (bilgiler çerçeve dışında). Secavend Medine'de farklı işaretlerle yazılır. |
+| 5(3)k | **Mealsiz eserlerde çerçeve içinde Türkçe karakter yer almaz.** | Mushaf sayfasının içinde Türkçe metin göstermiyoruz; uygun. |
+| 5(3)m | Mehabete uygun düşmeyen, doğru okumaya katkı sağlamayan, **renk karmaşasına yol açan renklendirme yapılmaz.** | Renkli tecvid (F1-04) "doğru okumaya katkı" sayılabilir; Kurula sorulmalı. Hafızlık renkleri (Faz 2) kullanıcı açınca görünür. |
+| 5(3)n | **Eserde Kurul tarafından uygun görülen yazı tipi (font) kullanılır.** | DigitalKhatt'ın Kurulca uygun görülmesi gerekir; olmazsa Kurulun uygun gördüğü bir font. |
+| 5(2) | Dijital eserlerin hızlandırma/yavaşlatma programlarında hadr, tedvir ve tahkik ölçüleri dikkate alınır. | Ses hızı ayarı (M5-03, F1-09) için not. |
+| 11 | Onaysız yayında: yayının durdurulması, toplatma, **internette erişimin engellenmesi**. | Türkiye'de mağaza erişimi riski. |
+| 9(4) | Yurt dışı menşeli **basılı** eserlerin ithali ve yurt içinde basımı: yurt içinde satılmamak şartıyla izin belgesi. | Medine düzenini Türkiye'de dijital olarak sunmanın durumu bu maddeyle netleşmiyor; Kurula sorulmalı. |
+
+**Değerlendirme:**
+- Türkiye'de yayımlanacak bir Kur'an uygulaması için Kurul onayı **yayın öncesi bir yasal adım** olarak görünüyor. Bu yalnızca "Türkiye düzeni" sorusu değil, uygulamanın Türkiye'de yayımlanması sorusu.
+- Piyasadaki birçok uygulamanın onaylı olup olmadığını bilmiyoruz; bu, kuralın uygulanma biçimine dair bir şey söylemez.
+- Başvuru, Diyanet meal izni (S1) ve Türkiye düzeni verisi talebiyle **tek bir görüşmede** birleştirilebilir.
+- Bu nedenle yeni açık karar önerildi: **AK-14** (`Proje_Gereksinimleri.md` §14).
+
+### 5.2 Türkiye mushafı ile Medine mushafı arasındaki farklar
+| Konu | Bulgu | Kaynak |
+|---|---|---|
+| Sayfa yapısı | İkisi de 604 sayfa, 15 satır, ayet berkenar (hafız mushafı, "mushafü'l-huffâz"). | Yönetmelik 5(3); TDV İslâm Ansiklopedisi "Mushaf" |
+| Cüz | Çoğunlukla aynı. | Cumhuriyet İlahiyat Dergisi, 2017 (Diyanet ve Medine mushaflarının cüz/hizb/rükû karşılaştırması) |
+| Hizb | **Farklı.** Medine: cüz başına 2 hizb, her biri 4 rubu' (cüz başına 8 rubu'). Diyanet: her cüz **4 hizbe** bölünür. 4, 7, 11, 26 ve 30. cüzlerde bazı hizbler farklı yerden başlar; makaleye göre bu yüzden bazı cüz başları da değişir. | Aynı makale |
+| Yazım ve işaretler (dabt) | Farklı (imla ve secavend işaretleri). Bu, Türkiye düzeninin yalnızca satır sonları değil, **kendi metni ve fontu** demek olduğunu gösteriyor. | Yönetmelik 5(3)b, e; dabtu'l-mushaf karşılaştırma makalesi (DergiPark) |
+| Satır ve sayfa sonları | Satır satır karşılaştırma bulunamadı; basılı nüshalarla doğrulanmalı. | — |
+
+### 5.3 Dijital veri ve lisans durumu
+| Aranan | Sonuç |
+|---|---|
+| QUL (20 onaylı, 8 yapım aşamasında düzen) | Medine (KFGQPC V1 1405H, V2 1421H), IndoPak 13/15/16 satır vb. **Türkiye düzeni yok.** QUL yeni düzen taleplerini GitHub üzerinden kabul ediyor. |
+| Açık kaynak depolar (GitHub, pub.dev) | Türkiye/Diyanet/Hafız Osman düzeni için satır verisi **bulunamadı**; bulunanların hepsi Medine düzeni. |
+| Diyanet (kuran.diyanet.gov.tr) | Mushaf PDF'i ve Word uyumlu Hamdullah, Abay, Latif fontlarının yayınlandığı bildiriliyor; sayfa içeriği okunamadı, lisans koşulları görülemedi. Diyanet'in uygulaması sayfa görüntüsü kullanıyor (F0-05 §8.7). |
+| Lisans | Açık lisanslı bir Türkiye düzeni verisi yok. Diyanet'in metni, düzeni ve fontları için yazılı izin gerekir (İÇ-04: atıf izin yerine geçmez). |
+
+### 5.4 Türkiye düzeni için yollar
+| Yol | Ne gerekir | Artısı | Eksisi |
+|---|---|---|---|
+| **A. Diyanet'ten veri ve izin (önerilen)** | Diyanet'e başvuru: Kurul onayı (§5.1) + dijital düzen/metin verisi veya izin + uygun font + meal izni (S1). | Hem yasal uyum hem veri tek kanaldan; Türkiye'deki kullanıcı beklentisi. | Süre ve sonuç belirsiz; ticari uygulama olduğu için izin verilmeyebilir. |
+| B. Basılı Türkiye mushafından düzen verisi üretmek | Onaylı bir basılı nüshadan ≈ 9.000 satır sonu; yarı otomatik araç + çift kontrol. **Metin ve font** sorunu çözülmez: Türkiye dabtında Unicode metin ve uygun font da gerekir. | Bağımsız. | Emek büyük; metin/font yine izin gerektirir; sonuç Kurul incelemesinden geçmeli. |
+| C. Medine düzeniyle yayın, Türkiye düzeni sonra | Kurula Medine düzeni ve DigitalKhatt ile başvurmak; Türkiye düzeni v1.x'te. | En hızlısı. | Kurulun Medine düzenini ve fontu kabul edip etmeyeceği bilinmiyor; M2-02'deki [Z] Türkiye düzeni v1.0'da karşılanmaz. |
+
+**Kullanıcı kararı (29.10.2026):** Diyanet başvurusu ilk sürümü bloklamaz; v1.0 Medine düzeniyle hazırlanır (yol C), Türkiye düzeni ve gerekirse font için başvuru sonra (yol A). Mimari düzen paketine hazır tutulur.
+
+**İlk öneri (kayıt için):** A ve C birlikte. Kurula Medine düzeniyle başvurulur ve aynı yazıda Türkiye düzeni verisi/izni istenir. Uygulama mimarisi bu sırada hazır hâle getirilir (düzen seçimi, indirilebilir düzen paketi, düzene özel metin ve font). Böylece veri gelince yalnızca paket üretilir.
+
+**Mimari için sonuç:** Türkiye düzeni = ayrı satır düzeni **+ kendi glif metni + kendi fontu + kendi hizb bölümlemesi**. Mevcut şema bunun çoğunu taşıyor (`layout_glyphs` metni düzene özel, `mushaf_layouts.font_pack` var). Eksik: düzene özel hizb/rubu' bölümlemesi (şu an `ayahs.hizb/rub` tek ve Medine'ye ait). Paket altyapısında bu da düzene bağlanmalı.
+
+**Tarih önerisi:** Diyanet başvurusu Faz 1 içinde (meal izniyle birlikte). Türkiye düzeni v1.0'ı bloklayabilir; karar AK-11 ve AK-14 ile.
+
+### 5.6 Uygulama: düzen seçimi ve düzen paketi altyapısı
+**Durum:** ✅ altyapı · ⏳ gerçek ikinci düzen verisi (Medine 1405H için QUL dosyaları bekleniyor)
+
+| Parça | Dosya | Açıklama |
+|---|---|---|
+| Düzen modeli | `features/quran/domain/mushaf_layout.dart` | `MushafLayout` (kimlik, sayfa ve satır sayısı, font paketi, sürüm, yerleşik mi) ve `kDefaultLayout` (Medine 1421H). Eski `kDefaultLayoutId` ve `kDefaultPageCount` sabitleri kaldırıldı: sayfa sayısı artık seçili düzenden gelir. |
+| Depo | `drift_quran_repository.dart` | Düzen tabloları, düzenin bulunduğu veritabanından okunur: yerleşik düzen içerik veritabanından, paket düzeni paketin kendi dosyasından. Metin, kelime ve ayet her zaman içerik veritabanından gelir. İki veritabanını birleştiren sorgular (sayfanın ilk ayeti, rubu' başlarının sayfası) ikiye bölündü. Yeni: `getLayouts()`. |
+| Düzen paketi (TK-13) | `layout_package_store.dart` | Paket, içerik veritabanıyla aynı şemada bir SQLite dosyasıdır; yalnızca tek düzenin satırlarını ve kimliğini taşır. **Kurulumda doğrulanır:** tür `layout`, kimlik var ve yerleşik düzenle çakışmıyor, **kelime parmak izi** içerikle aynı, düzen kaydı tek ve kimlikle aynı, sayfa sayısı tutuyor, font destekleniyor. Dosya geçici adla kopyalanır, sonra yerine alınır; aynı düzenin eski sürümü silinir. |
+| Kelime parmak izi | `tool/content/words_hash.dart`, `content_meta.wordsHash` | Paket glifleri kelimelere `words.id` ile bağlar. İçerik yeniden üretilip kelimeler değişirse eski paket **reddedilir** (yanlış kelimeye bağlanmaz). İçerik sürümü **7 → 8** (yalnızca bu alan eklendi; metin ve düzen değişmedi). |
+| Kurulu paketler | `core/database/user_database.dart` (v3), `user_data/...` | Yeni tablo `installed_packages` (SyncedRecord): paket kimliği, tür, sürüm, dosya adı, boyut. **Kullanıcı veritabanı v2 → v3**; migration ve veri koruma testi (T-04). |
+| Katalog ve seçim | `features/quran/application/layout_providers.dart` | `layoutCatalogProvider`: cihazdaki düzenler ve paket veritabanları; `install(dosya)` ve `remove(kimlik)`. `layoutSelectionProvider`: seçim, ayar anahtarı `mushaf.layoutId` (kalıcı). `currentLayoutProvider`: seçilen düzen cihazda yoksa (paket silinmiş ya da uyumsuz) yerleşik düzen. Seçim kaydı silinmez; paket geri gelirse o düzen yine açılır. |
+| Açılış | `bootstrap.dart` | Kurulu paketler açılır. Açılamayan paket atlanır ve loglanır, kaydı korunur; uygulama yerleşik düzenle çalışmaya devam eder. |
+| Geliştirme gelen kutusu | `layout_package_inbox.dart` | **Yalnızca `dev`:** `/sdcard/Android/data/<paket>/files/packages_inbox/` klasörüne `adb push` ile bırakılan paket, açılışta kurulur ve klasörden silinir. İndirme altyapısı (F1-11) gelene kadar cihazda denemek için. README "Mushaf düzeni paketleri". |
+| Okuma ekranı | `reader_page.dart`, `reader_providers.dart` | Düzen değişince okunan ayet **aynı kalır**, yeni düzendeki sayfası açılır (M2-15). Mushaf sayfaları, sayfa sayısı, Git paneli, Kur'an dizinindeki sayfa ızgarası ve `/read?page=` bağlantısı seçili düzene göre çalışır. |
+| Okuma ayarları (E-10) | `reader_settings_sheet.dart`, `layout_l10n.dart` | "Mushaf düzeni" bölümünde cihazdaki düzenler listelenir: ad, "604 sayfa · 15 satır", paketse "İndirilen paket". Bilinen düzenlerin adı dil dosyasından gelir, yeni paketlerinki verideki addan. |
+
+**Bulunan ve düzeltilen hata:** mushaf sayfası satır sayısını **15 olarak sabit** varsayıyordu. 20 satırlık bir düzenle yapılan test, sayfanın 281 piksel taştığını gösterdi. Satır sayısı artık düzenden geliyor (`MushafPage.linesPerPage`). IndoPak (13/16 satır) gibi düzenler için gerekliydi.
+
+**Testler:**
+
+| Test | Kontrol |
+|---|---|
+| `test/features/quran/layout_package_test.dart` (16) | Gerçek içerikten türetilen "birleşik sayfalar" test düzeni (302 sayfa × 30 satır) ile: kurulum, açılış, yeni sürümün eskisinin yerine geçmesi. **5 tür bozuk paketin reddi:** başka içerikle üretilmiş, tür yanlış, yerleşik kimlik, kimlik ve kayıt farklı, desteklenmeyen font. Dosyası silinmiş kayıt açılmıyor. **KK M2-15:** Kehf 45 Medine'de 298., test düzeninde 149. sayfa ve aynı ayet. Sayfa çizimi paketten, metin içerikten geliyor; 240 rubu' başı yeni düzenin sayfalarıyla. Katalog: kur, seç, kaldır (seçim yerleşik düzene düşüyor, kayıt ve dosya siliniyor). Seçimin yeniden açılışta korunması. Açılışta bozuk paketin atlanması. Gelen kutusu. |
+| `test/features/reader/layout_switch_test.dart` (3) | Okuma ekranında panelden düzen değişince Bakara 150 korunuyor, sayfa 16 → 8 → 16; ayet görünümüne gidip dönünce yine yeni düzenin sayfası. Seçili düzende Git panelinin sınırı (1–15) ve sayfa ızgarası. Seçili düzen cihazda yoksa yerleşik düzen açılıyor. |
+| `test/content/t02_layout_packages_test.dart` | **T-02 her düzen için:** `build/packages/` altındaki her pakette sayfalar tüm ayetleri boşluksuz kapsıyor mu, satırlar glifleri sırayla bir kez kapsıyor mu, hiçbir kelime iki satıra bölünmüyor mu, satır sayısı aşılmıyor mu, sure başlıkları ve besmeleler doğru mu. Medine 1405H paketi için ek olarak sayfa başları Tanzil'in 1405H sayfa verisiyle birebir aynı olmalı. Şimdilik paket olmadığı için yalnız test düzeni denetleniyor. |
+| `test/drift/user_database/migration_test.dart` | v2 → v3: profil, ayarlar (silinmiş olan dahil) ve okuma konumu (Kehf 45) birebir korunuyor; yeni tablo boş. |
+
+**Bilerek bozma:**
+- (a) Okuma ekranında düzen değişimini dinleyen satır kaldırıldı → "Sayfa 8 beklendi, Sayfa 16 bulundu".
+- (b) v3 migration adımı boşaltıldı → üç migration testi kırıldı.
+- (c) Kelime parmak izi kontrolü kaldırıldı → başka içerikle üretilmiş paketin reddi testi kırıldı.
+- (d) Test düzeninin satır sayısı 29'a düşürüldü → paket T-02 "1–29 beklendi, 30 bulundu".
+
+Hepsi geri alınınca geçti.
+
+**Emülatörde gerçek geçiş (29.10.2026):** önceki sürümün (kullanıcı veritabanı v2, içerik 7) üstüne kuruldu. Açılışta v2 yedeği alındı (`backups/user_v2_…`), `content_v8.sqlite` kopyalandı ve eskisi silindi. Kullanıcının 8 ayarı ve son okunan yeri (Mülk 1) yedekle birebir aynı; `installed_packages` tablosu eklendi.
+
+**Toplam:** 232 test geçiyor (2 atlanan: elle çalıştırılan sayfa paketi testi ve henüz üretilmemiş paketler); analiz ve biçim temiz; Android debug derlemesi başarılı.
+
+### 5.7 Gerçek ikinci düzen: Medine 1405H (geliştirme paketi)
+**Durum:** ✅ (29.10.2026). Kullanıcı kararı: "1405'i indireyim, test edelim; o kısım açık kalsın, daha sonra kapatalım." Düzen değiştirmenin v1.0'da görünür olup olmayacağı sonra karara bağlanacak.
+
+**Sonuç:**
+- QUL dosyaları: `qpc-v1-15-lines.db` (kaynak 15; dosyanın içinde "Quran Complex V1 (1405 print)") ve `qpc-v1-glyph-codes-wbw.db` (kaynak 57). İndirme klasörünün adı "1415H" ama içerik 1405H baskısı.
+- **V1 glif birimleri V2 ile birebir aynı:** 83.668 birimin hepsi aynı numara ve konumda. Bu yüzden kelime eşlemesi ve DigitalKhatt metni yerleşik düzenden alındı; yeni eşleme ya da elle düzeltme yok.
+- **Bağımsız doğrulama:** 1405H ile 1421H arasında ilk glifi farklı sayfalar tam 25 (121, 122, 123, 145, 532…600). Bunlar T-02'de elle listelenmiş bilinen 25 farkın aynısı (Q-10). 9.046 satırın 4.385'i iki baskıda aynı.
+- **T-02 (paket):** 604 sayfanın ilk ayeti Tanzil'in sayfa verisiyle (1405H) birebir aynı; yapı denetimleri geçti. Bozma denemesi: aynı kimlikle 1421H satırlarından paket üretildi → "121. sayfa: 5:77 beklendi, 5:78 bulundu".
+- **Araç:** `tool/content/build_layout_package.dart` → `build/packages/madani_1405_v1.sqlite` (6,6 MB; depoda değil). QUL satır okuma ve denetimi iki üreticinin ortak kullandığı `tool/content/qul_layout.dart`'a taşındı. Taşıma sonrasında içerik veritabanının 7 tablosu ve parmak izi önceki üretimle birebir aynı.
+- **Emülatörde:** paket `adb push` ile gelen kutusuna bırakıldı, açılışta kuruldu ve kutudan silindi; okuma ayarlarından seçildi. 4. sayfa doğru çizildi ("Bakara · Cüz 1 · Hizb 1", "4 · Sol sayfa"). Not: Windows'ta Git Bash `/sdcard/...` yollarını Windows yoluna çeviriyor; `MSYS_NO_PATHCONV=1` gerekir (PowerShell'de sorun yok).
+- **Bilinen:** 1405H satırları DigitalKhatt (1421H yazımı) ile çizildiğinde bazı satırlar sığmak için sayfanın yazı boyutunu küçültebilir; satır genişliği ölçümü (`check_line_widths.dart` benzeri) bu paket için yapılmadı.
+
+**Önceki plan (kayıt için):**
+- **Ne gerekiyor:** QUL'den iki dosya (ücretsiz hesapla elle): "KFGQPC V1 layout (1405H print)" SQLite (kaynak 15) ve "QPC V1 Glyphs – Word by Word" (kaynak 57). Dosyalar `tool/content/sources/qul/` altına konur.
+- **Sonra yapılacak:** paket üretim aracı (`tool/content/build_layout_package.dart`) yazılır. V1 glif birimleri, aynı konumlu V2 birimleri üzerinden esas kelimelere ve DigitalKhatt metnine bağlanır. Bu eşlemenin geçerli olup olmadığı dosya gelince denetlenir; tutmazsa araç hata verir. T-02 sayfa başlarını Tanzil'in 1405H verisiyle karşılaştırır.
+- **Lisans:** QUL'ün iki düzen sayfası da "telif bilgisi yok" diyor. Asıl hak sahibi KFGQPC; durum yerleşik 1421H düzeniyle aynı (❓, AK-11). İÇ-10 gereği paket **yalnızca geliştirmede** kullanılır, lisans netleşmeden dağıtılmaz. Paketler uygulamaya gömülmediği için bu doğal olarak sağlanır.
+
+### 5.5 Kaynaklar
+- Yönetmelik metni: mevzuat.gov.tr, "Kur'an-ı Kerim Basım ve Yayım Kriterleri Hakkında Yönetmelik" (RG 2/11/2022-32001; değişiklik RG 28/6/2024-32586)
+- TDV İslâm Ansiklopedisi, "Mushaf" maddesi (islamansiklopedisi.org.tr/mushaf)
+- Cumhuriyet İlahiyat Dergisi (Haziran 2017): Diyanet ve Medine mushaflarında cüz, hizb ve rükû (DergiPark makale dosyası 313002; DOAJ a5924ac96f1a4a90a984194c2079771b)
+- QUL mushaf düzenleri (qul.tarteel.ai/mushaf_layouts, resources/mushaf-layout/15 ve /10)
+
+---
+
+## 6. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 29.10.2026
 
 | İş paketi | Durum |
@@ -275,9 +404,11 @@ Diğer seçenek: her dokunuş çubukları açıp kapatır, kelime kartı uzun ba
 | F1-00 Faz 0'dan devredilenler | 🔨 F0-05 raporu ✅; araçlar hazır (sayfa paketi, performans, çeviri tablosu); gerçek cihaz, basılı nüsha, TalkBack dinleme ve Arapça gözden geçirme kullanıcıda; CI ve iOS sonra |
 | F1-01 Uygulama kabuğu ve gezinme | ✅ |
 | F1-02 Okuma ekranı | ✅ (dokunma kuralı ET-8 onay bekliyor) |
-| F1-03 … F1-14 | ⬜ |
+| F1-03 Mushaf düzenleri | ✅ Araştırma (§5), düzen seçimi ve paket altyapısı (§5.6), Medine 1405H geliştirme paketi (§5.7). Açık: düzen değiştirmenin v1.0'da görünür olup olmayacağı (kullanıcı sonra karar verecek); Türkiye düzeni v1.0 sonrası (AK-14) |
+| F1-04 … F1-14 | ⬜ |
 
 **Bekleyen kararlar ve işler**
+- **AK-14 Diyanet Kurul onayı: ⏸ ertelendi (kullanıcı kararı, 29.10.2026).** "Diyanet yönetmeliği olmadan ilerleyelim; daha sonra eklemek istediğimizde font için başvuru yapıp ekleriz; ilk sürümümüze engel olmasın." Risk kayıtlı (§5.1, md. 11). Türkiye düzeni verisi Diyanet'ten geleceği için **Türkiye düzeni de v1.0 sonrasına kayar** (M2-02 [Z] önceliğinin güncellenmesi kullanıcı onayına sunuldu).
 - **Yayın meali (S1, S2), karar Faz 1 sonunda (kullanıcı, 29.10.2026):** Kullanıcı, uygulama ticari olacağı için Diyanet'in izin vermeyeceğini düşünüyor. Bu yüzden **kamu malı yedek meal gerçek bir seçenek olarak hazırlanacak**: kaynak doğrulaması, metin hattı ve okunabilirlik değerlendirmesi F1-05 içinde yapılacak. Diyanet başvurusu yine de denenebilir. Geliştirme Diyanet mealiyle sürüyor.
 - **Faz 1 başlangıç kararları S1–S8 ve TK-11…TK-17:** öneri halinde; itiraz yoksa uygulanır.
 - **ET-1 ("Ben") ve ET-7 (Hafızlık sekmesi "yakında")** öneriye göre uygulandı; itiraz yoksa kesinleşir.

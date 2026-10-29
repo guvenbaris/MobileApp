@@ -96,5 +96,8 @@
   "readerKeepScreenOnHint": "The screen stays on while reading",
   "readerPageArrows": "Page arrows",
   "readerPageArrowsHint": "Buttons to turn pages, in addition to swiping",
-  "readerPercent": "{value}%"
+  "readerPercent": "{value}%",
+  "layoutMadani1405": "Madinah Mushaf (1405 AH)",
+  "readerLayoutInfo": "{pages} pages · {lines} lines",
+  "readerLayoutDownloaded": "Downloaded package"
 }

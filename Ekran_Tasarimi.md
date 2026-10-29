@@ -382,7 +382,7 @@ Her ekranda: amaç, kutu çizimi (TR, dikey telefon), öğeler, davranış, duru
 - İndirilmemiş surede çalma akışla yapılır; çevrimdışıysa "Bu sure indirilmedi" ve "İndir" düğmesi (D9).
 
 ### E-10 Okuma ayarları paneli
-Okuma ekranındaki ⚙︎ ile alttan açılır; değişiklik anında sayfaya uygulanır ve kalıcıdır. F1-02'de görünüm, tema, yazı, kilit, düzen bilgisi, ekran açık, sayfa okları ve kaydırma hızı var; düzen seçimi F1-03, tecvid F1-04, kelime meali F1-06 ile eklenir.
+Okuma ekranındaki ⚙︎ ile alttan açılır; değişiklik anında sayfaya uygulanır ve kalıcıdır. F1-02'de görünüm, tema, yazı, kilit, ekran açık, sayfa okları ve kaydırma hızı; F1-03'te düzen seçimi (cihazdaki düzenler, "604 sayfa · 15 satır", indirilen paket işareti) eklendi. Tecvid F1-04, kelime meali F1-06 ile eklenir.
 ```
 ┌──────────────────────────────────────┐
 │ Okuma ayarları                  ✕    │

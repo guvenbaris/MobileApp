@@ -1261,6 +1261,567 @@ class ReadingPositionsCompanion extends UpdateCompanion<ReadingPositionRow> {
   }
 }
 
+class $InstalledPackagesTable extends InstalledPackages
+    with TableInfo<$InstalledPackagesTable, InstalledPackageRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $InstalledPackagesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => _uuid.v4(),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: _nowUtc,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    clientDefault: _nowUtc,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _packageIdMeta = const VerificationMeta(
+    'packageId',
+  );
+  @override
+  late final GeneratedColumn<String> packageId = GeneratedColumn<String>(
+    'package_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
+  @override
+  late final GeneratedColumn<int> version = GeneratedColumn<int>(
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fileNameMeta = const VerificationMeta(
+    'fileName',
+  );
+  @override
+  late final GeneratedColumn<String> fileName = GeneratedColumn<String>(
+    'file_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sizeBytesMeta = const VerificationMeta(
+    'sizeBytes',
+  );
+  @override
+  late final GeneratedColumn<int> sizeBytes = GeneratedColumn<int>(
+    'size_bytes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    packageId,
+    kind,
+    version,
+    fileName,
+    sizeBytes,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'installed_packages';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<InstalledPackageRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    if (data.containsKey('package_id')) {
+      context.handle(
+        _packageIdMeta,
+        packageId.isAcceptableOrUnknown(data['package_id']!, _packageIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_packageIdMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('version')) {
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_versionMeta);
+    }
+    if (data.containsKey('file_name')) {
+      context.handle(
+        _fileNameMeta,
+        fileName.isAcceptableOrUnknown(data['file_name']!, _fileNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_fileNameMeta);
+    }
+    if (data.containsKey('size_bytes')) {
+      context.handle(
+        _sizeBytesMeta,
+        sizeBytes.isAcceptableOrUnknown(data['size_bytes']!, _sizeBytesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sizeBytesMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  InstalledPackageRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return InstalledPackageRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+      packageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}package_id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
+      fileName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}file_name'],
+      )!,
+      sizeBytes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}size_bytes'],
+      )!,
+    );
+  }
+
+  @override
+  $InstalledPackagesTable createAlias(String alias) {
+    return $InstalledPackagesTable(attachedDatabase, alias);
+  }
+}
+
+class InstalledPackageRow extends DataClass
+    implements Insertable<InstalledPackageRow> {
+  final String id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+
+  /// Paket kimliği (ör. düzen paketi için düzen kimliği `madani_1405`).
+  final String packageId;
+
+  /// `layout`, ileride `translation`, `tafsir`, `audio`.
+  final String kind;
+  final int version;
+
+  /// Uygulamanın paket klasöründeki dosya adı.
+  final String fileName;
+  final int sizeBytes;
+  const InstalledPackageRow({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+    required this.packageId,
+    required this.kind,
+    required this.version,
+    required this.fileName,
+    required this.sizeBytes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    map['package_id'] = Variable<String>(packageId);
+    map['kind'] = Variable<String>(kind);
+    map['version'] = Variable<int>(version);
+    map['file_name'] = Variable<String>(fileName);
+    map['size_bytes'] = Variable<int>(sizeBytes);
+    return map;
+  }
+
+  InstalledPackagesCompanion toCompanion(bool nullToAbsent) {
+    return InstalledPackagesCompanion(
+      id: Value(id),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+      packageId: Value(packageId),
+      kind: Value(kind),
+      version: Value(version),
+      fileName: Value(fileName),
+      sizeBytes: Value(sizeBytes),
+    );
+  }
+
+  factory InstalledPackageRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return InstalledPackageRow(
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+      packageId: serializer.fromJson<String>(json['packageId']),
+      kind: serializer.fromJson<String>(json['kind']),
+      version: serializer.fromJson<int>(json['version']),
+      fileName: serializer.fromJson<String>(json['fileName']),
+      sizeBytes: serializer.fromJson<int>(json['sizeBytes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+      'packageId': serializer.toJson<String>(packageId),
+      'kind': serializer.toJson<String>(kind),
+      'version': serializer.toJson<int>(version),
+      'fileName': serializer.toJson<String>(fileName),
+      'sizeBytes': serializer.toJson<int>(sizeBytes),
+    };
+  }
+
+  InstalledPackageRow copyWith({
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
+    String? packageId,
+    String? kind,
+    int? version,
+    String? fileName,
+    int? sizeBytes,
+  }) => InstalledPackageRow(
+    id: id ?? this.id,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    packageId: packageId ?? this.packageId,
+    kind: kind ?? this.kind,
+    version: version ?? this.version,
+    fileName: fileName ?? this.fileName,
+    sizeBytes: sizeBytes ?? this.sizeBytes,
+  );
+  InstalledPackageRow copyWithCompanion(InstalledPackagesCompanion data) {
+    return InstalledPackageRow(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      packageId: data.packageId.present ? data.packageId.value : this.packageId,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      version: data.version.present ? data.version.value : this.version,
+      fileName: data.fileName.present ? data.fileName.value : this.fileName,
+      sizeBytes: data.sizeBytes.present ? data.sizeBytes.value : this.sizeBytes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InstalledPackageRow(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('packageId: $packageId, ')
+          ..write('kind: $kind, ')
+          ..write('version: $version, ')
+          ..write('fileName: $fileName, ')
+          ..write('sizeBytes: $sizeBytes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    packageId,
+    kind,
+    version,
+    fileName,
+    sizeBytes,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is InstalledPackageRow &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt &&
+          other.packageId == this.packageId &&
+          other.kind == this.kind &&
+          other.version == this.version &&
+          other.fileName == this.fileName &&
+          other.sizeBytes == this.sizeBytes);
+}
+
+class InstalledPackagesCompanion extends UpdateCompanion<InstalledPackageRow> {
+  final Value<String> id;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<String> packageId;
+  final Value<String> kind;
+  final Value<int> version;
+  final Value<String> fileName;
+  final Value<int> sizeBytes;
+  final Value<int> rowid;
+  const InstalledPackagesCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.packageId = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.version = const Value.absent(),
+    this.fileName = const Value.absent(),
+    this.sizeBytes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  InstalledPackagesCompanion.insert({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    required String packageId,
+    required String kind,
+    required int version,
+    required String fileName,
+    required int sizeBytes,
+    this.rowid = const Value.absent(),
+  }) : packageId = Value(packageId),
+       kind = Value(kind),
+       version = Value(version),
+       fileName = Value(fileName),
+       sizeBytes = Value(sizeBytes);
+  static Insertable<InstalledPackageRow> custom({
+    Expression<String>? id,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<String>? packageId,
+    Expression<String>? kind,
+    Expression<int>? version,
+    Expression<String>? fileName,
+    Expression<int>? sizeBytes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (packageId != null) 'package_id': packageId,
+      if (kind != null) 'kind': kind,
+      if (version != null) 'version': version,
+      if (fileName != null) 'file_name': fileName,
+      if (sizeBytes != null) 'size_bytes': sizeBytes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  InstalledPackagesCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<String>? packageId,
+    Value<String>? kind,
+    Value<int>? version,
+    Value<String>? fileName,
+    Value<int>? sizeBytes,
+    Value<int>? rowid,
+  }) {
+    return InstalledPackagesCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      packageId: packageId ?? this.packageId,
+      kind: kind ?? this.kind,
+      version: version ?? this.version,
+      fileName: fileName ?? this.fileName,
+      sizeBytes: sizeBytes ?? this.sizeBytes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (packageId.present) {
+      map['package_id'] = Variable<String>(packageId.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<int>(version.value);
+    }
+    if (fileName.present) {
+      map['file_name'] = Variable<String>(fileName.value);
+    }
+    if (sizeBytes.present) {
+      map['size_bytes'] = Variable<int>(sizeBytes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('InstalledPackagesCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('packageId: $packageId, ')
+          ..write('kind: $kind, ')
+          ..write('version: $version, ')
+          ..write('fileName: $fileName, ')
+          ..write('sizeBytes: $sizeBytes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$UserDatabase extends GeneratedDatabase {
   _$UserDatabase(QueryExecutor e) : super(e);
   $UserDatabaseManager get managers => $UserDatabaseManager(this);
@@ -1269,6 +1830,8 @@ abstract class _$UserDatabase extends GeneratedDatabase {
   late final $ReadingPositionsTable readingPositions = $ReadingPositionsTable(
     this,
   );
+  late final $InstalledPackagesTable installedPackages =
+      $InstalledPackagesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1277,6 +1840,7 @@ abstract class _$UserDatabase extends GeneratedDatabase {
     userProfiles,
     settings,
     readingPositions,
+    installedPackages,
   ];
   @override
   DriftDatabaseOptions get options =>
@@ -1993,6 +2557,306 @@ typedef $$ReadingPositionsTableProcessedTableManager =
       ReadingPositionRow,
       PrefetchHooks Function()
     >;
+typedef $$InstalledPackagesTableCreateCompanionBuilder =
+    InstalledPackagesCompanion Function({
+      Value<String> id,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
+      required String packageId,
+      required String kind,
+      required int version,
+      required String fileName,
+      required int sizeBytes,
+      Value<int> rowid,
+    });
+typedef $$InstalledPackagesTableUpdateCompanionBuilder =
+    InstalledPackagesCompanion Function({
+      Value<String> id,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<String> packageId,
+      Value<String> kind,
+      Value<int> version,
+      Value<String> fileName,
+      Value<int> sizeBytes,
+      Value<int> rowid,
+    });
+
+class $$InstalledPackagesTableFilterComposer
+    extends Composer<_$UserDatabase, $InstalledPackagesTable> {
+  $$InstalledPackagesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get packageId => $composableBuilder(
+    column: $table.packageId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get fileName => $composableBuilder(
+    column: $table.fileName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sizeBytes => $composableBuilder(
+    column: $table.sizeBytes,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$InstalledPackagesTableOrderingComposer
+    extends Composer<_$UserDatabase, $InstalledPackagesTable> {
+  $$InstalledPackagesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get packageId => $composableBuilder(
+    column: $table.packageId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get fileName => $composableBuilder(
+    column: $table.fileName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sizeBytes => $composableBuilder(
+    column: $table.sizeBytes,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$InstalledPackagesTableAnnotationComposer
+    extends Composer<_$UserDatabase, $InstalledPackagesTable> {
+  $$InstalledPackagesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get packageId =>
+      $composableBuilder(column: $table.packageId, builder: (column) => column);
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<String> get fileName =>
+      $composableBuilder(column: $table.fileName, builder: (column) => column);
+
+  GeneratedColumn<int> get sizeBytes =>
+      $composableBuilder(column: $table.sizeBytes, builder: (column) => column);
+}
+
+class $$InstalledPackagesTableTableManager
+    extends
+        RootTableManager<
+          _$UserDatabase,
+          $InstalledPackagesTable,
+          InstalledPackageRow,
+          $$InstalledPackagesTableFilterComposer,
+          $$InstalledPackagesTableOrderingComposer,
+          $$InstalledPackagesTableAnnotationComposer,
+          $$InstalledPackagesTableCreateCompanionBuilder,
+          $$InstalledPackagesTableUpdateCompanionBuilder,
+          (
+            InstalledPackageRow,
+            BaseReferences<
+              _$UserDatabase,
+              $InstalledPackagesTable,
+              InstalledPackageRow
+            >,
+          ),
+          InstalledPackageRow,
+          PrefetchHooks Function()
+        > {
+  $$InstalledPackagesTableTableManager(
+    _$UserDatabase db,
+    $InstalledPackagesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$InstalledPackagesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$InstalledPackagesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$InstalledPackagesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<String> packageId = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<String> fileName = const Value.absent(),
+                Value<int> sizeBytes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => InstalledPackagesCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                packageId: packageId,
+                kind: kind,
+                version: version,
+                fileName: fileName,
+                sizeBytes: sizeBytes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                required String packageId,
+                required String kind,
+                required int version,
+                required String fileName,
+                required int sizeBytes,
+                Value<int> rowid = const Value.absent(),
+              }) => InstalledPackagesCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                packageId: packageId,
+                kind: kind,
+                version: version,
+                fileName: fileName,
+                sizeBytes: sizeBytes,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$InstalledPackagesTable, InstalledPackageRow>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$UserDatabase,
+                    $InstalledPackagesTable,
+                    InstalledPackageRow
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$InstalledPackagesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$UserDatabase,
+      $InstalledPackagesTable,
+      InstalledPackageRow,
+      $$InstalledPackagesTableFilterComposer,
+      $$InstalledPackagesTableOrderingComposer,
+      $$InstalledPackagesTableAnnotationComposer,
+      $$InstalledPackagesTableCreateCompanionBuilder,
+      $$InstalledPackagesTableUpdateCompanionBuilder,
+      (
+        InstalledPackageRow,
+        BaseReferences<
+          _$UserDatabase,
+          $InstalledPackagesTable,
+          InstalledPackageRow
+        >,
+      ),
+      InstalledPackageRow,
+      PrefetchHooks Function()
+    >;
 
 class $UserDatabaseManager {
   final _$UserDatabase _db;
@@ -2003,4 +2867,6 @@ class $UserDatabaseManager {
       $$SettingsTableTableManager(_db, _db.settings);
   $$ReadingPositionsTableTableManager get readingPositions =>
       $$ReadingPositionsTableTableManager(_db, _db.readingPositions);
+  $$InstalledPackagesTableTableManager get installedPackages =>
+      $$InstalledPackagesTableTableManager(_db, _db.installedPackages);
 }

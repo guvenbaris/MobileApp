@@ -9,12 +9,29 @@ part 'content_database.g.dart';
 /// Kaynak veri veya şema değiştiğinde artırılır; uygulama yeni sürümü
 /// görünce paketteki veritabanını yeniden kopyalar. Kullanıcı verisi ayrı
 /// veritabanındadır (MK-05) ve bundan etkilenmez.
-const int kContentVersion = 7;
+const int kContentVersion = 8;
 
 /// Paketteki veritabanının yolu (pubspec `assets` ile aynı olmalı).
 const String kContentAssetPath = 'assets/db/content.sqlite';
 
-/// Anahtar-değer: `contentVersion`, `source`, `builtAt`.
+/// `content_meta` anahtarları. İçerik veritabanında ilk dördü; düzen
+/// paketinde (TK-13) `package…` anahtarları ve paketin üretildiği içeriğin
+/// `wordsHash` değeri bulunur.
+abstract final class ContentMetaKeys {
+  static const contentVersion = 'contentVersion';
+  static const source = 'source';
+  static const builtAt = 'builtAt';
+
+  /// Kelime tablosunun parmak izi (kimlik, ayet, sıra). Düzen paketleri
+  /// kelimelere kimlikle bağlanır; paket ancak aynı parmak izli içerikle
+  /// kullanılır.
+  static const wordsHash = 'wordsHash';
+  static const packageId = 'packageId';
+  static const packageKind = 'packageKind';
+  static const packageVersion = 'packageVersion';
+}
+
+/// Anahtar-değer; anahtarlar [ContentMetaKeys].
 class ContentMeta extends Table {
   TextColumn get key => text()();
   TextColumn get value => text()();

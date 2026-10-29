@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_list_item.dart';
 import '../../../core/widgets/state_views.dart';
 import '../../today/application/today_providers.dart';
+import '../application/layout_providers.dart';
 import '../application/quran_providers.dart';
 import '../domain/quran_models.dart';
 import '../domain/quran_navigation.dart';
@@ -97,7 +98,7 @@ class _JumpFieldState extends ConsumerState<_JumpField> {
     final target = parseJump(
       text,
       ayahCounts: counts,
-      pageCount: kDefaultPageCount,
+      pageCount: ref.read(currentLayoutProvider).pageCount,
     );
     setState(() => _invalid = target == null);
     switch (target) {
@@ -235,11 +236,12 @@ class _JuzList extends ConsumerWidget {
   }
 }
 
-class _PageGrid extends StatelessWidget {
+/// Okunan düzenin sayfaları (M2-14: düzene göre sayfa sayısı değişebilir).
+class _PageGrid extends ConsumerWidget {
   const _PageGrid();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     return GridView.builder(
       key: const Key('quran.pageGrid'),
@@ -250,7 +252,7 @@ class _PageGrid extends StatelessWidget {
         crossAxisSpacing: AppSpacing.xs,
         mainAxisSpacing: AppSpacing.xs,
       ),
-      itemCount: kDefaultPageCount,
+      itemCount: ref.watch(currentLayoutProvider).pageCount,
       itemBuilder: (context, i) {
         final page = i + 1;
         return OutlinedButton(

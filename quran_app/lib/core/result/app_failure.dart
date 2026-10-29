@@ -31,6 +31,11 @@ final class CancelledFailure extends AppFailure {
   const CancelledFailure([super.message = 'İptal edildi']);
 }
 
+/// İçerik paketi bozuk, eksik veya bu içerik veritabanıyla uyumsuz (TK-13).
+final class InvalidPackageFailure extends AppFailure {
+  const InvalidPackageFailure(super.message);
+}
+
 /// Beklenmeyen hata; asıl istisnayı ve yığın izini taşır.
 final class UnexpectedFailure extends AppFailure {
   const UnexpectedFailure(super.message, {this.error, this.stackTrace});

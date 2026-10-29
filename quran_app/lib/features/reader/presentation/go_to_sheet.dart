@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_button.dart';
+import '../../quran/application/layout_providers.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/quran_models.dart';
 import '../../quran/domain/quran_navigation.dart';
@@ -56,7 +57,8 @@ class _GoToSheetState extends ConsumerState<_GoToSheet> {
 
   void _goToPage() {
     final page = int.tryParse(_page.text.trim());
-    if (page == null || page < 1 || page > kDefaultPageCount) return;
+    final pageCount = ref.read(currentLayoutProvider).pageCount;
+    if (page == null || page < 1 || page > pageCount) return;
     Navigator.pop(context, PageJump(page));
   }
 
@@ -145,7 +147,8 @@ class _GoToSheetState extends ConsumerState<_GoToSheet> {
                     inputFormatters: digitsOnly,
                     decoration: InputDecoration(
                       labelText: l10n.goToPage,
-                      helperText: '1–${context.formatInt(kDefaultPageCount)}',
+                      helperText:
+                          '1–${context.formatInt(ref.watch(currentLayoutProvider).pageCount)}',
                     ),
                     onSubmitted: (_) => _goToPage(),
                   ),

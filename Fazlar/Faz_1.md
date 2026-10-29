@@ -77,11 +77,12 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 - **Bitti:** Okuma ekranı E-04/E-05 tasarımına uygun; T-09 geçiyor. ✅ (`Faz_1_Notlar.md` §4; dokunma kuralı ET-8 onay bekliyor)
 
 ### F1-03 Mushaf Düzenleri [Z] — M2-02, M2-14, AK-11
-- [ ] **Türkiye mushaf düzeni araştırması:** kaynak, satır/sayfa yapısı, lisans; sonuç raporu (F0-05 raporuyla birlikte)
-- [ ] Düzen seçme ayarı; düzen değişince aynı ayette kalma (KK M2-15: Kehf 45)
-- [ ] İndirilebilir düzen paketi altyapısı (TK-13); T-02 her düzen için
-- [ ] Türkiye düzeni verisi (kaynak bulunursa) [Z]; IndoPak 15 satır [Ö]
-- **Bitti:** İkinci bir düzen eklenip seçilebiliyor ve tüm kayıtlar aynı ayette kalıyor; ya da Türkiye düzeni için yol ve tarih belli.
+- [x] **Türkiye mushaf düzeni araştırması:** kaynak, satır/sayfa yapısı, lisans; sonuç raporu (F0-05 raporuyla birlikte) → `Faz_1_Notlar.md` §5. Açık veri yok; Diyanet yönetmeliği dijital yayınları da kapsıyor (AK-14)
+- [x] Düzen seçme ayarı; düzen değişince aynı ayette kalma (KK M2-15: Kehf 45) → `Faz_1_Notlar.md` §5.6
+- [x] İndirilebilir düzen paketi altyapısı (TK-13); T-02 her düzen için. İndirme F1-11'de; şimdilik `dev`'de cihaz gelen kutusu
+- [ ] Türkiye düzeni verisi (kaynak bulunursa) [Z]: açık veri yok; Diyanet başvurusu v1.0 sonrası (AK-14, kullanıcı kararı). IndoPak 15 satır [Ö]
+- [x] Gerçek ikinci düzen paketi: Medine 1405H, yalnızca geliştirme (lisans AK-11); T-02 Tanzil 1405H ile 604/604 (§5.7)
+- **Bitti:** İkinci bir düzen eklenip seçilebiliyor ve tüm kayıtlar aynı ayette kalıyor; ya da Türkiye düzeni için yol ve tarih belli. ✅ (1405H paketiyle; Türkiye düzeni: Diyanet başvurusu, v1.0 sonrası)
 
 ### F1-04 Renkli Tecvid [Ö] — M2-06
 - [ ] Spike: DigitalKhatt ile tecvid renklendirme verisi (QUL tecvid verisi) ve lisansı
@@ -176,7 +177,8 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 ## Riskler
 | Risk | Etki | Önlem |
 |---|---|---|
-| Türkiye mushaf düzeni için dijital veri veya lisans yok | M2-02 [Z] karşılanamaz, v1.0 gecikir | F1-03 ilk iş olarak başlar; Diyanet ile görüşme (AK-11) paralel yürür; gerekirse düzen verisi üretimi ayrı iş paketi olur |
+| Türkiye mushaf düzeni için dijital veri veya lisans yok (F1-03 araştırmasıyla doğrulandı) | M2-02 [Z] karşılanamaz, v1.0 gecikir | Diyanet ile görüşme (AK-11) paralel yürür; mimari düzen paketine hazır tutulur; gerekirse düzen verisi üretimi ayrı iş paketi olur |
+| **Diyanet Kurul onayı (yönetmelik dijital yayınları kapsıyor)** | Türkiye'de yayın durdurulabilir/erişim engellenebilir (md. 11); font ve düzen Kurulca uygun görülmeli | AK-14: hukuk danışmanı + Kurula erken başvuru; meal izni ve Türkiye düzeni talebiyle birlikte |
 | Varsayılan meal (Diyanet) için yayın izni gecikir veya alınamaz | M16-01 gereği paketlenecek meal belirsiz | İzin başvurusu Faz 1'in başında yapılır; mimari meal kaynağından bağımsız; S2'deki kamu malı adayı yedek olarak hazırlanır |
 | Kari seslerinin lisansı ve boyutu | M5-01 (≥ 10 kari) karşılanamaz | Sesler uygulamaya gömülmez, indirilir; kari başına izin süreci erkenden başlar (İÇ-05) |
 | Kök/morfoloji verisinin lisansı (GPL olasılığı) | M3-04, M4-04 [Ö] düşer | S4: önce lisans; uygun değilse kapsamdan çıkar |
@@ -193,6 +195,9 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 ## Değişiklik Geçmişi
 | Tarih | Değişiklik |
 |---|---|
+| 29.10.2026 | F1-03: Medine 1405H geliştirme paketi ve paket üretim aracı; emülatörde kurulup seçildi |
+| 29.10.2026 | F1-03: düzen seçimi, düzen paketi altyapısı (doğrulama, kurulum, kayıt, kullanıcı DB v3), T-02 her düzen için; içerik sürümü 8 (`wordsHash`) |
+| 29.10.2026 | F1-03: Türkiye mushaf düzeni araştırması tamamlandı (açık veri yok; Diyanet yönetmeliği dijital yayınları kapsıyor → AK-14, risk eklendi) |
 | 29.10.2026 | F1-02 tamamlandı: gizlenebilir çubuklar, ekran açık (`wakelock_plus`, TK-15), sayfa okları ve kenar şeridi, sayfa çerçevesi (cüz/hizb/sayfa/sağ-sol, secde ve rubu'), yakınlaştırma ve yazı kilidi, otomatik kaydırma, okuma ayarları paneli, T-09 |
 | 29.10.2026 | F1-01 tamamlandı: sekmeli kabuk, Bugün, Kur'an dizini, Git paneli, derin bağlantı |
 | 29.10.2026 | F1-00: F0-05 sonuç raporu; sayfa karşılaştırma paketi, gerçek cihaz performans araçları ve çeviri gözden geçirme tablosu |

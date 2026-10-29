@@ -25,6 +25,10 @@ final readingPositionRepositoryProvider = Provider<ReadingPositionRepository>(
   (ref) => DriftReadingPositionRepository(ref.watch(userDatabaseProvider)),
 );
 
+final installedPackageRepositoryProvider = Provider<InstalledPackageRepository>(
+  (ref) => DriftInstalledPackageRepository(ref.watch(userDatabaseProvider)),
+);
+
 /// Uygulama açılırken okunan kullanıcı verisi. Ayarlar ve son okunan yer
 /// ilk karede hazır olsun diye `bootstrap` içinde bir kez yüklenir.
 class UserDataSnapshot {

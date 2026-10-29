@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/diagnostics/perf_probe.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../../core/result/result.dart';
+import '../../quran/application/layout_providers.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
@@ -17,15 +18,17 @@ T _unwrap<T>(Result<T> result) => switch (result) {
   Err(:final failure) => throw failure,
 };
 
-/// Varsayılan düzendeki bir mushaf sayfası.
+/// Okunan düzendeki bir mushaf sayfası. Düzen değişince tüm sayfalar yeni
+/// düzenden yeniden okunur (M2-14).
 final mushafPageProvider = FutureProvider.family<MushafPage, int>((
   ref,
   page,
 ) async {
+  final layoutId = ref.watch(currentLayoutProvider).id;
   final watch = Stopwatch()..start();
   final result = await ref
       .watch(quranRepositoryProvider)
-      .getMushafPage(kDefaultLayoutId, page);
+      .getMushafPage(layoutId, page);
   PerfProbe.instance?.recordPageLoad(page, watch.elapsed);
   return _unwrap(result);
 });
@@ -177,7 +180,9 @@ final anchorLocationProvider = FutureProvider<AyahLocation>((ref) async {
   final anchor = ref.watch(readerAnchorProvider);
   final repo = ref.watch(quranRepositoryProvider);
   final ayah = _unwrap(await repo.getAyah(anchor));
-  final page = _unwrap(await repo.pageOf(kDefaultLayoutId, anchor));
+  final page = _unwrap(
+    await repo.pageOf(ref.watch(currentLayoutProvider).id, anchor),
+  );
   return AyahLocation(juz: ayah.juz, hizb: ayah.hizb, page: page);
 });
 

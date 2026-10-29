@@ -26,8 +26,6 @@ class MushafPageView extends ConsumerWidget {
   final String basmala;
   final MushafColors colors;
 
-  static const _linesPerPage = 15;
-
   /// Basılı Medine mushafı metin alanının genişlik/yükseklik oranı (yaklaşık).
   static const _pageAspect = 0.62;
 
@@ -69,7 +67,7 @@ class MushafPageView extends ConsumerWidget {
                     width = height * _maxAspect;
                   }
                 }
-                final lineHeight = height / _linesPerPage;
+                final lineHeight = height / page.linesPerPage;
                 final fontSize = _fontSizeFor(width, lineHeight);
                 final content = SizedBox(
                   width: width,
@@ -78,7 +76,7 @@ class MushafPageView extends ConsumerWidget {
                     textDirection: TextDirection.rtl,
                     child: Column(
                       // İlk iki sayfa kısa ve ortalıdır.
-                      mainAxisAlignment: page.lines.length < _linesPerPage
+                      mainAxisAlignment: page.lines.length < page.linesPerPage
                           ? MainAxisAlignment.center
                           : MainAxisAlignment.start,
                       children: [

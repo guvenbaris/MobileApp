@@ -78,12 +78,13 @@ quran_app/
   - Üretim: `dart run tool/content/build_content_db.dart` (kaynakları doğrular; hata varsa yarım dosya bırakmaz).
   - Şema veya veri değişince `kContentVersion` artırılır; cihazda yeni dosya kopyalanır. Migration yoktur.
   - Çoklu mushaf düzeni (M2-14): metin bir kez saklanır, her düzen ayrı `mushaf_layout` kaydı ve `layout_*` satırlarıdır.
+  - Ek düzenler **düzen paketi** olarak gelir (TK-13): aynı şemada ayrı SQLite dosyası, `content_meta.wordsHash` ile içeriğe bağlı; kurulu paketler kullanıcı veritabanında `installed_packages`. Sayfa sayısı ve satır sayısı sabit yazılmaz, seçili düzenden (`currentLayoutProvider`) okunur. Ayrıntı: `quran_app/README.md` "Mushaf düzeni paketleri".
 - **Kullanıcı veritabanı:**
   - Drift, `core/database/user_database.dart`. Her kayıt `SyncedRecord` taşır: UUID, UTC `createdAt`/`updatedAt`, `deletedAt` (yumuşak silme).
   - Şema değişikliği: `currentSchemaVersion` artır → `dart run build_runner build` → `dart run drift_dev make-migrations` → `stepByStep` adımı → veri koruma testi (`test/drift/`). Ayrıntı: Faz_0_Notlar §9.3.
   - Migration öncesi otomatik yedek alınır (son 3).
 - **Konum kuralı (M2-15):** kullanıcı verisinde konum her zaman `sure:ayet(:kelime)` olarak saklanır; **sayfa numarası asla saklanmaz**.
-- **Ayarlar:** `settings` tablosunda anahtar → JSON; `persistSetting()` ile yazılır. Anahtarlar: `app.language`, `app.numerals`, `app.theme`, `reader.viewMode`, `reader.textScale`, `reader.textScaleLocked`, `reader.keepScreenOn`, `reader.pageArrows`, `reader.autoScrollSpeed`.
+- **Ayarlar:** `settings` tablosunda anahtar → JSON; `persistSetting()` ile yazılır. Anahtarlar: `app.language`, `app.numerals`, `app.theme`, `reader.viewMode`, `reader.textScale`, `reader.textScaleLocked`, `reader.keepScreenOn`, `reader.pageArrows`, `reader.autoScrollSpeed`, `mushaf.layoutId`.
 
 ## Kur'an metni ve mushaf (en hassas kısım)
 - **Kur'an metninde hiçbir harf veya işaret değiştirilmez.** Kaynakta tutarsızlık varsa veri elle düzeltilmez. Durum `VERI_KAYNAKLARI.md`'ye Q-n olarak yazılır; gerekirse gerekçeli, tek tek listelenmiş ve testle denetlenen bir düzen düzeltmesi yapılır (ör. Q-13, 254. sayfa).
@@ -140,7 +141,7 @@ quran_app/
   - `localizedApp()`: tek ekranı dil ve temayla sarar.
   - `openTab()`: alt sekme açar (`today`, `quran`, `memorize`, `me`).
   - `tapBack()`: geri tuşu. `tester.pageBack()` İngilizce "Back" aradığı için Türkçe/Arapçada çalışmaz.
-  - `FakeQuranRepository` (`withPages: true` ile basit mushaf sayfaları), `FakeWakeLock`, `openTestContentDatabase()`.
+  - `FakeQuranRepository` (`withPages: true` ile basit mushaf sayfaları, `halfLayout: true` ile ikinci düzen), `FakeWakeLock`, `openTestContentDatabase()`, `buildMergedLayoutPackage()` (gerçek içerikten test düzen paketi).
 - İçerik testleri (`test/content/`) üretilmiş `assets/db/content.sqlite` ister; önce veritabanı üretilir.
 - Uygulama düzeyindeki testlerde cihaz dili sabitlenir (`localesTestValue`); kullanıcı verisi `userDataSnapshotProvider` ile verilir.
 - **Bir denetim yazıldığında bilerek bozularak denenir** ve sonuç notlara yazılır. Örnekler: hareke değiştirme (T-01), migration'ı boşaltma, gömülü metin ekleme, kontrastı düşürme.

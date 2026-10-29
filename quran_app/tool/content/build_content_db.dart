@@ -23,7 +23,9 @@ import 'package:quran_app/features/quran/data/content_database.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
 import 'package:sqlite3/sqlite3.dart' as sqlite;
 
+import 'qul_layout.dart';
 import 'text_rules.dart';
+import 'words_hash.dart';
 
 const _quranComDir = 'tool/content/sources/quran_com';
 const _qulDir = 'tool/content/sources/qul';
@@ -86,17 +88,19 @@ Future<void> main() async {
     );
     final glyphToWords = _alignGlyphs(verses, text, qulGlyphs);
     await _insertLayout(db, text, glyphToWords, qulGlyphs, qulLayout);
+    final wordsHash = await computeWordsHash(db);
     await db.batch((b) {
       b.insertAll(db.contentMeta, [
         for (final (key, value) in [
-          ('contentVersion', '$kContentVersion'),
+          (ContentMetaKeys.contentVersion, '$kContentVersion'),
+          (ContentMetaKeys.wordsHash, wordsHash),
           (
-            'source',
+            ContentMetaKeys.source,
             '${manifest['source']} (${manifest['fetchedAt']}); '
                 'QUL ${_layout.qulLayoutFile}, ${_layout.qulGlyphFile}, '
                 '${_layout.digitalKhattFile}',
           ),
-          ('builtAt', DateTime.now().toUtc().toIso8601String()),
+          (ContentMetaKeys.builtAt, DateTime.now().toUtc().toIso8601String()),
         ])
           ContentMetaCompanion.insert(key: key, value: value),
       ]);
@@ -445,27 +449,7 @@ Future<void> _insertLayout(
   );
 
   // QUL satırları; düzeltmeler uygulanarak.
-  final rows = [
-    for (final r in qulLayout.select(
-      'SELECT page_number, line_number, line_type, is_centered, '
-      'first_word_id, last_word_id, surah_number FROM pages '
-      'ORDER BY page_number, line_number',
-    ))
-      (
-        page: r['page_number'] as int,
-        line: r['line_number'] as int,
-        type: switch (r['line_type'] as String) {
-          'ayah' => LayoutLineType.ayah,
-          'surah_name' => LayoutLineType.surahName,
-          'basmallah' => LayoutLineType.basmala,
-          final t => throw StateError('Bilinmeyen satır türü: $t'),
-        },
-        centered: r['is_centered'] == 1,
-        first: _intOrNull(r['first_word_id']),
-        last: _intOrNull(r['last_word_id']),
-        surah: _intOrNull(r['surah_number']),
-      ),
-  ];
+  final rows = readQulLines(qulLayout);
   for (final MapEntry(key: (page, line), value: location)
       in _lineStartCorrections.entries) {
     final i = rows.indexWhere((r) => r.page == page && r.line == line);
@@ -475,68 +459,17 @@ Future<void> _insertLayout(
       prev.page == page && prev.last == newFirst,
       'Düzeltme ($page, $line) beklenen satır sonunu bulamadı',
     );
-    rows[i - 1] = (
-      page: prev.page,
-      line: prev.line,
-      type: prev.type,
-      centered: prev.centered,
-      first: prev.first,
-      last: newFirst - 1,
-      surah: prev.surah,
-    );
-    final cur = rows[i];
-    rows[i] = (
-      page: cur.page,
-      line: cur.line,
-      type: cur.type,
-      centered: cur.centered,
-      first: newFirst,
-      last: cur.last,
-      surah: cur.surah,
-    );
-  }
-
-  // QUL besmele satırlarında sure numarası yok: önceki sure başlığından alınır
-  // (başlık önceki sayfanın son satırında olabilir).
-  int? lastHeaderSurah;
-  for (final (i, r) in rows.indexed) {
-    if (r.type == LayoutLineType.surahName) lastHeaderSurah = r.surah;
-    if (r.type == LayoutLineType.basmala) {
-      _check(r.surah == null || r.surah == lastHeaderSurah, 'Besmele suresi');
-      rows[i] = (
-        page: r.page,
-        line: r.line,
-        type: r.type,
-        centered: r.centered,
-        first: r.first,
-        last: r.last,
-        surah: lastHeaderSurah,
-      );
-    }
+    rows[i - 1] = withRange(prev, last: newFirst - 1);
+    rows[i] = withRange(rows[i], first: newFirst);
   }
 
   // Doğrulama: satır sayıları, glif kapsaması, kelimelerin satırlara bölünmesi.
   _check(rows.length == 9046, 'Satır sayısı ${rows.length}');
-  var expectedGlyph = 1;
-  final lineOfWord = <int, (int, int)>{};
-  final pageAyahs = <int, List<int>>{};
-  final ayahIdOfWord = <int, int>{};
-  for (final r in rows.where((r) => r.type == LayoutLineType.ayah)) {
-    _check(r.first == expectedGlyph, 's.${r.page} satır ${r.line} glif sırası');
-    for (var g = r.first!; g <= r.last!; g++) {
-      final (first, last) = glyphToWords[g]!;
-      for (var w = first; w <= last; w++) {
-        final prev = lineOfWord[w];
-        _check(
-          prev == null || prev == (r.page, r.line),
-          'Kelime $w iki satıra bölünmüş (s.${r.page})',
-        );
-        lineOfWord[w] = (r.page, r.line);
-      }
-    }
-    expectedGlyph = r.last! + 1;
-  }
-  _check(expectedGlyph - 1 == glyphText.length, 'Tüm glifler satırlarda değil');
+  final lineOfWord = checkQulLines(
+    rows,
+    glyphToWords,
+    glyphCount: glyphText.length,
+  );
   _check(
     lineOfWord.length == _wordCount + _ayahCount,
     'Satırlarda olmayan kelime var',
@@ -544,15 +477,9 @@ Future<void> _insertLayout(
 
   // Sayfa → ilk/son ayet.
   final words = await db.select(db.words).get();
-  for (final w in words) {
-    ayahIdOfWord[w.id] = w.ayahId;
-  }
-  for (final MapEntry(key: wordId, value: (page, _)) in lineOfWord.entries) {
-    final ayahId = ayahIdOfWord[wordId]!;
-    final range = pageAyahs.putIfAbsent(page, () => [ayahId, ayahId]);
-    if (ayahId < range[0]) range[0] = ayahId;
-    if (ayahId > range[1]) range[1] = ayahId;
-  }
+  final pageAyahs = pageAyahRanges(lineOfWord, {
+    for (final w in words) w.id: w.ayahId,
+  });
   _check(pageAyahs.length == _layout.pageCount, 'Sayfa sayısı');
 
   await db.batch((b) {
@@ -606,8 +533,6 @@ Future<void> _insertLayout(
     '${glyphText.length} glif',
   );
 }
-
-int? _intOrNull(Object? v) => v is int ? v : null;
 
 List<dynamic> _readList(String name) =>
     jsonDecode(File('$_quranComDir/$name').readAsStringSync()) as List<dynamic>;

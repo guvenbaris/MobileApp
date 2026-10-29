@@ -1,4 +1,5 @@
 import '../../../core/result/result.dart';
+import 'mushaf_layout.dart';
 import 'mushaf_page.dart';
 import 'quran_models.dart';
 import 'quran_navigation.dart';
@@ -7,6 +8,9 @@ import 'quran_navigation.dart';
 /// erişmez). İçerik cihazdadır, internet gerektirmez (M16-01).
 abstract interface class QuranRepository {
   Future<Result<List<Surah>>> getSurahs();
+
+  /// Cihazdaki düzenler: uygulamayla gelen ve kurulu paketlerdeki (M2-14).
+  Future<Result<List<MushafLayout>>> getLayouts();
 
   Future<Result<Ayah>> getAyah(AyahRef ref);
 

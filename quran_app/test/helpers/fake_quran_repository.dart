@@ -1,4 +1,5 @@
 import 'package:quran_app/core/result/result.dart';
+import 'package:quran_app/features/quran/domain/mushaf_layout.dart';
 import 'package:quran_app/features/quran/domain/mushaf_page.dart';
 import 'package:quran_app/features/quran/domain/quran_models.dart';
 import 'package:quran_app/features/quran/domain/quran_navigation.dart';
@@ -13,9 +14,29 @@ import 'package:quran_app/features/quran/domain/quran_repository.dart';
 /// satır olan basit sayfalar verilir. Cüz 2, Hizb 3 sahte veride 2:142'de
 /// başlar ([quarterStarts] ile aynı).
 class FakeQuranRepository implements QuranRepository {
-  FakeQuranRepository({this.withPages = false, this.sajdahs = const {}});
+  FakeQuranRepository({
+    this.withPages = false,
+    this.sajdahs = const {},
+    this.halfLayout = false,
+  });
 
   final bool withPages;
+
+  /// İkinci düzen [half]: sayfalar ikişer birleşik (`n` → `(n + 1) ~/ 2`).
+  /// Düzen değiştirme testleri için (M2-14, M2-15).
+  final bool halfLayout;
+
+  static const half = MushafLayout(
+    id: 'test_half',
+    name: 'Test: birleşik sayfalar',
+    pageCount: (pageCount + 1) ~/ 2,
+    linesPerPage: 20,
+    fontPack: 'digital_khatt',
+    version: 1,
+    isBuiltIn: false,
+  );
+
+  static bool _isHalf(String layoutId) => layoutId == half.id;
 
   /// Secde ayeti sayılacak ayetler (sahte veride yoktur; testler verir).
   final Set<AyahRef> sajdahs;
@@ -83,6 +104,10 @@ class FakeQuranRepository implements QuranRepository {
   Future<Result<List<Surah>>> getSurahs() async => const Ok(surahs);
 
   @override
+  Future<Result<List<MushafLayout>>> getLayouts() async =>
+      Ok([kDefaultLayout, if (halfLayout) half]);
+
+  @override
   Future<Result<Ayah>> getAyah(AyahRef ref) async =>
       _exists(ref) ? Ok(_ayah(ref)) : Err(NotFoundFailure('$ref'));
 
@@ -97,22 +122,32 @@ class FakeQuranRepository implements QuranRepository {
 
   @override
   Future<Result<int>> pageOf(String layoutId, AyahRef ref) async =>
-      _exists(ref) ? Ok(_page(ref)) : Err(NotFoundFailure('$ref'));
+      !_exists(ref)
+      ? Err(NotFoundFailure('$ref'))
+      : Ok(_isHalf(layoutId) ? (_page(ref) + 1) ~/ 2 : _page(ref));
 
   @override
   Future<Result<AyahRef>> firstAyahOfPage(String layoutId, int page) async =>
-      switch (page) {
-        1 => const Ok(AyahRef(1, 1)),
-        >= 2 && <= pageCount => Ok(AyahRef(2, (page - 2) * 10 + 1)),
-        _ => Err(NotFoundFailure('$page')),
-      };
+      _isHalf(layoutId)
+      ? firstAyahOfPage(kDefaultLayout.id, page * 2 - 1)
+      : switch (page) {
+          1 => const Ok(AyahRef(1, 1)),
+          >= 2 && <= pageCount => Ok(AyahRef(2, (page - 2) * 10 + 1)),
+          _ => Err(NotFoundFailure('$page')),
+        };
 
   @override
   Future<Result<MushafPage>> getMushafPage(String layoutId, int page) async {
-    if (!withPages || page < 1 || page > pageCount) {
+    final count = _isHalf(layoutId) ? half.pageCount : pageCount;
+    if (!withPages || page < 1 || page > count) {
       return Err(NotFoundFailure('$page'));
     }
-    final ayahs = _ayahsOfPage(page);
+    final ayahs = _isHalf(layoutId)
+        ? [
+            ..._ayahsOfPage(page * 2 - 1),
+            if (page * 2 <= pageCount) ..._ayahsOfPage(page * 2),
+          ]
+        : _ayahsOfPage(page);
     final first = _ayah(ayahs.first);
     final quarters = (await quarterStarts(layoutId)).valueOrNull!;
     return Ok(
@@ -122,6 +157,7 @@ class FakeQuranRepository implements QuranRepository {
         firstAyah: first.ref,
         juz: first.juz,
         hizb: first.hizb,
+        linesPerPage: _isHalf(layoutId) ? half.linesPerPage : 15,
         sajdahAyahs: [...ayahs.where(sajdahs.contains)],
         quarterStarts: [...quarters.where((q) => q.page == page)],
         lines: [
@@ -145,10 +181,22 @@ class FakeQuranRepository implements QuranRepository {
   }
 
   @override
-  Future<Result<List<QuarterStart>>> quarterStarts(String layoutId) async =>
-      const Ok([
-        QuarterStart(juz: 1, hizb: 1, rub: 1, start: AyahRef(1, 1), page: 1),
-        QuarterStart(juz: 1, hizb: 1, rub: 2, start: AyahRef(2, 26), page: 4),
-        QuarterStart(juz: 2, hizb: 3, rub: 9, start: AyahRef(2, 142), page: 16),
-      ]);
+  Future<Result<List<QuarterStart>>> quarterStarts(String layoutId) async {
+    const quarters = [
+      QuarterStart(juz: 1, hizb: 1, rub: 1, start: AyahRef(1, 1), page: 1),
+      QuarterStart(juz: 1, hizb: 1, rub: 2, start: AyahRef(2, 26), page: 4),
+      QuarterStart(juz: 2, hizb: 3, rub: 9, start: AyahRef(2, 142), page: 16),
+    ];
+    if (!_isHalf(layoutId)) return const Ok(quarters);
+    return Ok([
+      for (final q in quarters)
+        QuarterStart(
+          juz: q.juz,
+          hizb: q.hizb,
+          rub: q.rub,
+          start: q.start,
+          page: (q.page + 1) ~/ 2,
+        ),
+    ]);
+  }
 }

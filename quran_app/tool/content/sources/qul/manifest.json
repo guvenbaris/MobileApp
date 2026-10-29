@@ -9,6 +9,8 @@
     "fonts (depoda değil)": "https://qul.tarteel.ai/resources/font/249 (QPC V2 Font - Page by Page), 604 TTF, 208 MB",
     "digital-khatt-v2.db": "https://qul.tarteel.ai/resources/quran-script/48 (Digital Khatt V2 script - Word by word) - sqlite. Kelime numaraları qpc-v2.db ile aynı.",
     "digital-khatt-15-lines.db (depoda değil)": "https://qul.tarteel.ai/resources/mushaf-layout/21 - qpc-v2-15-lines.db ile satır satır aynı olduğu doğrulandı (28.10.2026), bu yüzden ayrıca saklanmadı.",
-    "DigitalKhattV2.otf (assets/fonts/)": "https://qul.tarteel.ai/resources/font/247 (Digital Khatt V2 Font) - SIL OFL 1.1, Amine Anane & Tarteel Inc."
+    "DigitalKhattV2.otf (assets/fonts/)": "https://qul.tarteel.ai/resources/font/247 (Digital Khatt V2 Font) - SIL OFL 1.1, Amine Anane & Tarteel Inc.",
+    "qpc-v1-15-lines.db": "https://qul.tarteel.ai/resources/mushaf-layout/15 (KFGQPC V1 layout, 1405H print) - sqlite. 29.10.2026 indirildi. Yalnızca geliştirme: düzen paketi madani_1405 (F1-03).",
+    "qpc-v1-glyph-codes-wbw.db": "https://qul.tarteel.ai/resources/quran-script/57 (QPC V1 Glyphs - Word by Word) - sqlite. 29.10.2026 indirildi. Glif numaraları ve konumları qpc-v2.db ile birebir aynı (paket aracı doğrular)."
   }
 }

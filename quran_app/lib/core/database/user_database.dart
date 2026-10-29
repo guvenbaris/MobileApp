@@ -55,16 +55,36 @@ class ReadingPositions extends Table with SyncedRecord {
   IntColumn get word => integer().nullable()();
 }
 
+/// Kurulu içerik paketleri (v3, TK-13): indirilen düzen, meal, tefsir ve
+/// ses paketleri. Paket dosyası cihazdadır; burada yalnızca kaydı tutulur.
+/// Paketler cihaza özeldir: başka cihazda yeniden indirilir (senkronda
+/// yalnızca "hangi paketler kurulu" bilgisi taşınabilir).
+@DataClassName('InstalledPackageRow')
+class InstalledPackages extends Table with SyncedRecord {
+  /// Paket kimliği (ör. düzen paketi için düzen kimliği `madani_1405`).
+  TextColumn get packageId => text().unique()();
+
+  /// `layout`, ileride `translation`, `tafsir`, `audio`.
+  TextColumn get kind => text()();
+  IntColumn get version => integer()();
+
+  /// Uygulamanın paket klasöründeki dosya adı.
+  TextColumn get fileName => text()();
+  IntColumn get sizeBytes => integer()();
+}
+
 /// Kullanıcı veritabanı (MK-01: tek doğru kaynak; MK-05: içerik
 /// veritabanından ayrı). Şema her değiştiğinde [schemaVersion] artırılır,
 /// `dart run drift_dev make-migrations` çalıştırılır ve migration yazılır
 /// (MK-04); migration testleri `test/drift/` altındadır (T-04).
-@DriftDatabase(tables: [UserProfiles, Settings, ReadingPositions])
+@DriftDatabase(
+  tables: [UserProfiles, Settings, ReadingPositions, InstalledPackages],
+)
 class UserDatabase extends _$UserDatabase {
   UserDatabase(super.executor);
 
   /// Kodun beklediği şema sürümü; yedekleme kararı da buna göre verilir.
-  static const currentSchemaVersion = 2;
+  static const currentSchemaVersion = 3;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -75,6 +95,8 @@ class UserDatabase extends _$UserDatabase {
     onUpgrade: stepByStep(
       // v2: son okunan konum tablosu.
       from1To2: (m, schema) => m.createTable(schema.readingPositions),
+      // v3: kurulu içerik paketleri (TK-13).
+      from2To3: (m, schema) => m.createTable(schema.installedPackages),
     ),
     beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');

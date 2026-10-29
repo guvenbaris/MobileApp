@@ -96,6 +96,7 @@ class MushafPage {
     required this.juz,
     required this.hizb,
     required this.lines,
+    this.linesPerPage = 15,
     this.sajdahAyahs = const [],
     this.quarterStarts = const [],
   });
@@ -110,6 +111,11 @@ class MushafPage {
   final int juz;
   final int hizb;
   final List<MushafLine> lines;
+
+  /// Düzenin sayfa başına satır sayısı (Medine 15; IndoPak 13/16). Kısa
+  /// sayfalar (ör. Fatiha) daha az satır taşır ama aynı satır yüksekliğiyle
+  /// çizilir.
+  final int linesPerPage;
 
   /// Bu sayfada başlayan secde ayetleri (M2-05). Yalnızca 14 secde sayılır
   /// (Hanefi, Q-8); 22:77'deki ۩ işareti metinde görünür ama burada yoktur.

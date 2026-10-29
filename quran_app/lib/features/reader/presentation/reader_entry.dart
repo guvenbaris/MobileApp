@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/widgets/state_views.dart';
+import '../../quran/application/layout_providers.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/quran_navigation.dart';
 import '../application/reader_providers.dart';
@@ -35,6 +36,7 @@ class _ReaderEntryState extends ConsumerState<ReaderEntry> {
 
   Future<void> _resolve() async {
     final repo = ref.read(quranRepositoryProvider);
+    final layout = ref.read(currentLayoutProvider);
     int? page;
     try {
       final counts = await ref.read(ayahCountsProvider.future);
@@ -42,18 +44,18 @@ class _ReaderEntryState extends ConsumerState<ReaderEntry> {
           ? parseJump(
               widget.ayah!,
               ayahCounts: counts,
-              pageCount: kDefaultPageCount,
+              pageCount: layout.pageCount,
             )
           : widget.page != null
           ? parseJump(
               widget.page!,
               ayahCounts: counts,
-              pageCount: kDefaultPageCount,
+              pageCount: layout.pageCount,
             )
           : AyahJump(ref.read(readerAnchorProvider));
       switch (target) {
         case AyahJump(:final ayah):
-          page = (await repo.pageOf(kDefaultLayoutId, ayah)).valueOrNull;
+          page = (await repo.pageOf(layout.id, ayah)).valueOrNull;
           if (page != null && mounted) {
             ref.read(readerAnchorProvider.notifier).set(ayah);
           }
