@@ -36,7 +36,7 @@ quran_app/
     bootstrap.dart                  Ortak başlangıç: veritabanları, lisans kaydı, sağlayıcılar, hata yakalama
     app.dart                        MaterialApp: router, dil, tema
     core/                           Özellikten bağımsız altyapı
-      config/ crash/ database/ diagnostics/ logging/ result/ routing/
+      config/ crash/ database/ diagnostics/ logging/ platform/ result/ routing/
       l10n/                         Dil seçimi, sayı biçimi, context.l10n
       theme/                        Palet, tema üretici, tipografi, ölçüler
       widgets/                      Ortak bileşenler (AppButton, AppListItem, durum ekranları)
@@ -62,6 +62,7 @@ quran_app/
 - **Durum ve bağımlılık (TK-01):** Riverpod 3, kod üretimsiz (`Provider`, `NotifierProvider`, `FutureProvider`). Sağlayıcılar .NET'teki DI kayıtlarına karşılık gelir.
   - Açılışta hazır olması gerekenler (veritabanları, kullanıcı verisi anlık görüntüsü) `bootstrap.dart`'ta açılır ve `overrideWithValue` ile verilir.
 - **Servisler (MK-06):** `AuthService`, `SyncService`, `LessonRepository`, `BillingService`, `CrashReporter` arayüzdür; `Fake…` uygulamaları `dev`'de kullanılır.
+  - Platform eklentileri de arayüz arkasındadır (ör. `core/platform/wake_lock.dart`); widget testleri sahtesini verir (`test/helpers/fake_wake_lock.dart`).
   - `prod`'da gerçek uygulaması olmayan servis açıkça `UnimplementedError` verir; sessizce sahteye düşmez.
   - Gerçek servis tek satırlık sağlayıcı değişikliğiyle bağlanır.
 - **Hata türleri:** veri katmanı `Result<T>` (`Ok`/`Err`) ve `AppFailure` döndürür; arayüze istisna sızdırmaz. Yakalanmamış hatalar `CrashReporter`'a gider (TK-10: sağlayıcı Faz 3'te seçilecek).
@@ -82,7 +83,7 @@ quran_app/
   - Şema değişikliği: `currentSchemaVersion` artır → `dart run build_runner build` → `dart run drift_dev make-migrations` → `stepByStep` adımı → veri koruma testi (`test/drift/`). Ayrıntı: Faz_0_Notlar §9.3.
   - Migration öncesi otomatik yedek alınır (son 3).
 - **Konum kuralı (M2-15):** kullanıcı verisinde konum her zaman `sure:ayet(:kelime)` olarak saklanır; **sayfa numarası asla saklanmaz**.
-- **Ayarlar:** `settings` tablosunda anahtar → JSON; `persistSetting()` ile yazılır. Anahtarlar: `app.language`, `app.numerals`, `app.theme`, `reader.viewMode`, `reader.textScale`.
+- **Ayarlar:** `settings` tablosunda anahtar → JSON; `persistSetting()` ile yazılır. Anahtarlar: `app.language`, `app.numerals`, `app.theme`, `reader.viewMode`, `reader.textScale`, `reader.textScaleLocked`, `reader.keepScreenOn`, `reader.pageArrows`, `reader.autoScrollSpeed`.
 
 ## Kur'an metni ve mushaf (en hassas kısım)
 - **Kur'an metninde hiçbir harf veya işaret değiştirilmez.** Kaynakta tutarsızlık varsa veri elle düzeltilmez. Durum `VERI_KAYNAKLARI.md`'ye Q-n olarak yazılır; gerekirse gerekçeli, tek tek listelenmiş ve testle denetlenen bir düzen düzeltmesi yapılır (ör. Q-13, 254. sayfa).
@@ -139,7 +140,7 @@ quran_app/
   - `localizedApp()`: tek ekranı dil ve temayla sarar.
   - `openTab()`: alt sekme açar (`today`, `quran`, `memorize`, `me`).
   - `tapBack()`: geri tuşu. `tester.pageBack()` İngilizce "Back" aradığı için Türkçe/Arapçada çalışmaz.
-  - `FakeQuranRepository`, `openTestContentDatabase()`.
+  - `FakeQuranRepository` (`withPages: true` ile basit mushaf sayfaları), `FakeWakeLock`, `openTestContentDatabase()`.
 - İçerik testleri (`test/content/`) üretilmiş `assets/db/content.sqlite` ister; önce veritabanı üretilir.
 - Uygulama düzeyindeki testlerde cihaz dili sabitlenir (`localesTestValue`); kullanıcı verisi `userDataSnapshotProvider` ile verilir.
 - **Bir denetim yazıldığında bilerek bozularak denenir** ve sonuç notlara yazılır. Örnekler: hareke değiştirme (T-01), migration'ı boşaltma, gömülü metin ekleme, kontrastı düşürme.

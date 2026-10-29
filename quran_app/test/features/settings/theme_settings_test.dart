@@ -92,28 +92,31 @@ void main() {
     });
   }
 
-  testWidgets('okuma ekranındaki tema düğmesi açık → sepya → koyu → açık', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      _app(settings: {ThemeSettingsNotifier.key: 'light'}),
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('today.continue')));
-    await tester.pumpAndSettle();
-
-    final seen = <Color>[];
-    for (var i = 0; i < 3; i++) {
-      await tester.tap(find.byKey(const Key('reader.theme')));
+  testWidgets(
+    'okuma ayarları panelinden tema seçilir, anında uygulanır (E-10)',
+    (tester) async {
+      await tester.pumpWidget(
+        _app(settings: {ThemeSettingsNotifier.key: 'light'}),
+      );
       await tester.pumpAndSettle();
-      seen.add(_readerBackground(tester)!);
-    }
-    expect(seen, [
-      AppPalette.sepia.mushaf.background,
-      AppPalette.dark.mushaf.background,
-      AppPalette.light.mushaf.background,
-    ]);
-  });
+      await tester.tap(find.byKey(const Key('today.continue')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('reader.settings')));
+      await tester.pumpAndSettle();
+
+      final seen = <Color>[];
+      for (final id in [AppThemeId.sepia, AppThemeId.dark, AppThemeId.light]) {
+        await tester.tap(find.byKey(Key('readerSettings.theme.${id.name}')));
+        await tester.pumpAndSettle();
+        seen.add(_readerBackground(tester)!);
+      }
+      expect(seen, [
+        AppPalette.sepia.mushaf.background,
+        AppPalette.dark.mushaf.background,
+        AppPalette.light.mushaf.background,
+      ]);
+    },
+  );
 
   group('erişilebilirlik kuralları (NF-E01, NF-E03)', () {
     for (final id in AppThemeId.values) {

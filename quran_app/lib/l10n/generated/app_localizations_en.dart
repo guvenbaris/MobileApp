@@ -259,4 +259,87 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get linkInvalid =>
       'This link does not point to a valid verse or page.';
+
+  @override
+  String readerJuzHizb(String juz, String hizb) {
+    return 'Juz $juz · Hizb $hizb';
+  }
+
+  @override
+  String get readerRightPage => 'Right page';
+
+  @override
+  String get readerLeftPage => 'Left page';
+
+  @override
+  String get readerSajdah => 'Sajdah';
+
+  @override
+  String get readerNextPage => 'Next page';
+
+  @override
+  String get readerPreviousPage => 'Previous page';
+
+  @override
+  String get readerSettings => 'Reading settings';
+
+  @override
+  String get readerContent => 'Reading area';
+
+  @override
+  String get readerShowControls => 'Show controls';
+
+  @override
+  String get readerHideControls => 'Hide controls';
+
+  @override
+  String get readerAutoScrollStart => 'Start auto-scroll';
+
+  @override
+  String get readerAutoScrollStop => 'Stop auto-scroll';
+
+  @override
+  String get readerAutoScrollSpeed => 'Auto-scroll speed';
+
+  @override
+  String get readerView => 'View';
+
+  @override
+  String get readerViewPage => 'Page';
+
+  @override
+  String get readerViewAyah => 'Verse';
+
+  @override
+  String get readerTextSize => 'Text size';
+
+  @override
+  String get readerTextLock => 'Lock text size';
+
+  @override
+  String get readerTextLockHint => 'Text size and page zoom stay fixed';
+
+  @override
+  String get readerMushafLayout => 'Mushaf layout';
+
+  @override
+  String get layoutMadani1421 => 'Madinah Mushaf (1421 AH)';
+
+  @override
+  String get readerKeepScreenOn => 'Keep screen on';
+
+  @override
+  String get readerKeepScreenOnHint => 'The screen stays on while reading';
+
+  @override
+  String get readerPageArrows => 'Page arrows';
+
+  @override
+  String get readerPageArrowsHint =>
+      'Buttons to turn pages, in addition to swiping';
+
+  @override
+  String readerPercent(String value) {
+    return '$value%';
+  }
 }

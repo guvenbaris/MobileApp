@@ -229,10 +229,10 @@ Her ekranda: amaç, kutu çizimi (TR, dikey telefon), öğeler, davranış, duru
 ### E-04 Okuma: sayfa görünümü
 **Amaç:** Basılı mushafla birebir sayfa; okurken dikkat dağıtmamak (D1).
 
-Çubuklar **görünür** (ekrana bir dokunuş):
+Çubuklar **görünür** (okuma ekranı böyle açılır):
 ```
 ┌──────────────────────────────────────┐
-│ ←  Bakara · Cüz 2 · Hizb 3      ⋯  ⚙︎ │  üst çubuk
+│ ←  Sayfa 23 · Cüz 2              ⚙︎ │  üst çubuk (⚙︎ okuma ayarları, E-10)
 ├──────────────────────────────────────┤
 │        ┌──────────────────────┐      │
 │        │     سُورَةُ البَقَرَة     │      │
@@ -242,25 +242,28 @@ Her ekranda: amaç, kutu çizimi (TR, dikey telefon), öğeler, davranış, duru
 │        └──────────────────────┘      │
 │            ۞ 23 · sağ sayfa           │  sayfa no + sağ/sol göstergesi (M2-04)
 ├──────────────────────────────────────┤
-│ ▶ Mişari · Bakara 150   ⏸  ⟳3   ⌃    │  mini oynatıcı (çalıyorsa)
-│ 📄/☰  🔊  Meal  🔖  Git               │  alt çubuk
+│ ▶ Mişari · Bakara 150   ⏸  ⟳3   ⌃    │  mini oynatıcı (çalıyorsa, F1-09)
+│ ‹   📄/☰   ▶ oto   Git   (🔊 Meal 🔖)  › │  alt çubuk; ‹ › yalnızca sayfa okları açıksa
 └──────────────────────────────────────┘
 ```
-Çubuklar **gizli** (varsayılan okuma hali):
+Çubuklar **gizli** (okuma hali; bir dokunuşla):
 ```
 ┌──────────────────────────────────────┐
-│  Cüz 2                       Sayfa 23 │  ince, soluk bilgi satırı (M2-04 her zaman görünür)
+│ Bakara                Cüz 2 · Hizb 3 │  sayfa üst şeridi (M2-04, her zaman görünür)
 │                                      │
 │        (yalnızca mushaf sayfası)     │
 │                                      │
+│ ‹ ۞ Hizb 3 · ½      23     Sağ sayfa › │  sayfa alt şeridi: işaretler, sayfa no, sağ/sol
 └──────────────────────────────────────┘
 ```
-- **Dokunma:** boş alana tek dokunuş çubukları açar/kapatır; çubuklar kendiliğinden kapanmaz (M2-13). Kelimeye dokunuş **kelime kartı** (E-07), ayete uzun basış **ayet eylem paneli** (E-06).
-- **Sayfa çevirme:** yatay kaydırma (mushaf sağdan sola; sonraki sayfa soldan gelir) + isteğe bağlı oklar. Ekran kenarındaki 24 dp şerit sistemin geri hareketine bırakılır (M2-09, §7).
+- **Çubuklar** içeriğin üstünde durur (açılıp kapanınca sayfa yeniden ölçülmez); kendiliğinden kapanmaz (M2-13). Okuma ekranı çubuklar açık açılır.
+- **Dokunma (ET-8, F1-02):** çubuklar açıkken içeriğe ilk dokunuş (kelimede de) yalnızca çubukları kapatır. Çubuklar kapalıyken kelimeye dokunuş **kelime kartı** (E-07), üst/alt şeride veya kelime arasına dokunuş çubukları açar. Ayete uzun basış **ayet eylem paneli** (E-06).
+- **Sayfa çevirme:** yatay kaydırma (mushaf sağdan sola; sonraki sayfa soldan gelir) + isteğe bağlı oklar (varsayılan kapalı). Oklar çubuklar açıkken alt çubuğun uçlarında, kapalıyken alt köşelerde; sol ok sonraki sayfa. Ekran kenarındaki 24 dp şerit sistemin geri hareketine bırakılır (M2-09, §7).
+- **Yakınlaştırma:** iki parmakla ×3'e kadar; yakınken sayfa çevrilmez. Yazı kilidi açıksa kapalı (M2-07).
 - **Ses çalarken:** çalınan ayet hafif zeminle vurgulanır, sayfa kendiliğinden ilerler (M5-06).
 - **İşaretler:** secde ayetinde kenarda ۩ notu, rubu'/hizb başında ۞ (M2-05). Faz 2'de hata işaretleri ve ezber renkleri yalnızca kullanıcı açarsa görünür.
-- **Otomatik kaydırma** (M2-11): alt çubuktan; hız kaydırıcısı, dokununca durur.
-- **Ekran açık** (M2-12): ayardan; okuma ekranında geçerli.
+- **Otomatik kaydırma** (M2-11): alt çubuktaki ▶ ile; başlayınca çubuklar kapanır, ekrana dokununca durur ve çubuklar geri gelir. Sayfa görünümünde ayarlanan sürede sonraki sayfaya geçer; hız E-10'da.
+- **Ekran açık** (M2-12): varsayılan açık, E-10'dan kapatılır; yalnızca okuma ekranında ve otomatik kaydırma sürerken geçerli.
 - **Durumlar:** sayfa yüklenirken sayfa rengi boş alan (titreme yok). Hata olursa ErrorState ve "Tekrar dene".
 
 ### E-05 Okuma: ayet görünümü
@@ -283,12 +286,13 @@ Her ekranda: amaç, kutu çizimi (TR, dikey telefon), öğeler, davranış, duru
 ├──────────────────────────────────────┤
 │ 2:151 ...                            │
 ├──────────────────────────────────────┤
-│ 📄/☰  🔊  Meal  🔖  Git     A− A+     │
+│ 📄/☰   ▶ oto   Git   (🔊 Meal 🔖)       │
 └──────────────────────────────────────┘
 ```
 - Ayetler dikey listede; okunan ayet ekranın üstündeki ayettir (M2-15). Sayfa görünümüne geçişte o ayetin sayfası açılır.
+- Altta her zaman görünen bilgi satırı: "Cüz 2 · Hizb 3 · Sayfa 23" (M2-04). Rubu' başında "۞ Hizb 3 · ½", secde ayetinde "۩ Secde" (M2-05).
 - **Odak modu** (seçenek): tek ayet tam ekran, sağa-sola kaydırarak ayet ayet ilerleme.
-- Yazı boyutu Arapça ve meal için ayrı ayarlanır (A−/A+, %50–%250; kilitlenebilir, M2-07).
+- Yazı boyutu E-10'da (A−/A+ ve kaydırıcı, %50–%250; kilitlenebilir, M2-07). Meal için ayrı boyut F1-05'te.
 - Sure başında sure adı, iniş yeri, ayet sayısı; besmele (Fatiha ve Tevbe kuralına uygun).
 - Ekran okuyucu: her ayet "Ayet 2:150, [Arapça], [meal]" olarak tek düğümde okunur (M13-03).
 
@@ -378,19 +382,19 @@ Her ekranda: amaç, kutu çizimi (TR, dikey telefon), öğeler, davranış, duru
 - İndirilmemiş surede çalma akışla yapılır; çevrimdışıysa "Bu sure indirilmedi" ve "İndir" düğmesi (D9).
 
 ### E-10 Okuma ayarları paneli
-Okuma ekranındaki ⚙︎ ile alttan açılır; değişiklik anında sayfaya uygulanır.
+Okuma ekranındaki ⚙︎ ile alttan açılır; değişiklik anında sayfaya uygulanır ve kalıcıdır. F1-02'de görünüm, tema, yazı, kilit, düzen bilgisi, ekran açık, sayfa okları ve kaydırma hızı var; düzen seçimi F1-03, tecvid F1-04, kelime meali F1-06 ile eklenir.
 ```
 ┌──────────────────────────────────────┐
 │ Okuma ayarları                  ✕    │
 │ Görünüm     [📄 Sayfa] [☰ Ayet]       │
-│ Tema        [Açık] [Sepya] [Koyu]    │
+│ Tema        [Cihaz] [Açık] [Sepya] [Koyu] │
 │ Yazı        A− ━━━━○━━━ A+   🔒 Kilitle │
 │ Mushaf      Medine 1421H ▾           │  (M2-14) düzen seçimi
 │ Tecvid      [ ○ ] renkli tecvid      │  (M2-06)
 │ Kelime meali[ ● ]                    │
 │ Ekran açık  [ ● ] okurken kapanmasın │  (M2-12)
 │ Sayfa okları[ ○ ]                    │  (M2-09)
-│ Oto kaydırma hız ━━○━━━  [Başlat]    │  (M2-11)
+│ Oto kaydırma hızı ━━○━━━ (1–10)      │  (M2-11; başlatma alt çubukta)
 └──────────────────────────────────────┘
 ```
 
@@ -674,12 +678,14 @@ Bölümler (her biri bir alt sayfa ya da liste bölümü):
 
 | Hareket | Okuma ekranında anlamı | Not |
 |---|---|---|
-| Tek dokunuş (boş alan) | Çubukları aç/kapat | |
-| Tek dokunuş (kelime) | Kelime kartı (E-07) | Hafızlık modunda: sonraki kelimeyi aç / hata işaretle |
+| Tek dokunuş, çubuklar açıkken | Çubukları kapat (kelimede de) | ET-8: sayfada boş alan çok az |
+| Tek dokunuş (boş alan, şerit), çubuklar kapalıyken | Çubukları aç | |
+| Tek dokunuş (kelime), çubuklar kapalıyken | Kelime kartı (E-07) | Hafızlık modunda: sonraki kelimeyi aç / hata işaretle |
+| Herhangi bir dokunuş, otomatik kaydırmada | Kaydırmayı durdur, çubukları aç | M2-11 |
 | Uzun basış (ayet) | Ayet eylem paneli (E-06) | Sürükleyince çoklu seçim |
 | Yatay kaydırma | Sayfa çevir (sağdan sola mushaf) | **Ekranın sol/sağ kenarındaki 24 dp şerit sistemin geri hareketine bırakılır** (M2-09; Al Quran şikâyeti) |
 | Dikey kaydırma | Ayet görünümünde liste; telefon yatayda sayfa içi | |
-| İki parmakla yakınlaştırma | Sayfa görünümünde büyütme | Yazı boyutu kilitliyse kapalı (M2-07) |
+| İki parmakla yakınlaştırma | Sayfa görünümünde büyütme (×3'e kadar) | Yazı boyutu kilitliyse kapalı (M2-07); yakınken tek parmak sayfayı kaydırır, çevirmez |
 | Mini oynatıcıyı yukarı çekme | Tam oynatıcı | |
 | Alt paneli aşağı çekme | Paneli kapat | Panel içindeki liste en üstteyse |
 
@@ -701,7 +707,9 @@ Bölümler (her biri bir alt sayfa ya da liste bölümü):
 | `SegmentedTabs` (Sure/Cüz/Sayfa, Meal/Tefsir) | Faz 1 | E-03, E-08, E-11, E-12 |
 | `AyahTile` (Arapça + meal + kelime meali) | Faz 1 | E-05, E-11 sonuçları, E-12 |
 | `MiniPlayer`, `PlayerSheet` | Faz 1 | E-09 |
-| `ReaderChrome` (üst/alt çubuk, gizlenebilir) | Faz 1 | E-04, E-05 |
+| `ReaderChrome` (üst/alt çubuk, gizlenebilir) | ✅ F1-02 (`reader_page.dart` içinde) | E-04, E-05 |
+| `MushafPageFrame` (sayfa üst/alt şeridi: sure, cüz, hizb, sayfa, sağ/sol, işaretler) | ✅ F1-02 | E-04, E-18 |
+| `MushafMarkText` (۞ / ۩ işareti + açıklama) | ✅ F1-02 | E-04, E-05 |
 | `DownloadTile` (ilerleme, duraklat, iptal) | Faz 1 | E-13, E-08 |
 | `DismissibleTip` (kapatılabilir öneri, "bir daha gösterme") | Faz 1 | E-02, E-06 |
 | `ProgressRing` (hedef halkası), `StreakBadge` (sade) | Faz 2 | E-02, E-21 |
@@ -732,13 +740,15 @@ Yeni bileşenler `lib/core/widgets/`'a ya da yalnız bir özelliğe aitse o öze
 | ET-2 | Bugün ekranında günün ayeti her gün mü değişsin, kullanıcı mı seçsin? | Her gün değişir; yer imlerinden "favori ayetler" seçeneği | ⏳ |
 | ET-3 | Okuma açılışta hangi görünümde başlasın? | Son kullanılan görünüm (F0-06'da kalıcı) | ✅ Uygulanıyor |
 | ET-4 | Ayet görünümünde varsayılan: tüm sure listesi mi, tek ayet odak mı? | Liste; odak modu seçenek | ⏳ |
-| ET-5 | Sayfa okları varsayılan açık mı? | Kapalı (kaydırma yeterli); ayarlardan açılır | ⏳ |
+| ET-5 | Sayfa okları varsayılan açık mı? | Kapalı (kaydırma yeterli); ayarlardan açılır | 🟡 Öneriyle uygulandı (F1-02), onay bekliyor |
 | ET-6 | Marka rengi ve logo | Uygulama adı (AK-04) ile birlikte | ⏳ |
 | ET-7 | Hafızlık sekmesi Faz 1'de görünsün mü? | Görünsün, "yakında" boş durumuyla (sekme yerleşimi sonradan değişmesin, Y-05) | 🟡 Öneriyle uygulandı (F1-01), onay bekliyor |
+| ET-8 | Okuma ekranında dokunma: mushaf sayfasında boş alan çok az; çubuklar nasıl kapanıp açılsın? | Çubuklar açıkken ilk dokunuş her yerde çubukları kapatır; kapalıyken kelime = kelime kartı, şerit/boşluk = çubukları aç. (Diğer seçenek: her dokunuş çubukları değiştirir, kelime kartı uzun basışla; ama uzun basış ayet eylemlerine ayrılmış.) | 🟡 Öneriyle uygulandı (F1-02), onay bekliyor |
 
 ---
 
 ## Değişiklik Geçmişi
 | Tarih | Değişiklik |
 |---|---|
+| 29.10.2026 | F1-02: E-04/E-05/E-10 ve §7 uygulanan hâle göre güncellendi (çubuk düzeni, sayfa üst/alt şeridi, oklar, dokunma kuralı); ET-5 uygulandı; ET-8 eklendi; bileşen kataloğu |
 | 29.10.2026 | İlk taslak (v0.1): rakip dersleri, ilkeler, bilgi mimarisi, E-01…E-29, tablet düzenleri, etkileşim kuralları, bileşen kataloğu |

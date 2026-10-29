@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Uygulamanın temaları (M2-08). Sıra, okuma ekranındaki tema düğmesinin
-/// geçiş sırasıdır.
+/// Uygulamanın temaları (M2-08).
 enum AppThemeId { light, sepia, dark }
 
 /// Mushaf sayfasının renkleri. Koyu temada metin alanı da koyudur (M2-08).

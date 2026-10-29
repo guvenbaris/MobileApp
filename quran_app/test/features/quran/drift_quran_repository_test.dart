@@ -112,6 +112,37 @@ void main() {
       expect(glyph.words, const [WordRef(37, 130, 3), WordRef(37, 130, 4)]);
     });
 
+    test('secde ve rubu\' işaretleri (M2-05): örnek sayfalar', () async {
+      expect((await page(176)).sajdahAyahs, const [AyahRef(7, 206)]);
+      // 22:77'deki ۩ metinde görünür ama secde sayılmaz (Q-8).
+      expect((await page(341)).sajdahAyahs, isEmpty);
+      final p5 = await page(5);
+      expect(p5.quarterStarts.map((q) => (q.rub, q.start)), [
+        (2, const AyahRef(2, 26)),
+      ]);
+      expect((await page(1)).quarterStarts.single.start, const AyahRef(1, 1));
+    });
+
+    test('604 sayfanın işaretleri bağımsız hesapla aynı: 14 secde, '
+        '240 rubu\'', () async {
+      final sajdahs = <AyahRef>[];
+      final quarters = <(int, AyahRef, int)>[];
+      for (var n = 1; n <= 604; n++) {
+        final p = await page(n);
+        sajdahs.addAll(p.sajdahAyahs);
+        quarters.addAll(p.quarterStarts.map((q) => (q.rub, q.start, q.page)));
+      }
+      final expectedSajdahs = (await db.select(db.ayahs).get())
+          .where((a) => a.sajdah != null)
+          .map((a) => AyahRef(a.surah, a.ayah))
+          .toList();
+      expect(sajdahs, hasLength(14));
+      expect(sajdahs, expectedSajdahs);
+      // Cüz dizinindeki sorgu (her rubu'un ilk ayeti ve sayfası).
+      final index = (await repo.quarterStarts(kDefaultLayoutId)).valueOrNull!;
+      expect(quarters, [for (final q in index) (q.rub, q.start, q.page)]);
+    });
+
     test('olmayan sayfa NotFoundFailure döndürür', () async {
       expect(
         await repo.getMushafPage(kDefaultLayoutId, 605),

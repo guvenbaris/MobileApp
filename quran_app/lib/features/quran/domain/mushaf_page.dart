@@ -1,4 +1,5 @@
 import 'quran_models.dart';
+import 'quran_navigation.dart';
 
 /// Düzenden bağımsız kelime konumu: sure:ayet:kelime (M2-15).
 ///
@@ -95,6 +96,8 @@ class MushafPage {
     required this.juz,
     required this.hizb,
     required this.lines,
+    this.sajdahAyahs = const [],
+    this.quarterStarts = const [],
   });
 
   final String layoutId;
@@ -107,4 +110,11 @@ class MushafPage {
   final int juz;
   final int hizb;
   final List<MushafLine> lines;
+
+  /// Bu sayfada başlayan secde ayetleri (M2-05). Yalnızca 14 secde sayılır
+  /// (Hanefi, Q-8); 22:77'deki ۩ işareti metinde görünür ama burada yoktur.
+  final List<AyahRef> sajdahAyahs;
+
+  /// Bu sayfada başlayan rubu'lar (M2-05: ۞ işareti ve hizb bilgisi).
+  final List<QuarterStart> quarterStarts;
 }

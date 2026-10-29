@@ -121,6 +121,9 @@ class MushafPageView extends ConsumerWidget {
         return Center(child: Text(basmala, style: style));
       case LayoutLineType.ayah:
         return Row(
+          // Kelimenin dokunma alanı satırın tüm yüksekliğidir (NF-E03:
+          // telefonda satır ≥ 48).
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: line.isCentered
               ? MainAxisAlignment.center
               : MainAxisAlignment.spaceBetween,
@@ -231,6 +234,7 @@ class _GlyphUnit extends StatelessWidget {
         onTap: () => onTap(selected),
         child: Container(
           color: selected ? highlight : null,
+          alignment: Alignment.center,
           padding: padding,
           child: Text(
             glyph.digitalKhattText ?? '',

@@ -66,15 +66,15 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 - **Bitti:** Uygulama açılışından son okunan ayete tek dokunuş; okuma ekranından ana menüye dönmeden herhangi bir ayete gidilebiliyor. ✅ (`Faz_1_Notlar.md` §3)
 
 ### F1-02 Okuma Ekranı [Z] — M2-01, M2-03, M2-04, M2-05, M2-07, M2-09…M2-13
-- [ ] Çubukların dokununca gizlenip gösterilmesi; ekranı kendiliğinden kapatmaz (M2-13)
-- [ ] Okurken ekran kapanmaz, ayarlanabilir (M2-12, TK-15)
-- [ ] Sayfa okları (isteğe bağlı) + kaydırma; kenar hareketleri sistemin geri hareketiyle çakışmaz (M2-09)
-- [ ] Cüz, hizb, sayfa ve sağ/sol sayfa göstergesi her zaman görünür (M2-04); secde ve rubu'/hizb işaretleri (M2-05)
-- [ ] Yazı boyutu kilidi; sayfa görünümünde yakınlaştırma (M2-07)
-- [ ] Kontrollü otomatik kaydırma, hız ayarlı, sayfa görünümünde de (M2-11) [Ö]
-- [ ] Okuma ayarları paneli (E-10): görünüm, tema, yazı, düzen, tecvid, ekran açık
-- [ ] T-09: döndürme ve çoklu pencere testleri (KK M2-10: Bakara 150)
-- **Bitti:** Okuma ekranı E-04/E-05 tasarımına uygun; T-09 geçiyor.
+- [x] Çubukların dokununca gizlenip gösterilmesi; ekranı kendiliğinden kapatmaz (M2-13)
+- [x] Okurken ekran kapanmaz, ayarlanabilir (M2-12, TK-15)
+- [x] Sayfa okları (isteğe bağlı) + kaydırma; kenar hareketleri sistemin geri hareketiyle çakışmaz (M2-09)
+- [x] Cüz, hizb, sayfa ve sağ/sol sayfa göstergesi her zaman görünür (M2-04); secde ve rubu'/hizb işaretleri (M2-05)
+- [x] Yazı boyutu kilidi; sayfa görünümünde yakınlaştırma (M2-07)
+- [x] Kontrollü otomatik kaydırma, hız ayarlı, sayfa görünümünde de (M2-11) [Ö]
+- [x] Okuma ayarları paneli (E-10): görünüm, tema, yazı, düzen, ekran açık, sayfa okları, kaydırma hızı. Tecvid (F1-04), kelime meali (F1-06) ve düzen seçimi (F1-03) kendi paketlerinde eklenir
+- [x] T-09: döndürme ve çoklu pencere testleri (KK M2-10: Bakara 150)
+- **Bitti:** Okuma ekranı E-04/E-05 tasarımına uygun; T-09 geçiyor. ✅ (`Faz_1_Notlar.md` §4; dokunma kuralı ET-8 onay bekliyor)
 
 ### F1-03 Mushaf Düzenleri [Z] — M2-02, M2-14, AK-11
 - [ ] **Türkiye mushaf düzeni araştırması:** kaynak, satır/sayfa yapısı, lisans; sonuç raporu (F0-05 raporuyla birlikte)
@@ -193,6 +193,7 @@ Faz 0 kullanıcı kararıyla kapandı (29.10.2026); aşağıdakiler bu faza taş
 ## Değişiklik Geçmişi
 | Tarih | Değişiklik |
 |---|---|
+| 29.10.2026 | F1-02 tamamlandı: gizlenebilir çubuklar, ekran açık (`wakelock_plus`, TK-15), sayfa okları ve kenar şeridi, sayfa çerçevesi (cüz/hizb/sayfa/sağ-sol, secde ve rubu'), yakınlaştırma ve yazı kilidi, otomatik kaydırma, okuma ayarları paneli, T-09 |
 | 29.10.2026 | F1-01 tamamlandı: sekmeli kabuk, Bugün, Kur'an dizini, Git paneli, derin bağlantı |
 | 29.10.2026 | F1-00: F0-05 sonuç raporu; sayfa karşılaştırma paketi, gerçek cihaz performans araçları ve çeviri gözden geçirme tablosu |
 | 29.10.2026 | S9 uygulandı (`text_uthmani` kaldırıldı, içerik sürümü 7); S1/S2 meal lisansı yolları netleştirildi (atıf izin yerine geçmez; izin + kamu malı yedek) |

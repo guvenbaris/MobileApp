@@ -525,6 +525,162 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bu bağlantı geçerli bir ayete veya sayfaya ait değil.'**
   String get linkInvalid;
+
+  /// Okuma ekranında her zaman görünen konum bilgisi (M2-04).
+  ///
+  /// In tr, this message translates to:
+  /// **'Cüz {juz} · Hizb {hizb}'**
+  String readerJuzHizb(String juz, String hizb);
+
+  /// Basılı mushafta sayfanın açılımdaki yeri (M2-04); hafızlar sayfa yerini ezberler.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sağ sayfa'**
+  String get readerRightPage;
+
+  /// No description provided for @readerLeftPage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sol sayfa'**
+  String get readerLeftPage;
+
+  /// Secde ayeti işareti (M2-05); önünde ۩ simgesi durur.
+  ///
+  /// In tr, this message translates to:
+  /// **'Secde'**
+  String get readerSajdah;
+
+  /// Sayfa oku (M2-09).
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonraki sayfa'**
+  String get readerNextPage;
+
+  /// No description provided for @readerPreviousPage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önceki sayfa'**
+  String get readerPreviousPage;
+
+  /// Okuma ayarları paneli (E-10).
+  ///
+  /// In tr, this message translates to:
+  /// **'Okuma ayarları'**
+  String get readerSettings;
+
+  /// Ekran okuyucu: okuma ekranının içerik bölgesi.
+  ///
+  /// In tr, this message translates to:
+  /// **'Okuma alanı'**
+  String get readerContent;
+
+  /// Ekran okuyucu: içeriğe dokununca çubuklar görünür (M2-13).
+  ///
+  /// In tr, this message translates to:
+  /// **'Menüyü göster'**
+  String get readerShowControls;
+
+  /// No description provided for @readerHideControls.
+  ///
+  /// In tr, this message translates to:
+  /// **'Menüyü gizle'**
+  String get readerHideControls;
+
+  /// M2-11.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik kaydırmayı başlat'**
+  String get readerAutoScrollStart;
+
+  /// No description provided for @readerAutoScrollStop.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik kaydırmayı durdur'**
+  String get readerAutoScrollStop;
+
+  /// No description provided for @readerAutoScrollSpeed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik kaydırma hızı'**
+  String get readerAutoScrollSpeed;
+
+  /// No description provided for @readerView.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görünüm'**
+  String get readerView;
+
+  /// Mushaf sayfası görünümü (M2-01).
+  ///
+  /// In tr, this message translates to:
+  /// **'Sayfa'**
+  String get readerViewPage;
+
+  /// Ayet ayet görünüm (M2-01).
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayet'**
+  String get readerViewAyah;
+
+  /// Ayet görünümündeki yazı boyutu (M2-07).
+  ///
+  /// In tr, this message translates to:
+  /// **'Yazı boyutu'**
+  String get readerTextSize;
+
+  /// No description provided for @readerTextLock.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yazı boyutunu kilitle'**
+  String get readerTextLock;
+
+  /// No description provided for @readerTextLockHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yazı boyutu ve sayfa yakınlaştırması değişmez'**
+  String get readerTextLockHint;
+
+  /// M2-14; düzen seçimi F1-03'te gelir.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mushaf düzeni'**
+  String get readerMushafLayout;
+
+  /// Varsayılan mushaf düzeninin adı.
+  ///
+  /// In tr, this message translates to:
+  /// **'Medine Mushafı (1421 H)'**
+  String get layoutMadani1421;
+
+  /// M2-12.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ekran açık kalsın'**
+  String get readerKeepScreenOn;
+
+  /// No description provided for @readerKeepScreenOnHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Okurken ekran kapanmaz'**
+  String get readerKeepScreenOnHint;
+
+  /// M2-09.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sayfa okları'**
+  String get readerPageArrows;
+
+  /// No description provided for @readerPageArrowsHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydırmanın yanında sayfa çevirme düğmeleri'**
+  String get readerPageArrowsHint;
+
+  /// Yüzde; Türkçede işaret sayının önünde.
+  ///
+  /// In tr, this message translates to:
+  /// **'%{value}'**
+  String readerPercent(String value);
 }
 
 class _AppLocalizationsDelegate

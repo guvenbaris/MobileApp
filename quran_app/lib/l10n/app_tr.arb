@@ -259,5 +259,92 @@
   "goToPage": "Sayfa",
   "goToJuz": "Cüz",
   "goToButton": "Git",
-  "linkInvalid": "Bu bağlantı geçerli bir ayete veya sayfaya ait değil."
+  "linkInvalid": "Bu bağlantı geçerli bir ayete veya sayfaya ait değil.",
+  "readerJuzHizb": "Cüz {juz} · Hizb {hizb}",
+  "@readerJuzHizb": {
+    "description": "Okuma ekranında her zaman görünen konum bilgisi (M2-04).",
+    "placeholders": {
+      "juz": {
+        "type": "String"
+      },
+      "hizb": {
+        "type": "String"
+      }
+    }
+  },
+  "readerRightPage": "Sağ sayfa",
+  "@readerRightPage": {
+    "description": "Basılı mushafta sayfanın açılımdaki yeri (M2-04); hafızlar sayfa yerini ezberler."
+  },
+  "readerLeftPage": "Sol sayfa",
+  "readerSajdah": "Secde",
+  "@readerSajdah": {
+    "description": "Secde ayeti işareti (M2-05); önünde ۩ simgesi durur."
+  },
+  "readerNextPage": "Sonraki sayfa",
+  "@readerNextPage": {
+    "description": "Sayfa oku (M2-09)."
+  },
+  "readerPreviousPage": "Önceki sayfa",
+  "readerSettings": "Okuma ayarları",
+  "@readerSettings": {
+    "description": "Okuma ayarları paneli (E-10)."
+  },
+  "readerContent": "Okuma alanı",
+  "@readerContent": {
+    "description": "Ekran okuyucu: okuma ekranının içerik bölgesi."
+  },
+  "readerShowControls": "Menüyü göster",
+  "@readerShowControls": {
+    "description": "Ekran okuyucu: içeriğe dokununca çubuklar görünür (M2-13)."
+  },
+  "readerHideControls": "Menüyü gizle",
+  "readerAutoScrollStart": "Otomatik kaydırmayı başlat",
+  "@readerAutoScrollStart": {
+    "description": "M2-11."
+  },
+  "readerAutoScrollStop": "Otomatik kaydırmayı durdur",
+  "readerAutoScrollSpeed": "Otomatik kaydırma hızı",
+  "readerView": "Görünüm",
+  "readerViewPage": "Sayfa",
+  "@readerViewPage": {
+    "description": "Mushaf sayfası görünümü (M2-01)."
+  },
+  "readerViewAyah": "Ayet",
+  "@readerViewAyah": {
+    "description": "Ayet ayet görünüm (M2-01)."
+  },
+  "readerTextSize": "Yazı boyutu",
+  "@readerTextSize": {
+    "description": "Ayet görünümündeki yazı boyutu (M2-07)."
+  },
+  "readerTextLock": "Yazı boyutunu kilitle",
+  "readerTextLockHint": "Yazı boyutu ve sayfa yakınlaştırması değişmez",
+  "readerMushafLayout": "Mushaf düzeni",
+  "@readerMushafLayout": {
+    "description": "M2-14; düzen seçimi F1-03'te gelir."
+  },
+  "layoutMadani1421": "Medine Mushafı (1421 H)",
+  "@layoutMadani1421": {
+    "description": "Varsayılan mushaf düzeninin adı."
+  },
+  "readerKeepScreenOn": "Ekran açık kalsın",
+  "@readerKeepScreenOn": {
+    "description": "M2-12."
+  },
+  "readerKeepScreenOnHint": "Okurken ekran kapanmaz",
+  "readerPageArrows": "Sayfa okları",
+  "@readerPageArrows": {
+    "description": "M2-09."
+  },
+  "readerPageArrowsHint": "Kaydırmanın yanında sayfa çevirme düğmeleri",
+  "readerPercent": "%{value}",
+  "@readerPercent": {
+    "description": "Yüzde; Türkçede işaret sayının önünde.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  }
 }

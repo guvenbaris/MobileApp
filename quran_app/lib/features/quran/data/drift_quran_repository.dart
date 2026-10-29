@@ -136,7 +136,24 @@ class DriftQuranRepository implements QuranRepository {
 
     WordRef ref(WordRow w) => WordRef(w.surah, w.ayah, w.position);
     final glyphById = {for (final g in glyphs) g.id: g};
-
+    // Sayfada başlayan ayetler: ilk kelimesi bu sayfada olanlar. Önceki
+    // sayfadan taşan ayet başladığı sayfaya aittir (pageOf ile aynı kural).
+    final startIds = {
+      for (final w in words.values)
+        if (w.position == 1) w.ayahId,
+    };
+    // Başlayan ayetler ve her birinin bir öncekisi: rubu' değişen ayet
+    // rubu' başıdır. Secde ve rubu' bilgisi tek sorguda.
+    final rows = {
+      for (final a
+          in await (_db.select(_db.ayahs)..where(
+                (a) =>
+                    a.id.isIn({...startIds, for (final id in startIds) id - 1}),
+              ))
+              .get())
+        a.id: a,
+    };
+    final starts = [for (final id in startIds.toList()..sort()) rows[id]!];
     return Ok(
       MushafPage(
         layoutId: layoutId,
@@ -144,6 +161,21 @@ class DriftQuranRepository implements QuranRepository {
         firstAyah: AyahRef(firstAyah.surah, firstAyah.ayah),
         juz: firstAyah.juz,
         hizb: firstAyah.hizb,
+        sajdahAyahs: [
+          for (final a in starts)
+            if (a.sajdah != null) AyahRef(a.surah, a.ayah),
+        ],
+        quarterStarts: [
+          for (final a in starts)
+            if (rows[a.id - 1]?.rub != a.rub)
+              QuarterStart(
+                juz: a.juz,
+                hizb: a.hizb,
+                rub: a.rub,
+                start: AyahRef(a.surah, a.ayah),
+                page: page,
+              ),
+        ],
         lines: [
           for (final l in lines)
             if (l.firstGlyphId == null)

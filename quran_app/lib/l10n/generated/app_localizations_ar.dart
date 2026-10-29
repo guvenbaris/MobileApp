@@ -260,4 +260,86 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get linkInvalid => 'هذا الرابط لا يشير إلى آية أو صفحة صحيحة.';
+
+  @override
+  String readerJuzHizb(String juz, String hizb) {
+    return 'الجزء $juz · الحزب $hizb';
+  }
+
+  @override
+  String get readerRightPage => 'الصفحة اليمنى';
+
+  @override
+  String get readerLeftPage => 'الصفحة اليسرى';
+
+  @override
+  String get readerSajdah => 'سجدة';
+
+  @override
+  String get readerNextPage => 'الصفحة التالية';
+
+  @override
+  String get readerPreviousPage => 'الصفحة السابقة';
+
+  @override
+  String get readerSettings => 'إعدادات القراءة';
+
+  @override
+  String get readerContent => 'منطقة القراءة';
+
+  @override
+  String get readerShowControls => 'إظهار أدوات التحكم';
+
+  @override
+  String get readerHideControls => 'إخفاء أدوات التحكم';
+
+  @override
+  String get readerAutoScrollStart => 'بدء التمرير التلقائي';
+
+  @override
+  String get readerAutoScrollStop => 'إيقاف التمرير التلقائي';
+
+  @override
+  String get readerAutoScrollSpeed => 'سرعة التمرير التلقائي';
+
+  @override
+  String get readerView => 'طريقة العرض';
+
+  @override
+  String get readerViewPage => 'صفحة';
+
+  @override
+  String get readerViewAyah => 'آية';
+
+  @override
+  String get readerTextSize => 'حجم الخط';
+
+  @override
+  String get readerTextLock => 'تثبيت حجم الخط';
+
+  @override
+  String get readerTextLockHint => 'لا يتغير حجم الخط ولا تكبير الصفحة';
+
+  @override
+  String get readerMushafLayout => 'تخطيط المصحف';
+
+  @override
+  String get layoutMadani1421 => 'مصحف المدينة النبوية (1421 هـ)';
+
+  @override
+  String get readerKeepScreenOn => 'إبقاء الشاشة مضاءة';
+
+  @override
+  String get readerKeepScreenOnHint => 'لا تنطفئ الشاشة أثناء القراءة';
+
+  @override
+  String get readerPageArrows => 'أسهم الصفحات';
+
+  @override
+  String get readerPageArrowsHint => 'أزرار لتقليب الصفحات إلى جانب السحب';
+
+  @override
+  String readerPercent(String value) {
+    return '$value٪';
+  }
 }

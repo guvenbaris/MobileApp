@@ -8,7 +8,8 @@
 1. [S9: Tanzil metninin uygulamadan çıkarılması ve meal lisansı](#1-s9-tanzil-metninin-uygulamadan-çıkarılması-ve-meal-lisansı)
 2. [F1-00 Faz 0'dan Devredilenler](#2-f1-00-faz-0dan-devredilenler)
 3. [F1-01 Uygulama Kabuğu ve Gezinme](#3-f1-01-uygulama-kabuğu-ve-gezinme)
-4. [Genel durum ve bekleyen kararlar](#4-genel-durum-ve-bekleyen-kararlar)
+4. [F1-02 Okuma Ekranı](#4-f1-02-okuma-ekranı)
+5. [Genel durum ve bekleyen kararlar](#5-genel-durum-ve-bekleyen-kararlar)
 
 ---
 
@@ -201,7 +202,71 @@ Raster süresi emülatörün yazılım grafik biriminden etkileniyor (F0-05 §8.
 
 ---
 
-## 4. Genel durum ve bekleyen kararlar
+## 4. F1-02 Okuma Ekranı
+**Tarih:** 29.10.2026 · **Durum:** ✅ (dokunma kuralı ET-8 onay bekliyor) · **Gereksinimler:** M2-01, M2-03, M2-04, M2-05, M2-07, M2-09…M2-13, T-09 · **Ekranlar:** E-04, E-05, E-10, §7 (`Ekran_Tasarimi.md`)
+
+### 4.1 Yapılanlar
+| Parça | Dosya | Açıklama |
+|---|---|---|
+| Çubuklar (M2-13) | `features/reader/presentation/reader_page.dart` | Üst çubuk (başlık, ⚙ okuma ayarları) ve alt çubuk (görünüm, otomatik kaydırma, Git) içeriğin **üstünde** durur; açılıp kapanınca sayfa yeniden ölçülmez, yazı boyutu zıplamaz. Okuma ekranı çubuklar açık açılır; çubuklar **asla kendiliğinden kapanmaz**. Geçiş 150 ms solma; sistemde "hareketi azalt" açıksa anında. |
+| Dokunma kuralı | aynı | Çubuklar açıkken içeriğe ilk dokunuş (kelimenin üstünde de) yalnızca çubukları kapatır. Çubuklar kapalıyken kelimeye dokunmak kelimeyi seçer; sayfanın üst/alt bilgi şeridine veya kelime arasına dokunmak çubukları açar. Kaydırma her durumda sayfayı çevirir. Gerekçe §4.3; onay ET-8. |
+| Ekran açık (M2-12, TK-15) | `core/platform/wake_lock.dart` | `WakeLock` arayüzü + `wakelock_plus` uygulaması (testlerde sahte). Ayar açıksa (varsayılan) **yalnızca okuma ekranındayken** ekran kapanmaz; çıkınca bırakılır. Ayar kapalı olsa da otomatik kaydırma sürerken açık kalır. Eklenti hata verirse okuma engellenmez, uyarı loglanır. |
+| Sayfa çevirme (M2-09) | `reader_page.dart` | Ekranın sol ve sağ kenarındaki **24 dp şerit** (cihazın hareket alanı daha genişse o kadar) yatay sürüklemeyi sayfa çevirmeden önce yakalar: sistemin geri hareketiyle çakışmaz. Şerit dokunuşları engellemez. **Sayfa okları** ayarla açılır (varsayılan kapalı, ET-5): çubuklar açıkken alt çubuğun iki ucunda, kapalıyken ekranın alt köşelerinde. Mushaf sağdan sola olduğu için **sol ok sonraki, sağ ok önceki sayfadır** (arayüz dilinden bağımsız). |
+| Sayfa çerçevesi (M2-04, M2-05) | `mushaf_page_frame.dart`, `mushaf_mark.dart` | Basılı nüshadaki gibi her sayfanın üstünde sure adı ve "Cüz 9 · Hizb 18", altında rubu'/secde işareti, sayfa numarası ve **Sağ/Sol sayfa** (tek numara sağda). Çubuklar gizliyken de görünür; çift sayfada her sayfanın kendi çerçevesi vardır. `۞`/`۩` simgeleri Kur'an fontuyla çizilir (arayüz fontlarında olmayabilir). |
+| İşaret verisi | `drift_quran_repository.dart`, `mushaf_page.dart` | `MushafPage.sajdahAyahs` ve `quarterStarts`: **o sayfada başlayan** secde ayetleri (yalnız 14 Hanefi secde; 22:77 sayılmaz) ve rubu' başları. Düzenden hesaplanır (M2-14: başka düzende de doğru). Tek ek sorgu. |
+| Ayet görünümü | `ayah_list_view.dart` | Rubu' başında "۞ Hizb 1 · ¼", secde ayetinde "۩ Secde"; altta her zaman görünen bilgi satırı "Cüz 1 · Hizb 1 · Sayfa 5" (okunan ayetin). |
+| Yakınlaştırma ve kilit (M2-07) | `reader_page.dart`, `reader_settings.dart` | Sayfa görünümünde iki parmakla ×3'e kadar yakınlaşma. Yakınken tek parmak sayfayı kaydırır, çevirmez; sayfa değişince yakınlık sıfırlanır. **Yazı boyutu kilidi** açıkken A−/A+, kaydırıcı ve yakınlaştırma kapanır. |
+| Otomatik kaydırma (M2-11) | `reader_page.dart`, `ayah_list_view.dart` | Alt çubuktaki ▶ ile başlar; başlayınca çubuklar kapanır. **Ekrana dokunmak durdurur** ve çubukları geri getirir. Hız 1–10: ayet görünümünde 15–105 piksel/sn sürekli kaydırma; sayfa görünümünde 184–40 sn'de bir sayfa (kademe 5 ≈ 2 dk). Kur'an'ın sonunda kendiliğinden durur. Kaydırmanın kendisi oturumluktur (kaydedilmez); hız ayarı kalıcıdır. |
+| Okuma ayarları paneli (E-10) | `reader_settings_sheet.dart` | Görünüm (Sayfa/Ayet), tema (Cihaz/Açık/Sepya/Koyu), yazı boyutu (A−, kaydırıcı %50–%250, A+), yazı kilidi, mushaf düzeni (şimdilik yalnızca bilgi: Medine 1421 H), ekran açık, sayfa okları, otomatik kaydırma hızı. Her değişiklik anında uygulanır ve kalıcıdır. Tecvid (F1-04), kelime meali (F1-06) ve düzen seçimi (F1-03) o paketlerde eklenecek; boş yer tutucu konmadı. |
+| Ayarlar (T-05) | `reader_settings.dart` | Yeni kalıcı anahtarlar: `reader.textScaleLocked`, `reader.keepScreenOn`, `reader.pageArrows`, `reader.autoScrollSpeed`. |
+| Kaldırılanlar | `theme_settings.dart`, `reader_page.dart` | Okuma çubuğundaki tema ve A−/A+ düğmeleri panele taşındı (F1-01 §3.2'deki başlık sıkışması kalıcı olarak çözüldü); `ThemeSettingsNotifier.cycleFrom` kullanılmadığı için silindi. Rubu' etiketi (`¼ ½ ¾`) Kur'an dizini ile ortak yardımcıya taşındı (`quarter_l10n.dart`). |
+
+**Yeni paket:** `wakelock_plus` 1.8.2 (BSD-3). Lisans kontrolü ve getirdiği paketler `VERI_KAYNAKLARI.md` §7'de. Dikkat: alt bağımlılık `dbus` (yalnızca Linux masaüstünde kullanılır) **MPL-2.0** lisanslıdır. Değiştirilmeden kullanıldığı için uygulamanın kaynağını açmayı gerektirmez; lisans metni Flutter'ın lisans sayfasında kendiliğinden yer alır. İstenirse ekranı açık tutma ~20 satırlık kendi platform koduyla da yapılabilir (paket ve 10 alt bağımlılık düşer).
+
+### 4.2 Bulunan ve düzeltilen sorunlar
+- **Kelimelerin dokunma alanı 48 dp'nin altındaydı** (42 dp). Erişilebilirlik testi okuma ekranında ilk kez sayfa çizimiyle çalışınca yakaladı. Kelimenin dokunma alanı artık satırın tüm yüksekliği (telefonda satır ≈ 53 dp); seçili kelimenin vurgusu da satır yüksekliğinde. *Bilinen sınır:* tek harfli kelimelerin **genişliği** 48 dp'den dar kalabilir. Metin içindeki bağlantılar gibi bu, yönergenin istisnasıdır.
+- **"Seçilen kelime" çubuğu son satırın üstüne biniyordu** (çubuklar üst katmana alınınca). Eskisi gibi ekranın altında yer açan çubuk oldu (D1: metnin üstüne bir şey binmez). F1-06'da kelime kartı yerini alacak.
+- **`۞` ve `۩` arayüz fontunda kutu olarak çıktı** (gerçek veriyle alınan görüntüde). Simgeler Kur'an fontuyla çiziliyor.
+- **Çubuklar açıkken onları kapatacak boş alan yoktu:** gerçek sayfada satırlar kelimelerle dolu, üst/alt bilgi şeritleri de çubukların altında kalıyor. Dokunma kuralı buna göre değişti (§4.3).
+
+### 4.3 Karar gerektiren: dokunma kuralı (ET-8)
+E-04 "boş alana dokunuş çubukları açar/kapatır, kelimeye dokunuş kelime kartı" diyordu. Gerçek sayfa görüntüsünde boş alan neredeyse yok (iki yana yaslı 15 satır). Uygulanan kural:
+- **Çubuklar açıkken** ilk dokunuş her yerde çubukları kapatır.
+- **Çubuklar kapalıyken** kelimeye dokunmak kelimeyi açar; üst/alt şeride veya kelime arasına dokunmak çubukları açar.
+
+Böylece okurken (çubuklar kapalı) kelimeye dokunmak hep kelimeyi açar; çubukları kapatmak için de yer aramak gerekmez. Ekran okuyucuda içerik bölgesinin "Menüyü göster/gizle" eylemi var.
+
+Diğer seçenek: her dokunuş çubukları açıp kapatır, kelime kartı uzun basışla açılır. Ama uzun basış ayet eylem paneline ayrılmış (E-06); iki işlev çakışır. Bu yüzden uygulanan kural önerilir. Onay `Ekran_Tasarimi.md` ET-8'de bekliyor.
+
+### 4.4 Testler
+| Test | Kontrol |
+|---|---|
+| `test/features/reader/reader_screen_test.dart` (16 test, gerçekçi sahte sayfalarla) | Çubuklar dokununca kapanıp açılıyor, 5 dk beklemede kapanmıyor; ilk dokunuş kelimeyi seçmiyor, ikincisi seçiyor. Çubuklar gizliyken üst/alt şerit: "Cüz 1 · Hizb 1", "5", "Sağ sayfa"; 6. sayfa "Sol sayfa". Sayfa altında "۞ Hizb 1 · ¼" ve "۩ Secde"; ayet görünümünde bilgi satırı, rubu' ve secde işareti. Ekran açık: varsayılan açık, ayardan kapanıyor, ekrandan çıkınca bırakılıyor, ayar kapalıyken otomatik kaydırmada açık. Kenar şeridinden (sol ve sağ) kaydırma sayfa çevirmiyor, ortadan çeviriyor. Oklar varsayılan kapalı; sol ok sonraki, sağ ok önceki; çubuklar kapalıyken köşede. İki parmakla yakınlaşma ve yakınken sayfa çevrilmemesi; kilitle A+ ve yakınlaştırma kapalı. Otomatik kaydırma: sayfa görünümünde 40 sn'de sonraki sayfa, dokununca duruyor; ayet görünümünde liste ilerliyor ve duruyor. Panelden görünüm değişince okunan ayet aynı (M2-01). Erişilebilirlik: çubuklar açık, gizli ve ayar paneli için etiket, 48 dp ve kontrast. |
+| `test/features/reader/t09_rotation_test.dart` (7 test) | **T-09, KK M2-10.** Bakara 150 açıkken sayfa ve ayet görünümünde: telefon dikey→yatay→dikey; tablet dikey→yatay (çift sayfa, 7. açılım)→dikey; çoklu pencere (ekranın yarısı, üçte biri, serbest pencere, katlanabilir, tam ekran). Okunan ayet her adımda 2:150, sayfa 16. Ayar paneli açıkken ve çubuklar gizliyken döndürme. |
+| `test/features/quran/drift_quran_repository_test.dart` (+2, gerçek veri) | 176. sayfada secde 7:206; 341. sayfada (22:77) secde yok; 5. sayfada 2:26 rubu' başı. **604 sayfanın tamamı:** sayfalardan toplanan secdeler veritabanındaki 14 secdeyle, rubu' başları cüz dizinindeki bağımsız SQL sorgusuyla (240 rubu', ayet ve sayfasıyla) birebir aynı. |
+| `test/features/reader/reader_persistence_test.dart` | Yeni dört ayarın varsayılanları ve yeniden açılışta korunması (T-05). |
+| Güncellenen | Tema testi artık panelden seçiyor. Sahte depo isteğe bağlı sayfa verisi ve ayet listesi veriyor (`withPages`, `sajdahs`); cüz bilgisi tutarlı (2:142'den sonrası Cüz 2), bu yüzden Bugün kartı beklentisi "Cüz 2" oldu (gerçek mushafla aynı). `test/helpers/fake_wake_lock.dart` eklendi. |
+
+**Bilerek bozma:**
+- *T-09:* (a) döndürmede okunan ayeti sayfa başına çeken bir satır eklendi → tablet ve çoklu pencere testleri "beklenen 2:150, bulunan 2:141" ile kırıldı. (b) döndürmede sayfa denetleyicisi 1. sayfaya kuruldu → "7. açılım bulunamadı" ile kırıldı. Geri alınınca geçti.
+- *İşaret verisi:* rubu' hesabında "önceki ayet" sorgudan çıkarıldı → iki test kırıldı (her başlayan ayet rubu' başı sayıldı). Geri alınınca geçti.
+
+**Gerçek veriyle görsel kontrol:** geçici bir testle (DigitalKhatt ve Roboto fontu, gerçek `content.sqlite`) 6 ekran görüntüsü alındı: 5. sayfa çubuklar açık; 176. sayfa çubuklar gizli ve oklar açık (üstte "A'râf · Cüz 9 · Hizb 18", altta "۩ Secde · 176 · Sol sayfa"); sepya temada ayar paneli; ayet görünümü; koyu temada 50. sayfa (Âl-i İmrân başı); seçili kelime. Bulunan üç sorun §4.2'de. Geçici test dosyası silindi.
+
+**Android derlemesi:** `flutter build apk --debug --flavor dev -t lib/main_dev.dart` başarılı (yeni yerel eklentiyle; 86 sn).
+
+**Toplam:** 209 test geçiyor (1 elle çalıştırılan atlanıyor); `flutter analyze --fatal-infos` ve `dart format` temiz.
+
+### 4.5 Bilmeniz gerekenler
+- **Çubuklar metnin üstünde durur.** Açıkken üst çubuk ilk satırın bir kısmını, alt çubuk sayfa altındaki bilgi şeridini örter; bir dokunuşla kapanır. Çubukları içerikten ayrı yere koymak, her açılıp kapanışta sayfayı yeniden ölçtürür ve yazı boyutu zıplar; bu yüzden tercih edilmedi.
+- **Ekran açık ayarı yalnızca okuma ekranında** geçerlidir; diğer ekranlarda telefonun kendi zaman aşımı geçer.
+- **Otomatik kaydırma hızları** ilk tahmindir. Gerçek okumada denenip gerekirse `ReaderSettings.autoScrollPixelsPerSecond` ve `autoScrollPageDuration` ayarlanır.
+- **Telefon yatay:** sayfa genişliğe sığar ve dikey kaydırılır (F0-05). Bu durumda üst/alt bilgi şeritleri ekranda sabit kalır.
+- **Emülatörde denenmedi** (bu oturumda açık değildi). Gerçek telefonda bir kez denenmeli: okuma ekranında 2–3 dakika dokunmadan bekleyin, ekran kararmamalı; okuma ayarlarından "Ekran açık kalsın" kapatılınca telefonun süresiyle kararmalı. Kenar şeridinin sistemin geri hareketiyle birlikte davranışı da aynı denemede görülür.
+
+---
+
+## 5. Genel durum ve bekleyen kararlar
 **Son güncelleme:** 29.10.2026
 
 | İş paketi | Durum |
@@ -209,11 +274,14 @@ Raster süresi emülatörün yazılım grafik biriminden etkileniyor (F0-05 §8.
 | S9 (Tanzil metni uygulamadan çıkarıldı) | ✅ |
 | F1-00 Faz 0'dan devredilenler | 🔨 F0-05 raporu ✅; araçlar hazır (sayfa paketi, performans, çeviri tablosu); gerçek cihaz, basılı nüsha, TalkBack dinleme ve Arapça gözden geçirme kullanıcıda; CI ve iOS sonra |
 | F1-01 Uygulama kabuğu ve gezinme | ✅ |
-| F1-02 … F1-14 | ⬜ |
+| F1-02 Okuma ekranı | ✅ (dokunma kuralı ET-8 onay bekliyor) |
+| F1-03 … F1-14 | ⬜ |
 
 **Bekleyen kararlar ve işler**
 - **Yayın meali (S1, S2), karar Faz 1 sonunda (kullanıcı, 29.10.2026):** Kullanıcı, uygulama ticari olacağı için Diyanet'in izin vermeyeceğini düşünüyor. Bu yüzden **kamu malı yedek meal gerçek bir seçenek olarak hazırlanacak**: kaynak doğrulaması, metin hattı ve okunabilirlik değerlendirmesi F1-05 içinde yapılacak. Diyanet başvurusu yine de denenebilir. Geliştirme Diyanet mealiyle sürüyor.
 - **Faz 1 başlangıç kararları S1–S8 ve TK-11…TK-17:** öneri halinde; itiraz yoksa uygulanır.
 - **ET-1 ("Ben") ve ET-7 (Hafızlık sekmesi "yakında")** öneriye göre uygulandı; itiraz yoksa kesinleşir.
-- **Ekran tasarımı açık soruları ET-1…ET-7** (`Ekran_Tasarimi.md` §10).
+- **Ekran tasarımı açık soruları ET-1…ET-8** (`Ekran_Tasarimi.md` §10). Yeni: **ET-8** okuma ekranında dokunma kuralı (§4.3). ET-5 (sayfa okları varsayılan kapalı) öneriyle uygulandı.
+- **`wakelock_plus` ve MPL-2.0 alt bağımlılığı (`dbus`):** sorun görülmüyor (değiştirilmeden kullanılıyor); istenirse paket yerine kendi platform kodu yazılabilir (§4.1).
+- **Gerçek cihazda bir kez:** ekranın açık kalması ve kenar şeridinin geri hareketiyle birlikte davranışı (§4.5).
 - **Emülatör:** içerik sürümü 7'ye çıktı; uygulama güncel kodla ilk açılışta yeni veritabanını kendiliğinden kopyalar ve eskisini siler.

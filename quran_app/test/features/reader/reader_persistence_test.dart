@@ -33,6 +33,11 @@ void main() {
     addTearDown(session.dispose);
     final settings = session.read(readerSettingsProvider);
     expect(settings.viewMode, ReaderViewMode.page);
+    // Varsayılanlar: ekran açık (M2-12), oklar kapalı (ET-5), kilit yok.
+    expect(settings.keepScreenOn, isTrue);
+    expect(settings.pageArrows, isFalse);
+    expect(settings.textScaleLocked, isFalse);
+    expect(settings.autoScrollSpeed, 3);
     expect(session.read(readerAnchorProvider), const AyahRef(1, 1));
     expect(session.read(userDataSnapshotProvider).localUserId, isNotNull);
   });
@@ -42,7 +47,11 @@ void main() {
     final localUserId = first.read(userDataSnapshotProvider).localUserId;
     first.read(readerSettingsProvider.notifier)
       ..setViewMode(ReaderViewMode.ayah)
-      ..setTextScale(1.75);
+      ..setTextScale(1.75)
+      ..setTextScaleLocked(true)
+      ..setKeepScreenOn(false)
+      ..setPageArrows(true)
+      ..setAutoScrollSpeed(7);
     first.read(readerAnchorProvider.notifier).set(const AyahRef(18, 45));
     // Sağlayıcıların kapanması bekleyen kaydı tamamlar (uygulama kapanışı).
     first.dispose();
@@ -53,6 +62,10 @@ void main() {
     final settings = second.read(readerSettingsProvider);
     expect(settings.viewMode, ReaderViewMode.ayah);
     expect(settings.textScale, 1.75);
+    expect(settings.textScaleLocked, isTrue);
+    expect(settings.keepScreenOn, isFalse);
+    expect(settings.pageArrows, isTrue);
+    expect(settings.autoScrollSpeed, 7);
     expect(second.read(readerAnchorProvider), const AyahRef(18, 45));
     expect(second.read(userDataSnapshotProvider).localUserId, localUserId);
   });

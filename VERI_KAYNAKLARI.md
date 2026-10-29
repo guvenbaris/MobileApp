@@ -252,6 +252,12 @@ Uygulamaya giren Dart/Flutter paketlerinin lisansları; pub önbelleğindeki LIC
 | uuid | 4.6.0 | MIT |
 | intl | 0.20.3 | BSD-3-Clause |
 | cupertino_icons | 1.0.9 | MIT |
+| wakelock_plus (+ platform_interface) | 1.8.2 (1.7.0) | BSD-3-Clause. Ekranı açık tutma (M2-12, TK-15; F1-02) |
+| ↳ package_info_plus (+ platform_interface) | 10.2.2 (4.1.0) | BSD-3-Clause (wakelock_plus'ın alt bağımlılığı) |
+| ↳ win32, ffi_leak_tracker | 6.4.0, 0.1.2 | BSD-3-Clause (yalnızca Windows'ta çalışır) |
+| ↳ dbus | 0.8.0 | **MPL-2.0** (yalnızca Linux'ta çalışır). Dosya düzeyinde copyleft: dbus'ın kendi dosyaları değiştirilirse o dosyalar açılmalıdır; **değiştirilmeden kullanıldığı için uygulamanın kaynağını açmayı gerektirmez**. Lisans metni NOTICES ile dağıtılır. |
+| ↳ http, web | 1.6.0, 1.1.2 | BSD-3-Clause |
+| ↳ xml, petitparser | 7.1.0, 7.1.0 | MIT |
 | Flutter SDK (flutter, flutter_localizations) | 3.47.8 | BSD-3-Clause |
 
 Yalnızca geliştirmede kullanılan paketler (`drift_dev`, `build_runner`, `analyzer`, `crypto`, `flutter_lints`, test paketleri) uygulamaya girmez. Yeni paket eklenince bu tabloya eklenir; GPL gibi uygulamanın kaynak kodunu açmayı gerektiren lisanslı paketler kullanılmaz.
@@ -268,4 +274,5 @@ Yalnızca geliştirmede kullanılan paketler (`drift_dev`, `build_runner`, `anal
 | 28.10.2026 | Tanzil kökenli `ayahs.text_uthmani` alanı ve atıf yükümlülüğü açıkça yazıldı; Faz 1'de arama metni kararıyla birlikte değerlendirilecek |
 | 28.10.2026 | Q-8 kararı: 14 secde. Dosya düzeyinde "İndirilen dosyalar ve indirme amaçları", "İndirilip kullanılmayan veriler" ve "Veritabanı alanlarının kaynağı ve kullanımı" bölümleri eklendi |
 | 29.10.2026 | **Genel gözden geçirme (F0-10).** Düzeltmeler: (1) Tanzil koşullarının tamamı yazıldı: telif notunun metni içeren dosyada bulunması koşulu eksikti; not artık `content.sqlite` içinde (`content_meta.notice.tanzil`, içerik sürümü 6). Besmele ayrımı açık soru olarak eklendi. "Hiçbir karakter değiştirilmedi" ifadesi Q-9'daki boşluk kırpmayı da anlatacak şekilde düzeltildi. (2) DigitalKhatt kelime metni ayrı kaynak olarak ayrıldı (fontun OFL lisansı metni kapsamaz; lisansı ❓). (3) Font meta verisi okundu: sürüm 0.1, telif 2020-2024 / 2024, OFL, ayrılmış ad yok; OFL dosyasındaki yıl farkı belgelendi. (4) OFL metni ve Tanzil notu uygulama içi lisans sayfasına eklendi; OFL dosyası pakete alındı. (5) "Uygulama paketine giren içerik" bölümü eklendi (APK ile doğrulandı). (6) `qpc-v2.db` satırı düzeltildi: QCF glif kodları kullanılmıyor, glif birimleri kullanılıyor. QCF fontları için "kullanıcı onayıyla indirilecek paket" ifadesi kaldırıldı. (7) §2'ye `digital-khatt-v2.db` ve font 247 eklendi. (8) `words` tablosunun 83.666 satırı (77.430 kelime + 6.236 ayet sonu) ve `mushaf_layouts.font_pack` (`qcf_v2` → `digital_khatt`) düzeltildi; `content_meta.source` artık DigitalKhatt dosyasını da yazıyor. (9) Q-14/Q-15 sırası düzeltildi. (10) Lisans kontrol listesine font ve kelime metni sütunları ile "yayın öncesi kapatılacaklar" eklendi. (11) §7 yazılım bağımlılıkları eklendi. |
+| 29.10.2026 | §7: `wakelock_plus` ve alt bağımlılıkları eklendi (F1-02); `dbus` MPL-2.0 notu |
 | 29.10.2026 | **Faz 1 S9:** Tanzil kökenli `ayahs.text_uthmani` alanı ve `content_meta.notice.tanzil` kaldırıldı (içerik sürümü 7, 13,9 MB). Tanzil yalnızca test referansı (tek dış referans). T-01'deki karakter karakter karşılaştırma, KFGQPC ve DigitalKhatt harf iskeletinin Tanzil ile karşılaştırılmasına dönüştü. Q-9 geçersiz; besmele sorusu kapandı; lisans kontrol listesinde Tanzil sütunu "yalnızca test". |

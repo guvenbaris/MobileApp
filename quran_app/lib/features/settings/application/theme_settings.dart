@@ -19,14 +19,6 @@ class ThemeSettingsNotifier extends Notifier<ThemePreference> {
     state = preference;
     persistSetting(ref, key, preference.name);
   }
-
-  /// Okuma ekranındaki tema düğmesi: şu an görünen temadan sonrakine geçer
-  /// (açık → sepya → koyu → açık).
-  void cycleFrom(AppThemeId current) {
-    final next =
-        AppThemeId.values[(current.index + 1) % AppThemeId.values.length];
-    set(ThemePreference.values.byName(next.name));
-  }
 }
 
 final themeSettingsProvider =

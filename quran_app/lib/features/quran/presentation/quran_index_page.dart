@@ -11,6 +11,7 @@ import '../../today/application/today_providers.dart';
 import '../application/quran_providers.dart';
 import '../domain/quran_models.dart';
 import '../domain/quran_navigation.dart';
+import 'quarter_l10n.dart';
 import 'surah_l10n.dart';
 
 /// Kur'an sekmesi (E-03): sure, cüz ve sayfa dizini; `2:255` veya sayfa
@@ -184,8 +185,6 @@ class _SurahList extends ConsumerWidget {
 class _JuzList extends ConsumerWidget {
   const _JuzList();
 
-  static const _fractions = ['', '¼', '½', '¾'];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
@@ -219,12 +218,7 @@ class _JuzList extends ConsumerWidget {
                     AppListItem(
                       key: Key('quran.rub.${q.rub}'),
                       onTap: () => _openAyah(context, q.start),
-                      title: q.quarterInHizb == 0
-                          ? l10n.hizbStart(context.formatInt(q.hizb))
-                          : l10n.hizbQuarter(
-                              context.formatInt(q.hizb),
-                              _fractions[q.quarterInHizb],
-                            ),
+                      title: q.label(context),
                       subtitle: location(q),
                     ),
                 ],

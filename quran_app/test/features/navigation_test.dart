@@ -116,7 +116,7 @@ void main() {
       await tester.pumpWidget(_app(lastRead: const AyahRef(2, 150)));
       await tester.pumpAndSettle();
       expect(find.text('Okumaya devam et'), findsOneWidget);
-      expect(find.text('Bakara 150 · Sayfa 16 · Cüz 1'), findsOneWidget);
+      expect(find.text('Bakara 150 · Sayfa 16 · Cüz 2'), findsOneWidget);
       await tester.tap(find.byKey(const Key('today.continue')));
       await tester.pumpAndSettle();
       expect(_readerTitle(tester), 'Sayfa 16');

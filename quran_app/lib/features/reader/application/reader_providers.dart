@@ -8,6 +8,7 @@ import '../../../core/result/result.dart';
 import '../../quran/application/quran_providers.dart';
 import '../../quran/domain/mushaf_page.dart';
 import '../../quran/domain/quran_models.dart';
+import '../../quran/domain/quran_navigation.dart';
 import '../../user_data/application/user_data_providers.dart';
 import '../../user_data/domain/user_data_repositories.dart';
 
@@ -156,4 +157,33 @@ final ayahIndexProvider = FutureProvider<AyahIndex>(
 final surahAyahsProvider = FutureProvider.family<List<Ayah>, int>(
   (ref, surah) async =>
       _unwrap(await ref.watch(quranRepositoryProvider).getAyahsOfSurah(surah)),
+);
+
+/// Okunan ayetin cüz, hizb ve sayfası: ayet görünümünde her zaman görünen
+/// bilgi satırı için (M2-04).
+class AyahLocation {
+  const AyahLocation({
+    required this.juz,
+    required this.hizb,
+    required this.page,
+  });
+
+  final int juz;
+  final int hizb;
+  final int page;
+}
+
+final anchorLocationProvider = FutureProvider<AyahLocation>((ref) async {
+  final anchor = ref.watch(readerAnchorProvider);
+  final repo = ref.watch(quranRepositoryProvider);
+  final ayah = _unwrap(await repo.getAyah(anchor));
+  final page = _unwrap(await repo.pageOf(kDefaultLayoutId, anchor));
+  return AyahLocation(juz: ayah.juz, hizb: ayah.hizb, page: page);
+});
+
+/// Rubu' başı olan ayetler (ayet görünümünde ۞ işareti, M2-05).
+final quarterStartByAyahProvider = FutureProvider<Map<AyahRef, QuarterStart>>(
+  (ref) async => {
+    for (final q in await ref.watch(quarterStartsProvider.future)) q.start: q,
+  },
 );

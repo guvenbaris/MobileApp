@@ -258,4 +258,88 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get linkInvalid =>
       'Bu bağlantı geçerli bir ayete veya sayfaya ait değil.';
+
+  @override
+  String readerJuzHizb(String juz, String hizb) {
+    return 'Cüz $juz · Hizb $hizb';
+  }
+
+  @override
+  String get readerRightPage => 'Sağ sayfa';
+
+  @override
+  String get readerLeftPage => 'Sol sayfa';
+
+  @override
+  String get readerSajdah => 'Secde';
+
+  @override
+  String get readerNextPage => 'Sonraki sayfa';
+
+  @override
+  String get readerPreviousPage => 'Önceki sayfa';
+
+  @override
+  String get readerSettings => 'Okuma ayarları';
+
+  @override
+  String get readerContent => 'Okuma alanı';
+
+  @override
+  String get readerShowControls => 'Menüyü göster';
+
+  @override
+  String get readerHideControls => 'Menüyü gizle';
+
+  @override
+  String get readerAutoScrollStart => 'Otomatik kaydırmayı başlat';
+
+  @override
+  String get readerAutoScrollStop => 'Otomatik kaydırmayı durdur';
+
+  @override
+  String get readerAutoScrollSpeed => 'Otomatik kaydırma hızı';
+
+  @override
+  String get readerView => 'Görünüm';
+
+  @override
+  String get readerViewPage => 'Sayfa';
+
+  @override
+  String get readerViewAyah => 'Ayet';
+
+  @override
+  String get readerTextSize => 'Yazı boyutu';
+
+  @override
+  String get readerTextLock => 'Yazı boyutunu kilitle';
+
+  @override
+  String get readerTextLockHint =>
+      'Yazı boyutu ve sayfa yakınlaştırması değişmez';
+
+  @override
+  String get readerMushafLayout => 'Mushaf düzeni';
+
+  @override
+  String get layoutMadani1421 => 'Medine Mushafı (1421 H)';
+
+  @override
+  String get readerKeepScreenOn => 'Ekran açık kalsın';
+
+  @override
+  String get readerKeepScreenOnHint => 'Okurken ekran kapanmaz';
+
+  @override
+  String get readerPageArrows => 'Sayfa okları';
+
+  @override
+  String get readerPageArrowsHint =>
+      'Kaydırmanın yanında sayfa çevirme düğmeleri';
+
+  @override
+  String readerPercent(String value) {
+    return '%$value';
+  }
 }
